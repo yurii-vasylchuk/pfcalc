@@ -1,0 +1,41 @@
+<svg [attr.viewBox]="viewBox" class="gauge">
+  <ng-container *ngFor="let track of _tracks; let i = index; trackBy: trackTrackByFn">
+    <circle [attr.cx]="width / 2"
+            [attr.cy]="height / 2"
+            [attr.r]="track.radius"
+            [attr.stroke-width]="track.strokeWidth"
+            [attr.stroke]="track.bgStrokeColor"
+
+            fill="transparent">
+    </circle>
+
+    <circle *ngFor="let circle of track.circles; trackBy: circleTrackByFn"
+            [attr.cx]="width / 2"
+            [attr.cy]="height / 2"
+            [attr.r]="track.radius"
+            [attr.stroke-width]="track.strokeWidth"
+            [attr.stroke]="circle.color"
+            [class.foreground-circle__animated]="circle.blink"
+            [pfcGaugeCircle]="circle"
+            class="foreground-circle"
+            fill="transparent"
+            stroke-linecap="round">
+    </circle>
+  </ng-container>
+
+  <text [attr.font-size]="titleFontSize"
+        [attr.x]="titleX"
+        [attr.y]="titleY"
+        class="title"
+        font-weight="bold"
+        text-anchor="middle">
+    {{title}}
+  </text>
+  <text [attr.font-size]="subtitleFontSize"
+        [attr.x]="subtitleX"
+        [attr.y]="subtitleY"
+        class="subtitle"
+        text-anchor="middle">
+    {{subtitle}}
+  </text>
+</svg>

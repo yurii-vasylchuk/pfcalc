@@ -1,0 +1,26 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 15%;
+  height: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+button {
+  width: 100%;
+}
+
+a[mat-button] {
+  width: 100%;
+}
+
+.base-hint {
+  font-size: 0.6rem;
+  margin-top: 0.5em;
+  color: rgba(0, 0, 0, .54);
+}

@@ -1,0 +1,77 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  row-gap: 3vw;
+  height: 100%;
+  padding: 3vw 0;
+}
+
+.nutrients {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3vw;
+  padding: 0 3vw;
+
+  &__header {
+    font-size: 1.2rem;
+    margin: 0 0 .2rem;
+  }
+
+  &__gauges {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    > * {
+      width: 22%;
+    }
+  }
+}
+
+.add-meal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 3vw;
+
+  > * {
+    width: 100%;
+  }
+}
+
+.meals {
+  &__header {
+    font-size: 1.2rem;
+    margin: 0 0 .2rem;
+    padding: 0 3vw;
+  }
+
+  &__line {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 3vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+    &_even {
+      background-color: rgba(0, 0, 0, .1);
+    }
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__title {
+    font-size: .8rem;
+  }
+
+  &__weight {
+    font-size: .65rem;
+    color: rgba(0, 0, 0, .54);
+  }
+}

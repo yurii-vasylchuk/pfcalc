@@ -1,0 +1,8 @@
+<pfc-gauge [subtitle]="'' + aim"
+           [title]="titleShorten"
+           [values]="gaugeConfig"
+></pfc-gauge>
+
+<span *ngIf="aim != null" class="values">{{value}}/{{aim}}</span>
+<span *ngIf="aim == null" class="values">{{value}}</span>
+<span class="title">{{title}}</span>

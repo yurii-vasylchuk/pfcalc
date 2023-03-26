@@ -1,0 +1,42 @@
+<form (ngSubmit)="submit()" [formGroup]="form">
+  <mat-form-field>
+    <mat-label>{{'common.protein' | translate}}</mat-label>
+    <input formControlName="protein" matInput type="number"/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'common.fat' | translate}}</mat-label>
+    <input formControlName="fat" matInput type="number"/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'common.carbohydrates' | translate}}</mat-label>
+    <input formControlName="carbohydrates" matInput type="number"/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'common.calories' | translate}}</mat-label>
+    <input formControlName="calories" matInput type="number"/>
+  </mat-form-field>
+
+  <mat-slide-toggle formControlName="baseValues">{{'complete-profile.base-values.label' | translate}}</mat-slide-toggle>
+  <p class="base-hint">{{'complete-profile.base-values.description' | translate}}</p>
+
+
+  <mat-form-field *ngIf="form.controls.baseValues.value">
+    <mat-label>{{'complete-profile.base-values.protein' | translate}}</mat-label>
+    <input formControlName="baseProtein" matInput type="number"/>
+  </mat-form-field>
+  <mat-form-field *ngIf="form.controls.baseValues.value">
+    <mat-label>{{'complete-profile.base-values.fat' | translate}}</mat-label>
+    <input formControlName="baseFat" matInput type="number"/>
+  </mat-form-field>
+  <mat-form-field *ngIf="form.controls.baseValues.value">
+    <mat-label>{{'complete-profile.base-values.carbohydrates' | translate}}</mat-label>
+    <input formControlName="baseCarbohydrates" matInput type="number"/>
+  </mat-form-field>
+  <mat-form-field *ngIf="form.controls.baseValues.value">
+    <mat-label>{{'complete-profile.base-values.calories' | translate}}</mat-label>
+    <input formControlName="baseCalories" matInput type="number"/>
+  </mat-form-field>
+
+  <button [disabled]="!form.valid" color="primary" mat-raised-button
+          type="submit">{{'complete-profile.submit-btn' | translate}}</button>
+</form>

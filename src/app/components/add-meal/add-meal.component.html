@@ -1,0 +1,50 @@
+<h1 class="title">{{'add-meal.title' | translate}}</h1>
+<div class="content">
+  <mat-form-field class="dish-search">
+    <input #searchField (input)="handleSearchChange()" matInput placeholder="Search" type="text">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+  <mat-accordion class="dishes" displayMode="flat">
+    <mat-expansion-panel *ngFor="let option of data.items | async; trackBy: dishOptionTrackBy"
+                         hideToggle>
+      <mat-expansion-panel-header>
+        <div class="dishes-header">
+          <div class="dishes-header_title">
+            <p class="dishes-header_title-primary">{{option.name}}</p>
+            <p [innerHTML]="'add-meal.option-subtitle' | translate:option.pfcc"
+               class="dishes-header_title-secondary"></p>
+          </div>
+
+          <div *ngIf="option.type === 'dish'" class="flex-spacer"></div>
+
+          <button (click)="handleDeleteOptionClick(option); $event.stopPropagation();" *ngIf="option.type === 'dish'" color="accent"
+                  mat-icon-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-expansion-panel-header>
+
+      <ng-template matExpansionPanelContent>
+        <div [ngSwitch]="option.type">
+          <div *ngSwitchCase="'dish'">
+            <mat-form-field>
+              <mat-label>Вага</mat-label>
+              <input matInput matSuffix="г">
+            </mat-form-field>
+          </div>
+          <div *ngSwitchCase="'recipe'">
+            <p>a Recipe {{option.name}}</p></div>
+          <div *ngSwitchCase="'raw-food'">
+            <p>a Raw food {{option.name}}</p></div>
+        </div>
+      </ng-template>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+<div class="actions">
+  <button [mat-dialog-close]="meals"
+          color="accent"
+          mat-raised-button>
+    {{'add-meal.add-btn' | translate}}
+  </button>
+</div>

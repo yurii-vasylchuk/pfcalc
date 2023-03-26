@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Exo 2', sans-serif;
+}
+
+.flex-spacer {
+  flex-grow: 1;
+}
+
+.fullscreen-dialog {
+  max-width: calc(100vw - 10px) !important;
+  max-height: calc(100vh - 10px) !important;
+  width: calc(100vw - 10px);
+  height: calc(100vh - 10px);
+}
+
+.fullscreen-dialog .mat-dialog-container {
+  padding: 0;
+}
