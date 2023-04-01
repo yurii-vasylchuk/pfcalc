@@ -22,6 +22,7 @@ const Template: Story = args => ({
 export const Default = Template.bind({});
 Default.args = {
   value: 30,
+  addingValue: 0,
   aim: 120,
   title: 'Protein',
   strokeWidth: 15,

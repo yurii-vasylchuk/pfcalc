@@ -14,6 +14,7 @@ import {IGaugeTrackConf} from '../gauge/gauge-component.interfaces';
 export class NutritionGaugeComponent {
   @Input() value = 0;
   @Input() aim: number | null = 100;
+  @Input() addingValue = 0;
   @Input() title!: string;
 
   @Input() strokeWidth = 15;
@@ -28,19 +29,29 @@ export class NutritionGaugeComponent {
   }
 
   get gaugeConfig(): IGaugeTrackConf[] {
-    return [
+    const result = [
       {
         strokeWidth: this.strokeWidth,
         bgStrokeColor: this.bgColor,
         circles: [
           {
             value: this.value,
-            maxValue: this.aim || this.value,
+            maxValue: this.aim || (this.value + (this.addingValue > 0 ? this.addingValue : 0)),
             color: this.mainColor,
             blink: false,
           },
         ],
       },
     ];
+
+    if (this.addingValue) {
+      result[0].circles.push({
+        value: this.value + this.addingValue,
+        maxValue: this.aim|| (this.value + (this.addingValue > 0 ? this.addingValue : 0)),
+        color: this.mainColor,
+        blink: true
+      });
+    }
+    return result;
   }
 }
