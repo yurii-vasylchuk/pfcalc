@@ -75,6 +75,10 @@ export class AddMealComponent {
       option.delete();
     }
   }
+
+  onClose() {
+    this.dialogRef.close(null);
+  }
 }
 
 export type DishOptionType = 'dish' | 'recipe' | 'raw-food';

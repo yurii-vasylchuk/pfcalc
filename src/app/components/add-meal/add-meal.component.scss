@@ -9,11 +9,21 @@
   }
 }
 
-.title {
-  flex-grow: 0;
-  flex-shrink: 0;
-  padding: 24px 24px 24px;
-  margin: 0;
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  &__close {
+    margin: 28px 2px 20px;
+  }
+  &__title {
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding: 24px 24px 24px;
+    margin: 0;
+  }
 }
 
 .content {

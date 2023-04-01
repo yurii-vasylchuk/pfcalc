@@ -1,4 +1,9 @@
-<h1 class="title">{{'add-meal.title' | translate}}</h1>
+<div class="heading">
+  <h1 class="heading__title">{{'add-meal.title' | translate}}</h1>
+  <button class="heading__close" mat-icon-button (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 <div class="content">
   <mat-form-field class="dish-search">
     <input #searchField (input)="handleSearchChange()" matInput placeholder="Search" type="text">
@@ -17,7 +22,8 @@
 
           <div *ngIf="option.type === 'dish'" class="flex-spacer"></div>
 
-          <button (click)="handleDeleteOptionClick(option); $event.stopPropagation();" *ngIf="option.type === 'dish'" color="accent"
+          <button (click)="handleDeleteOptionClick(option); $event.stopPropagation();" *ngIf="option.type === 'dish'"
+                  color="accent"
                   mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
