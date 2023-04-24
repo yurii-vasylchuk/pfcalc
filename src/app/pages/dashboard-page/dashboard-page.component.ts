@@ -1,25 +1,25 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {NutritionGaugeComponent} from '../../components/nutrition-gauge/nutrition-gauge.component';
 import {Store} from '@ngxs/store';
 import {DomainState} from '../../state/domain/domain.state';
 import {IDish, IFood, IMeal, IProfile} from '../../commons/models/domain.models';
-import {BehaviorSubject, combineLatest, combineLatestWith, filter, map, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, combineLatestWith, filter, map, Observable, take} from 'rxjs';
 import {AsyncPipe, CommonModule} from '@angular/common';
 import {emptyPfcc, IPfcc} from '../../commons/models/common.models';
-import {MatButtonModule} from '@angular/material/button';
 import {DateTime} from 'luxon';
-import {MatListModule} from '@angular/material/list';
 import {TranslateModule} from '@ngx-translate/core';
 import {ceilPfcc, multiplyPfcc} from '../../commons/functions';
 import {MatIconModule} from '@angular/material/icon';
-import {DeleteDishAction, RemoveMealAction} from '../../state/domain/domain.state-models';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {AddMealAction, DeleteDishAction, RemoveMealAction} from '../../state/domain/domain.state-models';
 import {
   AddMealComponent,
   AddMealDialogData,
-  DishOptionType,
   IDishOption,
+  ISelectedDish,
 } from '../../components/add-meal/add-meal.component';
+import {MatListModule} from '@angular/material/list';
+import {MatButtonModule} from '@angular/material/button';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 
 @Component({
   selector: 'pfc-dashboard-page',
@@ -29,7 +29,7 @@ import {
   standalone: true,
   imports: [CommonModule, NutritionGaugeComponent, AsyncPipe, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule],
 })
-export class DashboardPageComponent implements AfterViewInit {
+export class DashboardPageComponent {
   profile$: Observable<IProfile>;
 
   dailyNutrients$: Observable<IPfcc>;
@@ -78,9 +78,9 @@ export class DashboardPageComponent implements AfterViewInit {
         combineLatestWith(this.store.select(DomainState.dishesMap), this.store.select(DomainState.foodsMap)),
         map(([meals, dishes, foods]) => {
           return meals.map(meal => {
-            const dish = meal.cooked ? dishes.get(meal.dishId) || null : null;
+            const dish = meal.dishId != null ? dishes.get(meal.dishId) || null : null;
             let food: any;
-            if (meal.cooked) {
+            if (meal.dishId != null) {
               food = dish != null ? foods.get(dish.foodId) : null;
             } else {
               food = foods.get(meal.foodId);
@@ -106,10 +106,6 @@ export class DashboardPageComponent implements AfterViewInit {
 
   mealTrackBy = (idx: number, item: IExtendedMeal) => item.id;
 
-  ngAfterViewInit() {
-    this.addMeal();
-  }
-
   removeMeal(mealId: number) {
     this.store.dispatch(new RemoveMealAction(mealId));
   }
@@ -117,7 +113,8 @@ export class DashboardPageComponent implements AfterViewInit {
   addMeal() {
     const filter$ = new BehaviorSubject<string | null>(null);
 
-    const allDishOptions$ = combineLatest([
+    const allDishOptions$ = new BehaviorSubject<IDishOption[]>([]);
+    combineLatest([
       this.store.select(DomainState.dishes),
       this.store.select(DomainState.foodsMap),
     ]).pipe(
@@ -133,9 +130,12 @@ export class DashboardPageComponent implements AfterViewInit {
             const food = foodsMap.get(dish.foodId) as IFood;
             const item: IDishOption = {
               id: `dish-${dish.id}`,
+              foodId: dish.foodId,
+              dishId: dish.id,
               name: dish.name,
               type: 'dish',
-              pfcc: ceilPfcc(multiplyPfcc(food.pfcc, (dish.cookedWeight / dish.recipeWeight)), 1), // TODO: Ceil pfcc?
+              ingredients: null,
+              pfcc: ceilPfcc(multiplyPfcc(food.pfcc, (dish.cookedWeight / dish.recipeWeight)), 1),
               delete: () => {
                 this.store.dispatch(new DeleteDishAction(dish.id));
               },
@@ -146,31 +146,71 @@ export class DashboardPageComponent implements AfterViewInit {
           ...Array.from(foodsMap.values()).map(food => {
             return {
               id: `food-${food.id}`,
+              foodId: food.id,
               name: food.name,
               pfcc: food.pfcc,
-              type: (food.isCookable ? 'recipe' : 'raw-food') as DishOptionType,
+              type: food.type,
+              ingredients: food.type !== 'recipe' ? null : [
+                ...food.consistOf
+              ]
             };
           }),
         ];
       }),
-    );
-    const ref = this.dialog.open<AddMealComponent, AddMealDialogData>(AddMealComponent, {
+    ).subscribe(options => allDishOptions$.next(options));
+
+    const ref = this.dialog.open<AddMealComponent, AddMealDialogData, ISelectedDish>(AddMealComponent, {
       panelClass: 'fullscreen-dialog',
 
       data: {
         filter: val => filter$.next(val),
+        dailyNutrients$: this.dailyNutrients$,
+        dailyAims$: this.dailyAims$,
         items: combineLatest([allDishOptions$, filter$])
           .pipe(
             map(([options, filter]): IDishOption[] => options.filter(o => filter == null || o.name.toLowerCase().includes(filter.toLowerCase()))),
           ),
       },
     });
-    ref.afterClosed()
-      .subscribe(console.log);
+
+    combineLatest([
+      allDishOptions$,
+      ref.afterClosed(),
+    ]).pipe(
+      map(([options, selected]) => {
+        if (selected == null) {
+          return null;
+        }
+
+        const selectedOption: IDishOption = options.find(o => o.id === selected.id) as IDishOption;
+
+        if (selectedOption == null) {
+          return null;
+        }
+
+        return {
+          id: selectedOption.type === 'dish' ? selectedOption.dishId : selectedOption.foodId,
+          eatenOn: DateTime.now(),
+          pfcc: selectedOption.pfcc,
+          cooked: selectedOption.type === 'dish',
+          foodId: selectedOption.foodId,
+          dishId: selectedOption.type === 'dish' ? selectedOption.dishId : null,
+          weight: selected.weight,
+        } as IMeal;
+      }),
+      take(1),
+    ).subscribe(newMeal => {
+      allDishOptions$.complete();
+
+      if (newMeal != null) {
+        this.store.dispatch(new AddMealAction(newMeal));
+      }
+    });
+
   }
 
   getMealName(meal: IExtendedMeal): string | null {
-    return (meal.cooked ? meal.dish?.name : meal.food.name) || null;
+    return (meal.dishId != null ? meal.dish?.name : meal.food.name) || null;
   }
 }
 

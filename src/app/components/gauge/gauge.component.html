@@ -31,7 +31,8 @@
         text-anchor="middle">
     {{title}}
   </text>
-  <text [attr.font-size]="subtitleFontSize"
+  <text *ngIf="subtitle != null"
+        [attr.font-size]="subtitleFontSize"
         [attr.x]="subtitleX"
         [attr.y]="subtitleY"
         class="subtitle"

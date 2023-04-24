@@ -67,6 +67,9 @@
   "add-meal": {
     "title": "Зʼїсти страву",
     "add-btn": "Зберегти",
-    "option-subtitle": "{{protein}}<strong>/</strong>{{fat}}<strong>/</strong>{{carbohydrates}}<strong>/</strong>{{calories}}"
+    "option-subtitle": "{{protein}} {{fat}} {{carbohydrates}} {{calories}}",
+    "edit-recipe": "Редагувати інгредієнти",
+    "search-placeholder": "Пошук страви...",
+    "weight-input-placeholder": "Напр. 240"
   }
 }

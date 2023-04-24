@@ -1,8 +1,15 @@
-<pfc-gauge [subtitle]="'' + aim"
+<pfc-gauge *ngIf="aim != null; else gaugeWithoutSubtitle"
+           [subtitle]="'' + aim"
            [title]="titleShorten"
            [values]="gaugeConfig"
 ></pfc-gauge>
 
-<span *ngIf="aim != null" class="values">{{value}}/{{aim}}</span>
-<span *ngIf="aim == null" class="values">{{value}}</span>
+<ng-template #gaugeWithoutSubtitle>
+  <pfc-gauge [title]="titleShorten"
+             [values]="gaugeConfig"
+  ></pfc-gauge>
+</ng-template>
+
+<span *ngIf="aim != null" class="values">{{value + (addingValue || 0)}}/{{aim}}</span>
+<span *ngIf="aim == null" class="values">{{value + (addingValue || 0)}}</span>
 <span class="title">{{title}}</span>

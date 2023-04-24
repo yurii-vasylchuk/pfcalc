@@ -1,27 +1,21 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Inject,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Output, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {TranslateModule} from '@ngx-translate/core';
-import {MatButtonModule} from '@angular/material/button';
-import {IMeal} from '../../commons/models/domain.models';
-import {MatInputModule} from '@angular/material/input';
+import {FoodType, IIngredient, IMeal} from '../../commons/models/domain.models';
 import {MatIconModule} from '@angular/material/icon';
-import {MatListModule} from '@angular/material/list';
 import {Observable} from 'rxjs';
 import {IPfcc} from '../../commons/models/common.models';
-import {MatExpansionModule} from '@angular/material/expansion';
+import {MatExpansionModule, MatExpansionPanel} from '@angular/material/expansion';
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {NutritionGaugeComponent} from '../nutrition-gauge/nutrition-gauge.component';
+import {FormsModule} from "@angular/forms";
 
 export interface AddMealDialogData {
   items: Observable<IDishOption[]>;
+  dailyNutrients$: Observable<IPfcc>,
+  dailyAims$: Observable<IPfcc>,
   filter: (val: string) => void;
 }
 
@@ -30,28 +24,28 @@ export interface AddMealDialogData {
   standalone: true,
   imports: [CommonModule,
     TranslateModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatInputModule,
     MatIconModule,
-    MatListModule,
-    MatExpansionModule],
+    MatExpansionModule, MatInputModule, MatDialogModule, MatButtonModule, NutritionGaugeComponent, FormsModule],
   templateUrl: './add-meal.component.html',
   styleUrls: ['./add-meal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddMealComponent {
-  meals: IMeal[] = [];
+  protected readonly Math = Math;
+  protected meals: IMeal[] = [];
 
   @Output()
-  search = new EventEmitter<string | null>();
+  protected search = new EventEmitter<string | null>();
 
   @ViewChild('searchField')
-  searchField!: ElementRef<HTMLInputElement>;
-  selectedOptionId = 'NOTHING';
+  protected searchField!: ElementRef<HTMLInputElement>;
+  @ViewChild('dishesList')
+  protected dishesList!: MatExpansionPanel;
+  protected selectedDishWeight = 0;
 
-  constructor(private dialogRef: MatDialogRef<AddMealComponent>,
-              private cdr: ChangeDetectorRef,
+  private selectedDish: IDishOption | null = null;
+
+  constructor(private dialogRef: MatDialogRef<AddMealComponent, ISelectedDish | null>,
               @Inject(MAT_DIALOG_DATA) public data: AddMealDialogData) {
   }
 
@@ -61,13 +55,13 @@ export class AddMealComponent {
     this.data.filter(this.searchField.nativeElement.value);
   }
 
-  handleOptionClick(selectedOptionId: string) {
-    if (this.selectedOptionId === selectedOptionId) {
-      this.selectedOptionId = 'NOTHING';
+  handleDishSelected(option: IDishOption) {
+    this.selectedDish = option;
+    if (option.type === 'recipe') {
+      this.selectedDishWeight = option.ingredients?.map(i => i.ingredientWeight).reduce((w1, w2) => w1 + w2, 0) || 0;
     } else {
-      this.selectedOptionId = selectedOptionId;
+      this.selectedDishWeight = 100;
     }
-    this.cdr.markForCheck();
   }
 
   handleDeleteOptionClick(option: IDishOption) {
@@ -79,17 +73,38 @@ export class AddMealComponent {
   onClose() {
     this.dialogRef.close(null);
   }
+
+  handleDishUnselected() {
+    this.selectedDish = null;
+  }
+
+  handleSaveClick() {
+    if (this.selectedDish == null) {
+      this.dialogRef.close(null);
+    } else {
+      this.dialogRef.close({
+        id: this.selectedDish.id,
+        weight: this.selectedDishWeight,
+      });
+    }
+  }
 }
 
-export type DishOptionType = 'dish' | 'recipe' | 'raw-food';
+export type DishOptionType = 'dish' | FoodType;
 
 interface IBaseDishOption {
   id: string;
+  foodId: number;
   name: string;
   type: DishOptionType;
   pfcc: IPfcc;
 }
 
 export type IDishOption =
-  (IBaseDishOption & { type: 'dish', delete?: (() => void) }) |
-  (IBaseDishOption & { type: 'recipe' | 'raw-food' })
+  (IBaseDishOption & { type: 'dish', delete?: (() => void), dishId: number, ingredients: null }) |
+  (IBaseDishOption & { type: FoodType, ingredients: null | IIngredient[] });
+
+export interface ISelectedDish {
+  id: string;
+  weight: number;
+}

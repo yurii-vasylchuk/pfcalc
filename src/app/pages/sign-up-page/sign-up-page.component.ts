@@ -1,14 +1,14 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatButtonModule} from '@angular/material/button';
 import {CommonModule} from '@angular/common';
 import * as fromPfccValidators from '../../commons/pfcc-validators';
 import {Store} from '@ngxs/store';
 import {AuthSignUpAction} from '../../state/auth/auth.state-models';
-import {MatInputModule} from '@angular/material/input';
 import {map} from 'rxjs';
 import {TranslateModule} from '@ngx-translate/core';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
 
 @Component({
   selector: 'pfc-sign-up-page',

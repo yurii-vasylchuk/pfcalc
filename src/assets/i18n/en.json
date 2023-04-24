@@ -67,6 +67,9 @@
   "add-meal": {
     "title": "Add meal",
     "add-btn": "Save",
-    "option-subtitle": "{{protein}}/{{fat}}/{{carbohydrates}}/{{calories}}"
+    "option-subtitle": "{{protein}}/{{fat}}/{{carbohydrates}}/{{calories}}",
+    "edit-recipe": "Edit ingredients",
+    "search-placeholder": "Find a food...",
+    "weight-input-placeholder": "Ex. 240"
   }
 }

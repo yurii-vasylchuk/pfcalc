@@ -3,12 +3,12 @@
     "interfaces": [
         {
             "name": "AddMealDialogData",
-            "id": "interface-AddMealDialogData-5c2236ce0c878783acbca9570997c636b4a1af10f897c6c474a9699b711d0aca1ed2a43b216f7ad9c2e8f38d015f08822d3d9f989dcf1360cca57bc0cce6172b",
+            "id": "interface-AddMealDialogData-36636905916e9b0de826e455ace1ed9ecbb1e2db25b773b1a5d6aa68990c55d3ff078470d3016a8a65dff1fca54c819b89516882f0b2cee41b7b485e90c6edea",
             "file": "src/app/components/add-meal/add-meal.component.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import {\n  ChangeDetectionStrategy,\n  ChangeDetectorRef,\n  Component,\n  ElementRef,\n  EventEmitter,\n  Inject,\n  Output,\n  ViewChild,\n} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {MatButtonModule} from '@angular/material/button';\nimport {IMeal} from '../../commons/models/domain.models';\nimport {MatInputModule} from '@angular/material/input';\nimport {MatIconModule} from '@angular/material/icon';\nimport {MatListModule} from '@angular/material/list';\nimport {Observable} from 'rxjs';\nimport {IPfcc} from '../../commons/models/common.models';\nimport {MatExpansionModule} from '@angular/material/expansion';\n\nexport interface AddMealDialogData {\n  items: Observable<IDishOption[]>;\n  filter: (val: string) => void;\n}\n\n@Component({\n  selector: 'pfc-add-meal',\n  standalone: true,\n  imports: [CommonModule,\n    TranslateModule,\n    MatDialogModule,\n    MatButtonModule,\n    MatInputModule,\n    MatIconModule,\n    MatListModule,\n    MatExpansionModule],\n  templateUrl: './add-meal.component.html',\n  styleUrls: ['./add-meal.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class AddMealComponent {\n  meals: IMeal[] = [];\n\n  @Output()\n  search = new EventEmitter<string | null>();\n\n  @ViewChild('searchField')\n  searchField!: ElementRef<HTMLInputElement>;\n  selectedOptionId = 'NOTHING';\n\n  constructor(private dialogRef: MatDialogRef<AddMealComponent>,\n              private cdr: ChangeDetectorRef,\n              @Inject(MAT_DIALOG_DATA) public data: AddMealDialogData) {\n  }\n\n  dishOptionTrackBy = (idx: number, item: IDishOption) => item.id;\n\n  handleSearchChange() {\n    this.data.filter(this.searchField.nativeElement.value);\n  }\n\n  handleOptionClick(selectedOptionId: string) {\n    if (this.selectedOptionId === selectedOptionId) {\n      this.selectedOptionId = 'NOTHING';\n    } else {\n      this.selectedOptionId = selectedOptionId;\n    }\n    this.cdr.markForCheck();\n  }\n\n  handleDeleteOptionClick(option: IDishOption) {\n    if (option.type === 'dish' && option.delete != null) {\n      option.delete();\n    }\n  }\n}\n\nexport type DishOptionType = 'dish' | 'recipe' | 'raw-food';\n\ninterface IBaseDishOption {\n  id: string;\n  name: string;\n  type: DishOptionType;\n  pfcc: IPfcc;\n}\n\nexport type IDishOption =\n  (IBaseDishOption & { type: 'dish', delete?: (() => void) }) |\n  (IBaseDishOption & { type: 'recipe' | 'raw-food' })\n",
+            "sourceCode": "import {\n  ChangeDetectionStrategy,\n  ChangeDetectorRef,\n  Component,\n  ElementRef,\n  EventEmitter,\n  Inject,\n  Output,\n  ViewChild,\n} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {IMeal} from '../../commons/models/domain.models';\nimport {MatIconModule} from '@angular/material/icon';\nimport {Observable} from 'rxjs';\nimport {IPfcc} from '../../commons/models/common.models';\nimport {MatExpansionModule} from '@angular/material/expansion';\nimport {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';\nimport {MatInputModule} from '@angular/material/input';\nimport {MatButtonModule} from '@angular/material/button';\n\nexport interface AddMealDialogData {\n  items: Observable<IDishOption[]>;\n  filter: (val: string) => void;\n}\n\n@Component({\n  selector: 'pfc-add-meal',\n  standalone: true,\n  imports: [CommonModule,\n    TranslateModule,\n    MatIconModule,\n    MatExpansionModule, MatInputModule, MatDialogModule, MatButtonModule],\n  templateUrl: './add-meal.component.html',\n  styleUrls: ['./add-meal.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class AddMealComponent {\n  meals: IMeal[] = [];\n\n  @Output()\n  search = new EventEmitter<string | null>();\n\n  @ViewChild('searchField')\n  searchField!: ElementRef<HTMLInputElement>;\n  selectedOptionId = 'NOTHING';\n\n  constructor(private dialogRef: MatDialogRef<AddMealComponent>,\n              private cdr: ChangeDetectorRef,\n              @Inject(MAT_DIALOG_DATA) public data: AddMealDialogData) {\n  }\n\n  dishOptionTrackBy = (idx: number, item: IDishOption) => item.id;\n\n  handleSearchChange() {\n    this.data.filter(this.searchField.nativeElement.value);\n  }\n\n  handleOptionClick(selectedOptionId: string) {\n    if (this.selectedOptionId === selectedOptionId) {\n      this.selectedOptionId = 'NOTHING';\n    } else {\n      this.selectedOptionId = selectedOptionId;\n    }\n    this.cdr.markForCheck();\n  }\n\n  handleDeleteOptionClick(option: IDishOption) {\n    if (option.type === 'dish' && option.delete != null) {\n      option.delete();\n    }\n  }\n\n  onClose() {\n    this.dialogRef.close(null);\n  }\n}\n\nexport type DishOptionType = 'dish' | 'recipe' | 'raw-food';\n\ninterface IBaseDishOption {\n  id: string;\n  name: string;\n  type: DishOptionType;\n  pfcc: IPfcc;\n}\n\nexport type IDishOption =\n  (IBaseDishOption & { type: 'dish', delete?: (() => void) }) |\n  (IBaseDishOption & { type: 'recipe' | 'raw-food' })\n",
             "properties": [
                 {
                     "name": "filter",
@@ -17,7 +17,7 @@
                     "type": "function",
                     "optional": false,
                     "description": "",
-                    "line": 25
+                    "line": 24
                 },
                 {
                     "name": "items",
@@ -26,7 +26,7 @@
                     "type": "Observable<IDishOption[]>",
                     "optional": false,
                     "description": "",
-                    "line": 24
+                    "line": 23
                 }
             ],
             "indexSignatures": [],
@@ -140,12 +140,12 @@
         },
         {
             "name": "IBaseDishOption",
-            "id": "interface-IBaseDishOption-5c2236ce0c878783acbca9570997c636b4a1af10f897c6c474a9699b711d0aca1ed2a43b216f7ad9c2e8f38d015f08822d3d9f989dcf1360cca57bc0cce6172b",
+            "id": "interface-IBaseDishOption-36636905916e9b0de826e455ace1ed9ecbb1e2db25b773b1a5d6aa68990c55d3ff078470d3016a8a65dff1fca54c819b89516882f0b2cee41b7b485e90c6edea",
             "file": "src/app/components/add-meal/add-meal.component.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import {\n  ChangeDetectionStrategy,\n  ChangeDetectorRef,\n  Component,\n  ElementRef,\n  EventEmitter,\n  Inject,\n  Output,\n  ViewChild,\n} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {MatButtonModule} from '@angular/material/button';\nimport {IMeal} from '../../commons/models/domain.models';\nimport {MatInputModule} from '@angular/material/input';\nimport {MatIconModule} from '@angular/material/icon';\nimport {MatListModule} from '@angular/material/list';\nimport {Observable} from 'rxjs';\nimport {IPfcc} from '../../commons/models/common.models';\nimport {MatExpansionModule} from '@angular/material/expansion';\n\nexport interface AddMealDialogData {\n  items: Observable<IDishOption[]>;\n  filter: (val: string) => void;\n}\n\n@Component({\n  selector: 'pfc-add-meal',\n  standalone: true,\n  imports: [CommonModule,\n    TranslateModule,\n    MatDialogModule,\n    MatButtonModule,\n    MatInputModule,\n    MatIconModule,\n    MatListModule,\n    MatExpansionModule],\n  templateUrl: './add-meal.component.html',\n  styleUrls: ['./add-meal.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class AddMealComponent {\n  meals: IMeal[] = [];\n\n  @Output()\n  search = new EventEmitter<string | null>();\n\n  @ViewChild('searchField')\n  searchField!: ElementRef<HTMLInputElement>;\n  selectedOptionId = 'NOTHING';\n\n  constructor(private dialogRef: MatDialogRef<AddMealComponent>,\n              private cdr: ChangeDetectorRef,\n              @Inject(MAT_DIALOG_DATA) public data: AddMealDialogData) {\n  }\n\n  dishOptionTrackBy = (idx: number, item: IDishOption) => item.id;\n\n  handleSearchChange() {\n    this.data.filter(this.searchField.nativeElement.value);\n  }\n\n  handleOptionClick(selectedOptionId: string) {\n    if (this.selectedOptionId === selectedOptionId) {\n      this.selectedOptionId = 'NOTHING';\n    } else {\n      this.selectedOptionId = selectedOptionId;\n    }\n    this.cdr.markForCheck();\n  }\n\n  handleDeleteOptionClick(option: IDishOption) {\n    if (option.type === 'dish' && option.delete != null) {\n      option.delete();\n    }\n  }\n}\n\nexport type DishOptionType = 'dish' | 'recipe' | 'raw-food';\n\ninterface IBaseDishOption {\n  id: string;\n  name: string;\n  type: DishOptionType;\n  pfcc: IPfcc;\n}\n\nexport type IDishOption =\n  (IBaseDishOption & { type: 'dish', delete?: (() => void) }) |\n  (IBaseDishOption & { type: 'recipe' | 'raw-food' })\n",
+            "sourceCode": "import {\n  ChangeDetectionStrategy,\n  ChangeDetectorRef,\n  Component,\n  ElementRef,\n  EventEmitter,\n  Inject,\n  Output,\n  ViewChild,\n} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {IMeal} from '../../commons/models/domain.models';\nimport {MatIconModule} from '@angular/material/icon';\nimport {Observable} from 'rxjs';\nimport {IPfcc} from '../../commons/models/common.models';\nimport {MatExpansionModule} from '@angular/material/expansion';\nimport {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';\nimport {MatInputModule} from '@angular/material/input';\nimport {MatButtonModule} from '@angular/material/button';\n\nexport interface AddMealDialogData {\n  items: Observable<IDishOption[]>;\n  filter: (val: string) => void;\n}\n\n@Component({\n  selector: 'pfc-add-meal',\n  standalone: true,\n  imports: [CommonModule,\n    TranslateModule,\n    MatIconModule,\n    MatExpansionModule, MatInputModule, MatDialogModule, MatButtonModule],\n  templateUrl: './add-meal.component.html',\n  styleUrls: ['./add-meal.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class AddMealComponent {\n  meals: IMeal[] = [];\n\n  @Output()\n  search = new EventEmitter<string | null>();\n\n  @ViewChild('searchField')\n  searchField!: ElementRef<HTMLInputElement>;\n  selectedOptionId = 'NOTHING';\n\n  constructor(private dialogRef: MatDialogRef<AddMealComponent>,\n              private cdr: ChangeDetectorRef,\n              @Inject(MAT_DIALOG_DATA) public data: AddMealDialogData) {\n  }\n\n  dishOptionTrackBy = (idx: number, item: IDishOption) => item.id;\n\n  handleSearchChange() {\n    this.data.filter(this.searchField.nativeElement.value);\n  }\n\n  handleOptionClick(selectedOptionId: string) {\n    if (this.selectedOptionId === selectedOptionId) {\n      this.selectedOptionId = 'NOTHING';\n    } else {\n      this.selectedOptionId = selectedOptionId;\n    }\n    this.cdr.markForCheck();\n  }\n\n  handleDeleteOptionClick(option: IDishOption) {\n    if (option.type === 'dish' && option.delete != null) {\n      option.delete();\n    }\n  }\n\n  onClose() {\n    this.dialogRef.close(null);\n  }\n}\n\nexport type DishOptionType = 'dish' | 'recipe' | 'raw-food';\n\ninterface IBaseDishOption {\n  id: string;\n  name: string;\n  type: DishOptionType;\n  pfcc: IPfcc;\n}\n\nexport type IDishOption =\n  (IBaseDishOption & { type: 'dish', delete?: (() => void) }) |\n  (IBaseDishOption & { type: 'recipe' | 'raw-food' })\n",
             "properties": [
                 {
                     "name": "id",
@@ -154,7 +154,7 @@
                     "type": "string",
                     "optional": false,
                     "description": "",
-                    "line": 83
+                    "line": 82
                 },
                 {
                     "name": "name",
@@ -163,7 +163,7 @@
                     "type": "string",
                     "optional": false,
                     "description": "",
-                    "line": 84
+                    "line": 83
                 },
                 {
                     "name": "pfcc",
@@ -172,7 +172,7 @@
                     "type": "IPfcc",
                     "optional": false,
                     "description": "",
-                    "line": 86
+                    "line": 85
                 },
                 {
                     "name": "type",
@@ -181,7 +181,7 @@
                     "type": "DishOptionType",
                     "optional": false,
                     "description": "",
-                    "line": 85
+                    "line": 84
                 }
             ],
             "indexSignatures": [],
@@ -4518,7 +4518,7 @@
     "components": [
         {
             "name": "AddMealComponent",
-            "id": "component-AddMealComponent-5c2236ce0c878783acbca9570997c636b4a1af10f897c6c474a9699b711d0aca1ed2a43b216f7ad9c2e8f38d015f08822d3d9f989dcf1360cca57bc0cce6172b",
+            "id": "component-AddMealComponent-36636905916e9b0de826e455ace1ed9ecbb1e2db25b773b1a5d6aa68990c55d3ff078470d3016a8a65dff1fca54c819b89516882f0b2cee41b7b485e90c6edea",
             "file": "src/app/components/add-meal/add-meal.component.ts",
             "changeDetection": "ChangeDetectionStrategy.OnPush",
             "encapsulation": [],
@@ -4542,7 +4542,7 @@
                     "defaultValue": "new EventEmitter<string | null>()",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 47,
+                    "line": 42,
                     "type": "EventEmitter"
                 }
             ],
@@ -4554,7 +4554,7 @@
                     "type": "AddMealDialogData",
                     "optional": false,
                     "description": "",
-                    "line": 55,
+                    "line": 50,
                     "decorators": [
                         {
                             "name": "Inject",
@@ -4573,7 +4573,7 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 58
+                    "line": 53
                 },
                 {
                     "name": "meals",
@@ -4583,7 +4583,7 @@
                     "type": "IMeal[]",
                     "optional": false,
                     "description": "",
-                    "line": 44
+                    "line": 39
                 },
                 {
                     "name": "searchField",
@@ -4592,7 +4592,7 @@
                     "type": "ElementRef<HTMLInputElement>",
                     "optional": false,
                     "description": "",
-                    "line": 50,
+                    "line": 45,
                     "decorators": [
                         {
                             "name": "ViewChild",
@@ -4608,7 +4608,7 @@
                     "type": "string",
                     "optional": false,
                     "description": "",
-                    "line": 51
+                    "line": 46
                 }
             ],
             "methodsClass": [
@@ -4625,7 +4625,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 73,
+                    "line": 68,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -4653,7 +4653,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 64,
+                    "line": 59,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -4674,7 +4674,17 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 60,
+                    "line": 55,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onClose",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 74,
                     "deprecated": false,
                     "deprecationMessage": ""
                 }
@@ -4686,11 +4696,11 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import {\n  ChangeDetectionStrategy,\n  ChangeDetectorRef,\n  Component,\n  ElementRef,\n  EventEmitter,\n  Inject,\n  Output,\n  ViewChild,\n} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {MatButtonModule} from '@angular/material/button';\nimport {IMeal} from '../../commons/models/domain.models';\nimport {MatInputModule} from '@angular/material/input';\nimport {MatIconModule} from '@angular/material/icon';\nimport {MatListModule} from '@angular/material/list';\nimport {Observable} from 'rxjs';\nimport {IPfcc} from '../../commons/models/common.models';\nimport {MatExpansionModule} from '@angular/material/expansion';\n\nexport interface AddMealDialogData {\n  items: Observable<IDishOption[]>;\n  filter: (val: string) => void;\n}\n\n@Component({\n  selector: 'pfc-add-meal',\n  standalone: true,\n  imports: [CommonModule,\n    TranslateModule,\n    MatDialogModule,\n    MatButtonModule,\n    MatInputModule,\n    MatIconModule,\n    MatListModule,\n    MatExpansionModule],\n  templateUrl: './add-meal.component.html',\n  styleUrls: ['./add-meal.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class AddMealComponent {\n  meals: IMeal[] = [];\n\n  @Output()\n  search = new EventEmitter<string | null>();\n\n  @ViewChild('searchField')\n  searchField!: ElementRef<HTMLInputElement>;\n  selectedOptionId = 'NOTHING';\n\n  constructor(private dialogRef: MatDialogRef<AddMealComponent>,\n              private cdr: ChangeDetectorRef,\n              @Inject(MAT_DIALOG_DATA) public data: AddMealDialogData) {\n  }\n\n  dishOptionTrackBy = (idx: number, item: IDishOption) => item.id;\n\n  handleSearchChange() {\n    this.data.filter(this.searchField.nativeElement.value);\n  }\n\n  handleOptionClick(selectedOptionId: string) {\n    if (this.selectedOptionId === selectedOptionId) {\n      this.selectedOptionId = 'NOTHING';\n    } else {\n      this.selectedOptionId = selectedOptionId;\n    }\n    this.cdr.markForCheck();\n  }\n\n  handleDeleteOptionClick(option: IDishOption) {\n    if (option.type === 'dish' && option.delete != null) {\n      option.delete();\n    }\n  }\n}\n\nexport type DishOptionType = 'dish' | 'recipe' | 'raw-food';\n\ninterface IBaseDishOption {\n  id: string;\n  name: string;\n  type: DishOptionType;\n  pfcc: IPfcc;\n}\n\nexport type IDishOption =\n  (IBaseDishOption & { type: 'dish', delete?: (() => void) }) |\n  (IBaseDishOption & { type: 'recipe' | 'raw-food' })\n",
+            "sourceCode": "import {\n  ChangeDetectionStrategy,\n  ChangeDetectorRef,\n  Component,\n  ElementRef,\n  EventEmitter,\n  Inject,\n  Output,\n  ViewChild,\n} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {IMeal} from '../../commons/models/domain.models';\nimport {MatIconModule} from '@angular/material/icon';\nimport {Observable} from 'rxjs';\nimport {IPfcc} from '../../commons/models/common.models';\nimport {MatExpansionModule} from '@angular/material/expansion';\nimport {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';\nimport {MatInputModule} from '@angular/material/input';\nimport {MatButtonModule} from '@angular/material/button';\n\nexport interface AddMealDialogData {\n  items: Observable<IDishOption[]>;\n  filter: (val: string) => void;\n}\n\n@Component({\n  selector: 'pfc-add-meal',\n  standalone: true,\n  imports: [CommonModule,\n    TranslateModule,\n    MatIconModule,\n    MatExpansionModule, MatInputModule, MatDialogModule, MatButtonModule],\n  templateUrl: './add-meal.component.html',\n  styleUrls: ['./add-meal.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class AddMealComponent {\n  meals: IMeal[] = [];\n\n  @Output()\n  search = new EventEmitter<string | null>();\n\n  @ViewChild('searchField')\n  searchField!: ElementRef<HTMLInputElement>;\n  selectedOptionId = 'NOTHING';\n\n  constructor(private dialogRef: MatDialogRef<AddMealComponent>,\n              private cdr: ChangeDetectorRef,\n              @Inject(MAT_DIALOG_DATA) public data: AddMealDialogData) {\n  }\n\n  dishOptionTrackBy = (idx: number, item: IDishOption) => item.id;\n\n  handleSearchChange() {\n    this.data.filter(this.searchField.nativeElement.value);\n  }\n\n  handleOptionClick(selectedOptionId: string) {\n    if (this.selectedOptionId === selectedOptionId) {\n      this.selectedOptionId = 'NOTHING';\n    } else {\n      this.selectedOptionId = selectedOptionId;\n    }\n    this.cdr.markForCheck();\n  }\n\n  handleDeleteOptionClick(option: IDishOption) {\n    if (option.type === 'dish' && option.delete != null) {\n      option.delete();\n    }\n  }\n\n  onClose() {\n    this.dialogRef.close(null);\n  }\n}\n\nexport type DishOptionType = 'dish' | 'recipe' | 'raw-food';\n\ninterface IBaseDishOption {\n  id: string;\n  name: string;\n  type: DishOptionType;\n  pfcc: IPfcc;\n}\n\nexport type IDishOption =\n  (IBaseDishOption & { type: 'dish', delete?: (() => void) }) |\n  (IBaseDishOption & { type: 'recipe' | 'raw-food' })\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": ":host {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n\n  > * {\n    width: 100%;\n    box-sizing: border-box;\n  }\n}\n\n.title {\n  flex-grow: 0;\n  flex-shrink: 0;\n  padding: 24px 24px 24px;\n  margin: 0;\n}\n\n.content {\n  display: flex;\n  flex-direction: column;\n  flex-grow: 1;\n  flex-shrink: 1;\n  overflow: hidden;\n\n  .dish-search {\n    padding: 0 5px;\n  }\n\n  .dishes {\n    overflow: scroll;\n\n    .dishes-header {\n      width: 100%;\n      display: flex;\n      flex-direction: row;\n      align-items: center;\n      justify-content: flex-start;\n    }\n\n    .dishes-header_title {\n      display: flex;\n      flex-direction: column;\n      align-items: flex-start;\n      justify-content: flex-start;\n    }\n\n    .dishes-header_title-primary {\n      margin: 0;\n    }\n\n    .dishes-header_title-secondary {\n      margin: 0;\n      font-size: .7rem;\n      color: #707070;\n\n      strong {\n        font-weight: 900;\n        color: red;\n      }\n    }\n  }\n}\n\n.actions {\n  flex-grow: 0;\n  flex-shrink: 0;\n  display: flex;\n  flex-direction: row;\n  justify-content: center;\n  gap: 10px;\n  padding: 24px 10px;\n  box-sizing: border-box;\n  width: 100%;\n\n  * {\n    flex-grow: 1;\n  }\n}\n",
+                    "data": ":host {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n\n  > * {\n    width: 100%;\n    box-sizing: border-box;\n  }\n}\n\n.heading {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n  width: 100%;\n  &__close {\n    margin: 28px 2px 20px;\n  }\n  &__title {\n    flex-grow: 0;\n    flex-shrink: 0;\n    padding: 24px 24px 24px;\n    margin: 0;\n  }\n}\n\n.content {\n  display: flex;\n  flex-direction: column;\n  flex-grow: 1;\n  flex-shrink: 1;\n  overflow: hidden;\n\n  .dish-search {\n    padding: 0 5px;\n  }\n\n  .dishes {\n    overflow: scroll;\n\n    .dishes-header {\n      width: 100%;\n      display: flex;\n      flex-direction: row;\n      align-items: center;\n      justify-content: flex-start;\n    }\n\n    .dishes-header_title {\n      display: flex;\n      flex-direction: column;\n      align-items: flex-start;\n      justify-content: flex-start;\n    }\n\n    .dishes-header_title-primary {\n      margin: 0;\n    }\n\n    .dishes-header_title-secondary {\n      margin: 0;\n      font-size: .7rem;\n      color: #707070;\n\n      strong {\n        font-weight: 900;\n        color: red;\n      }\n    }\n  }\n}\n\n.actions {\n  flex-grow: 0;\n  flex-shrink: 0;\n  display: flex;\n  flex-direction: row;\n  justify-content: center;\n  gap: 10px;\n  padding: 24px 10px;\n  box-sizing: border-box;\n  width: 100%;\n\n  * {\n    flex-grow: 1;\n  }\n}\n\n.dish-option {\n  &_dish{\n  }\n\n  &__weight-input {\n    text-align: end;\n  }\n}\n",
                     "styleUrl": "./add-meal.component.scss"
                 }
             ],
@@ -4720,7 +4730,7 @@
                         "deprecationMessage": ""
                     }
                 ],
-                "line": 51,
+                "line": 46,
                 "jsdoctags": [
                     {
                         "name": "dialogRef",
@@ -4751,7 +4761,7 @@
                     }
                 ]
             },
-            "templateData": "<h1 class=\"title\">{{'add-meal.title' | translate}}</h1>\n<div class=\"content\">\n  <mat-form-field class=\"dish-search\">\n    <input #searchField (input)=\"handleSearchChange()\" matInput placeholder=\"Search\" type=\"text\">\n    <mat-icon matSuffix>search</mat-icon>\n  </mat-form-field>\n  <mat-accordion class=\"dishes\" displayMode=\"flat\">\n    <mat-expansion-panel *ngFor=\"let option of data.items | async; trackBy: dishOptionTrackBy\"\n                         hideToggle>\n      <mat-expansion-panel-header>\n        <div class=\"dishes-header\">\n          <div class=\"dishes-header_title\">\n            <p class=\"dishes-header_title-primary\">{{option.name}}</p>\n            <p [innerHTML]=\"'add-meal.option-subtitle' | translate:option.pfcc\"\n               class=\"dishes-header_title-secondary\"></p>\n          </div>\n\n          <div *ngIf=\"option.type === 'dish'\" class=\"flex-spacer\"></div>\n\n          <button (click)=\"handleDeleteOptionClick(option); $event.stopPropagation();\" *ngIf=\"option.type === 'dish'\" color=\"accent\"\n                  mat-icon-button>\n            <mat-icon>delete</mat-icon>\n          </button>\n        </div>\n      </mat-expansion-panel-header>\n\n      <ng-template matExpansionPanelContent>\n        <div [ngSwitch]=\"option.type\">\n          <div *ngSwitchCase=\"'dish'\">\n            <mat-form-field>\n              <mat-label>Вага</mat-label>\n              <input matInput matSuffix=\"г\">\n            </mat-form-field>\n          </div>\n          <div *ngSwitchCase=\"'recipe'\">\n            <p>a Recipe {{option.name}}</p></div>\n          <div *ngSwitchCase=\"'raw-food'\">\n            <p>a Raw food {{option.name}}</p></div>\n        </div>\n      </ng-template>\n    </mat-expansion-panel>\n  </mat-accordion>\n</div>\n<div class=\"actions\">\n  <button [mat-dialog-close]=\"meals\"\n          color=\"accent\"\n          mat-raised-button>\n    {{'add-meal.add-btn' | translate}}\n  </button>\n</div>\n"
+            "templateData": "<div class=\"heading\">\n  <h1 class=\"heading__title\">{{'add-meal.title' | translate}}</h1>\n  <button class=\"heading__close\" mat-icon-button (click)=\"onClose()\">\n    <mat-icon>close</mat-icon>\n  </button>\n</div>\n<div class=\"content\">\n  <mat-form-field class=\"dish-search\">\n    <input #searchField (input)=\"handleSearchChange()\" matInput placeholder=\"Search\" type=\"text\">\n    <mat-icon matSuffix>search</mat-icon>\n  </mat-form-field>\n  <mat-accordion class=\"dishes\" displayMode=\"flat\">\n    <mat-expansion-panel *ngFor=\"let option of data.items | async; trackBy: dishOptionTrackBy\"\n                         hideToggle>\n      <mat-expansion-panel-header>\n        <div class=\"dishes-header\">\n          <div class=\"dishes-header_title\">\n            <p class=\"dishes-header_title-primary\">{{option.name}}</p>\n            <p [innerHTML]=\"'add-meal.option-subtitle' | translate:option.pfcc\"\n               class=\"dishes-header_title-secondary\"></p>\n          </div>\n\n          <div *ngIf=\"option.type === 'dish'\" class=\"flex-spacer\"></div>\n\n          <button (click)=\"handleDeleteOptionClick(option); $event.stopPropagation();\" *ngIf=\"option.type === 'dish'\"\n                  color=\"accent\"\n                  mat-icon-button>\n            <mat-icon>delete</mat-icon>\n          </button>\n        </div>\n      </mat-expansion-panel-header>\n\n      <ng-template matExpansionPanelContent>\n        <ng-container [ngSwitch]=\"option.type\">\n          <div *ngSwitchCase=\"'dish'\" class=\"dish-option dish-option_dish\">\n            <mat-form-field appearance=\"fill\" floatLabel=\"always\">\n              <mat-label>Вага</mat-label>\n              <input matInput class=\"dish-option__weight-input\" type=\"number\">\n              <span matTextSuffix>&nbsp;г</span>\n            </mat-form-field>\n          </div>\n          <div *ngSwitchCase=\"'recipe'\" class=\"dish-option dish-option_recipe\">\n            <p>a Recipe {{option.name}}</p></div>\n          <div *ngSwitchCase=\"'raw-food'\"  class=\"dish-option dish-option_raw-food\">\n            <p>a Raw food {{option.name}}</p></div>\n        </ng-container>\n      </ng-template>\n    </mat-expansion-panel>\n  </mat-accordion>\n</div>\n<div class=\"actions\">\n  <button [mat-dialog-close]=\"meals\"\n          color=\"accent\"\n          mat-raised-button>\n    {{'add-meal.add-btn' | translate}}\n  </button>\n</div>\n"
         },
         {
             "name": "AppComponent",
@@ -4836,7 +4846,7 @@
         },
         {
             "name": "ConfigureProfileComponent",
-            "id": "component-ConfigureProfileComponent-ac32ac3221a551a456ec59cf8303bea5ef7a7ff7684c194f0f01dca4076f0571d6611fe71302fd6e19cb940af9f8eee0a490243fe1c71056062682cb3437ba5c",
+            "id": "component-ConfigureProfileComponent-28b643b34d57377c77b2f1d9f8dde5aea341f16d82030c24650d9828c8cf301d1f5746b9e2fc699a8c6784cd7dab3d0187f83c726fb7783914da506c1d12422f",
             "file": "src/app/pages/configure-profile/configure-profile.component.ts",
             "changeDetection": "ChangeDetectionStrategy.OnPush",
             "encapsulation": [],
@@ -4886,7 +4896,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import {ChangeDetectionStrategy, Component} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';\nimport {MatFormFieldModule} from '@angular/material/form-field';\nimport {MatButtonModule} from '@angular/material/button';\nimport {MatInputModule} from '@angular/material/input';\nimport {Store} from '@ngxs/store';\nimport {MatSlideToggleModule} from '@angular/material/slide-toggle';\nimport {ConfigureProfileAction} from '../../state/domain/domain.state-models';\nimport {TranslateModule} from '@ngx-translate/core';\n\n@Component({\n  selector: 'pfc-configure-profile',\n  standalone: true,\n  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatSlideToggleModule, TranslateModule],\n  templateUrl: './configure-profile.component.html',\n  styleUrls: ['./configure-profile.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ConfigureProfileComponent {\n  form = this.fb.group({\n    protein: [100, Validators.min(0)],\n    fat: [40, Validators.min(0)],\n    carbohydrates: [150, Validators.min(0)],\n    calories: [2000, Validators.min(0)],\n    baseValues: [false],\n    baseProtein: [0, Validators.min(0)],\n    baseFat: [0, Validators.min(0)],\n    baseCarbohydrates: [0, Validators.min(0)],\n    baseCalories: [0, Validators.min(0)],\n  });\n\n  constructor(private store: Store, private fb: FormBuilder) {\n  }\n\n  submit() {\n    this.store.dispatch(new ConfigureProfileAction({\n      protein: this.form.value.protein || null,\n      fat: this.form.value.fat || null,\n      carbohydrates: this.form.value.carbohydrates || null,\n      calories: this.form.value.calories || null,\n    }, this.form.value.baseValues ? {\n      protein: this.form.value.baseProtein || null,\n      fat: this.form.value.baseFat || null,\n      carbohydrates: this.form.value.baseCarbohydrates || null,\n      calories: this.form.value.baseCalories || null,\n    } : undefined));\n  }\n}\n",
+            "sourceCode": "import {ChangeDetectionStrategy, Component} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';\nimport {Store} from '@ngxs/store';\nimport {ConfigureProfileAction} from '../../state/domain/domain.state-models';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {MatFormFieldModule} from '@angular/material/form-field';\nimport {MatButtonModule} from '@angular/material/button';\nimport {MatInputModule} from '@angular/material/input';\nimport {MatSlideToggleModule} from '@angular/material/slide-toggle';\n\n@Component({\n  selector: 'pfc-configure-profile',\n  standalone: true,\n  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatSlideToggleModule, TranslateModule],\n  templateUrl: './configure-profile.component.html',\n  styleUrls: ['./configure-profile.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ConfigureProfileComponent {\n  form = this.fb.group({\n    protein: [100, Validators.min(0)],\n    fat: [40, Validators.min(0)],\n    carbohydrates: [150, Validators.min(0)],\n    calories: [2000, Validators.min(0)],\n    baseValues: [false],\n    baseProtein: [0, Validators.min(0)],\n    baseFat: [0, Validators.min(0)],\n    baseCarbohydrates: [0, Validators.min(0)],\n    baseCalories: [0, Validators.min(0)],\n  });\n\n  constructor(private store: Store, private fb: FormBuilder) {\n  }\n\n  submit() {\n    this.store.dispatch(new ConfigureProfileAction({\n      protein: this.form.value.protein || null,\n      fat: this.form.value.fat || null,\n      carbohydrates: this.form.value.carbohydrates || null,\n      calories: this.form.value.calories || null,\n    }, this.form.value.baseValues ? {\n      protein: this.form.value.baseProtein || null,\n      fat: this.form.value.baseFat || null,\n      carbohydrates: this.form.value.baseCarbohydrates || null,\n      calories: this.form.value.baseCalories || null,\n    } : undefined));\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -4940,7 +4950,7 @@
         },
         {
             "name": "DashboardPageComponent",
-            "id": "component-DashboardPageComponent-811f4a4624f26e5231ec8de8f262340041c18487d06d2747351e32ca897ee7fc14079af2f5fbcd89ced2ec00c8f03ae8ed6f8d55696ea4a228ca50a4316f6f52",
+            "id": "component-DashboardPageComponent-9f17a1bc2436f62510dcf466146e3835587b110e79a11d1a9fa37d9e0b6e74fe336044ded678aad86c136a1646d61567b4dbaa1f74ba99ce2c4d9b7381c6c0c6",
             "file": "src/app/pages/dashboard-page/dashboard-page.component.ts",
             "changeDetection": "ChangeDetectionStrategy.OnPush",
             "encapsulation": [],
@@ -5110,7 +5120,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';\nimport {NutritionGaugeComponent} from '../../components/nutrition-gauge/nutrition-gauge.component';\nimport {Store} from '@ngxs/store';\nimport {DomainState} from '../../state/domain/domain.state';\nimport {IDish, IFood, IMeal, IProfile} from '../../commons/models/domain.models';\nimport {BehaviorSubject, combineLatest, combineLatestWith, filter, map, Observable} from 'rxjs';\nimport {AsyncPipe, CommonModule} from '@angular/common';\nimport {emptyPfcc, IPfcc} from '../../commons/models/common.models';\nimport {MatButtonModule} from '@angular/material/button';\nimport {DateTime} from 'luxon';\nimport {MatListModule} from '@angular/material/list';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {ceilPfcc, multiplyPfcc} from '../../commons/functions';\nimport {MatIconModule} from '@angular/material/icon';\nimport {DeleteDishAction, RemoveMealAction} from '../../state/domain/domain.state-models';\nimport {MatDialog, MatDialogModule} from '@angular/material/dialog';\nimport {\n  AddMealComponent,\n  AddMealDialogData,\n  DishOptionType,\n  IDishOption,\n} from '../../components/add-meal/add-meal.component';\n\n@Component({\n  selector: 'pfc-dashboard-page',\n  templateUrl: './dashboard-page.component.html',\n  styleUrls: ['./dashboard-page.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  standalone: true,\n  imports: [CommonModule, NutritionGaugeComponent, AsyncPipe, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule],\n})\nexport class DashboardPageComponent implements AfterViewInit {\n  profile$: Observable<IProfile>;\n\n  dailyNutrients$: Observable<IPfcc>;\n  weeklyNutrients$: Observable<IPfcc>;\n\n  dailyAims$: Observable<IPfcc>;\n  weeklyAims$: Observable<IPfcc>;\n\n  eatenMeals$: Observable<IExtendedMeal[]>;\n\n  constructor(private store: Store, private dialog: MatDialog) {\n    const weekday = DateTime.now().weekday;\n\n    this.profile$ = this.store.select(DomainState.profile)\n      .pipe(\n        filter(p => p != null),\n      ) as Observable<IProfile>;\n\n    this.dailyAims$ = this.store.select(DomainState.profile).pipe(\n      filter(p => p != null),\n      map(p => p?.aims || emptyPfcc),\n    ) as Observable<IPfcc>;\n    this.weeklyAims$ = this.dailyAims$.pipe(\n      map(aims => {\n        return {\n          protein: (aims.protein || 0) * weekday,\n          fat: (aims.fat || 0) * weekday,\n          carbohydrates: (aims.carbohydrates || 0) * weekday,\n          calories: (aims.calories || 0) * weekday,\n        };\n      }),\n    ) as Observable<IPfcc>;\n\n\n    this.weeklyNutrients$ = this.store.select(DomainState.weeklyNutrients)\n      .pipe(\n        map(ceilPfcc),\n      );\n    this.dailyNutrients$ = this.store.select(DomainState.todayNutrients)\n      .pipe(\n        map(ceilPfcc),\n      );\n\n    this.eatenMeals$ = this.store.select(DomainState.todayMeals)\n      .pipe(\n        combineLatestWith(this.store.select(DomainState.dishesMap), this.store.select(DomainState.foodsMap)),\n        map(([meals, dishes, foods]) => {\n          return meals.map(meal => {\n            const dish = meal.cooked ? dishes.get(meal.dishId) || null : null;\n            let food: any;\n            if (meal.cooked) {\n              food = dish != null ? foods.get(dish.foodId) : null;\n            } else {\n              food = foods.get(meal.foodId);\n            }\n\n            const pfcc = ceilPfcc(meal.pfcc, 1);\n            const extendedMeal: IExtendedMeal = {\n              ...meal,\n              pfcc: {\n                protein: pfcc.protein || 0,\n                fat: pfcc.fat || 0,\n                carbohydrates: pfcc.carbohydrates || 0,\n                calories: pfcc.calories || 0,\n              },\n              dish: dish,\n              food: food,\n            };\n            return extendedMeal;\n          });\n        }),\n      );\n  }\n\n  mealTrackBy = (idx: number, item: IExtendedMeal) => item.id;\n\n  ngAfterViewInit() {\n    this.addMeal();\n  }\n\n  removeMeal(mealId: number) {\n    this.store.dispatch(new RemoveMealAction(mealId));\n  }\n\n  addMeal() {\n    const filter$ = new BehaviorSubject<string | null>(null);\n\n    const allDishOptions$ = combineLatest([\n      this.store.select(DomainState.dishes),\n      this.store.select(DomainState.foodsMap),\n    ]).pipe(\n      map(([dishes, foodsMap]): IDishOption[] => {\n        return [\n          ...dishes.filter(d => {\n            const foodIsPresent = foodsMap.has(d.foodId);\n            if (!foodIsPresent) {\n              console.error(`Food with id ${d.foodId} is not found; dish: ${d}`);\n            }\n            return foodIsPresent;\n          }).map(dish => {\n            const food = foodsMap.get(dish.foodId) as IFood;\n            const item: IDishOption = {\n              id: `dish-${dish.id}`,\n              name: dish.name,\n              type: 'dish',\n              pfcc: ceilPfcc(multiplyPfcc(food.pfcc, (dish.cookedWeight / dish.recipeWeight)), 1), // TODO: Ceil pfcc?\n              delete: () => {\n                this.store.dispatch(new DeleteDishAction(dish.id));\n              },\n            };\n            return item;\n          }),\n\n          ...Array.from(foodsMap.values()).map(food => {\n            return {\n              id: `food-${food.id}`,\n              name: food.name,\n              pfcc: food.pfcc,\n              type: (food.isCookable ? 'recipe' : 'raw-food') as DishOptionType,\n            };\n          }),\n        ];\n      }),\n    );\n    const ref = this.dialog.open<AddMealComponent, AddMealDialogData>(AddMealComponent, {\n      panelClass: 'fullscreen-dialog',\n\n      data: {\n        filter: val => filter$.next(val),\n        items: combineLatest([allDishOptions$, filter$])\n          .pipe(\n            map(([options, filter]): IDishOption[] => options.filter(o => filter == null || o.name.toLowerCase().includes(filter.toLowerCase()))),\n          ),\n      },\n    });\n    ref.afterClosed()\n      .subscribe(console.log);\n  }\n\n  getMealName(meal: IExtendedMeal): string | null {\n    return (meal.cooked ? meal.dish?.name : meal.food.name) || null;\n  }\n}\n\ntype IExtendedMeal = IMeal &\n  {\n    food: IFood,\n    dish: IDish | null\n  };\n",
+            "sourceCode": "import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';\nimport {NutritionGaugeComponent} from '../../components/nutrition-gauge/nutrition-gauge.component';\nimport {Store} from '@ngxs/store';\nimport {DomainState} from '../../state/domain/domain.state';\nimport {IDish, IFood, IMeal, IProfile} from '../../commons/models/domain.models';\nimport {BehaviorSubject, combineLatest, combineLatestWith, filter, map, Observable} from 'rxjs';\nimport {AsyncPipe, CommonModule} from '@angular/common';\nimport {emptyPfcc, IPfcc} from '../../commons/models/common.models';\nimport {DateTime} from 'luxon';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {ceilPfcc, multiplyPfcc} from '../../commons/functions';\nimport {MatIconModule} from '@angular/material/icon';\nimport {DeleteDishAction, RemoveMealAction} from '../../state/domain/domain.state-models';\nimport {\n  AddMealComponent,\n  AddMealDialogData,\n  DishOptionType,\n  IDishOption,\n} from '../../components/add-meal/add-meal.component';\nimport {MatListModule} from '@angular/material/list';\nimport {MatButtonModule} from '@angular/material/button';\nimport {MatDialog, MatDialogModule} from '@angular/material/dialog';\n\n@Component({\n  selector: 'pfc-dashboard-page',\n  templateUrl: './dashboard-page.component.html',\n  styleUrls: ['./dashboard-page.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  standalone: true,\n  imports: [CommonModule, NutritionGaugeComponent, AsyncPipe, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule],\n})\nexport class DashboardPageComponent implements AfterViewInit {\n  profile$: Observable<IProfile>;\n\n  dailyNutrients$: Observable<IPfcc>;\n  weeklyNutrients$: Observable<IPfcc>;\n\n  dailyAims$: Observable<IPfcc>;\n  weeklyAims$: Observable<IPfcc>;\n\n  eatenMeals$: Observable<IExtendedMeal[]>;\n\n  constructor(private store: Store, private dialog: MatDialog) {\n    const weekday = DateTime.now().weekday;\n\n    this.profile$ = this.store.select(DomainState.profile)\n      .pipe(\n        filter(p => p != null),\n      ) as Observable<IProfile>;\n\n    this.dailyAims$ = this.store.select(DomainState.profile).pipe(\n      filter(p => p != null),\n      map(p => p?.aims || emptyPfcc),\n    ) as Observable<IPfcc>;\n    this.weeklyAims$ = this.dailyAims$.pipe(\n      map(aims => {\n        return {\n          protein: (aims.protein || 0) * weekday,\n          fat: (aims.fat || 0) * weekday,\n          carbohydrates: (aims.carbohydrates || 0) * weekday,\n          calories: (aims.calories || 0) * weekday,\n        };\n      }),\n    ) as Observable<IPfcc>;\n\n\n    this.weeklyNutrients$ = this.store.select(DomainState.weeklyNutrients)\n      .pipe(\n        map(ceilPfcc),\n      );\n    this.dailyNutrients$ = this.store.select(DomainState.todayNutrients)\n      .pipe(\n        map(ceilPfcc),\n      );\n\n    this.eatenMeals$ = this.store.select(DomainState.todayMeals)\n      .pipe(\n        combineLatestWith(this.store.select(DomainState.dishesMap), this.store.select(DomainState.foodsMap)),\n        map(([meals, dishes, foods]) => {\n          return meals.map(meal => {\n            const dish = meal.cooked ? dishes.get(meal.dishId) || null : null;\n            let food: any;\n            if (meal.cooked) {\n              food = dish != null ? foods.get(dish.foodId) : null;\n            } else {\n              food = foods.get(meal.foodId);\n            }\n\n            const pfcc = ceilPfcc(meal.pfcc, 1);\n            const extendedMeal: IExtendedMeal = {\n              ...meal,\n              pfcc: {\n                protein: pfcc.protein || 0,\n                fat: pfcc.fat || 0,\n                carbohydrates: pfcc.carbohydrates || 0,\n                calories: pfcc.calories || 0,\n              },\n              dish: dish,\n              food: food,\n            };\n            return extendedMeal;\n          });\n        }),\n      );\n  }\n\n  mealTrackBy = (idx: number, item: IExtendedMeal) => item.id;\n\n  ngAfterViewInit() {\n    this.addMeal();\n  }\n\n  removeMeal(mealId: number) {\n    this.store.dispatch(new RemoveMealAction(mealId));\n  }\n\n  addMeal() {\n    const filter$ = new BehaviorSubject<string | null>(null);\n\n    const allDishOptions$ = combineLatest([\n      this.store.select(DomainState.dishes),\n      this.store.select(DomainState.foodsMap),\n    ]).pipe(\n      map(([dishes, foodsMap]): IDishOption[] => {\n        return [\n          ...dishes.filter(d => {\n            const foodIsPresent = foodsMap.has(d.foodId);\n            if (!foodIsPresent) {\n              console.error(`Food with id ${d.foodId} is not found; dish: ${d}`);\n            }\n            return foodIsPresent;\n          }).map(dish => {\n            const food = foodsMap.get(dish.foodId) as IFood;\n            const item: IDishOption = {\n              id: `dish-${dish.id}`,\n              name: dish.name,\n              type: 'dish',\n              pfcc: ceilPfcc(multiplyPfcc(food.pfcc, (dish.cookedWeight / dish.recipeWeight)), 1), // TODO: Ceil pfcc?\n              delete: () => {\n                this.store.dispatch(new DeleteDishAction(dish.id));\n              },\n            };\n            return item;\n          }),\n\n          ...Array.from(foodsMap.values()).map(food => {\n            return {\n              id: `food-${food.id}`,\n              name: food.name,\n              pfcc: food.pfcc,\n              type: (food.isCookable ? 'recipe' : 'raw-food') as DishOptionType,\n            };\n          }),\n        ];\n      }),\n    );\n    const ref = this.dialog.open<AddMealComponent, AddMealDialogData>(AddMealComponent, {\n      panelClass: 'fullscreen-dialog',\n\n      data: {\n        filter: val => filter$.next(val),\n        items: combineLatest([allDishOptions$, filter$])\n          .pipe(\n            map(([options, filter]): IDishOption[] => options.filter(o => filter == null || o.name.toLowerCase().includes(filter.toLowerCase()))),\n          ),\n      },\n    });\n    ref.afterClosed()\n      .subscribe(console.log);\n  }\n\n  getMealName(meal: IExtendedMeal): string | null {\n    return (meal.cooked ? meal.dish?.name : meal.food.name) || null;\n  }\n}\n\ntype IExtendedMeal = IMeal &\n  {\n    food: IFood,\n    dish: IDish | null\n  };\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -5434,6 +5444,385 @@
             "templateData": "<svg [attr.viewBox]=\"viewBox\" class=\"gauge\">\n  <ng-container *ngFor=\"let track of _tracks; let i = index; trackBy: trackTrackByFn\">\n    <circle [attr.cx]=\"width / 2\"\n            [attr.cy]=\"height / 2\"\n            [attr.r]=\"track.radius\"\n            [attr.stroke-width]=\"track.strokeWidth\"\n            [attr.stroke]=\"track.bgStrokeColor\"\n\n            fill=\"transparent\">\n    </circle>\n\n    <circle *ngFor=\"let circle of track.circles; trackBy: circleTrackByFn\"\n            [attr.cx]=\"width / 2\"\n            [attr.cy]=\"height / 2\"\n            [attr.r]=\"track.radius\"\n            [attr.stroke-width]=\"track.strokeWidth\"\n            [attr.stroke]=\"circle.color\"\n            [class.foreground-circle__animated]=\"circle.blink\"\n            [pfcGaugeCircle]=\"circle\"\n            class=\"foreground-circle\"\n            fill=\"transparent\"\n            stroke-linecap=\"round\">\n    </circle>\n  </ng-container>\n\n  <text [attr.font-size]=\"titleFontSize\"\n        [attr.x]=\"titleX\"\n        [attr.y]=\"titleY\"\n        class=\"title\"\n        font-weight=\"bold\"\n        text-anchor=\"middle\">\n    {{title}}\n  </text>\n  <text [attr.font-size]=\"subtitleFontSize\"\n        [attr.x]=\"subtitleX\"\n        [attr.y]=\"subtitleY\"\n        class=\"subtitle\"\n        text-anchor=\"middle\">\n    {{subtitle}}\n  </text>\n</svg>\n"
         },
         {
+            "name": "NumberInputComponent",
+            "id": "component-NumberInputComponent-5dae501f506692c1abd0c1a3b51fb52da6193aaeb7dba74cde89b828fcfc0bc61a5045bd175042b9979826136c2962a18673dd06721b45ef27b74705a47fe62f",
+            "file": "src/app/components/number-input/number-input.component.ts",
+            "changeDetection": "ChangeDetectionStrategy.OnPush",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "pfc-number-input",
+            "styleUrls": [
+                "./number-input.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./number-input.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "disabled",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 21,
+                    "type": "boolean",
+                    "decorators": []
+                },
+                {
+                    "name": "steps",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 31,
+                    "type": "number[]",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "_steps",
+                    "defaultValue": "NumberInputComponent.DEFAULT_STEPS",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                },
+                {
+                    "name": "DEFAULT_STEPS",
+                    "defaultValue": "[1]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 18,
+                    "modifierKind": [
+                        121,
+                        124,
+                        144
+                    ]
+                },
+                {
+                    "name": "onChange",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": " | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 23,
+                    "modifierKind": [
+                        121
+                    ]
+                },
+                {
+                    "name": "onTouch",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": " | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 24,
+                    "modifierKind": [
+                        121
+                    ]
+                },
+                {
+                    "name": "value",
+                    "defaultValue": "0",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "decrease",
+                    "args": [
+                        {
+                            "name": "step",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 49,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "step",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "handleValueChange",
+                    "args": [
+                        {
+                            "name": "change",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 39,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "change",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "increase",
+                    "args": [
+                        {
+                            "name": "step",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 44,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "step",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnChange",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": " | null",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 54,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": " | null",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnTouched",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": " | null",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 58,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": " | null",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "setDisabledState",
+                    "args": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 62,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "writeValue",
+                    "args": [
+                        {
+                            "name": "value",
+                            "type": "number | null",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 66,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "value",
+                            "type": "number | null",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {MatButtonModule} from '@angular/material/button';\nimport {MatInputModule} from '@angular/material/input';\nimport {MatFormFieldModule} from '@angular/material/form-field';\nimport {MatIconModule} from '@angular/material/icon';\nimport {ControlValueAccessor} from '@angular/forms';\n\n@Component({\n  selector: 'pfc-number-input',\n  standalone: true,\n  imports: [CommonModule, MatButtonModule, MatInputModule, MatFormFieldModule, MatIconModule],\n  templateUrl: './number-input.component.html',\n  styleUrls: ['./number-input.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class NumberInputComponent implements ControlValueAccessor {\n  private static readonly DEFAULT_STEPS = [1];\n  _steps = NumberInputComponent.DEFAULT_STEPS;\n  value: number | null = 0;\n  @Input() disabled = false;\n\n  private onChange: ((_: number) => void) | null = null;\n  private onTouch: (() => void) | null = null;\n\n\n  constructor(private cdr: ChangeDetectorRef) {\n  }\n\n  @Input()\n  set steps(steps: number[]) {\n    if (steps != null && steps.length > 0) {\n      this._steps = steps;\n    } else {\n      this._steps = NumberInputComponent.DEFAULT_STEPS;\n    }\n  }\n\n  handleValueChange(change: number): void {\n    console.log(change);\n    this.value = change;\n  }\n\n  increase(step: number) {\n    this.value = (this.value || 0) + step;\n    this.cdr.markForCheck();\n  }\n\n  decrease(step: number) {\n    this.value = (this.value || 0) - step;\n    this.cdr.markForCheck();\n  }\n\n  registerOnChange(fn: ((_: number) => void) | null): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: (() => void) | null): void {\n    this.onTouch = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  writeValue(value: number | null): void {\n    this.value = value;\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ":host {\n  display: flex;\n  flex-direction: row;\n\n  > * {\n    margin: 0 5px;\n  }\n\n  > :last-child {\n    margin-right: 0;\n  }\n\n  > :first-child {\n    margin-left: 0;\n  }\n}\n",
+                    "styleUrl": "./number-input.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "cdr",
+                        "type": "ChangeDetectorRef",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 24,
+                "jsdoctags": [
+                    {
+                        "name": "cdr",
+                        "type": "ChangeDetectorRef",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "ControlValueAccessor"
+            ],
+            "accessors": {
+                "steps": {
+                    "name": "steps",
+                    "setSignature": {
+                        "name": "steps",
+                        "type": "void",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "args": [
+                            {
+                                "name": "steps",
+                                "type": "number[]",
+                                "deprecated": false,
+                                "deprecationMessage": ""
+                            }
+                        ],
+                        "returnType": "void",
+                        "line": 31,
+                        "jsdoctags": [
+                            {
+                                "name": "steps",
+                                "type": "number[]",
+                                "deprecated": false,
+                                "deprecationMessage": "",
+                                "tagName": {
+                                    "text": "param"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "templateData": "<button mat-icon-button *ngFor=\"let step of _steps\" (click)=\"decrease(step)\">\n  <mat-icon>minus</mat-icon>\n</button>\n\n<mat-form-field>\n  <input matInput type=\"number\" (change)=\"handleValueChange\" [disabled]=\"disabled\">\n</mat-form-field>\n\n<button mat-icon-button *ngFor=\"let step of _steps\" (click)=\"increase(step)\">\n  <mat-icon>plus</mat-icon>\n</button>\n"
+        },
+        {
             "name": "NutritionGaugeComponent",
             "id": "component-NutritionGaugeComponent-109d9e7510af4fa12dd41521450b0d10963ac5ec21b4376e15e1e07b48e90531391d3c15de0ad4dffdf603aafa08613e15c0af8800ef30accc343bcf505917bd",
             "file": "src/app/components/nutrition-gauge/nutrition-gauge.component.ts",
@@ -5567,7 +5956,7 @@
         },
         {
             "name": "SignInPageComponent",
-            "id": "component-SignInPageComponent-3468ccef1ee0538b832e18f0785681626e3c77b32febe9f5d8f47a4fbcbda4c967e423cc7a317b341e809ff180a478a8e938afb7aee7ae5a33a3978dc31308b6",
+            "id": "component-SignInPageComponent-fc8a8094448c3e44d0bf99a7e8ba30390580b068cc3c99ea21cae037acbadb957b09ab0ab0466952b9682dd48c14c1cedcbcfa7f309b92c9459c6d948a61a67a",
             "file": "src/app/pages/sign-in-page/sign-in-page.component.ts",
             "changeDetection": "ChangeDetectionStrategy.OnPush",
             "encapsulation": [],
@@ -5627,7 +6016,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {MatInputModule} from '@angular/material/input';\nimport {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';\nimport {MatButtonModule} from '@angular/material/button';\nimport {Store} from '@ngxs/store';\nimport {AuthSignInAction} from '../../state/auth/auth.state-models';\nimport {TranslateModule} from '@ngx-translate/core';\n\n@Component({\n  selector: 'pfc-sign-in-page',\n  standalone: true,\n  imports: [\n    CommonModule,\n    MatInputModule,\n    ReactiveFormsModule,\n    MatButtonModule,\n    TranslateModule,\n  ],\n  templateUrl: './sign-in-page.component.html',\n  styleUrls: ['./sign-in-page.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class SignInPageComponent implements OnInit {\n\n  form = this.fb.group({\n    email: ['', Validators.compose([Validators.required, Validators.email])],\n    password: ['', Validators.compose([Validators.required])],\n  });\n\n  constructor(private fb: FormBuilder,\n              private store: Store) {\n  }\n\n\n  ngOnInit(): void {\n  }\n\n  onSubmit() {\n    const email = this.form.value.email as string;\n    const password = this.form.value.password as string;\n    this.store.dispatch(new AuthSignInAction(email, password));\n  }\n}\n",
+            "sourceCode": "import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';\nimport {CommonModule} from '@angular/common';\nimport {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';\nimport {Store} from '@ngxs/store';\nimport {AuthSignInAction} from '../../state/auth/auth.state-models';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {MatInputModule} from '@angular/material/input';\nimport {MatButtonModule} from '@angular/material/button';\n\n@Component({\n  selector: 'pfc-sign-in-page',\n  standalone: true,\n  imports: [\n    CommonModule,\n    MatInputModule,\n    ReactiveFormsModule,\n    MatButtonModule,\n    TranslateModule,\n  ],\n  templateUrl: './sign-in-page.component.html',\n  styleUrls: ['./sign-in-page.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class SignInPageComponent implements OnInit {\n\n  form = this.fb.group({\n    email: ['', Validators.compose([Validators.required, Validators.email])],\n    password: ['', Validators.compose([Validators.required])],\n  });\n\n  constructor(private fb: FormBuilder,\n              private store: Store) {\n  }\n\n\n  ngOnInit(): void {\n  }\n\n  onSubmit() {\n    const email = this.form.value.email as string;\n    const password = this.form.value.password as string;\n    this.store.dispatch(new AuthSignInAction(email, password));\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -5684,7 +6073,7 @@
         },
         {
             "name": "SignUpPageComponent",
-            "id": "component-SignUpPageComponent-3b7c73909caeed7707806fd79dab53742f8555a526ade11f131f7ab66c026887504abd639044d1d1d51a75f199c254c28ae56ef7a34d5ae3e3bb98ba3e0e30e0",
+            "id": "component-SignUpPageComponent-4bb97c15b1c4fe84e06af90162da94585b2ff83a6085b3bab0b6c9de7995d34e9ffce62a8f495347734b0097a420b404d1f48c2bc04f1a5d282f36bb86084553",
             "file": "src/app/pages/sign-up-page/sign-up-page.component.ts",
             "changeDetection": "ChangeDetectionStrategy.OnPush",
             "encapsulation": [],
@@ -5757,7 +6146,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';\nimport {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';\nimport {MatFormFieldModule} from '@angular/material/form-field';\nimport {MatButtonModule} from '@angular/material/button';\nimport {CommonModule} from '@angular/common';\nimport * as fromPfccValidators from '../../commons/pfcc-validators';\nimport {Store} from '@ngxs/store';\nimport {AuthSignUpAction} from '../../state/auth/auth.state-models';\nimport {MatInputModule} from '@angular/material/input';\nimport {map} from 'rxjs';\nimport {TranslateModule} from '@ngx-translate/core';\n\n@Component({\n  selector: 'pfc-sign-up-page',\n  templateUrl: './sign-up-page.component.html',\n  styleUrls: ['./sign-up-page.component.scss'],\n  standalone: true,\n  imports: [\n    CommonModule,\n    ReactiveFormsModule,\n    MatFormFieldModule,\n    MatButtonModule,\n    MatInputModule,\n    TranslateModule,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class SignUpPageComponent implements OnInit {\n\n\n  readonly minPasswordLength = 6;\n  form = this.fb.group({\n    email: ['', Validators.compose([Validators.email, Validators.required])],\n    password: ['', Validators.compose([Validators.required, Validators.minLength(this.minPasswordLength)])],\n    confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(this.minPasswordLength)])],\n  }, {\n    validators: fromPfccValidators.fieldsMatches('password', 'confirmPassword'),\n  });\n\n  constructor(private fb: FormBuilder, private store: Store) {\n  }\n\n  ngOnInit(): void {\n    this.form.statusChanges\n      .pipe(\n        map(formStatus => {\n          return [\n            formStatus,\n            this.form.errors,\n            this.form.controls.email.errors,\n            this.form.controls.password.errors,\n            this.form.controls.confirmPassword.errors,\n          ];\n        }),\n      )\n      .subscribe(console.log);\n  }\n\n  signUp() {\n    const password = this.form.value.password as string;\n    const email = this.form.value.email as string;\n    this.store.dispatch(new AuthSignUpAction(email, password));\n  }\n}\n",
+            "sourceCode": "import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';\nimport {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';\nimport {CommonModule} from '@angular/common';\nimport * as fromPfccValidators from '../../commons/pfcc-validators';\nimport {Store} from '@ngxs/store';\nimport {AuthSignUpAction} from '../../state/auth/auth.state-models';\nimport {map} from 'rxjs';\nimport {TranslateModule} from '@ngx-translate/core';\nimport {MatFormFieldModule} from '@angular/material/form-field';\nimport {MatButtonModule} from '@angular/material/button';\nimport {MatInputModule} from '@angular/material/input';\n\n@Component({\n  selector: 'pfc-sign-up-page',\n  templateUrl: './sign-up-page.component.html',\n  styleUrls: ['./sign-up-page.component.scss'],\n  standalone: true,\n  imports: [\n    CommonModule,\n    ReactiveFormsModule,\n    MatFormFieldModule,\n    MatButtonModule,\n    MatInputModule,\n    TranslateModule,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class SignUpPageComponent implements OnInit {\n\n\n  readonly minPasswordLength = 6;\n  form = this.fb.group({\n    email: ['', Validators.compose([Validators.email, Validators.required])],\n    password: ['', Validators.compose([Validators.required, Validators.minLength(this.minPasswordLength)])],\n    confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(this.minPasswordLength)])],\n  }, {\n    validators: fromPfccValidators.fieldsMatches('password', 'confirmPassword'),\n  });\n\n  constructor(private fb: FormBuilder, private store: Store) {\n  }\n\n  ngOnInit(): void {\n    this.form.statusChanges\n      .pipe(\n        map(formStatus => {\n          return [\n            formStatus,\n            this.form.errors,\n            this.form.controls.email.errors,\n            this.form.controls.password.errors,\n            this.form.controls.confirmPassword.errors,\n          ];\n        }),\n      )\n      .subscribe(console.log);\n  }\n\n  signUp() {\n    const password = this.form.value.password as string;\n    const email = this.form.value.email as string;\n    this.store.dispatch(new AuthSignUpAction(email, password));\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -5932,16 +6321,6 @@
                 "defaultValue": "'complete-profile'"
             },
             {
-                "name": "context",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/test.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "type": "",
-                "defaultValue": "require.context('./', true, /\\.spec\\.ts$/)"
-            },
-            {
                 "name": "dashboard",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -5966,6 +6345,16 @@
                 "ctype": "miscellaneous",
                 "subtype": "variable",
                 "file": "src/app/components/nutrition-gauge/nutrition-gauge.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/components/number-input/number-input.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "",
@@ -6022,15 +6411,6 @@
                 "defaultValue": "(origin: string, ...toCompare: string[]) => {\n  return control => {\n    if (toCompare == null || toCompare.length == 0) {\n      console.warn('Fields to compare is not configured');\n      return null;\n    }\n\n    const originalValue = control.get(origin)?.value;\n    if (originalValue == null) {\n      return null;\n    }\n\n    for (const field of toCompare) {\n      const comparingControl = control.get(field);\n\n      if (comparingControl == null) {\n        throw new Error(`Can't find ${field} in provided form`);\n      }\n\n      const comparingValue = comparingControl.value || null;\n\n      if (comparingValue !== originalValue) {\n        return {\n          fieldsMatches: `Value of ${field} (${comparingValue}) doesn't match ${origin} (${originalValue})`,\n        };\n      }\n    }\n\n    return null;\n  };\n}"
             },
             {
-                "name": "require",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/test.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "type": "literal type"
-            },
-            {
                 "name": "signIn",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -6069,6 +6449,16 @@
                 "deprecationMessage": "",
                 "type": "Story",
                 "defaultValue": "args => ({\n  props: {\n    ...args,\n  },\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/components/number-input/number-input.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "args => ({\n  props: {\n    ...args,\n  }\n})"
             }
         ],
         "functions": [
@@ -6516,27 +6906,6 @@
                     "defaultValue": "'signup'"
                 }
             ],
-            "src/test.ts": [
-                {
-                    "name": "context",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/test.ts",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "",
-                    "defaultValue": "require.context('./', true, /\\.spec\\.ts$/)"
-                },
-                {
-                    "name": "require",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/test.ts",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "literal type"
-                }
-            ],
             "src/app/components/gauge/gauge.stories.ts": [
                 {
                     "name": "Default",
@@ -6579,6 +6948,28 @@
                     "deprecationMessage": "",
                     "type": "Story",
                     "defaultValue": "args => ({\n  props: {\n    ...args,\n  },\n})"
+                }
+            ],
+            "src/app/components/number-input/number-input.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/components/number-input/number-input.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/components/number-input/number-input.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "args => ({\n  props: {\n    ...args,\n  }\n})"
                 }
             ],
             "src/app/state/domain/domain.state.ts": [
@@ -7336,7 +7727,7 @@
                 "linktype": "component",
                 "name": "AddMealComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/11",
+                "coverageCount": "0/12",
                 "status": "low"
             },
             {
@@ -7414,6 +7805,35 @@
             },
             {
                 "filePath": "src/app/components/gauge/gauge.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/number-input/number-input.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "NumberInputComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/16",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/number-input/number-input.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/number-input/number-input.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
@@ -7738,26 +8158,6 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
                 "name": "environment",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/test.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "context",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/test.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "require",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"

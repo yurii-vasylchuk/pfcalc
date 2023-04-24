@@ -1,7 +1,8 @@
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {
+  AddMealAction,
   ConfigureProfileAction,
-  IDomainState,
+  IDomainState, MealAddedSuccessfullyEvent, MealAddingFailedEvent,
   MealRemovedSuccessfullyEvent,
   MealRemovingFailedEvent,
   ProfileConfigurationFailedEvent,
@@ -167,6 +168,30 @@ export class DomainState {
 
   @Action(MealRemovingFailedEvent)
   handleMealRemovingFailed(ctx: StateContext<IDomainState>, action: MealRemovingFailedEvent) {
-    console.log(`Failed to remove meal, reason: ${action.msg}`);
+    console.error(`Failed to remove meal, reason: ${action.msg}`);
+  }
+
+  @Action(AddMealAction)
+  handleAddMealAction(ctx: StateContext<IDomainState>, action: AddMealAction) {
+    return this.service.addMeal(action.meal).pipe(
+      map(rsp => new MealAddedSuccessfullyEvent(rsp.meal)),
+      catchError(err => of(new MealAddingFailedEvent(action.meal, err.message))),
+      map(ctx.dispatch)
+    );
+  }
+
+  @Action(MealAddedSuccessfullyEvent)
+  handleMealAddedSuccessfullyEvent(ctx: StateContext<IDomainState>, action: MealAddedSuccessfullyEvent) {
+    ctx.patchState({
+      meals: [
+        ...ctx.getState().meals,
+        action.meal
+      ]
+    });
+  }
+
+  @Action(MealAddingFailedEvent)
+  handleMealAddingFailedEvent(ctx: StateContext<IDomainState>, action: MealAddingFailedEvent) {
+    console.error(action.msg);
   }
 }

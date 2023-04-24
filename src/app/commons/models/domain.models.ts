@@ -10,8 +10,11 @@ interface IBaseFood {
   hidden: boolean;
   ownedByUser: boolean;
   type: FoodType;
-  isCookable: boolean;
 }
+
+export type IIngredient = (IBaseFood & {
+  ingredientWeight: number
+});
 
 export type IFood =
   (IBaseFood & {
@@ -20,7 +23,7 @@ export type IFood =
   }) |
   (IBaseFood & {
     type: 'recipe',
-    consistOf: IFood[]
+    consistOf: IIngredient[]
   });
 
 export type FoodType = 'ingredient' | 'recipe';
@@ -28,23 +31,21 @@ export type FoodType = 'ingredient' | 'recipe';
 export interface IDish {
   id: number;
   cookedOn: DateTime;
+  pfcc: IPfcc;
   name: string;
   foodId: number;
   recipeWeight: number;
   cookedWeight: number;
 }
 
-interface IBaseMeal {
+export interface IMeal {
   id: number;
   eatenOn: DateTime;
   weight: number;
   pfcc: IPfcc;
   foodId: number;
+  dishId: number | null;
 }
-
-export type IMeal =
-  (IBaseMeal & { cooked: true, dishId: number }) |
-  (IBaseMeal & { cooked: false, dishId: null });
 
 export interface IProfile {
   aims: IPfcc;
@@ -57,4 +58,11 @@ export interface IProfileResponse extends IProfile {
   dishes: IDish[];
   foods: IFood[];
   account: IAccount;
+}
+
+export interface IProfileStatistics {
+  nutrients: {
+    weeklyAverage: IPfcc,
+    monthlyAverage: IPfcc
+  }
 }

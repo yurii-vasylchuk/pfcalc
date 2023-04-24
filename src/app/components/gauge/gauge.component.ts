@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {GaugeCircleDirective} from './gauge-circle.directive';
 import {IGaugeCircleConf, IGaugeTrackConf} from './gauge-component.interfaces';
 import {CommonModule} from '@angular/common';
@@ -17,13 +17,10 @@ interface IGaugeInternalTrackConfig extends IGaugeTrackConf {
     CommonModule, GaugeCircleDirective,
   ],
 })
-export class GaugeComponent {
+export class GaugeComponent implements OnChanges {
   @Input() animationDuration = 3;
   @Input() title!: string;
   @Input() subtitle?: string;
-
-  @Input() titleShift?: number;
-  @Input() subtitleShift?: number;
 
   @Input() titleFontSize = 35;
   @Input() subtitleFontSize = 20;
@@ -38,18 +35,20 @@ export class GaugeComponent {
 
   _tracks: IGaugeInternalTrackConfig[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) {
+  private cumulativeRadius = 40;
+
+  constructor() {
   }
 
   @Input()
   set values(values: IGaugeTrackConf[]) {
-    let cumulativeRadius = 40;
+    this.cumulativeRadius = 40;
     this._tracks = values.map((track, idx) => {
-      cumulativeRadius += track.strokeWidth;
+      this.cumulativeRadius += track.strokeWidth;
       return {
         ...track,
         trackId: track.trackId != null ? track.trackId : idx,
-        radius: cumulativeRadius - (track.strokeWidth / 2),
+        radius: this.cumulativeRadius - (track.strokeWidth / 2),
         circles: track.circles.map((circle, idx) => {
           return {
             ...circle,
@@ -58,16 +57,9 @@ export class GaugeComponent {
         }),
       };
     });
-
-    this.width = this.height = cumulativeRadius * 2;
-    this.titleY = this.titleX = cumulativeRadius;
-    this.subtitleX = cumulativeRadius;
-    this.subtitleY = cumulativeRadius + this.subtitleFontSize;
-    this.viewBox = `0 0 ${this.width} ${this.height}`;
     for (const track of this._tracks) {
       track.circles.sort((c1, c2) => c2.value - c1.value);
     }
-    // this.cdr.markForCheck();
   }
 
   trackTrackByFn = (idx: number, track: IGaugeTrackConf) => {
@@ -77,4 +69,13 @@ export class GaugeComponent {
   circleTrackByFn = (idx: number, circle: IGaugeCircleConf) => {
     return circle.circleId ? circle.circleId : idx;
   };
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.width = this.height = this.cumulativeRadius * 2;
+    this.titleX = this.cumulativeRadius;
+    this.titleY = this.subtitle != null ? this.cumulativeRadius : this.cumulativeRadius + (this.titleFontSize * 0.39);
+    this.subtitleX = this.cumulativeRadius;
+    this.subtitleY = this.cumulativeRadius + this.subtitleFontSize;
+    this.viewBox = `0 0 ${this.width} ${this.height}`;
+  }
 }

@@ -1,13 +1,13 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Store} from '@ngxs/store';
+import {ConfigureProfileAction} from '../../state/domain/domain.state-models';
+import {TranslateModule} from '@ngx-translate/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
-import {Store} from '@ngxs/store';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {ConfigureProfileAction} from '../../state/domain/domain.state-models';
-import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   selector: 'pfc-configure-profile',

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {ISignInResponse, ISignUpResponse} from '../commons/models/auth.models';
-import {IProfileResponse} from '../commons/models/domain.models';
+import {IMeal, IProfileResponse} from '../commons/models/domain.models';
 import {DateTime} from 'luxon';
 import {IPfcc} from '../commons/models/common.models';
 
@@ -45,6 +45,15 @@ export class ProfileService {
 
   removeMeal(mealId: number): Observable<null> {
     return of(null);
+  }
+
+  addMeal(meal: IMeal) {
+    return of({
+      meal: {
+        ...meal,
+        id: meal.id != null ? meal.id : (Math.ceil(Math.random() * 10000))
+      }
+    });
   }
 
   private readonly mockProfile: () => IProfileResponse = () => {
@@ -363,15 +372,69 @@ export class ProfileService {
             calories: 433,
           },
         },
+        {
+          id: 21,
+          type: 'recipe',
+          consistOf: [
+            {
+              id: 13,
+              type: 'ingredient',
+              consistOf: null,
+              name: 'Рис/Макароны',
+              isCookable: true,
+              hidden: true,
+              ownedByUser: true,
+              ingredientWeight: 200,
+              pfcc: {
+                protein: 14,
+                fat: 1.2,
+                carbohydrates: 154.6,
+                calories: 646,
+              },
+            },
+            {
+              id: 1,
+              type: 'ingredient',
+              name: 'СВ Задняя часть',
+              isCookable: true,
+              consistOf: null,
+              hidden: true,
+              ownedByUser: true,
+              ingredientWeight: 50,
+              pfcc: {
+                protein: 10.5,
+                fat: 4.8,
+                carbohydrates: 0,
+                calories: 88,
+              },
+            }
+          ],
+          name: 'Плов',
+          hidden: true,
+          isCookable: true,
+          ownedByUser: true,
+          pfcc: {
+            protein: 80,
+            fat: 0,
+            carbohydrates: 0,
+            calories: 433,
+          },
+        },
       ],
       dishes: [
         {
           id: 1,
-          name: 'Рис 07.12',
+          name: 'Рис',
           cookedOn: DateTime.now().set({weekday: 1}),
           foodId: 13,
           recipeWeight: 230,
-          cookedWeight: 530,
+          cookedWeight: 560,
+          pfcc: {
+            protein: 3.5,
+            fat: 0.3,
+            carbohydrates: 38.65,
+            calories: 161.5
+          }
         },
       ],
       meals: [
@@ -413,4 +476,5 @@ export class ProfileService {
       },
     };
   };
+
 }

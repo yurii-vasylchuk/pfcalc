@@ -1,4 +1,4 @@
-import {IDish, IFood, IMeal, IProfile, IProfileResponse} from '../../commons/models/domain.models';
+import {IDish, IFood, IMeal, IProfile, IProfileResponse, IProfileStatistics} from '../../commons/models/domain.models';
 import {IPfcc} from '../../commons/models/common.models';
 
 export interface IDomainState {
@@ -6,6 +6,7 @@ export interface IDomainState {
   foods: IFood[];
   meals: IMeal[];
   dishes: IDish[];
+  stats?: IProfileStatistics;
 }
 
 export class ProfileLoadedEvent {
@@ -62,5 +63,27 @@ export class DeleteDishAction {
   static readonly type = '[DOMAIN] Delete dish';
 
   constructor(public readonly dishId: number) {
+  }
+}
+
+export class AddMealAction {
+  static readonly type = '[DOMAIN] Add meal';
+
+  constructor(public readonly meal: IMeal) {
+  }
+}
+
+export class MealAddedSuccessfullyEvent {
+  static readonly type = '[DOMAIN] Meal added';
+
+  constructor(public readonly meal: IMeal) {
+  }
+}
+
+export class MealAddingFailedEvent {
+  static readonly type = '[DOMAIN] Meal adding failed';
+
+  constructor(public readonly meal: IMeal,
+              public readonly msg: string) {
   }
 }
