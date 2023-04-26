@@ -1,0 +1,10 @@
+
+<div class="flex-spacer"></div>
+<mat-form-field appearance="outline" class="lang-select mat-form-field-no-bottom">
+  <mat-label>
+    <mat-icon fontIcon="public"></mat-icon>
+  </mat-label>
+  <mat-select (selectionChange)="handleLangChanged($event)" #langSelector>
+    <mat-option *ngFor="let lang of availableLanguages" [value]="lang">{{lang}}</mat-option>
+  </mat-select>
+</mat-form-field>

@@ -14,6 +14,7 @@ import {DomainState} from './state/domain/domain.state';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HeadingComponent} from "./components/heading/heading.component";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -46,6 +47,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: environment.production,
     }),
+    HeadingComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],

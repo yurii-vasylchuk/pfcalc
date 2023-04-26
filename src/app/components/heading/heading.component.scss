@@ -1,0 +1,13 @@
+:host {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 10px;
+  box-shadow: 0 4px 5px -2px #8a8a8a;
+  display: flex;
+  flex-direction: row;
+}
+
+.lang-select {
+  width: 85px;
+}

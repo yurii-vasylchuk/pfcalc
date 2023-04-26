@@ -9,6 +9,7 @@ import {
   AuthSignUpFailedEvent,
   AuthSignUpSucceededEvent,
   IAuthState,
+  LanguageChangedEvent,
 } from './auth.state-models';
 import {ProfileService} from '../../service/profile.service';
 import {catchError, map, mergeMap, of, tap} from 'rxjs';
@@ -17,7 +18,7 @@ import {ProfileConfiguredSuccessfullyEvent, ProfileLoadedEvent} from '../domain/
 import * as fromRoutes from '../../commons/routes';
 import {LocalStoreService} from '../../service/local-store.service';
 import {UnknownBoolean} from '../../commons/models/common.models';
-import {IAccount} from '../../commons/models/auth.models';
+import {IAccount, Language} from '../../commons/models/auth.models';
 
 
 @State<IAuthState>({
@@ -33,6 +34,13 @@ import {IAccount} from '../../commons/models/auth.models';
 export class AuthState implements NgxsOnInit {
   constructor(private profileService: ProfileService,
               private localStoreService: LocalStoreService) {
+  }
+
+  public static readonly DEFAULT_LANGUAGE: Language = 'ua';
+
+  @Selector()
+  static language(state: IAuthState): Language {
+    return state.account?.preferredLanguage || this.DEFAULT_LANGUAGE;
   }
 
   @Selector()
@@ -69,6 +77,8 @@ export class AuthState implements NgxsOnInit {
         ctx.patchState({
           loggedIn: UnknownBoolean.TRUE,
           token: token,
+          account: profile.account,
+          profileConfigured: UnknownBoolean.of(profile.profileConfigured)
         });
 
         if (profile.profileConfigured) {
@@ -181,4 +191,18 @@ export class AuthState implements NgxsOnInit {
       profileConfigured: action.profile.profileConfigured ? UnknownBoolean.TRUE : UnknownBoolean.FALSE,
     });
   }
+
+  @Action(LanguageChangedEvent)
+  handleLanguageChangedEvent(ctx: StateContext<IAuthState>, action: LanguageChangedEvent) {
+    const account = ctx.getState().account;
+    if (account != null) {
+      ctx.patchState({
+        account: {
+          ...account,
+          preferredLanguage: action.lang
+        }
+      });
+    }
+  }
+
 }

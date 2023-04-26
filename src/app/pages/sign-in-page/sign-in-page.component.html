@@ -2,7 +2,7 @@
 
   <mat-form-field>
     <mat-label>{{'sign-in.email.label' | translate}}</mat-label>
-    <input formControlName="email" matInput type="text"/>
+    <input formControlName="email" matInput type="email"/>
 
     <mat-error *ngIf="form.controls.email.hasError('required')"
                [innerHTML]="'sign-in.email.required' | translate">

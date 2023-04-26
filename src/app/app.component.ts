@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {Store} from '@ngxs/store';
 import {AuthState} from './state/auth/auth.state';
-import {filter, map} from 'rxjs';
+import {filter} from 'rxjs';
 
 @Component({
   selector: 'pfc-root',
@@ -11,14 +11,12 @@ import {filter, map} from 'rxjs';
 })
 export class AppComponent {
   constructor(private translateService: TranslateService, private store: Store) {
-    translateService.setDefaultLang('ua');
-    translateService.use('ua');
-
-    store.select(AuthState.account)
+    store.select(AuthState.language)
       .pipe(
-        map(acc => acc?.preferredLanguage),
-        filter(lang => lang != null),
+        filter(lang => lang != null)
       )
-      .subscribe(lang => translateService.use(lang as string));
+      .subscribe(lang => translateService.use(lang));
+
+    translateService.setDefaultLang(AuthState.DEFAULT_LANGUAGE);
   }
 }

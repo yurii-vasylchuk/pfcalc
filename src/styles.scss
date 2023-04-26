@@ -14,11 +14,17 @@ body {
 
 .fullscreen-dialog {
   max-width: calc(100vw - 10px) !important;
-  max-height: calc(100vh - 10px) !important;
+  max-height: 87vh !important;
   width: calc(100vw - 10px);
-  height: calc(100vh - 10px);
+  height: 87vh;
 }
 
 .fullscreen-dialog .mat-dialog-container {
   padding: 0;
+}
+
+.mat-form-field-no-bottom {
+  > .mat-mdc-form-field-bottom-align {
+    display: none;
+  }
 }

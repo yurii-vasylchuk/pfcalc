@@ -1,11 +1,11 @@
 import {UnknownBoolean} from '../../commons/models/common.models';
-import {IAccount} from '../../commons/models/auth.models';
+import {IAccount, Language} from '../../commons/models/auth.models';
 
 export interface IAuthState {
   loggedIn: UnknownBoolean,
   profileConfigured: UnknownBoolean,
   token: string | null,
-  account: IAccount | null;
+  account: IAccount | null,
 }
 
 export class AuthSignInAction {
@@ -55,5 +55,12 @@ export class AuthSignUpFailedEvent {
   static readonly type = '[AUTH] Sign up failed';
 
   constructor(public readonly msg: string) {
+  }
+}
+
+export class LanguageChangedEvent {
+  static readonly type = '[AUTH] Language changed';
+
+  constructor(public readonly lang: Language) {
   }
 }

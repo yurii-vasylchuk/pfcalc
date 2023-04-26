@@ -53,4 +53,8 @@ export class UnknownBoolean {
       return UnknownBoolean.TRUE;
     }
   }
+
+  static of(value: boolean) {
+    return value ? UnknownBoolean.TRUE : UnknownBoolean.FALSE;
+  }
 }
