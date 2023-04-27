@@ -10,6 +10,6 @@
   ></pfc-gauge>
 </ng-template>
 
-<span *ngIf="aim != null" class="values">{{value + (addingValue || 0)}}/{{aim}}</span>
-<span *ngIf="aim == null" class="values">{{value + (addingValue || 0)}}</span>
+<span *ngIf="aim != null" class="values">{{fromFunctions.ceil(value + (addingValue || 0))}}/{{fromFunctions.ceil(aim)}}</span>
+<span *ngIf="aim == null" class="values">{{fromFunctions.ceil(value + (addingValue || 0))}}</span>
 <span class="title">{{title}}</span>

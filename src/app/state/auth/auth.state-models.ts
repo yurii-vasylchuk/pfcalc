@@ -6,6 +6,7 @@ export interface IAuthState {
   profileConfigured: UnknownBoolean,
   token: string | null,
   account: IAccount | null,
+  language: Language
 }
 
 export class AuthSignInAction {

@@ -38,21 +38,19 @@
 
 <div class="meals">
   <h1 class="meals__header">{{'dashboard.meals-list.title' | translate}}</h1>
-  <mat-list>
-    <div *ngFor="let meal of eatenMeals$ | async; let i=index; trackBy: mealTrackBy" [ngClass]="i % 2 === 1 ? 'meals__line_even' : ''" class="meals__line"
-         mat-line>
-      <div class="meals__description">
-        <span class="meals__title">{{getMealName(meal)}} - {{meal.weight}}{{'common.gram-sign' | translate}}</span>
-        <span class="meals__weight">{{meal.pfcc.protein}}{{'common.gram-sign' | translate}}
-          /{{meal.pfcc.fat}}{{'common.gram-sign' | translate}}
-          /{{meal.pfcc.carbohydrates}}{{'common.gram-sign' | translate}} {{meal.pfcc.calories}}{{'common.calories-sign' | translate}}</span>
-      </div>
-      <div class="flex-spacer"></div>
-      <button (click)="removeMeal(meal.id)" mat-icon-button>
-        <mat-icon>delete</mat-icon>
-      </button>
+  <div *ngFor="let meal of eatenMeals$ | async; let i=index; trackBy: mealTrackBy"
+       [ngClass]="i % 2 === 1 ? 'meals__line_even' : ''" class="meals__line">
+    <div class="meals__description">
+      <span class="meals__title">{{getMealName(meal)}} - {{meal.weight}}{{'common.gram-sign' | translate}}</span>
+      <span class="meals__weight">
+          {{'common.pfcc-values' | translate:fromFunctions.ceilPfcc(fromFunctions.multiplyPfcc(meal.pfcc, meal.weight / 100))}}
+        </span>
     </div>
-  </mat-list>
+    <div class="flex-spacer"></div>
+    <button (click)="removeMeal(meal.id)" mat-icon-button>
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
 </div>
 
 

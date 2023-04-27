@@ -49,13 +49,12 @@ export function sumPfccs(...pfccs: IPfcc[]) {
     }, {} as IPfcc);
 }
 
-export function ceilPfcc(pfcc: IPfcc, afterDotSigns = 0): IPfcc {
-  const multiplier = Math.pow(10, afterDotSigns);
+export function ceilPfcc(pfcc: IPfcc, afterDotSigns = 2, caloriesAfterDotSign = 0): IPfcc {
   return {
-    protein: pfcc.protein != null ? (Math.ceil((pfcc.protein * multiplier) as number) / multiplier) : null,
-    fat: pfcc.fat != null ? Math.ceil((pfcc.fat * multiplier) as number) / multiplier : null,
-    carbohydrates: pfcc.carbohydrates != null ? Math.ceil((pfcc.carbohydrates * multiplier) as number) / multiplier : null,
-    calories: pfcc.calories != null ? Math.ceil((pfcc.calories * multiplier) as number) / multiplier : null,
+    protein: pfcc.protein != null ? ceil(pfcc.protein, afterDotSigns) : null,
+    fat: pfcc.fat != null ? ceil(pfcc.fat, afterDotSigns) : null,
+    carbohydrates: pfcc.carbohydrates != null ? ceil(pfcc.carbohydrates, afterDotSigns) : null,
+    calories: pfcc.calories != null ? ceil(pfcc.calories, caloriesAfterDotSign) : null,
   };
 }
 
@@ -66,4 +65,10 @@ export function multiplyPfcc(pfcc: IPfcc, multiplier: number): IPfcc {
     carbohydrates: pfcc.carbohydrates != null ? (pfcc.carbohydrates * multiplier) : null,
     calories: pfcc.calories != null ? (pfcc.calories * multiplier) : null,
   };
+}
+
+export function ceil(value: number, afterDotSigns = 2) {
+  const multiplier = Math.pow(10, afterDotSigns);
+
+  return Math.ceil(value * multiplier) / multiplier;
 }

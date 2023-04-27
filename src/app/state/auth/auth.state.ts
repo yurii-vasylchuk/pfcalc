@@ -28,6 +28,7 @@ import {IAccount, Language} from '../../commons/models/auth.models';
     loggedIn: UnknownBoolean.UNKNOWN,
     token: null,
     account: null,
+    language: AuthState.DEFAULT_LANGUAGE
   },
 })
 @Injectable()
@@ -40,7 +41,7 @@ export class AuthState implements NgxsOnInit {
 
   @Selector()
   static language(state: IAuthState): Language {
-    return state.account?.preferredLanguage || this.DEFAULT_LANGUAGE;
+    return state.language;
   }
 
   @Selector()
@@ -72,22 +73,25 @@ export class AuthState implements NgxsOnInit {
       return;
     }
 
-    this.profileService.getProfile().pipe(
-      tap(profile => {
-        ctx.patchState({
-          loggedIn: UnknownBoolean.TRUE,
-          token: token,
-          account: profile.account,
-          profileConfigured: UnknownBoolean.of(profile.profileConfigured)
-        });
+    this.profileService.getProfile()
+      .pipe(
+        tap(profile => {
+          ctx.patchState({
+            loggedIn: UnknownBoolean.TRUE,
+            token: token,
+            account: profile.account,
+            profileConfigured: UnknownBoolean.of(profile.profileConfigured),
+            language: profile.account.preferredLanguage
+          });
 
-        if (profile.profileConfigured) {
-          ctx.dispatch(new Navigate([fromRoutes.dashboard]));
-        } else {
-          ctx.dispatch(new Navigate([fromRoutes.completeProfile]));
-        }
-      }),
-      map(profile => new ProfileLoadedEvent(profile)))
+          if (profile.profileConfigured) {
+            ctx.dispatch(new Navigate([fromRoutes.dashboard]));
+          } else {
+            ctx.dispatch(new Navigate([fromRoutes.completeProfile]));
+          }
+        }),
+        map(profile => new ProfileLoadedEvent(profile))
+      )
       .subscribe(ctx.dispatch);
   }
 
@@ -121,6 +125,7 @@ export class AuthState implements NgxsOnInit {
       loggedIn: UnknownBoolean.TRUE,
       profileConfigured: action.isProfileConfigured ? UnknownBoolean.TRUE : UnknownBoolean.FALSE,
       account: action.account,
+      language: action.account.preferredLanguage
     });
 
     this.localStoreService.saveJwtToken(action.token);
@@ -195,6 +200,9 @@ export class AuthState implements NgxsOnInit {
   @Action(LanguageChangedEvent)
   handleLanguageChangedEvent(ctx: StateContext<IAuthState>, action: LanguageChangedEvent) {
     const account = ctx.getState().account;
+    ctx.patchState({
+      language: action.lang
+    })
     if (account != null) {
       ctx.patchState({
         account: {

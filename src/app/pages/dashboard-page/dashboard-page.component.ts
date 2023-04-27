@@ -20,6 +20,8 @@ import {
 import {MatListModule} from '@angular/material/list';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import * as fromFunctions from '../../commons/functions'
+import {MatLineModule} from "@angular/material/core";
 
 @Component({
   selector: 'pfc-dashboard-page',
@@ -27,7 +29,7 @@ import {MatDialog, MatDialogModule} from '@angular/material/dialog';
   styleUrls: ['./dashboard-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, NutritionGaugeComponent, AsyncPipe, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule],
+  imports: [CommonModule, NutritionGaugeComponent, AsyncPipe, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule, MatLineModule],
 })
 export class DashboardPageComponent {
   profile$: Observable<IProfile>;
@@ -212,6 +214,8 @@ export class DashboardPageComponent {
   getMealName(meal: IExtendedMeal): string | null {
     return (meal.dishId != null ? meal.dish?.name : meal.food.name) || null;
   }
+
+  protected readonly fromFunctions = fromFunctions;
 }
 
 type IExtendedMeal = IMeal &

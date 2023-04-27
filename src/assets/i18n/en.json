@@ -9,6 +9,7 @@
     "fat-sign": "f",
     "carbohydrates-sign": "c",
     "pfcc-sign": "p/f/c/kc",
+    "pfcc-values": "{{protein}}g / {{fat}}g / {{carbohydrates}}g / {{calories}}kCal",
     "calories-sign": "kcals"
   },
   "sign-in": {
@@ -67,7 +68,6 @@
   "add-meal": {
     "title": "Add meal",
     "add-btn": "Save",
-    "option-subtitle": "{{protein}} / {{fat}} / {{carbohydrates}} / {{calories}}",
     "edit-recipe": "Edit ingredients",
     "search-placeholder": "Find a food...",
     "weight-input-placeholder": "Ex. 240"

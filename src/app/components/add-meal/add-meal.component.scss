@@ -104,15 +104,10 @@
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 10px;
+    gap: 5px;
 
     > * {
-      margin: 0 5px;
-    }
-    > :first-child {
-      margin-left: 0;
-    }
-    > :last-child {
-      margin-right: 0;
+      max-width: calc(25% - 15px);
     }
   }
 

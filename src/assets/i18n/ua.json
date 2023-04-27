@@ -9,6 +9,7 @@
     "fat-sign": "ж",
     "carbohydrates-sign": "у",
     "pfcc-sign": "б/ж/у/к",
+    "pfcc-values": "{{protein}}г / {{fat}}г / {{carbohydrates}}г / {{calories}}кКал",
     "calories-sign": "ккал"
   },
   "sign-in": {
@@ -67,7 +68,6 @@
   "add-meal": {
     "title": "Зʼїсти страву",
     "add-btn": "Зберегти",
-    "option-subtitle": "{{protein}} / {{fat}} / {{carbohydrates}} / {{calories}}",
     "edit-recipe": "Редагувати інгредієнти",
     "search-placeholder": "Пошук страви...",
     "weight-input-placeholder": "Напр. 240"

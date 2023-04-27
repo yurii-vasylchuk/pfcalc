@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {GaugeComponent} from '../gauge/gauge.component';
 import {IGaugeTrackConf} from '../gauge/gauge-component.interfaces';
+import * as fromFunctions from "../../commons/functions";
 
 @Component({
   selector: 'pfc-nutrition-gauge',
@@ -54,4 +55,6 @@ export class NutritionGaugeComponent {
     }
     return result;
   }
+
+  protected readonly fromFunctions = fromFunctions;
 }
