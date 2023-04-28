@@ -1,0 +1,30 @@
+name: GitHub Actions Demo
+run-name: Deploying latest master [${{ github.actor }}]
+on:
+  push:
+    branches: master
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up node.js
+        uses: actions/setup-node@v3.3.0
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - name: Download dependencies
+        run: npm i
+      - name: Build
+        run: npm run build
+      - name: Copy distribution
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          source: "dist/frontend/*"
+          target: "/home/ec2-user/"
