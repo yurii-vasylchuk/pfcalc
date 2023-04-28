@@ -28,3 +28,11 @@ jobs:
           port: 22
           source: "dist/frontend/*"
           target: "/home/ec2-user/"
+      - name: Deploy distribution
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
+          script: "sudo deploy.sh"
