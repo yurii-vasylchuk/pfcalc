@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: Build & deploy master
 run-name: Deploying latest master [${{ github.actor }}]
 on:
   push:
@@ -33,6 +33,6 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
           port: 22
           script: "sudo deploy.sh"
