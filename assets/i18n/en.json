@@ -1,0 +1,75 @@
+{
+  "common": {
+    "calories": "Calories",
+    "protein": "Protein",
+    "carbohydrates": "Carbohydrates",
+    "fat": "Fat",
+    "gram-sign": "g",
+    "protein-sign": "p",
+    "fat-sign": "f",
+    "carbohydrates-sign": "c",
+    "pfcc-sign": "p/f/c/kc",
+    "pfcc-values": "{{protein}}g / {{fat}}g / {{carbohydrates}}g / {{calories}}kCal",
+    "calories-sign": "kcals"
+  },
+  "sign-in": {
+    "email": {
+      "label": "Email",
+      "required": "Email is <strong>required</strong>",
+      "email": "Invalid email"
+    },
+    "password": {
+      "label": "Password",
+      "required": "Password is <strong>required</strong>"
+    },
+    "sign-in-btn": "Sign in",
+    "sign-up-link": "Sign up"
+  },
+  "sign-up": {
+    "email": {
+      "label": "Email",
+      "required": "Email is <strong>required</strong>",
+      "email": "Invalid email"
+    },
+    "password": {
+      "label": "Password",
+      "required": "Password is <strong>required</strong>",
+      "matches": "Passwords doesn't match",
+      "min-length": "Password should have at least {{value}} characters"
+    },
+    "confirm-password": {
+      "label": "Confirm password",
+      "required": "Password confirmation is <strong>required</strong>",
+      "matches": "Passwords doesn't match",
+      "min-length": "Password should have at least {{value}} characters"
+    },
+    "sign-up-btn": "Sign up",
+    "sign-in-link": "Sign in"
+  },
+  "complete-profile": {
+    "base-values": {
+      "label": "Base values",
+      "description": "You can set any base values and they will be added to daily values automatically",
+      "calories": "Base calories",
+      "protein": "Base protein",
+      "carbohydrates": "Base carbohydrates",
+      "fat": "Base fat"
+    },
+    "submit-btn": "Submit"
+  },
+  "dashboard": {
+    "add-meal-btn": "Add meal",
+    "daily-nutrients": "Daily nutrients",
+    "weekly-nutrients": "Weekly nutrients",
+    "meals-list": {
+      "title": "Meals"
+    }
+  },
+  "add-meal": {
+    "title": "Add meal",
+    "add-btn": "Save",
+    "edit-recipe": "Edit ingredients",
+    "search-placeholder": "Find a food...",
+    "weight-input-placeholder": "Ex. 240"
+  }
+}

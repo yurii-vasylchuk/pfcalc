@@ -1,0 +1,75 @@
+{
+  "common": {
+    "calories": "Калорії",
+    "protein": "Білки",
+    "carbohydrates": "Вуглеводи",
+    "fat": "Жири",
+    "gram-sign": "г",
+    "protein-sign": "б",
+    "fat-sign": "ж",
+    "carbohydrates-sign": "у",
+    "pfcc-sign": "б/ж/у/к",
+    "pfcc-values": "{{protein}}г / {{fat}}г / {{carbohydrates}}г / {{calories}}кКал",
+    "calories-sign": "ккал"
+  },
+  "sign-in": {
+    "email": {
+      "label": "Ємаіл",
+      "required": "Ємаіл є <strong>обовʼязковим</strong>",
+      "email": "Невалідний ємаіл"
+    },
+    "password": {
+      "label": "Пароль",
+      "required": "Пароль є <strong>обовʼязковим</strong>"
+    },
+    "sign-in-btn": "Увійти",
+    "sign-up-link": "Зареєструватись"
+  },
+  "sign-up": {
+    "email": {
+      "label": "Ємаіл",
+      "required": "Ємаіл є <strong>обовʼязковим</strong>",
+      "email": "Невалідний ємаіл"
+    },
+    "password": {
+      "label": "Пароль",
+      "required": "Пароль є <strong>обовʼязковим</strong>",
+      "matches": "Паролі не зпівпадають",
+      "min-length": "Пароль має складатись якнайменш із {{value}} символів"
+    },
+    "confirm-password": {
+      "label": "Підтвердження паролю",
+      "required": "Підтвердження паролю є <strong>обовʼязковим</strong>",
+      "matches": "Паролі не зпівпадають",
+      "min-length": "Пароль має складатись якнайменш із {{value}} символів"
+    },
+    "sign-up-btn": "Зареєструватись",
+    "sign-in-link": "Увійти"
+  },
+  "complete-profile": {
+    "base-values": {
+      "label": "Базові значення",
+      "description": "Ви можете встановити базові значення для нутрієнтів. Вони будуть додані щоденних лічильників автоматично",
+      "calories": "Базові калорії",
+      "protein": "Базові білки",
+      "carbohydrates": "Базові вуглеводи",
+      "fat": "Базові жири"
+    },
+    "submit-btn": "Зберегти"
+  },
+  "dashboard": {
+    "add-meal-btn": "Зʼїсти страву",
+    "daily-nutrients": "Сьогодні",
+    "weekly-nutrients": "За тиждень",
+    "meals-list": {
+      "title": "Зʼїдено сьогодні"
+    }
+  },
+  "add-meal": {
+    "title": "Зʼїсти страву",
+    "add-btn": "Зберегти",
+    "edit-recipe": "Редагувати інгредієнти",
+    "search-placeholder": "Пошук страви...",
+    "weight-input-placeholder": "Напр. 240"
+  }
+}
