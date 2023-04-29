@@ -1,0 +1,20 @@
+name: Build & deploy master to GH Pages
+run-name: Deploying latest master [${{ github.actor }}] on GitHub Pages
+on:
+  push:
+    branches: master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: All things angular
+        uses: AhsanAyaz/angular-deploy-gh-pages-actions@v1.4.0
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }} # see the Configuration section for how you can create secrets
+          build_configuration: development # The build environment for the app. please look configurations in your angular.json
+          base_href: https://yurii-vasylchuk.github.io/pfcalc/   # make sure this corresponds to https://<your_username>.github.io/<base_href>/
+          angular_dist_build_folder: dist/frontend # The folder where your project is supposed to be after running ng build by the action.
+
+    permissions:
+      contents: write
