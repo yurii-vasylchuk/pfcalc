@@ -90,7 +90,7 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
-              "baseHref": "/pfcalc"
+              "baseHref": "https://yurii-vasylchuk.github.io/pfcalc/"
             }
           },
           "defaultConfiguration": "production"
