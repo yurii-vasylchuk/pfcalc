@@ -202,7 +202,7 @@
 /******/ 	
 /******/ 	/* webpack/runtime/publicPath */
 /******/ 	(() => {
-/******/ 		__webpack_require__.p = "";
+/******/ 		__webpack_require__.p = "https://yurii-vasylchuk.github.io/pfcalc/";
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
