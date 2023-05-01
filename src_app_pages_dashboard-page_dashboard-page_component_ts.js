@@ -1037,7 +1037,7 @@ class DashboardPageComponent {
         return null;
       }
       return {
-        id: selectedOption.type === 'dish' ? selectedOption.dishId : selectedOption.foodId,
+        id: null,
         eatenOn: luxon__WEBPACK_IMPORTED_MODULE_3__.DateTime.now(),
         pfcc: selectedOption.pfcc,
         cooked: selectedOption.type === 'dish',
