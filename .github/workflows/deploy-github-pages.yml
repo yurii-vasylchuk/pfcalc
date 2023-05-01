@@ -12,7 +12,7 @@ jobs:
         uses: AhsanAyaz/angular-deploy-gh-pages-actions@v1.4.0
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }} # see the Configuration section for how you can create secrets
-          build_configuration: development # The build environment for the app. please look configurations in your angular.json
+          build_configuration: gh_pages # The build environment for the app. please look configurations in your angular.json
           base_href: https://yurii-vasylchuk.github.io/pfcalc/   # make sure this corresponds to https://<your_username>.github.io/<base_href>/
           angular_dist_build_folder: dist/frontend # The folder where your project is supposed to be after running ng build by the action.
 
