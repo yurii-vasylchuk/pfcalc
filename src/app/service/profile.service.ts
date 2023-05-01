@@ -47,7 +47,7 @@ export class ProfileService {
     return of(null);
   }
 
-  addMeal(meal: IMeal) {
+  addMeal(meal: IMeal): Observable<{meal: IMeal}> {
     return of({
       meal: {
         ...meal,

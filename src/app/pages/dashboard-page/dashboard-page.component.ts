@@ -191,7 +191,7 @@ export class DashboardPageComponent {
         }
 
         return {
-          id: selectedOption.type === 'dish' ? selectedOption.dishId : selectedOption.foodId,
+          id: null,
           eatenOn: DateTime.now(),
           pfcc: selectedOption.pfcc,
           cooked: selectedOption.type === 'dish',
