@@ -125,10 +125,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "AppModule": () => (/* binding */ AppModule),
 /* harmony export */   "HttpLoaderFactory": () => (/* binding */ HttpLoaderFactory)
 /* harmony export */ });
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/platform-browser */ 4497);
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/platform-browser */ 4497);
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app-routing.module */ 158);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.component */ 5041);
-/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/platform-browser/animations */ 7146);
+/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/platform-browser/animations */ 7146);
 /* harmony import */ var _ngxs_devtools_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngxs/devtools-plugin */ 8633);
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../environments/environment */ 2340);
 /* harmony import */ var _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngxs/router-plugin */ 5417);
@@ -136,11 +136,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngxs_store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ngxs/store */ 9307);
 /* harmony import */ var _state_auth_auth_state__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./state/auth/auth.state */ 9305);
 /* harmony import */ var _state_domain_domain_state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./state/domain/domain.state */ 908);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/common/http */ 8987);
-/* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @ngx-translate/core */ 8699);
-/* harmony import */ var _ngx_translate_http_loader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ngx-translate/http-loader */ 8319);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/common/http */ 8987);
+/* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @ngx-translate/core */ 8699);
+/* harmony import */ var _ngx_translate_http_loader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @ngx-translate/http-loader */ 8319);
 /* harmony import */ var _components_heading_heading_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/heading/heading.component */ 334);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/core */ 2560);
+/* harmony import */ var _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ngxs/form-plugin */ 5579);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 2560);
+
+
 
 
 
@@ -163,36 +166,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function HttpLoaderFactory(http) {
-  return new _ngx_translate_http_loader__WEBPACK_IMPORTED_MODULE_10__.TranslateHttpLoader(http, './assets/i18n/');
+  return new _ngx_translate_http_loader__WEBPACK_IMPORTED_MODULE_11__.TranslateHttpLoader(http, './assets/i18n/');
 }
 class AppModule {}
 AppModule.ɵfac = function AppModule_Factory(t) {
   return new (t || AppModule)();
 };
-AppModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵdefineNgModule"]({
+AppModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵdefineNgModule"]({
   type: AppModule,
   bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent]
 });
-AppModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵdefineInjector"]({
-  imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_12__.BrowserModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_13__.HttpClientModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_14__.BrowserAnimationsModule, _ngxs_store__WEBPACK_IMPORTED_MODULE_6__.NgxsModule.forRoot([_state_auth_auth_state__WEBPACK_IMPORTED_MODULE_7__.AuthState, _state_domain_domain_state__WEBPACK_IMPORTED_MODULE_8__.DomainState], {
+AppModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵdefineInjector"]({
+  imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__.BrowserModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClientModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_15__.BrowserAnimationsModule, _ngxs_store__WEBPACK_IMPORTED_MODULE_6__.NgxsModule.forRoot([_state_auth_auth_state__WEBPACK_IMPORTED_MODULE_7__.AuthState, _state_domain_domain_state__WEBPACK_IMPORTED_MODULE_8__.DomainState], {
     developmentMode: !_environments_environment__WEBPACK_IMPORTED_MODULE_3__.environment.production
   }), _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_4__.NgxsRouterPluginModule.forRoot(), _ngxs_logger_plugin__WEBPACK_IMPORTED_MODULE_5__.NgxsLoggerPluginModule.forRoot({
     disabled: _environments_environment__WEBPACK_IMPORTED_MODULE_3__.environment.production
-  }), _ngx_translate_core__WEBPACK_IMPORTED_MODULE_15__.TranslateModule.forRoot({
+  }), _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_10__.NgxsFormPluginModule.forRoot(), _ngx_translate_core__WEBPACK_IMPORTED_MODULE_16__.TranslateModule.forRoot({
     defaultLanguage: 'ua',
     loader: {
-      provide: _ngx_translate_core__WEBPACK_IMPORTED_MODULE_15__.TranslateLoader,
+      provide: _ngx_translate_core__WEBPACK_IMPORTED_MODULE_16__.TranslateLoader,
       useFactory: HttpLoaderFactory,
-      deps: [_angular_common_http__WEBPACK_IMPORTED_MODULE_13__.HttpClient]
+      deps: [_angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClient]
     }
   }), _ngxs_devtools_plugin__WEBPACK_IMPORTED_MODULE_2__.NgxsReduxDevtoolsPluginModule.forRoot({
     disabled: _environments_environment__WEBPACK_IMPORTED_MODULE_3__.environment.production
   }), _components_heading_heading_component__WEBPACK_IMPORTED_MODULE_9__.HeadingComponent]
 });
 (function () {
-  (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵsetNgModuleScope"](AppModule, {
+  (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵsetNgModuleScope"](AppModule, {
     declarations: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent],
-    imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_12__.BrowserModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_13__.HttpClientModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_14__.BrowserAnimationsModule, _ngxs_store__WEBPACK_IMPORTED_MODULE_6__["ɵNgxsRootModule"], _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_4__.NgxsRouterPluginModule, _ngxs_logger_plugin__WEBPACK_IMPORTED_MODULE_5__.NgxsLoggerPluginModule, _ngx_translate_core__WEBPACK_IMPORTED_MODULE_15__.TranslateModule, _ngxs_devtools_plugin__WEBPACK_IMPORTED_MODULE_2__.NgxsReduxDevtoolsPluginModule, _components_heading_heading_component__WEBPACK_IMPORTED_MODULE_9__.HeadingComponent]
+    imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__.BrowserModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClientModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_15__.BrowserAnimationsModule, _ngxs_store__WEBPACK_IMPORTED_MODULE_6__["ɵNgxsRootModule"], _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_4__.NgxsRouterPluginModule, _ngxs_logger_plugin__WEBPACK_IMPORTED_MODULE_5__.NgxsLoggerPluginModule, _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_10__.NgxsFormPluginModule, _ngx_translate_core__WEBPACK_IMPORTED_MODULE_16__.TranslateModule, _ngxs_devtools_plugin__WEBPACK_IMPORTED_MODULE_2__.NgxsReduxDevtoolsPluginModule, _components_heading_heading_component__WEBPACK_IMPORTED_MODULE_9__.HeadingComponent]
   });
 })();
 
@@ -991,6 +994,21 @@ class ProfileService {
               calories: 646
             }
           }, {
+            id: 17,
+            type: 'ingredient',
+            consistOf: null,
+            name: 'Яйцо',
+            isCookable: false,
+            hidden: true,
+            ownedByUser: true,
+            ingredientWeight: 200,
+            pfcc: {
+              protein: 6.3,
+              fat: 5,
+              carbohydrates: 0,
+              calories: 74
+            }
+          }, {
             id: 1,
             type: 'ingredient',
             name: 'СВ Задняя часть',
@@ -1388,7 +1406,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "AddMealAction": () => (/* binding */ AddMealAction),
 /* harmony export */   "ConfigureProfileAction": () => (/* binding */ ConfigureProfileAction),
+/* harmony export */   "CookADishAddIngredient": () => (/* binding */ CookADishAddIngredient),
+/* harmony export */   "CookADishRemoveIngredient": () => (/* binding */ CookADishRemoveIngredient),
 /* harmony export */   "DeleteDishAction": () => (/* binding */ DeleteDishAction),
+/* harmony export */   "InitiateCookADishForm": () => (/* binding */ InitiateCookADishForm),
 /* harmony export */   "MealAddedSuccessfullyEvent": () => (/* binding */ MealAddedSuccessfullyEvent),
 /* harmony export */   "MealAddingFailedEvent": () => (/* binding */ MealAddingFailedEvent),
 /* harmony export */   "MealRemovedSuccessfullyEvent": () => (/* binding */ MealRemovedSuccessfullyEvent),
@@ -1468,6 +1489,24 @@ class MealAddingFailedEvent {
   }
 }
 MealAddingFailedEvent.type = '[DOMAIN] Meal adding failed';
+class InitiateCookADishForm {
+  constructor(recipeId) {
+    this.recipeId = recipeId;
+  }
+}
+InitiateCookADishForm.type = '[DOMAIN] Initiate Cook a Dish form';
+class CookADishAddIngredient {
+  constructor(ingredient) {
+    this.ingredient = ingredient;
+  }
+}
+CookADishAddIngredient.type = '[DOMAIN] Cook a Dish - add ingredient';
+class CookADishRemoveIngredient {
+  constructor(idx) {
+    this.idx = idx;
+  }
+}
+CookADishRemoveIngredient.type = '[DOMAIN] Cook a Dish - remove ingredient';
 
 /***/ }),
 
@@ -1482,18 +1521,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "DOMAIN_STATE_NAME": () => (/* binding */ DOMAIN_STATE_NAME),
 /* harmony export */   "DomainState": () => (/* binding */ DomainState)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! tslib */ 4929);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! tslib */ 4929);
 /* harmony import */ var _ngxs_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngxs/store */ 9307);
 /* harmony import */ var _domain_state_models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./domain.state-models */ 8859);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ 635);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ 3158);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs */ 745);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ 635);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs */ 3158);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs */ 745);
 /* harmony import */ var _commons_models_common_models__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../commons/models/common.models */ 5291);
 /* harmony import */ var _commons_functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../commons/functions */ 8490);
 /* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! luxon */ 20);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/core */ 2560);
-/* harmony import */ var _service_profile_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../service/profile.service */ 9042);
+/* harmony import */ var _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ngxs/form-plugin */ 5579);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/core */ 2560);
+/* harmony import */ var _service_profile_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../service/profile.service */ 9042);
 var _class;
+
 
 
 
@@ -1537,6 +1578,9 @@ let DomainState = (_class = class DomainState {
     }
     return (0,_commons_functions__WEBPACK_IMPORTED_MODULE_3__.sumPfccs)(...eaten);
   }
+  static cookADishForm(state) {
+    return state.forms.cookADish.model != null ? state.forms.cookADish.model : null;
+  }
   static weeklyNutrients(state) {
     const eaten = state.meals.filter(m => (0,_commons_functions__WEBPACK_IMPORTED_MODULE_3__.isOnCurrentWeek)(m.eatenOn)).map(m => m.pfcc);
     if (state.profile?.base != null) {
@@ -1550,7 +1594,7 @@ let DomainState = (_class = class DomainState {
     return state.meals.filter(m => (0,_commons_functions__WEBPACK_IMPORTED_MODULE_3__.isToday)(m.eatenOn));
   }
   handleSuccessfulSignIn(ctx, action) {
-    ctx.setState({
+    ctx.patchState({
       profile: {
         ...action.profile
       },
@@ -1560,7 +1604,7 @@ let DomainState = (_class = class DomainState {
     });
   }
   configureProfile(ctx, action) {
-    return this.service.configureProfile(action.aims, action.base || null).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_6__.map)(_ => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfiguredSuccessfullyEvent(action.aims, action.base || null)), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfigurationFailedEvent(err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_6__.map)(ctx.dispatch));
+    return this.service.configureProfile(action.aims, action.base || null).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(_ => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfiguredSuccessfullyEvent(action.aims, action.base || null)), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfigurationFailedEvent(err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(ctx.dispatch));
   }
   handleProfileConfiguredSuccessfullyEvent(ctx, action) {
     const profile = ctx.getState().profile;
@@ -1584,7 +1628,7 @@ let DomainState = (_class = class DomainState {
     });
   }
   handleRemoveMealAction(ctx, action) {
-    return this.service.removeMeal(action.mealId).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_6__.map)(_ => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealRemovedSuccessfullyEvent(action.mealId)), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealRemovingFailedEvent(action.mealId, err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_6__.map)(ctx.dispatch));
+    return this.service.removeMeal(action.mealId).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(_ => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealRemovedSuccessfullyEvent(action.mealId)), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealRemovingFailedEvent(action.mealId, err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(ctx.dispatch));
   }
   handleMealRemovedEvent(ctx, action) {
     ctx.patchState({
@@ -1595,7 +1639,7 @@ let DomainState = (_class = class DomainState {
     console.error(`Failed to remove meal, reason: ${action.msg}`);
   }
   handleAddMealAction(ctx, action) {
-    return this.service.addMeal(action.meal).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_6__.map)(rsp => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealAddedSuccessfullyEvent(rsp.meal)), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealAddingFailedEvent(action.meal, err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_6__.map)(ctx.dispatch));
+    return this.service.addMeal(action.meal).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(rsp => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealAddedSuccessfullyEvent(rsp.meal)), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealAddingFailedEvent(action.meal, err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(ctx.dispatch));
   }
   handleMealAddedSuccessfullyEvent(ctx, action) {
     ctx.patchState({
@@ -1605,38 +1649,88 @@ let DomainState = (_class = class DomainState {
   handleMealAddingFailedEvent(ctx, action) {
     console.error(action.msg);
   }
+  handleInitiateCookADishForm(ctx, action) {
+    const foods = ctx.getState().foods;
+    const recipe = foods.find(f => f.type === 'recipe' && f.id === action.recipeId);
+    if (recipe == null) {
+      console.warn(`Can't find recipe with provided id == ${action.recipeId}`);
+      return;
+    }
+    const formIngredients = (recipe.consistOf || []).map(i => {
+      return {
+        ingredient: foods.find(f => f.id === i.id),
+        ingredientWeight: i.ingredientWeight
+      };
+    });
+    ctx.dispatch(new _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_5__.UpdateFormValue({
+      path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
+      value: {
+        name: `${recipe.name} ${luxon__WEBPACK_IMPORTED_MODULE_4__.DateTime.now().toFormat("dd.MM")}`,
+        ingredients: formIngredients,
+        cookedWeight: recipe.consistOf?.map(i => i.ingredientWeight).reduce((w1, w2) => w1 + w2, 0) || 0
+      }
+    }));
+  }
+  handleCookADishAddIngredient(ctx, action) {
+    ctx.dispatch(new _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_5__.UpdateFormValue({
+      path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
+      propertyPath: `ingredients.${ctx.getState().forms.cookADish?.model?.ingredients?.length || 0}`,
+      value: action.ingredient
+    }));
+  }
+  handleCookADishRemoveIngredient(ctx, action) {
+    const ingredients = ctx.getState().forms.cookADish?.model?.ingredients;
+    const idx = action.idx;
+    if (ingredients == null || ingredients.length <= 0 || idx >= ingredients.length) {
+      return;
+    }
+    ctx.dispatch(new _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_5__.UpdateFormValue({
+      path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
+      propertyPath: 'ingredients',
+      value: [...ingredients?.slice(0, idx), ...ingredients?.slice(idx + 1, ingredients?.length)]
+    }));
+  }
 }, _class.ɵfac = function DomainState_Factory(t) {
-  return new (t || _class)(_angular_core__WEBPACK_IMPORTED_MODULE_9__["ɵɵinject"](_service_profile_service__WEBPACK_IMPORTED_MODULE_5__.ProfileService));
-}, _class.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_9__["ɵɵdefineInjectable"]({
+  return new (t || _class)(_angular_core__WEBPACK_IMPORTED_MODULE_10__["ɵɵinject"](_service_profile_service__WEBPACK_IMPORTED_MODULE_6__.ProfileService));
+}, _class.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_10__["ɵɵdefineInjectable"]({
   token: _class,
   factory: _class.ɵfac
 }), _class);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileLoadedEvent)], DomainState.prototype, "handleSuccessfulSignIn", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ConfigureProfileAction)], DomainState.prototype, "configureProfile", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfiguredSuccessfullyEvent)], DomainState.prototype, "handleProfileConfiguredSuccessfullyEvent", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfigurationFailedEvent)], DomainState.prototype, "handleProfileConfiguringFailed", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.RemoveMealAction)], DomainState.prototype, "handleRemoveMealAction", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealRemovedSuccessfullyEvent)], DomainState.prototype, "handleMealRemovedEvent", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealRemovingFailedEvent)], DomainState.prototype, "handleMealRemovingFailed", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.AddMealAction)], DomainState.prototype, "handleAddMealAction", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealAddedSuccessfullyEvent)], DomainState.prototype, "handleMealAddedSuccessfullyEvent", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealAddingFailedEvent)], DomainState.prototype, "handleMealAddingFailedEvent", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "profile", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "dishes", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "foods", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "meals", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "foodsMap", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "dishesMap", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "todayNutrients", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "weeklyNutrients", null);
-(0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "todayMeals", null);
-DomainState = (0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.State)({
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileLoadedEvent)], DomainState.prototype, "handleSuccessfulSignIn", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ConfigureProfileAction)], DomainState.prototype, "configureProfile", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfiguredSuccessfullyEvent)], DomainState.prototype, "handleProfileConfiguredSuccessfullyEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfigurationFailedEvent)], DomainState.prototype, "handleProfileConfiguringFailed", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.RemoveMealAction)], DomainState.prototype, "handleRemoveMealAction", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealRemovedSuccessfullyEvent)], DomainState.prototype, "handleMealRemovedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealRemovingFailedEvent)], DomainState.prototype, "handleMealRemovingFailed", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.AddMealAction)], DomainState.prototype, "handleAddMealAction", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealAddedSuccessfullyEvent)], DomainState.prototype, "handleMealAddedSuccessfullyEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.MealAddingFailedEvent)], DomainState.prototype, "handleMealAddingFailedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.InitiateCookADishForm)], DomainState.prototype, "handleInitiateCookADishForm", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CookADishAddIngredient)], DomainState.prototype, "handleCookADishAddIngredient", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CookADishRemoveIngredient)], DomainState.prototype, "handleCookADishRemoveIngredient", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "profile", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "dishes", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "foods", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "meals", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "foodsMap", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "dishesMap", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "todayNutrients", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "cookADishForm", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "weeklyNutrients", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "todayMeals", null);
+DomainState = (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.State)({
   name: DOMAIN_STATE_NAME,
   defaults: {
     profile: null,
     dishes: [],
     foods: [],
-    meals: []
+    meals: [],
+    forms: {
+      cookADish: {
+        model: undefined
+      }
+    }
   }
 })], DomainState);
 
