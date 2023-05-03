@@ -15,6 +15,7 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HeadingComponent} from "./components/heading/heading.component";
+import {NgxsFormPluginModule} from "@ngxs/form-plugin";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -35,6 +36,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxsLoggerPluginModule.forRoot({
       disabled: environment.production,
     }),
+    NgxsFormPluginModule.forRoot(),
     TranslateModule.forRoot({
       defaultLanguage: 'ua',
       loader: {

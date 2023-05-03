@@ -71,5 +71,10 @@
     "edit-recipe": "Редагувати інгредієнти",
     "search-placeholder": "Пошук страви...",
     "weight-input-placeholder": "Напр. 240"
+  },
+  "cook-a-dish": {
+    "title": "Приготувати страву",
+    "dish-name-label": "Назва",
+    "save-btn": "Зберегти"
   }
 }

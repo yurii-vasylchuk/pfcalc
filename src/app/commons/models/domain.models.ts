@@ -12,7 +12,7 @@ interface IBaseFood {
   type: FoodType;
 }
 
-export type IIngredient = (IBaseFood & {
+export type IIngredient = (IFood & {
   ingredientWeight: number
 });
 

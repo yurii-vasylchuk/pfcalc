@@ -393,6 +393,22 @@ export class ProfileService {
               },
             },
             {
+              id: 17,
+              type: 'ingredient',
+              consistOf: null,
+              name: 'Яйцо',
+              isCookable: false,
+              hidden: true,
+              ownedByUser: true,
+              ingredientWeight: 200,
+              pfcc: {
+                protein: 6.3,
+                fat: 5,
+                carbohydrates: 0,
+                calories: 74,
+              },
+            },
+            {
               id: 1,
               type: 'ingredient',
               name: 'СВ Задняя часть',

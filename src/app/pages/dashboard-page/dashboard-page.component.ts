@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
 import {NutritionGaugeComponent} from '../../components/nutrition-gauge/nutrition-gauge.component';
 import {Store} from '@ngxs/store';
 import {DomainState} from '../../state/domain/domain.state';
@@ -8,6 +8,7 @@ import {AsyncPipe, CommonModule} from '@angular/common';
 import {emptyPfcc, IPfcc} from '../../commons/models/common.models';
 import {DateTime} from 'luxon';
 import {TranslateModule} from '@ngx-translate/core';
+import * as fromFunctions from '../../commons/functions';
 import {ceilPfcc, multiplyPfcc} from '../../commons/functions';
 import {MatIconModule} from '@angular/material/icon';
 import {AddMealAction, DeleteDishAction, RemoveMealAction} from '../../state/domain/domain.state-models';
@@ -20,7 +21,6 @@ import {
 import {MatListModule} from '@angular/material/list';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import * as fromFunctions from '../../commons/functions'
 import {MatLineModule} from "@angular/material/core";
 
 @Component({
@@ -31,7 +31,10 @@ import {MatLineModule} from "@angular/material/core";
   standalone: true,
   imports: [CommonModule, NutritionGaugeComponent, AsyncPipe, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule, MatLineModule],
 })
-export class DashboardPageComponent {
+export class DashboardPageComponent implements AfterViewInit {
+
+  protected readonly fromFunctions = fromFunctions;
+
   profile$: Observable<IProfile>;
 
   dailyNutrients$: Observable<IPfcc>;
@@ -215,7 +218,10 @@ export class DashboardPageComponent {
     return (meal.dishId != null ? meal.dish?.name : meal.food.name) || null;
   }
 
-  protected readonly fromFunctions = fromFunctions;
+
+  ngAfterViewInit(): void {
+    this.addMeal();
+  }
 }
 
 type IExtendedMeal = IMeal &

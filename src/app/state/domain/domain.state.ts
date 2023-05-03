@@ -2,7 +2,13 @@ import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {
   AddMealAction,
   ConfigureProfileAction,
-  IDomainState, MealAddedSuccessfullyEvent, MealAddingFailedEvent,
+  CookADishAddIngredient,
+  CookADishRemoveIngredient,
+  ICookADishForm,
+  IDomainState,
+  InitiateCookADishForm,
+  MealAddedSuccessfullyEvent,
+  MealAddingFailedEvent,
   MealRemovedSuccessfullyEvent,
   MealRemovingFailedEvent,
   ProfileConfigurationFailedEvent,
@@ -17,6 +23,7 @@ import {IDish, IFood, IMeal, IProfile} from '../../commons/models/domain.models'
 import {emptyPfcc, IPfcc} from '../../commons/models/common.models';
 import {isOnCurrentWeek, isToday, sumPfccs} from '../../commons/functions';
 import {DateTime} from 'luxon';
+import {UpdateFormValue} from "@ngxs/form-plugin";
 
 export const DOMAIN_STATE_NAME = 'domain';
 
@@ -27,6 +34,11 @@ export const DOMAIN_STATE_NAME = 'domain';
     dishes: [],
     foods: [],
     meals: [],
+    forms: {
+      cookADish: {
+        model: undefined
+      }
+    }
   },
 })
 @Injectable()
@@ -83,6 +95,11 @@ export class DomainState {
   }
 
   @Selector()
+  static cookADishForm(state: IDomainState): ICookADishForm | null {
+    return state.forms.cookADish.model != null ? state.forms.cookADish.model : null;
+  }
+
+  @Selector()
   static weeklyNutrients(state: IDomainState): IPfcc {
     const eaten = state.meals
       .filter(m => isOnCurrentWeek(m.eatenOn))
@@ -105,7 +122,7 @@ export class DomainState {
 
   @Action(ProfileLoadedEvent)
   handleSuccessfulSignIn(ctx: StateContext<IDomainState>, action: ProfileLoadedEvent) {
-    ctx.setState({
+    ctx.patchState({
       profile: {
         ...action.profile,
       },
@@ -193,5 +210,63 @@ export class DomainState {
   @Action(MealAddingFailedEvent)
   handleMealAddingFailedEvent(ctx: StateContext<IDomainState>, action: MealAddingFailedEvent) {
     console.error(action.msg);
+  }
+
+  @Action(InitiateCookADishForm)
+  handleInitiateCookADishForm(ctx: StateContext<IDomainState>, action: InitiateCookADishForm) {
+    const foods = ctx.getState().foods;
+
+    const recipe = foods.find(f => f.type === 'recipe' && f.id === action.recipeId);
+
+    if (recipe == null) {
+      console.warn(`Can't find recipe with provided id == ${action.recipeId}`);
+      return;
+    }
+
+    const formIngredients = (recipe.consistOf || []).map(i => {
+      return {
+        ingredient: foods.find(f => f.id === i.id),
+        ingredientWeight: i.ingredientWeight
+      };
+    });
+
+    ctx.dispatch(new UpdateFormValue({
+      path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
+      value: {
+        name: `${recipe.name} ${DateTime.now().toFormat("dd.MM")}`,
+        ingredients: formIngredients,
+        cookedWeight: recipe.consistOf
+          ?.map(i => i.ingredientWeight)
+          .reduce((w1, w2) => w1 + w2, 0) || 0
+      }
+    }));
+  }
+
+  @Action(CookADishAddIngredient)
+  handleCookADishAddIngredient(ctx: StateContext<IDomainState>, action: CookADishAddIngredient) {
+    ctx.dispatch(new UpdateFormValue({
+      path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
+      propertyPath: `ingredients.${ctx.getState().forms.cookADish?.model?.ingredients?.length || 0}`,
+      value: action.ingredient
+    }))
+  }
+
+  @Action(CookADishRemoveIngredient)
+  handleCookADishRemoveIngredient(ctx: StateContext<IDomainState>, action: CookADishRemoveIngredient) {
+    const ingredients = ctx.getState().forms.cookADish?.model?.ingredients;
+    const idx = action.idx;
+    if (ingredients == null || ingredients.length <= 0 || idx >= ingredients.length) {
+      return;
+    }
+
+
+    ctx.dispatch(new UpdateFormValue({
+      path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
+      propertyPath: 'ingredients',
+      value: [
+        ...ingredients?.slice(0, idx),
+        ...ingredients?.slice(idx + 1, ingredients?.length)
+      ]
+    }));
   }
 }

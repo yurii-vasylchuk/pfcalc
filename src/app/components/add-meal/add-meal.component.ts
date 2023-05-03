@@ -1,16 +1,26 @@
-import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {FoodType, IIngredient, IMeal} from '../../commons/models/domain.models';
 import {MatIconModule} from '@angular/material/icon';
-import {Observable} from 'rxjs';
+import {Observable, take} from 'rxjs';
 import {IPfcc} from '../../commons/models/common.models';
 import {MatExpansionModule, MatExpansionPanel} from '@angular/material/expansion';
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {NutritionGaugeComponent} from '../nutrition-gauge/nutrition-gauge.component';
 import {FormsModule} from "@angular/forms";
+import {CookADishComponent} from "../cook-a-dish/cook-a-dish.component";
 
 export interface AddMealDialogData {
   items: Observable<IDishOption[]>;
@@ -30,7 +40,7 @@ export interface AddMealDialogData {
   styleUrls: ['./add-meal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddMealComponent {
+export class AddMealComponent implements AfterViewInit {
   protected readonly Math = Math;
   protected meals: IMeal[] = [];
 
@@ -46,7 +56,18 @@ export class AddMealComponent {
   private selectedDish: IDishOption | null = null;
 
   constructor(private dialogRef: MatDialogRef<AddMealComponent, ISelectedDish | null>,
-              @Inject(MAT_DIALOG_DATA) public data: AddMealDialogData) {
+              @Inject(MAT_DIALOG_DATA) public data: AddMealDialogData,
+              private dialog: MatDialog) {
+  }
+
+  ngAfterViewInit(): void {
+    this.data.items
+      .pipe(take(1))
+      .subscribe(options => {
+        const opt = options.find(o => o.foodId === 21);
+        this.handleDishSelected(opt!);
+        this.handleEditRecipeClicked();
+      })
   }
 
   dishOptionTrackBy = (idx: number, item: IDishOption) => item.id;
@@ -87,6 +108,13 @@ export class AddMealComponent {
         weight: this.selectedDishWeight,
       });
     }
+  }
+
+  handleEditRecipeClicked() {
+    this.dialog.open(CookADishComponent, {
+      panelClass: 'fullscreen-dialog',
+      data: {recipeId: this.selectedDish?.foodId}
+    });
   }
 }
 

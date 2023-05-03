@@ -1,0 +1,61 @@
+<div class="heading" mat-dialog-title>
+  <h1 class="heading__title">{{'cook-a-dish.title' | translate}}</h1>
+  <div class="flex-spacer"></div>
+  <button class="heading__close" mat-icon-button (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<div class="content" mat-dialog-content>
+  <form [formGroup]="form" [ngxsForm]="formStateName" (ngSubmit)="handleSubmit()">
+    <mat-form-field>
+      <mat-label>{{'cook-a-dish.dish-name-label' | translate}}</mat-label>
+      <input type="text" matInput formControlName="name">
+    </mat-form-field>
+
+    <ng-container formArrayName="ingredients">
+      <ng-container *ngFor="let _ of (formData | async)?.ingredients; let i = index">
+        <div [formGroupName]="i" class="content__ingredient-box">
+          <mat-form-field class="content__ingredient">
+            <mat-label>Ingredient</mat-label>
+            <mat-select formControlName="ingredient">
+              <mat-option *ngFor="let food of allIngredients | async" [value]="food">
+                {{food.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="content__ingredient-weight">
+            <input type="number" formControlName="weight" matInput>
+          </mat-form-field>
+          <div class="content__ingredient-remove">
+            <button mat-icon-button
+                    color="warn"
+                    aria-label="Remove ingredient"
+                    (click)="removeIngredient(i)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <button mat-button
+            color="primary"
+            class="content__add-ingredient"
+            (click)="addIngredient()">ADD INGREDIENT</button>
+
+    <mat-form-field>
+      <mat-label>Cooked weight</mat-label>
+      <input type="number" matInput formControlName="cookedWeight">
+    </mat-form-field>
+  </form>
+
+</div>
+
+<div class="actions">
+  <button mat-raised-button
+          color="accent"
+          type="submit">
+    {{'cook-a-dish.save-btn' | translate}}
+  </button>
+</div>

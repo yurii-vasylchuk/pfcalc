@@ -1,5 +1,21 @@
-import {IDish, IFood, IMeal, IProfile, IProfileResponse, IProfileStatistics} from '../../commons/models/domain.models';
+import {
+  IDish,
+  IFood,
+  IMeal,
+  IProfile,
+  IProfileResponse,
+  IProfileStatistics
+} from '../../commons/models/domain.models';
 import {IPfcc} from '../../commons/models/common.models';
+
+export interface ICookADishForm {
+  name: string;
+  ingredients: {
+    ingredient: IFood,
+    ingredientWeight: number
+  }[];
+  cookedWeight: number
+}
 
 export interface IDomainState {
   profile: IProfile | null;
@@ -7,6 +23,11 @@ export interface IDomainState {
   meals: IMeal[];
   dishes: IDish[];
   stats?: IProfileStatistics;
+  forms: {
+    cookADish: {
+      model?: ICookADishForm
+    }
+  }
 }
 
 export class ProfileLoadedEvent {
@@ -85,5 +106,26 @@ export class MealAddingFailedEvent {
 
   constructor(public readonly meal: IMeal,
               public readonly msg: string) {
+  }
+}
+
+export class InitiateCookADishForm {
+  static readonly type = '[DOMAIN] Initiate Cook a Dish form';
+
+  constructor(public readonly recipeId: number) {
+  }
+}
+
+export class CookADishAddIngredient {
+  static readonly type = '[DOMAIN] Cook a Dish - add ingredient';
+
+  constructor(public readonly ingredient: { ingredient?: IFood, ingredientWeight: number }) {
+  }
+}
+
+export class CookADishRemoveIngredient {
+  static readonly type = '[DOMAIN] Cook a Dish - remove ingredient';
+
+  constructor(public readonly idx: number) {
   }
 }
