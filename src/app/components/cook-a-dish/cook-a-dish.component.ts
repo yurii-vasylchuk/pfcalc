@@ -41,8 +41,8 @@ export class CookADishComponent {
   protected $allIngredients: Observable<IFood[]>;
   protected $formData: Observable<ICookADishForm | null> = this.store.select(DomainState.cookADishForm);
   protected $usedIngredientsIds: Observable<number[]>;
-  protected trackFoodByIdFn: TrackByFunction<IFood> = (idx, food) => `${idx}`;
   protected trackIngredientByIdFn: TrackByFunction<{ingredient: IFood; ingredientWeight: number}> = (idx, i) => `${idx}`;
+
   private $destroyed: Observable<void> = new Subject();
 
   constructor(private store: Store,
