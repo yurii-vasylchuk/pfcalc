@@ -525,13 +525,15 @@ __webpack_require__.r(__webpack_exports__);
 function CookADishComponent_ng_container_16_mat_option_6_Template(rf, ctx) {
   if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "mat-option", 21);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipe"](1, "async");
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
   }
   if (rf & 2) {
     const food_r4 = ctx.$implicit;
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("value", food_r4);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](1);
+    const ctx_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("value", food_r4)("disabled", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](1, 3, ctx_r3.$usedIngredientsIds).includes(food_r4.id));
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtextInterpolate1"](" ", food_r4.name, " ");
   }
 }
@@ -543,7 +545,7 @@ function CookADishComponent_ng_container_16_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](4, "Ingredient");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](5, "mat-select", 15);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](6, CookADishComponent_ng_container_16_mat_option_6_Template, 2, 2, "mat-option", 16);
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](6, CookADishComponent_ng_container_16_mat_option_6_Template, 3, 5, "mat-option", 16);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipe"](7, "async");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]()();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](8, "mat-form-field", 17);
@@ -567,7 +569,7 @@ function CookADishComponent_ng_container_16_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](1);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("formGroupName", i_r2);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](5);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngForOf", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](7, 2, ctx_r0.allIngredients));
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngForOf", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](7, 2, ctx_r0.$allIngredients));
   }
 }
 class CookADishComponent {
@@ -582,12 +584,14 @@ class CookADishComponent {
       ingredients: this.fb.array([]),
       cookedWeight: [0, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.Validators.required]
     });
-    this.formData = this.store.select(_state_domain_domain_state__WEBPACK_IMPORTED_MODULE_0__.DomainState.cookADishForm);
+    this.$formData = this.store.select(_state_domain_domain_state__WEBPACK_IMPORTED_MODULE_0__.DomainState.cookADishForm);
+    this.trackIngredientByIdFn = (idx, i) => `${idx}`;
     this.$destroyed = new rxjs__WEBPACK_IMPORTED_MODULE_6__.Subject();
-    this.formData.pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.takeUntil)(this.$destroyed), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.map)(fd => fd?.ingredients), (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.skipWhile)(i => i == null)).subscribe(ingredients => {
+    this.$formData.pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.takeUntil)(this.$destroyed), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.map)(fd => fd?.ingredients), (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.skipWhile)(i => i == null)).subscribe(ingredients => {
       if (ingredients == null) {
         return;
       }
+      ingredients = ingredients.filter(i => i.ingredient != null);
       if (ingredients.length || 0 > this.ingredients.length) {
         for (let i = this.ingredients.length; i < ingredients.length; i++) {
           this.ingredients.push(this.fb.group({
@@ -597,7 +601,8 @@ class CookADishComponent {
         }
       }
     });
-    this.allIngredients = store.select(_state_domain_domain_state__WEBPACK_IMPORTED_MODULE_0__.DomainState.foods);
+    this.$allIngredients = store.select(_state_domain_domain_state__WEBPACK_IMPORTED_MODULE_0__.DomainState.foods);
+    this.$usedIngredientsIds = store.select(_state_domain_domain_state__WEBPACK_IMPORTED_MODULE_0__.DomainState.cookADishUsedIngredients).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_8__.map)(foods => foods.map(f => f.id)));
     if (data.recipeId != null) {
       this.store.dispatch(new _state_domain_domain_state_models__WEBPACK_IMPORTED_MODULE_2__.InitiateCookADishForm(data.recipeId));
     }
@@ -612,6 +617,10 @@ class CookADishComponent {
     this.dialogRef.close(null);
   }
   addIngredient() {
+    this.ingredients.push(this.fb.group({
+      ingredient: [null, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.Validators.required],
+      weight: [100, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.Validators.required]
+    }));
     this.store.dispatch(new _state_domain_domain_state_models__WEBPACK_IMPORTED_MODULE_2__.CookADishAddIngredient({
       ingredientWeight: 100
     }));
@@ -633,8 +642,8 @@ CookADishComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4
   standalone: true,
   features: [_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵStandaloneFeature"]],
   decls: 28,
-  vars: 14,
-  consts: [["mat-dialog-title", "", 1, "heading"], [1, "heading__title"], [1, "flex-spacer"], ["mat-icon-button", "", 1, "heading__close", 3, "click"], ["mat-dialog-content", "", 1, "content"], [3, "formGroup", "ngxsForm", "ngSubmit"], ["type", "text", "matInput", "", "formControlName", "name"], ["formArrayName", "ingredients"], [4, "ngFor", "ngForOf"], ["mat-button", "", "color", "primary", 1, "content__add-ingredient", 3, "click"], ["type", "number", "matInput", "", "formControlName", "cookedWeight"], [1, "actions"], ["mat-raised-button", "", "color", "accent", "type", "submit"], [1, "content__ingredient-box", 3, "formGroupName"], [1, "content__ingredient"], ["formControlName", "ingredient"], [3, "value", 4, "ngFor", "ngForOf"], [1, "content__ingredient-weight"], ["type", "number", "formControlName", "weight", "matInput", ""], [1, "content__ingredient-remove"], ["mat-icon-button", "", "color", "warn", "aria-label", "Remove ingredient", 3, "click"], [3, "value"]],
+  vars: 15,
+  consts: [["mat-dialog-title", "", 1, "heading"], [1, "heading__title"], [1, "flex-spacer"], ["mat-icon-button", "", 1, "heading__close", 3, "click"], ["mat-dialog-content", "", 1, "content"], [3, "formGroup", "ngxsForm", "ngSubmit"], ["type", "text", "matInput", "", "formControlName", "name"], ["formArrayName", "ingredients"], [4, "ngFor", "ngForOf", "ngForTrackBy"], ["mat-button", "", "color", "primary", 1, "content__add-ingredient", 3, "click"], ["type", "number", "matInput", "", "formControlName", "cookedWeight"], [1, "actions"], ["mat-raised-button", "", "color", "accent", "type", "submit"], [1, "content__ingredient-box", 3, "formGroupName"], [1, "content__ingredient"], ["formControlName", "ingredient"], [3, "value", "disabled", 4, "ngFor", "ngForOf"], [1, "content__ingredient-weight"], ["type", "number", "formControlName", "weight", "matInput", ""], [1, "content__ingredient-remove"], ["mat-icon-button", "", "color", "warn", "aria-label", "Remove ingredient", 3, "click"], [3, "value", "disabled"]],
   template: function CookADishComponent_Template(rf, ctx) {
     if (rf & 1) {
       _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 0)(1, "h1", 1);
@@ -682,15 +691,15 @@ CookADishComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4
     if (rf & 2) {
       let tmp_4_0;
       _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](2);
-      _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](3, 6, "cook-a-dish.title"));
+      _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](3, 7, "cook-a-dish.title"));
       _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](7);
       _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("formGroup", ctx.form)("ngxsForm", ctx.formStateName);
       _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](3);
-      _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](13, 8, "cook-a-dish.dish-name-label"));
+      _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](13, 9, "cook-a-dish.dish-name-label"));
       _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](4);
-      _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngForOf", (tmp_4_0 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](17, 10, ctx.formData)) == null ? null : tmp_4_0.ingredients);
+      _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngForOf", (tmp_4_0 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](17, 11, ctx.$formData)) == null ? null : tmp_4_0.ingredients)("ngForTrackBy", ctx.trackIngredientByIdFn);
       _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](10);
-      _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtextInterpolate1"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](27, 12, "cook-a-dish.save-btn"), " ");
+      _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtextInterpolate1"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpipeBind1"](27, 13, "cook-a-dish.save-btn"), " ");
     }
   },
   dependencies: [_angular_common__WEBPACK_IMPORTED_MODULE_11__.CommonModule, _angular_common__WEBPACK_IMPORTED_MODULE_11__.NgForOf, _angular_common__WEBPACK_IMPORTED_MODULE_11__.AsyncPipe, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.ReactiveFormsModule, _angular_forms__WEBPACK_IMPORTED_MODULE_5__["ɵNgNoValidate"], _angular_forms__WEBPACK_IMPORTED_MODULE_5__.DefaultValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.NumberValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.NgControlStatus, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.NgControlStatusGroup, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormGroupDirective, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormControlName, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormGroupName, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormArrayName, _angular_material_form_field__WEBPACK_IMPORTED_MODULE_12__.MatFormFieldModule, _angular_material_form_field__WEBPACK_IMPORTED_MODULE_12__.MatFormField, _angular_material_form_field__WEBPACK_IMPORTED_MODULE_12__.MatLabel, _angular_material_input__WEBPACK_IMPORTED_MODULE_13__.MatInputModule, _angular_material_input__WEBPACK_IMPORTED_MODULE_13__.MatInput, _angular_material_button__WEBPACK_IMPORTED_MODULE_14__.MatButtonModule, _angular_material_button__WEBPACK_IMPORTED_MODULE_14__.MatButton, _angular_material_button__WEBPACK_IMPORTED_MODULE_14__.MatIconButton, _angular_material_dialog__WEBPACK_IMPORTED_MODULE_10__.MatDialogModule, _angular_material_dialog__WEBPACK_IMPORTED_MODULE_10__.MatDialogTitle, _angular_material_dialog__WEBPACK_IMPORTED_MODULE_10__.MatDialogContent, _angular_material_select__WEBPACK_IMPORTED_MODULE_15__.MatSelectModule, _angular_material_select__WEBPACK_IMPORTED_MODULE_15__.MatSelect, _angular_material_core__WEBPACK_IMPORTED_MODULE_16__.MatOption, _ngx_translate_core__WEBPACK_IMPORTED_MODULE_17__.TranslateModule, _ngx_translate_core__WEBPACK_IMPORTED_MODULE_17__.TranslatePipe, _angular_material_icon__WEBPACK_IMPORTED_MODULE_18__.MatIconModule, _angular_material_icon__WEBPACK_IMPORTED_MODULE_18__.MatIcon, _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_1__.NgxsFormPluginModule, _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_1__["ɵFormDirective"]],

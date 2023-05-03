@@ -1581,6 +1581,9 @@ let DomainState = (_class = class DomainState {
   static cookADishForm(state) {
     return state.forms.cookADish.model != null ? state.forms.cookADish.model : null;
   }
+  static cookADishUsedIngredients(state) {
+    return (state.forms.cookADish.model?.ingredients || []).map(i => i.ingredient).filter(i => i != null);
+  }
   static weeklyNutrients(state) {
     const eaten = state.meals.filter(m => (0,_commons_functions__WEBPACK_IMPORTED_MODULE_3__.isOnCurrentWeek)(m.eatenOn)).map(m => m.pfcc);
     if (state.profile?.base != null) {
@@ -1717,6 +1720,7 @@ let DomainState = (_class = class DomainState {
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "dishesMap", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "todayNutrients", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "cookADishForm", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "cookADishUsedIngredients", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "weeklyNutrients", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "todayMeals", null);
 DomainState = (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.State)({
