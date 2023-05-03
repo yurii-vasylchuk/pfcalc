@@ -14,12 +14,14 @@
     </mat-form-field>
 
     <ng-container formArrayName="ingredients">
-      <ng-container *ngFor="let _ of (formData | async)?.ingredients; let i = index">
+      <ng-container *ngFor="let _ of ($formData | async)?.ingredients; let i = index; trackBy: trackIngredientByIdFn">
         <div [formGroupName]="i" class="content__ingredient-box">
           <mat-form-field class="content__ingredient">
             <mat-label>Ingredient</mat-label>
             <mat-select formControlName="ingredient">
-              <mat-option *ngFor="let food of allIngredients | async" [value]="food">
+              <mat-option *ngFor="let food of $allIngredients | async;"
+                          [value]="food"
+                          [disabled]="($usedIngredientsIds | async)!.includes(food.id)">
                 {{food.name}}
               </mat-option>
             </mat-select>

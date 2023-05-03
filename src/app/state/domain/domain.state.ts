@@ -100,6 +100,13 @@ export class DomainState {
   }
 
   @Selector()
+  static cookADishUsedIngredients(state: IDomainState): IFood[] {
+    return (state.forms.cookADish.model?.ingredients || [])
+      .map(i => i.ingredient)
+      .filter(i => i != null);
+  }
+
+  @Selector()
   static weeklyNutrients(state: IDomainState): IPfcc {
     const eaten = state.meals
       .filter(m => isOnCurrentWeek(m.eatenOn))
