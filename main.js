@@ -1659,13 +1659,14 @@ let DomainState = (_class = class DomainState {
       console.warn(`Can't find recipe with provided id == ${action.recipeId}`);
       return;
     }
-    const formIngredients = (recipe.consistOf || []).map(i => {
+    const formIngredients = (recipe.consistOf || []).map((i, index) => {
       return {
         ingredient: foods.find(f => f.id === i.id),
-        ingredientWeight: i.ingredientWeight
+        ingredientWeight: i.ingredientWeight,
+        index
       };
     });
-    ctx.dispatch(new _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_5__.UpdateFormValue({
+    ctx.dispatch(new _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_5__.ResetForm({
       path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
       value: {
         name: `${recipe.name} ${luxon__WEBPACK_IMPORTED_MODULE_4__.DateTime.now().toFormat("dd.MM")}`,
