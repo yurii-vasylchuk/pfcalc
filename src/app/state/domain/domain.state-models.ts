@@ -12,7 +12,8 @@ export interface ICookADishForm {
   name: string;
   ingredients: {
     ingredient: IFood,
-    ingredientWeight: number
+    ingredientWeight: number,
+    index: number
   }[];
   cookedWeight: number
 }
@@ -119,7 +120,7 @@ export class InitiateCookADishForm {
 export class CookADishAddIngredient {
   static readonly type = '[DOMAIN] Cook a Dish - add ingredient';
 
-  constructor(public readonly ingredient: { ingredient?: IFood, ingredientWeight: number }) {
+  constructor(public readonly ingredient: { ingredient?: IFood, ingredientWeight: number, index: number }) {
   }
 }
 

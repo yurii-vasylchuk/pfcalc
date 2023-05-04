@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {AddMealComponent, ISelectedDish} from "../add-meal/add-meal.component";
 import {Store} from "@ngxs/store";
-import {map, Observable, skipWhile, Subject, takeUntil, withLatestFrom} from "rxjs";
+import {map, Observable, skipWhile, Subject, takeUntil} from "rxjs";
 import {DOMAIN_STATE_NAME, DomainState} from "../../state/domain/domain.state";
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -16,7 +16,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {NgxsFormPluginModule} from "@ngxs/form-plugin";
 import {
   CookADishAddIngredient,
-  CookADishRemoveIngredient, ICookADishForm,
+  CookADishRemoveIngredient,
+  ICookADishForm,
   InitiateCookADishForm
 } from "../../state/domain/domain.state-models";
 
@@ -41,7 +42,11 @@ export class CookADishComponent {
   protected $allIngredients: Observable<IFood[]>;
   protected $formData: Observable<ICookADishForm | null> = this.store.select(DomainState.cookADishForm);
   protected $usedIngredientsIds: Observable<number[]>;
-  protected trackIngredientByIdFn: TrackByFunction<{ingredient: IFood; ingredientWeight: number}> = (idx, i) => `${idx}`;
+  protected trackIngredientByIndexFn: TrackByFunction<{
+    ingredient: IFood;
+    ingredientWeight: number,
+    index: number
+  }> = (idx, i) => `${i.index}`;
 
   private $destroyed: Observable<void> = new Subject();
 
@@ -66,7 +71,8 @@ export class CookADishComponent {
         for (let i = this.ingredients.length; i < ingredients.length; i++) {
           this.ingredients.push(this.fb.group({
             ingredient: [ingredients[i].ingredient, Validators.required],
-            weight: [ingredients[i].ingredientWeight, Validators.required]
+            ingredientWeight: [ingredients[i].ingredientWeight, Validators.required],
+            index: [ingredients[i].index]
           }));
         }
       }
@@ -95,12 +101,16 @@ export class CookADishComponent {
   }
 
   addIngredient() {
+    let nextIndex: number = this.ingredients.at(this.ingredients.length - 1).value.index + 1;
+
     this.ingredients.push(this.fb.group({
       ingredient: [null, Validators.required],
-      weight: [100, Validators.required]
+      ingredientWeight: [100, Validators.required],
+      index: [nextIndex]
     }));
     this.store.dispatch(new CookADishAddIngredient({
-      ingredientWeight: 100
+      ingredientWeight: 100,
+      index: nextIndex
     }))
   }
 

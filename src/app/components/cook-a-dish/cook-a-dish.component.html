@@ -7,14 +7,14 @@
 </div>
 
 <div class="content" mat-dialog-content>
-  <form [formGroup]="form" [ngxsForm]="formStateName" (ngSubmit)="handleSubmit()">
+  <form [formGroup]="form" [ngxsForm]="formStateName" (ngSubmit)="handleSubmit()" id="cook-a-dish-form">
     <mat-form-field>
       <mat-label>{{'cook-a-dish.dish-name-label' | translate}}</mat-label>
       <input type="text" matInput formControlName="name">
     </mat-form-field>
 
     <ng-container formArrayName="ingredients">
-      <ng-container *ngFor="let _ of ($formData | async)?.ingredients; let i = index; trackBy: trackIngredientByIdFn">
+      <ng-container *ngFor="let _ of ($formData | async)?.ingredients; let i = index; trackBy: trackIngredientByIndexFn">
         <div [formGroupName]="i" class="content__ingredient-box">
           <mat-form-field class="content__ingredient">
             <mat-label>Ingredient</mat-label>
@@ -27,8 +27,9 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="content__ingredient-weight">
-            <input type="number" formControlName="weight" matInput>
+            <input type="number" formControlName="ingredientWeight" matInput>
           </mat-form-field>
+          <input type="hidden" formControlName="index">
           <div class="content__ingredient-remove">
             <button mat-icon-button
                     color="warn"
@@ -57,7 +58,8 @@
 <div class="actions">
   <button mat-raised-button
           color="accent"
-          type="submit">
+          type="submit"
+          form="cook-a-dish-form">
     {{'cook-a-dish.save-btn' | translate}}
   </button>
 </div>

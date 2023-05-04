@@ -23,7 +23,7 @@ import {IDish, IFood, IMeal, IProfile} from '../../commons/models/domain.models'
 import {emptyPfcc, IPfcc} from '../../commons/models/common.models';
 import {isOnCurrentWeek, isToday, sumPfccs} from '../../commons/functions';
 import {DateTime} from 'luxon';
-import {UpdateFormValue} from "@ngxs/form-plugin";
+import {ResetForm, UpdateFormValue} from "@ngxs/form-plugin";
 
 export const DOMAIN_STATE_NAME = 'domain';
 
@@ -230,14 +230,15 @@ export class DomainState {
       return;
     }
 
-    const formIngredients = (recipe.consistOf || []).map(i => {
+    const formIngredients = (recipe.consistOf || []).map((i, index) => {
       return {
         ingredient: foods.find(f => f.id === i.id),
-        ingredientWeight: i.ingredientWeight
+        ingredientWeight: i.ingredientWeight,
+        index
       };
     });
 
-    ctx.dispatch(new UpdateFormValue({
+    ctx.dispatch(new ResetForm({
       path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
       value: {
         name: `${recipe.name} ${DateTime.now().toFormat("dd.MM")}`,
