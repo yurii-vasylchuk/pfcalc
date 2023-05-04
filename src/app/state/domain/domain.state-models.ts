@@ -1,4 +1,5 @@
 import {
+  IDishToCreate,
   IDish,
   IFood,
   IMeal,
@@ -88,6 +89,21 @@ export class DeleteDishAction {
   }
 }
 
+export class DishDeletedEvent {
+  static readonly type = '[DOMAIN] Dish deleted';
+
+  constructor(public readonly dishId: number) {
+  }
+}
+
+export class DishDeletionFailedEvent {
+  static readonly type = '[DOMAIN] Dish deletion failed';
+
+  constructor(public readonly dishId: number,
+              public readonly msg: string) {
+  }
+}
+
 export class AddMealAction {
   static readonly type = '[DOMAIN] Add meal';
 
@@ -128,5 +144,25 @@ export class CookADishRemoveIngredient {
   static readonly type = '[DOMAIN] Cook a Dish - remove ingredient';
 
   constructor(public readonly idx: number) {
+  }
+}
+
+export class CreateDishAction {
+  static readonly type='[DOMAIN] Create dish';
+
+  constructor(public readonly dish: IDishToCreate) {
+  }
+}
+
+export class DishCreatedEvent {
+  static readonly type = '[DOMAIN] Dish created successfully';
+
+  constructor(public readonly dish: IDish) {
+  }
+}
+export class DishCreationFailedEvent {
+  static readonly type = '[DOMAIN] Dish creation failed';
+
+  constructor(public readonly msg: string) {
   }
 }

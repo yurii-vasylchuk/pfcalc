@@ -1,26 +1,31 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
   Inject,
   Output,
-  ViewChild
+  QueryList,
+  ViewChild,
+  ViewChildren
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {FoodType, IIngredient, IMeal} from '../../commons/models/domain.models';
 import {MatIconModule} from '@angular/material/icon';
-import {Observable, take} from 'rxjs';
+import {map, Observable, switchMap, take} from 'rxjs';
 import {IPfcc} from '../../commons/models/common.models';
-import {MatExpansionModule, MatExpansionPanel} from '@angular/material/expansion';
+import {MatAccordion, MatExpansionModule, MatExpansionPanel} from '@angular/material/expansion';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {NutritionGaugeComponent} from '../nutrition-gauge/nutrition-gauge.component';
 import {FormsModule} from "@angular/forms";
-import {CookADishComponent} from "../cook-a-dish/cook-a-dish.component";
+import {CookADishComponent, ICookADishDialogData, ICookADishResult} from "../cook-a-dish/cook-a-dish.component";
+import {Store} from "@ngxs/store";
+import {CreateDishAction} from "../../state/domain/domain.state-models";
+import {DateTime} from "luxon";
+import {DomainState} from "../../state/domain/domain.state";
 
 export interface AddMealDialogData {
   items: Observable<IDishOption[]>;
@@ -40,7 +45,7 @@ export interface AddMealDialogData {
   styleUrls: ['./add-meal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddMealComponent implements AfterViewInit {
+export class AddMealComponent {
   protected readonly Math = Math;
   protected meals: IMeal[] = [];
 
@@ -49,25 +54,18 @@ export class AddMealComponent implements AfterViewInit {
 
   @ViewChild('searchField')
   protected searchField!: ElementRef<HTMLInputElement>;
-  @ViewChild('dishesList')
-  protected dishesList!: MatExpansionPanel;
+  @ViewChildren('dishesOption')
+  protected dishesAccordionItems!: QueryList<MatExpansionPanel>;
+  @ViewChildren('dishesAccordion')
+  protected dishesAccordion!: MatAccordion;
   protected selectedDishWeight = 0;
 
   private selectedDish: IDishOption | null = null;
 
-  constructor(private dialogRef: MatDialogRef<AddMealComponent, ISelectedDish | null>,
-              @Inject(MAT_DIALOG_DATA) public data: AddMealDialogData,
+  constructor(private store: Store,
+              private dialogRef: MatDialogRef<AddMealComponent, ISelectedDish | null>,
+              @Inject(MAT_DIALOG_DATA) protected data: AddMealDialogData,
               private dialog: MatDialog) {
-  }
-
-  ngAfterViewInit(): void {
-    this.data.items
-      .pipe(take(1))
-      .subscribe(options => {
-        const opt = options.find(o => o.foodId === 21);
-        this.handleDishSelected(opt!);
-        this.handleEditRecipeClicked();
-      })
   }
 
   dishOptionTrackBy = (idx: number, item: IDishOption) => item.id;
@@ -111,9 +109,32 @@ export class AddMealComponent implements AfterViewInit {
   }
 
   handleEditRecipeClicked() {
-    this.dialog.open(CookADishComponent, {
+    const ref = this.dialog.open<CookADishComponent, ICookADishDialogData, ICookADishResult>(CookADishComponent, {
       panelClass: 'fullscreen-dialog',
-      data: {recipeId: this.selectedDish?.foodId}
+      data: {recipeId: this.selectedDish!.foodId}
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (result == null) {
+        return;
+      }
+      this.store.dispatch(new CreateDishAction({
+        name: result.name,
+        foodId: this.selectedDish!.foodId,
+        cookedOn: DateTime.now(),
+        cookedWeight: result.cookedWeight,
+        ingredients: result.ingredients
+      })).pipe(
+        switchMap(_ => this.store.select(DomainState.dishes)),
+        take(1),
+        map(dishes => dishes.find(dish => dish.name === result.name)),
+      ).subscribe(dish => {
+        if (dish == null) {
+          return;
+        }
+
+        console.log(this.dishesAccordionItems.get(0));
+      });
     });
   }
 }

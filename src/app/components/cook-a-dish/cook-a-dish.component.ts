@@ -1,16 +1,15 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, TrackByFunction} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {AddMealComponent, ISelectedDish} from "../add-meal/add-meal.component";
 import {Store} from "@ngxs/store";
 import {map, Observable, skipWhile, Subject, takeUntil} from "rxjs";
 import {DOMAIN_STATE_NAME, DomainState} from "../../state/domain/domain.state";
-import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSelectModule} from "@angular/material/select";
-import {IFood} from "../../commons/models/domain.models";
+import {IFood, IIngredient} from "../../commons/models/domain.models";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatIconModule} from "@angular/material/icon";
 import {NgxsFormPluginModule} from "@ngxs/form-plugin";
@@ -21,9 +20,6 @@ import {
   InitiateCookADishForm
 } from "../../state/domain/domain.state-models";
 
-interface CookADishDialogData {
-  recipeId: number | null;
-}
 
 @Component({
   selector: 'pfc-cook-a-dish',
@@ -34,7 +30,7 @@ interface CookADishDialogData {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CookADishComponent {
-  protected form: FormGroup = this.fb.group({
+  protected form = this.fb.group({
     name: [null, Validators.required],
     ingredients: this.fb.array([]),
     cookedWeight: [0, Validators.required]
@@ -51,9 +47,9 @@ export class CookADishComponent {
   private $destroyed: Observable<void> = new Subject();
 
   constructor(private store: Store,
-              private dialogRef: MatDialogRef<AddMealComponent, ISelectedDish | null>,
+              private dialogRef: MatDialogRef<CookADishComponent, ICookADishResult | null>,
               private cdr: ChangeDetectorRef,
-              @Inject(MAT_DIALOG_DATA) private data: CookADishDialogData,
+              @Inject(MAT_DIALOG_DATA) private data: ICookADishDialogData,
               private fb: FormBuilder) {
 
     this.$formData.pipe(
@@ -115,11 +111,35 @@ export class CookADishComponent {
   }
 
   handleSubmit() {
-    console.log(this.form.value);
+    this.store.select(DomainState.cookADishForm)
+      .subscribe(form => {
+        if (form == null) {
+          return;
+        }
+        this.dialogRef.close({
+          ...form,
+          ingredients: form.ingredients.map(i => {
+            return {
+              ...i.ingredient,
+              ingredientWeight: i.ingredientWeight
+            }
+          })
+        });
+      });
   }
 
   removeIngredient(idx: number): void {
     (this.form.get('ingredients') as FormArray).removeAt(idx);
     this.store.dispatch(new CookADishRemoveIngredient(idx));
   }
+}
+
+export interface ICookADishResult {
+  name: string;
+  ingredients: IIngredient[];
+  cookedWeight: number
+}
+
+export interface ICookADishDialogData {
+  recipeId: number | null;
 }

@@ -67,8 +67,12 @@ export function multiplyPfcc(pfcc: IPfcc, multiplier: number): IPfcc {
   };
 }
 
-export function ceil(value: number, afterDotSigns = 2) {
+export function ceil(value: number, afterDotSigns = 2): number {
   const multiplier = Math.pow(10, afterDotSigns);
 
   return Math.ceil(value * multiplier) / multiplier;
+}
+
+export function sum(v1: number, v2: number): number {
+  return v1 + v2;
 }

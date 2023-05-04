@@ -10,9 +10,10 @@
            [placeholder]="'add-meal.search-placeholder' | translate" type="text">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
-  <mat-accordion class="dishes" displayMode="flat">
-    <mat-expansion-panel #dishesList *ngFor="let option of data.items | async; trackBy: dishOptionTrackBy"
+  <mat-accordion #dishesAccordion class="dishes" displayMode="flat">
+    <mat-expansion-panel *ngFor="let option of data.items | async; trackBy: dishOptionTrackBy"
                          hideToggle
+                         #dishesOption
                          (afterExpand)="handleDishSelected(option)"
                          (afterCollapse)="handleDishUnselected()">
       <mat-expansion-panel-header>

@@ -34,8 +34,10 @@ export interface IDish {
   pfcc: IPfcc;
   name: string;
   foodId: number;
+  ingredients: IIngredient[]
   recipeWeight: number;
   cookedWeight: number;
+  deleted: boolean;
 }
 
 export interface IMeal {
@@ -65,4 +67,16 @@ export interface IProfileStatistics {
     weeklyAverage: IPfcc,
     monthlyAverage: IPfcc
   }
+}
+
+export interface IDishToCreate {
+  cookedOn: DateTime;
+  name: string;
+  foodId: number;
+  ingredients: IIngredient[]
+  cookedWeight: number;
+}
+
+export interface ICreateDishResponse {
+  dish: IDish
 }

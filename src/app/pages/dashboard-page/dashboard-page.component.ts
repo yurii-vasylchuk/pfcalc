@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {NutritionGaugeComponent} from '../../components/nutrition-gauge/nutrition-gauge.component';
 import {Store} from '@ngxs/store';
 import {DomainState} from '../../state/domain/domain.state';
@@ -31,7 +31,7 @@ import {MatLineModule} from "@angular/material/core";
   standalone: true,
   imports: [CommonModule, NutritionGaugeComponent, AsyncPipe, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule, MatLineModule],
 })
-export class DashboardPageComponent implements AfterViewInit {
+export class DashboardPageComponent {
 
   protected readonly fromFunctions = fromFunctions;
 
@@ -131,22 +131,23 @@ export class DashboardPageComponent implements AfterViewInit {
               console.error(`Food with id ${d.foodId} is not found; dish: ${d}`);
             }
             return foodIsPresent;
-          }).map(dish => {
-            const food = foodsMap.get(dish.foodId) as IFood;
-            const item: IDishOption = {
-              id: `dish-${dish.id}`,
-              foodId: dish.foodId,
-              dishId: dish.id,
-              name: dish.name,
-              type: 'dish',
-              ingredients: null,
-              pfcc: ceilPfcc(multiplyPfcc(food.pfcc, (dish.cookedWeight / dish.recipeWeight)), 1),
-              delete: () => {
-                this.store.dispatch(new DeleteDishAction(dish.id));
-              },
-            };
-            return item;
-          }),
+          }).filter(d => !d.deleted)
+            .map(dish => {
+              const food = foodsMap.get(dish.foodId) as IFood;
+              const item: IDishOption = {
+                id: `dish-${dish.id}`,
+                foodId: dish.foodId,
+                dishId: dish.id,
+                name: dish.name,
+                type: 'dish',
+                ingredients: null,
+                pfcc: ceilPfcc(multiplyPfcc(food.pfcc, (dish.cookedWeight / dish.recipeWeight)), 1),
+                delete: () => {
+                  this.store.dispatch(new DeleteDishAction(dish.id));
+                },
+              };
+              return item;
+            }),
 
           ...Array.from(foodsMap.values()).map(food => {
             return {
@@ -216,11 +217,6 @@ export class DashboardPageComponent implements AfterViewInit {
 
   getMealName(meal: IExtendedMeal): string | null {
     return (meal.dishId != null ? meal.dish?.name : meal.food.name) || null;
-  }
-
-
-  ngAfterViewInit(): void {
-    this.addMeal();
   }
 }
 

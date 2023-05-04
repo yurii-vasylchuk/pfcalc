@@ -2,9 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {ISignInResponse, ISignUpResponse} from '../commons/models/auth.models';
-import {IMeal, IProfileResponse} from '../commons/models/domain.models';
+import {ICreateDishResponse, IDishToCreate, IMeal, IProfileResponse} from '../commons/models/domain.models';
 import {DateTime} from 'luxon';
 import {IPfcc} from '../commons/models/common.models';
+import {sum} from "../commons/functions";
 
 @Injectable({
   providedIn: 'root',
@@ -47,11 +48,32 @@ export class ProfileService {
     return of(null);
   }
 
-  addMeal(meal: IMeal): Observable<{meal: IMeal}> {
+  addMeal(meal: IMeal): Observable<{ meal: IMeal }> {
     return of({
       meal: {
         ...meal,
         id: meal.id != null ? meal.id : (Math.ceil(Math.random() * 10000))
+      }
+    });
+  }
+
+  addDish(dish: IDishToCreate): Observable<ICreateDishResponse> {
+    return of({
+      dish: {
+        id: Math.ceil(Math.random() * 10000),
+        cookedOn: dish.cookedOn,
+        pfcc: {
+          protein: 20 + Math.ceil(Math.random() * 40),
+          carbohydrates: 40 + Math.ceil(Math.random() * 50),
+          fat: 5 + Math.ceil(Math.random() * 15),
+          calories: 100 + Math.ceil(Math.random() * 900),
+        },
+        name: dish.name,
+        foodId: dish.foodId,
+        ingredients: dish.ingredients,
+        recipeWeight: dish.ingredients?.map(i => i.ingredientWeight).reduce(sum, 0),
+        cookedWeight: dish.cookedWeight,
+        deleted: false
       }
     });
   }
@@ -445,12 +467,31 @@ export class ProfileService {
           foodId: 13,
           recipeWeight: 230,
           cookedWeight: 560,
+          ingredients: [
+            {
+              id: 13,
+              type: 'ingredient',
+              consistOf: null,
+              name: 'Рис/Макароны',
+              isCookable: true,
+              hidden: true,
+              ownedByUser: true,
+              pfcc: {
+                protein: 7,
+                fat: 0.6,
+                carbohydrates: 77.3,
+                calories: 323,
+              },
+              ingredientWeight: 230
+            }
+          ],
           pfcc: {
             protein: 3.5,
             fat: 0.3,
             carbohydrates: 38.65,
             calories: 161.5
-          }
+          },
+          deleted: false
         },
       ],
       meals: [
@@ -493,4 +534,7 @@ export class ProfileService {
     };
   };
 
+  deleteDish(dishId: number): Observable<null> {
+    return of(null);
+  }
 }

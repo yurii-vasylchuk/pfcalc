@@ -4,6 +4,9 @@ import {
   ConfigureProfileAction,
   CookADishAddIngredient,
   CookADishRemoveIngredient,
+  CreateDishAction, DeleteDishAction,
+  DishCreatedEvent,
+  DishCreationFailedEvent, DishDeletedEvent, DishDeletionFailedEvent,
   ICookADishForm,
   IDomainState,
   InitiateCookADishForm,
@@ -139,6 +142,37 @@ export class DomainState {
     });
   }
 
+  @Action(DeleteDishAction)
+  handleDeleteDishAction(ctx: StateContext<IDomainState>, action: DeleteDishAction) {
+    return this.service.deleteDish(action.dishId)
+      .pipe(
+        map(_ => new DishDeletedEvent(action.dishId)),
+        catchError(err => of(new DishDeletionFailedEvent(action.dishId, err.message))),
+        map(ctx.dispatch)
+      );
+  }
+
+  @Action(DishDeletedEvent)
+  handleDishDeletedEvent(ctx: StateContext<IDomainState>, action: DishDeletedEvent) {
+    ctx.patchState({
+      dishes: ctx.getState().dishes.map(d => {
+        if (d.id !== action.dishId) {
+          return d;
+        } else {
+          return {
+            ...d,
+            deleted: true
+          }
+        }
+      })
+    });
+  }
+
+  @Action(DishDeletionFailedEvent)
+  handleDishDeletionFailedEvent(ctx: StateContext<IDomainState>, action: DishDeletionFailedEvent) {
+    console.warn(`Failed to delete dish#${action.dishId}: ${action.msg}`);
+  }
+
   @Action(ConfigureProfileAction)
   configureProfile(ctx: StateContext<IDomainState>, action: ConfigureProfileAction) {
     return this.service.configureProfile(action.aims, action.base || null)
@@ -193,6 +227,30 @@ export class DomainState {
   @Action(MealRemovingFailedEvent)
   handleMealRemovingFailed(ctx: StateContext<IDomainState>, action: MealRemovingFailedEvent) {
     console.error(`Failed to remove meal, reason: ${action.msg}`);
+  }
+
+  @Action(CreateDishAction)
+  handleCreateDishAction(ctx: StateContext<IDomainState>, action: CreateDishAction) {
+    return this.service.addDish(action.dish).pipe(
+      map(rsp => new DishCreatedEvent(rsp.dish)),
+      catchError(err => of(new DishCreationFailedEvent(err.message))),
+      map(ctx.dispatch)
+    )
+  }
+
+  @Action(DishCreationFailedEvent)
+  handleDishCreationFailedEvent(ctx: StateContext<IDomainState>, action: DishCreationFailedEvent) {
+    console.log(`Failed to create a dish: ${action.msg}`);
+  }
+
+  @Action(DishCreatedEvent)
+  handleDishCreatedEvent(ctx: StateContext<IDomainState>, action: DishCreatedEvent) {
+    ctx.patchState({
+      dishes: [
+        ...ctx.getState().dishes,
+        action.dish
+      ]
+    })
   }
 
   @Action(AddMealAction)
