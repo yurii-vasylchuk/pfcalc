@@ -100,7 +100,10 @@
                      [placeholder]="'add-meal.weight-input-placeholder' | translate">
               <span matSuffix>{{'common.gram-sign' | translate}} &nbsp;</span>
             </mat-form-field>
-            <button mat-raised-button color="accent" class="dish-option__edit-recipe" (click)="handleEditRecipeClicked()">
+            <button mat-raised-button
+                    color="primary"
+                    class="dish-option__edit-recipe"
+                    (click)="handleEditRecipeClicked()">
               {{'add-meal.edit-recipe' | translate}}
             </button>
           </div>
@@ -142,7 +145,7 @@
 </div>
 
 <div class="actions">
-  <button color="accent"
+  <button color="primary"
           mat-raised-button
           (click)="handleSaveClick()">
     {{'add-meal.add-btn' | translate}}
