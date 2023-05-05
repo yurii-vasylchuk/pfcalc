@@ -75,6 +75,9 @@
   "cook-a-dish": {
     "title": "Приготувати страву",
     "dish-name-label": "Назва",
-    "save-btn": "Зберегти"
+    "save-btn": "Зберегти",
+    "ingredient-select-label": "Інгредієнт",
+    "add-ingredient-btn": "Додати інгредієнт",
+    "cooked-weight-label": "Вага страви"
   }
 }
