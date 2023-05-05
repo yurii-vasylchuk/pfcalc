@@ -314,7 +314,7 @@ export class DomainState {
       path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
       propertyPath: `ingredients.${ctx.getState().forms.cookADish?.model?.ingredients?.length || 0}`,
       value: action.ingredient
-    }))
+    }));
   }
 
   @Action(CookADishRemoveIngredient)
