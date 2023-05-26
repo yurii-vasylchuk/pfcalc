@@ -23,9 +23,11 @@ import {NutritionGaugeComponent} from '../nutrition-gauge/nutrition-gauge.compon
 import {FormsModule} from "@angular/forms";
 import {CookADishComponent, ICookADishDialogData, ICookADishResult} from "../cook-a-dish/cook-a-dish.component";
 import {Store} from "@ngxs/store";
-import {CreateDishAction} from "../../state/domain/domain.state-models";
+import {CreateDishAction, CreateFoodAction} from "../../state/domain/domain.state-models";
 import {DateTime} from "luxon";
 import {DomainState} from "../../state/domain/domain.state";
+import {AddFoodComponent, AddFoodModalData} from "../add-food/add-food.component";
+import {IAddFoodFormModel} from "../../state/form/add-food-form.state-models";
 
 export interface AddMealDialogData {
   items: Observable<IDishOption[]>;
@@ -59,8 +61,7 @@ export class AddMealComponent {
   @ViewChildren('dishesAccordion')
   protected dishesAccordion!: MatAccordion;
   protected selectedDishWeight = 0;
-
-  private selectedDish: IDishOption | null = null;
+  protected selectedDish: IDishOption | null = null;
 
   constructor(private store: Store,
               private dialogRef: MatDialogRef<AddMealComponent, ISelectedDish | null>,
@@ -135,6 +136,37 @@ export class AddMealComponent {
 
         console.log(this.dishesAccordionItems.get(0));
       });
+    });
+  }
+
+  handleAddFoodClick(name?: string) {
+    const ref = this.dialog.open<AddFoodComponent, AddFoodModalData, IAddFoodFormModel>(AddFoodComponent, {
+      panelClass: 'fullscreen-dialog',
+      data: {
+        name: name
+      }
+    });
+
+    ref.afterClosed().subscribe(res => {
+      if (res == null || res.name == null) {
+        return
+      }
+      this.store.dispatch(new CreateFoodAction({
+        name: res.name,
+        type: res.ingredients.length > 0 ? 'recipe' : 'ingredient',
+        description: res.description || undefined,
+        pfcc: res.pfcc,
+        hidden: false, // TODO: Add to form
+        ownedByUser: true, // TODO
+        consistOf: res.ingredients.length > 0 ?
+          res.ingredients.map(i => {
+            return {
+              ...i.ingredient,
+              ingredientWeight: i.weight
+            } as IIngredient;
+          }) :
+          null
+      }))
     });
   }
 }

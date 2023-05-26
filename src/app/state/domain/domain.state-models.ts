@@ -1,6 +1,6 @@
 import {
-  IDishToCreate,
   IDish,
+  IDishToCreate,
   IFood,
   IMeal,
   IProfile,
@@ -8,9 +8,10 @@ import {
   IProfileStatistics
 } from '../../commons/models/domain.models';
 import {IPfcc} from '../../commons/models/common.models';
+import {IFormState} from "../form/form.commons";
 
-export interface ICookADishForm {
-  name: string;
+export interface ICookADishFormModel {
+  name: string | null;
   ingredients: {
     ingredient: IFood,
     ingredientWeight: number,
@@ -26,9 +27,7 @@ export interface IDomainState {
   dishes: IDish[];
   stats?: IProfileStatistics;
   forms: {
-    cookADish: {
-      model?: ICookADishForm
-    }
+    cookADish: IFormState<ICookADishFormModel>
   }
 }
 
@@ -148,7 +147,7 @@ export class CookADishRemoveIngredient {
 }
 
 export class CreateDishAction {
-  static readonly type='[DOMAIN] Create dish';
+  static readonly type = '[DOMAIN] Create dish';
 
   constructor(public readonly dish: IDishToCreate) {
   }
@@ -160,8 +159,30 @@ export class DishCreatedEvent {
   constructor(public readonly dish: IDish) {
   }
 }
+
 export class DishCreationFailedEvent {
   static readonly type = '[DOMAIN] Dish creation failed';
+
+  constructor(public readonly msg: string) {
+  }
+}
+
+export class CreateFoodAction {
+  static readonly type = '[DOMAIN] Create food';
+
+  constructor(public readonly food: Omit<IFood, 'id'>) {
+  }
+}
+
+export class FoodCreatedEvent {
+  static readonly type = '[DOMAIN] Food created';
+
+  constructor(public readonly food: IFood) {
+  }
+}
+
+export class CreateFoodFailedEvent {
+  static readonly type = '[DOMAIN] Food creation failed';
 
   constructor(public readonly msg: string) {
   }

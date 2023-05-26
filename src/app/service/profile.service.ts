@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {ISignInResponse, ISignUpResponse} from '../commons/models/auth.models';
-import {ICreateDishResponse, IDishToCreate, IMeal, IProfileResponse} from '../commons/models/domain.models';
+import {ICreateDishResponse, IDishToCreate, IFood, IMeal, IProfileResponse} from '../commons/models/domain.models';
 import {DateTime} from 'luxon';
 import {IPfcc} from '../commons/models/common.models';
 import {sum} from "../commons/functions";
@@ -536,5 +536,12 @@ export class ProfileService {
 
   deleteDish(dishId: number): Observable<null> {
     return of(null);
+  }
+
+  addFood(food: Omit<IFood, "id">): Observable<IFood> {
+    return of({
+      ...food,
+      id: Math.ceil(Math.random() * 10000),
+    } as IFood);
   }
 }

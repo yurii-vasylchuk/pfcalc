@@ -16,6 +16,7 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HeadingComponent} from "./components/heading/heading.component";
 import {NgxsFormPluginModule} from "@ngxs/form-plugin";
+import {AddFoodFormState} from "./state/form/add-food-form.state";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -30,7 +31,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NgxsModule.forRoot([AuthState, DomainState],
+    NgxsModule.forRoot([AuthState, DomainState, AddFoodFormState],
       {developmentMode: !environment.production}),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({

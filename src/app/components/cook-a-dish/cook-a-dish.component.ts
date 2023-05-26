@@ -16,7 +16,7 @@ import {NgxsFormPluginModule} from "@ngxs/form-plugin";
 import {
   CookADishAddIngredient,
   CookADishRemoveIngredient,
-  ICookADishForm,
+  ICookADishFormModel,
   InitiateCookADishForm
 } from "../../state/domain/domain.state-models";
 
@@ -36,7 +36,7 @@ export class CookADishComponent {
     cookedWeight: [0, Validators.required]
   });
   protected $allIngredients: Observable<IFood[]>;
-  protected $formData: Observable<ICookADishForm | null> = this.store.select(DomainState.cookADishForm);
+  protected $formData: Observable<ICookADishFormModel | null>;
   protected $usedIngredientsIds: Observable<number[]>;
   protected trackIngredientByIndexFn: TrackByFunction<{
     ingredient: IFood;
@@ -51,6 +51,9 @@ export class CookADishComponent {
               private cdr: ChangeDetectorRef,
               @Inject(MAT_DIALOG_DATA) private data: ICookADishDialogData,
               private fb: FormBuilder) {
+
+    this.$formData = this.store.select(DomainState.cookADishForm)
+      .pipe(map(fd => fd.model || null));
 
     this.$formData.pipe(
       takeUntil(this.$destroyed),
@@ -112,12 +115,16 @@ export class CookADishComponent {
 
   handleSubmit() {
     this.store.select(DomainState.cookADishForm)
+      .pipe(
+        map(form => form.model)
+      )
       .subscribe(form => {
         if (form == null) {
           return;
         }
         this.dialogRef.close({
-          ...form,
+          name: form.name as string,
+          cookedWeight: form.cookedWeight,
           ingredients: form.ingredients.map(i => {
             return {
               ...i.ingredient,

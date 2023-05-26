@@ -4,10 +4,16 @@ import {
   ConfigureProfileAction,
   CookADishAddIngredient,
   CookADishRemoveIngredient,
-  CreateDishAction, DeleteDishAction,
+  CreateDishAction,
+  CreateFoodAction,
+  CreateFoodFailedEvent,
+  DeleteDishAction,
   DishCreatedEvent,
-  DishCreationFailedEvent, DishDeletedEvent, DishDeletionFailedEvent,
-  ICookADishForm,
+  DishCreationFailedEvent,
+  DishDeletedEvent,
+  DishDeletionFailedEvent,
+  FoodCreatedEvent,
+  ICookADishFormModel,
   IDomainState,
   InitiateCookADishForm,
   MealAddedSuccessfullyEvent,
@@ -27,6 +33,7 @@ import {emptyPfcc, IPfcc} from '../../commons/models/common.models';
 import {isOnCurrentWeek, isToday, sumPfccs} from '../../commons/functions';
 import {DateTime} from 'luxon';
 import {ResetForm, UpdateFormValue} from "@ngxs/form-plugin";
+import {IFormState} from "../form/form.commons";
 
 export const DOMAIN_STATE_NAME = 'domain';
 
@@ -39,7 +46,14 @@ export const DOMAIN_STATE_NAME = 'domain';
     meals: [],
     forms: {
       cookADish: {
-        model: undefined
+        model: {
+          name: null,
+          cookedWeight: 0,
+          ingredients: []
+        },
+        dirty: false,
+        status: 'PENDING',
+        errors: {}
       }
     }
   },
@@ -98,8 +112,8 @@ export class DomainState {
   }
 
   @Selector()
-  static cookADishForm(state: IDomainState): ICookADishForm | null {
-    return state.forms.cookADish.model != null ? state.forms.cookADish.model : null;
+  static cookADishForm(state: IDomainState): IFormState<ICookADishFormModel> {
+    return state.forms.cookADish;
   }
 
   @Selector()
@@ -334,5 +348,29 @@ export class DomainState {
         ...ingredients?.slice(idx + 1, ingredients?.length)
       ]
     }));
+  }
+
+  @Action(CreateFoodAction)
+  handleCreateFoodAction(ctx: StateContext<IDomainState>, action: CreateFoodAction) {
+    return this.service.addFood(action.food).pipe(
+      map(food => new FoodCreatedEvent(food)),
+      catchError(err => of(new CreateFoodFailedEvent(err.message))),
+      map(ctx.dispatch)
+    )
+  }
+
+  @Action(FoodCreatedEvent)
+  handleFoodCreatedEvent(ctx: StateContext<IDomainState>, action: FoodCreatedEvent) {
+    ctx.patchState({
+      foods: [
+        ...ctx.getState().foods,
+        action.food
+      ]
+    })
+  }
+
+  @Action(CreateFoodFailedEvent)
+  handleCreateFoodFailedEvent(ctx: StateContext<IDomainState>, action: CreateFoodFailedEvent) {
+    console.warn(action.msg);
   }
 }

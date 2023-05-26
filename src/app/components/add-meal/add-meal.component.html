@@ -6,147 +6,160 @@
 </div>
 <div class="content">
   <mat-form-field class="dish-search">
-    <input #searchField (input)="handleSearchChange()" matInput
-           [placeholder]="'add-meal.search-placeholder' | translate" type="text">
+    <input #searchField
+           (input)="handleSearchChange()"
+           matInput
+           [placeholder]="'add-meal.search-placeholder' | translate"
+           type="text">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
-  <mat-accordion #dishesAccordion class="dishes" displayMode="flat">
-    <mat-expansion-panel *ngFor="let option of data.items | async; trackBy: dishOptionTrackBy"
-                         hideToggle
-                         #dishesOption
-                         (afterExpand)="handleDishSelected(option)"
-                         (afterCollapse)="handleDishUnselected()">
-      <mat-expansion-panel-header>
-        <div class="dishes-header">
-          <div class="dishes-header_title">
-            <p class="dishes-header_title-primary">{{option.name}}</p>
-            <p [innerHTML]="'common.pfcc-values' | translate:option.pfcc"
-               class="dishes-header_title-secondary"></p>
-          </div>
 
-          <div *ngIf="option.type === 'dish'" class="flex-spacer"></div>
-
-          <button (click)="handleDeleteOptionClick(option); $event.stopPropagation();" *ngIf="option.type === 'dish'"
-                  color="accent"
-                  mat-icon-button>
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </mat-expansion-panel-header>
-
-      <ng-template matExpansionPanelContent>
-        <ng-container [ngSwitch]="option.type">
-          <div *ngSwitchCase="'dish'" class="dish-option dish-option_dish">
-            <div class="dish-option__nutrients">
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.protein || 0"
-                                   [aim]="(data.dailyAims$ | async)?.protein || null"
-                                   [title]="'common.protein' | translate"
-                                   [addingValue]="Math.ceil((option.pfcc.protein || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.fat || 0"
-                                   [aim]="(data.dailyAims$ | async)?.fat || null"
-                                   [title]="'common.fat' | translate"
-                                   [addingValue]="Math.ceil((option.pfcc.fat || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.carbohydrates || 0"
-                                   [aim]="(data.dailyAims$ | async)?.carbohydrates || null"
-                                   [title]="'common.carbohydrates'|translate"
-                                   [addingValue]="Math.ceil((option.pfcc.carbohydrates || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.calories || 0"
-                                   [aim]="(data.dailyAims$ | async)?.calories || null"
-                                   [title]="'common.calories'|translate"
-                                   [addingValue]="Math.ceil((option.pfcc.calories || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
+  <div class="dishes">
+    <mat-accordion #dishesAccordion displayMode="flat">
+      <mat-expansion-panel *ngFor="let option of data.items | async; trackBy: dishOptionTrackBy"
+                           hideToggle
+                           #dishesOption
+                           (afterExpand)="handleDishSelected(option)"
+                           (afterCollapse)="handleDishUnselected()">
+        <mat-expansion-panel-header>
+          <div class="dishes-header">
+            <div class="dishes-header_title">
+              <p class="dishes-header_title-primary">{{option.name}}</p>
+              <p [innerHTML]="'common.pfcc-values' | translate:option.pfcc"
+                 class="dishes-header_title-secondary"></p>
             </div>
-            <mat-form-field class="dish-option__weight-input">
-              <input matInput
-                     type="number"
-                     [(ngModel)]="selectedDishWeight"
-                     [placeholder]="'add-meal.weight-input-placeholder' | translate">
-              <span matSuffix>{{'common.gram-sign' | translate}} &nbsp;</span>
-            </mat-form-field>
-          </div>
-          <div *ngSwitchCase="'recipe'" class="dish-option dish-option_recipe">
-            <div class="dish-option__nutrients">
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.protein || 0"
-                                   [aim]="(data.dailyAims$ | async)?.protein || null"
-                                   [title]="'common.protein' | translate"
-                                   [addingValue]="Math.ceil((option.pfcc.protein || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.fat || 0"
-                                   [aim]="(data.dailyAims$ | async)?.fat || null"
-                                   [title]="'common.fat' | translate"
-                                   [addingValue]="Math.ceil((option.pfcc.fat || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.carbohydrates || 0"
-                                   [aim]="(data.dailyAims$ | async)?.carbohydrates || null"
-                                   [title]="'common.carbohydrates'|translate"
-                                   [addingValue]="Math.ceil((option.pfcc.carbohydrates || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.calories || 0"
-                                   [aim]="(data.dailyAims$ | async)?.calories || null"
-                                   [title]="'common.calories'|translate"
-                                   [addingValue]="Math.ceil((option.pfcc.calories || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
-            </div>
-            <p *ngFor="let ingredient of option.ingredients">{{ingredient.name}}
-              - {{ingredient.ingredientWeight}}{{'common.gram-sign' | translate}}</p>
 
-            <mat-form-field class="dish-option__weight-input">
-              <input matInput
-                     type="number"
-                     [(ngModel)]="selectedDishWeight"
-                     [placeholder]="'add-meal.weight-input-placeholder' | translate">
-              <span matSuffix>{{'common.gram-sign' | translate}} &nbsp;</span>
-            </mat-form-field>
-            <button mat-raised-button
-                    color="primary"
-                    class="dish-option__edit-recipe"
-                    (click)="handleEditRecipeClicked()">
-              {{'add-meal.edit-recipe' | translate}}
+            <div *ngIf="option.type === 'dish'" class="flex-spacer"></div>
+
+            <button (click)="handleDeleteOptionClick(option); $event.stopPropagation();" *ngIf="option.type === 'dish'"
+                    color="accent"
+                    mat-icon-button>
+              <mat-icon>delete</mat-icon>
             </button>
           </div>
-          <div *ngSwitchCase="'ingredient'" class="dish-option dish-option_raw-food">
-            <div class="dish-option__nutrients">
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.protein || 0"
-                                   [aim]="(data.dailyAims$ | async)?.protein || null"
-                                   [title]="'common.protein' | translate"
-                                   [addingValue]="Math.ceil((option.pfcc.protein || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.fat || 0"
-                                   [aim]="(data.dailyAims$ | async)?.fat || null"
-                                   [title]="'common.fat' | translate"
-                                   [addingValue]="Math.ceil((option.pfcc.fat || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.carbohydrates || 0"
-                                   [aim]="(data.dailyAims$ | async)?.carbohydrates || null"
-                                   [title]="'common.carbohydrates'|translate"
-                                   [addingValue]="Math.ceil((option.pfcc.carbohydrates || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
-              <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.calories || 0"
-                                   [aim]="(data.dailyAims$ | async)?.calories || null"
-                                   [title]="'common.calories'|translate"
-                                   [addingValue]="Math.ceil((option.pfcc.calories || 0) * (selectedDishWeight * 0.01))"
-              ></pfc-nutrition-gauge>
+        </mat-expansion-panel-header>
+
+        <ng-template matExpansionPanelContent>
+          <ng-container [ngSwitch]="option.type">
+            <div *ngSwitchCase="'dish'" class="dish-option dish-option_dish">
+              <div class="dish-option__nutrients">
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.protein || 0"
+                                     [aim]="(data.dailyAims$ | async)?.protein || null"
+                                     [title]="'common.protein' | translate"
+                                     [addingValue]="Math.ceil((option.pfcc.protein || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.fat || 0"
+                                     [aim]="(data.dailyAims$ | async)?.fat || null"
+                                     [title]="'common.fat' | translate"
+                                     [addingValue]="Math.ceil((option.pfcc.fat || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.carbohydrates || 0"
+                                     [aim]="(data.dailyAims$ | async)?.carbohydrates || null"
+                                     [title]="'common.carbohydrates'|translate"
+                                     [addingValue]="Math.ceil((option.pfcc.carbohydrates || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.calories || 0"
+                                     [aim]="(data.dailyAims$ | async)?.calories || null"
+                                     [title]="'common.calories'|translate"
+                                     [addingValue]="Math.ceil((option.pfcc.calories || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+              </div>
+              <mat-form-field class="dish-option__weight-input">
+                <input matInput
+                       type="number"
+                       [(ngModel)]="selectedDishWeight"
+                       [placeholder]="'add-meal.weight-input-placeholder' | translate">
+                <span matSuffix>{{'common.gram-sign' | translate}} &nbsp;</span>
+              </mat-form-field>
             </div>
-            <mat-form-field class="dish-option__weight-input">
-              <input matInput
-                     type="number"
-                     [(ngModel)]="selectedDishWeight"
-                     [placeholder]="'add-meal.weight-input-placeholder' | translate">
-              <span matSuffix>{{'common.gram-sign' | translate}} &nbsp;</span>
-            </mat-form-field>
-          </div>
-        </ng-container>
-      </ng-template>
-    </mat-expansion-panel>
-  </mat-accordion>
+            <div *ngSwitchCase="'recipe'" class="dish-option dish-option_recipe">
+              <div class="dish-option__nutrients">
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.protein || 0"
+                                     [aim]="(data.dailyAims$ | async)?.protein || null"
+                                     [title]="'common.protein' | translate"
+                                     [addingValue]="Math.ceil((option.pfcc.protein || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.fat || 0"
+                                     [aim]="(data.dailyAims$ | async)?.fat || null"
+                                     [title]="'common.fat' | translate"
+                                     [addingValue]="Math.ceil((option.pfcc.fat || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.carbohydrates || 0"
+                                     [aim]="(data.dailyAims$ | async)?.carbohydrates || null"
+                                     [title]="'common.carbohydrates'|translate"
+                                     [addingValue]="Math.ceil((option.pfcc.carbohydrates || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.calories || 0"
+                                     [aim]="(data.dailyAims$ | async)?.calories || null"
+                                     [title]="'common.calories'|translate"
+                                     [addingValue]="Math.ceil((option.pfcc.calories || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+              </div>
+              <p *ngFor="let ingredient of option.ingredients">{{ingredient.name}}
+                - {{ingredient.ingredientWeight}}{{'common.gram-sign' | translate}}</p>
+
+              <mat-form-field class="dish-option__weight-input">
+                <input matInput
+                       type="number"
+                       [(ngModel)]="selectedDishWeight"
+                       [placeholder]="'add-meal.weight-input-placeholder' | translate">
+                <span matSuffix>{{'common.gram-sign' | translate}} &nbsp;</span>
+              </mat-form-field>
+              <button mat-raised-button
+                      color="primary"
+                      class="dish-option__edit-recipe"
+                      (click)="handleEditRecipeClicked()">
+                {{'add-meal.edit-recipe' | translate}}
+              </button>
+            </div>
+            <div *ngSwitchCase="'ingredient'" class="dish-option dish-option_raw-food">
+              <div class="dish-option__nutrients">
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.protein || 0"
+                                     [aim]="(data.dailyAims$ | async)?.protein || null"
+                                     [title]="'common.protein' | translate"
+                                     [addingValue]="Math.ceil((option.pfcc.protein || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.fat || 0"
+                                     [aim]="(data.dailyAims$ | async)?.fat || null"
+                                     [title]="'common.fat' | translate"
+                                     [addingValue]="Math.ceil((option.pfcc.fat || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.carbohydrates || 0"
+                                     [aim]="(data.dailyAims$ | async)?.carbohydrates || null"
+                                     [title]="'common.carbohydrates'|translate"
+                                     [addingValue]="Math.ceil((option.pfcc.carbohydrates || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+                <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.calories || 0"
+                                     [aim]="(data.dailyAims$ | async)?.calories || null"
+                                     [title]="'common.calories'|translate"
+                                     [addingValue]="Math.ceil((option.pfcc.calories || 0) * (selectedDishWeight * 0.01))"
+                ></pfc-nutrition-gauge>
+              </div>
+              <mat-form-field class="dish-option__weight-input">
+                <input matInput
+                       type="number"
+                       [(ngModel)]="selectedDishWeight"
+                       [placeholder]="'add-meal.weight-input-placeholder' | translate">
+                <span matSuffix>{{'common.gram-sign' | translate}} &nbsp;</span>
+              </mat-form-field>
+            </div>
+          </ng-container>
+        </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="add-food-btn-container">
+      <button mat-button
+              color="primary" (click)="handleAddFoodClick(searchField.value)">
+        {{'add-meal.create-foot-btn' | translate}}
+      </button>
+    </div>
+  </div>
 </div>
 
 <div class="actions">
   <button color="primary"
           mat-raised-button
+          [disabled]="selectedDish == null"
           (click)="handleSaveClick()">
     {{'add-meal.add-btn' | translate}}
   </button>
