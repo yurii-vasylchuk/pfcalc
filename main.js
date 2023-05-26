@@ -26,7 +26,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const routes = [{
   path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.dashboard,
-  loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_button_mjs-node_modules_angular_material_fesm2-8dc5ff"), __webpack_require__.e("src_app_pages_dashboard-page_dashboard-page_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/dashboard-page/dashboard-page.component */ 2397)).then(mod => mod.DashboardPageComponent),
+  loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_button_mjs-node_modules_angular_material_fesm2-8dc5ff"), __webpack_require__.e("default-node_modules_angular_material_fesm2020_slide-toggle_mjs"), __webpack_require__.e("src_app_pages_dashboard-page_dashboard-page_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/dashboard-page/dashboard-page.component */ 2397)).then(mod => mod.DashboardPageComponent),
   canActivate: [_service_is_authenticated_guard__WEBPACK_IMPORTED_MODULE_0__.IsAuthenticatedGuard, _service_profile_configured_guard__WEBPACK_IMPORTED_MODULE_1__.ProfileConfiguredGuard]
 }, {
   path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.signIn,
@@ -38,7 +38,7 @@ const routes = [{
   canActivate: [_service_is_not_authenticated_guard__WEBPACK_IMPORTED_MODULE_3__.IsNotAuthenticatedGuard]
 }, {
   path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.completeProfile,
-  loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_button_mjs-node_modules_angular_material_fesm2-8dc5ff"), __webpack_require__.e("src_app_pages_configure-profile_configure-profile_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/configure-profile/configure-profile.component */ 6678)).then(mod => mod.ConfigureProfileComponent),
+  loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_button_mjs-node_modules_angular_material_fesm2-8dc5ff"), __webpack_require__.e("default-node_modules_angular_material_fesm2020_slide-toggle_mjs"), __webpack_require__.e("src_app_pages_configure-profile_configure-profile_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/configure-profile/configure-profile.component */ 6678)).then(mod => mod.ConfigureProfileComponent),
   canActivate: [_service_is_authenticated_guard__WEBPACK_IMPORTED_MODULE_0__.IsAuthenticatedGuard]
 }, {
   path: '**',
@@ -125,10 +125,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "AppModule": () => (/* binding */ AppModule),
 /* harmony export */   "HttpLoaderFactory": () => (/* binding */ HttpLoaderFactory)
 /* harmony export */ });
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/platform-browser */ 4497);
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/platform-browser */ 4497);
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app-routing.module */ 158);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.component */ 5041);
-/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/platform-browser/animations */ 7146);
+/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/platform-browser/animations */ 7146);
 /* harmony import */ var _ngxs_devtools_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngxs/devtools-plugin */ 8633);
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../environments/environment */ 2340);
 /* harmony import */ var _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngxs/router-plugin */ 5417);
@@ -136,12 +136,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngxs_store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ngxs/store */ 9307);
 /* harmony import */ var _state_auth_auth_state__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./state/auth/auth.state */ 9305);
 /* harmony import */ var _state_domain_domain_state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./state/domain/domain.state */ 908);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/common/http */ 8987);
-/* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @ngx-translate/core */ 8699);
-/* harmony import */ var _ngx_translate_http_loader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @ngx-translate/http-loader */ 8319);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/common/http */ 8987);
+/* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @ngx-translate/core */ 8699);
+/* harmony import */ var _ngx_translate_http_loader__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @ngx-translate/http-loader */ 8319);
 /* harmony import */ var _components_heading_heading_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/heading/heading.component */ 334);
 /* harmony import */ var _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ngxs/form-plugin */ 5579);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 2560);
+/* harmony import */ var _state_form_add_food_form_state__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./state/form/add-food-form.state */ 4978);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/core */ 2560);
+
 
 
 
@@ -166,36 +168,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function HttpLoaderFactory(http) {
-  return new _ngx_translate_http_loader__WEBPACK_IMPORTED_MODULE_11__.TranslateHttpLoader(http, './assets/i18n/');
+  return new _ngx_translate_http_loader__WEBPACK_IMPORTED_MODULE_12__.TranslateHttpLoader(http, './assets/i18n/');
 }
 class AppModule {}
 AppModule.ɵfac = function AppModule_Factory(t) {
   return new (t || AppModule)();
 };
-AppModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵdefineNgModule"]({
+AppModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_13__["ɵɵdefineNgModule"]({
   type: AppModule,
   bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent]
 });
-AppModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵdefineInjector"]({
-  imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__.BrowserModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClientModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_15__.BrowserAnimationsModule, _ngxs_store__WEBPACK_IMPORTED_MODULE_6__.NgxsModule.forRoot([_state_auth_auth_state__WEBPACK_IMPORTED_MODULE_7__.AuthState, _state_domain_domain_state__WEBPACK_IMPORTED_MODULE_8__.DomainState], {
+AppModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_13__["ɵɵdefineInjector"]({
+  imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_14__.BrowserModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_15__.HttpClientModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_16__.BrowserAnimationsModule, _ngxs_store__WEBPACK_IMPORTED_MODULE_6__.NgxsModule.forRoot([_state_auth_auth_state__WEBPACK_IMPORTED_MODULE_7__.AuthState, _state_domain_domain_state__WEBPACK_IMPORTED_MODULE_8__.DomainState, _state_form_add_food_form_state__WEBPACK_IMPORTED_MODULE_11__.AddFoodFormState], {
     developmentMode: !_environments_environment__WEBPACK_IMPORTED_MODULE_3__.environment.production
   }), _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_4__.NgxsRouterPluginModule.forRoot(), _ngxs_logger_plugin__WEBPACK_IMPORTED_MODULE_5__.NgxsLoggerPluginModule.forRoot({
     disabled: _environments_environment__WEBPACK_IMPORTED_MODULE_3__.environment.production
-  }), _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_10__.NgxsFormPluginModule.forRoot(), _ngx_translate_core__WEBPACK_IMPORTED_MODULE_16__.TranslateModule.forRoot({
+  }), _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_10__.NgxsFormPluginModule.forRoot(), _ngx_translate_core__WEBPACK_IMPORTED_MODULE_17__.TranslateModule.forRoot({
     defaultLanguage: 'ua',
     loader: {
-      provide: _ngx_translate_core__WEBPACK_IMPORTED_MODULE_16__.TranslateLoader,
+      provide: _ngx_translate_core__WEBPACK_IMPORTED_MODULE_17__.TranslateLoader,
       useFactory: HttpLoaderFactory,
-      deps: [_angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClient]
+      deps: [_angular_common_http__WEBPACK_IMPORTED_MODULE_15__.HttpClient]
     }
   }), _ngxs_devtools_plugin__WEBPACK_IMPORTED_MODULE_2__.NgxsReduxDevtoolsPluginModule.forRoot({
     disabled: _environments_environment__WEBPACK_IMPORTED_MODULE_3__.environment.production
   }), _components_heading_heading_component__WEBPACK_IMPORTED_MODULE_9__.HeadingComponent]
 });
 (function () {
-  (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵsetNgModuleScope"](AppModule, {
+  (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_13__["ɵɵsetNgModuleScope"](AppModule, {
     declarations: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent],
-    imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__.BrowserModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClientModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_15__.BrowserAnimationsModule, _ngxs_store__WEBPACK_IMPORTED_MODULE_6__["ɵNgxsRootModule"], _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_4__.NgxsRouterPluginModule, _ngxs_logger_plugin__WEBPACK_IMPORTED_MODULE_5__.NgxsLoggerPluginModule, _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_10__.NgxsFormPluginModule, _ngx_translate_core__WEBPACK_IMPORTED_MODULE_16__.TranslateModule, _ngxs_devtools_plugin__WEBPACK_IMPORTED_MODULE_2__.NgxsReduxDevtoolsPluginModule, _components_heading_heading_component__WEBPACK_IMPORTED_MODULE_9__.HeadingComponent]
+    imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_14__.BrowserModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_15__.HttpClientModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_16__.BrowserAnimationsModule, _ngxs_store__WEBPACK_IMPORTED_MODULE_6__["ɵNgxsRootModule"], _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_4__.NgxsRouterPluginModule, _ngxs_logger_plugin__WEBPACK_IMPORTED_MODULE_5__.NgxsLoggerPluginModule, _ngxs_form_plugin__WEBPACK_IMPORTED_MODULE_10__.NgxsFormPluginModule, _ngx_translate_core__WEBPACK_IMPORTED_MODULE_17__.TranslateModule, _ngxs_devtools_plugin__WEBPACK_IMPORTED_MODULE_2__.NgxsReduxDevtoolsPluginModule, _components_heading_heading_component__WEBPACK_IMPORTED_MODULE_9__.HeadingComponent]
   });
 })();
 
@@ -214,11 +216,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "isOnCurrentWeek": () => (/* binding */ isOnCurrentWeek),
 /* harmony export */   "isToday": () => (/* binding */ isToday),
 /* harmony export */   "multiplyPfcc": () => (/* binding */ multiplyPfcc),
+/* harmony export */   "pfccFormGroupIsNotEmpty": () => (/* binding */ pfccFormGroupIsNotEmpty),
 /* harmony export */   "sum": () => (/* binding */ sum),
 /* harmony export */   "sumPfccs": () => (/* binding */ sumPfccs),
 /* harmony export */   "sumUndefined": () => (/* binding */ sumUndefined)
 /* harmony export */ });
 /* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! luxon */ 20);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ 2508);
+
 
 function sumUndefined(n1, n2) {
   if (isValueAbsent(n1) && isValueAbsent(n2)) {
@@ -290,6 +295,40 @@ function ceil(value, afterDotSigns = 2) {
 function sum(v1, v2) {
   return v1 + v2;
 }
+const pfccFormGroupIsNotEmpty = control => {
+  if (!(control instanceof _angular_forms__WEBPACK_IMPORTED_MODULE_1__.FormGroup)) {
+    throw new Error('This validator can be applied only to FormGroup');
+  }
+  const proteinControl = control.get('protein');
+  const fatControl = control.get('fat');
+  const carbohydratesControl = control.get('carbohydrates');
+  const caloriesControl = control.get('calories');
+  if (proteinControl == null || fatControl == null || carbohydratesControl == null || caloriesControl == null) {
+    throw new Error('This validator can be applied only to FormGroup containing "protein", "fat", "carbohydrates" and "calories" FormControl-s');
+  }
+  const protein = proteinControl.value;
+  const fat = fatControl.value;
+  const carbohydrates = carbohydratesControl.value;
+  const calories = caloriesControl.value;
+  if (protein != null && typeof protein !== 'number') {
+    throw Error('Protein control value is not a number');
+  }
+  if (fat != null && typeof fat !== 'number') {
+    throw Error('Fat control value is not a number');
+  }
+  if (carbohydrates != null && typeof carbohydrates !== 'number') {
+    throw Error('Carbohydrates control value is not a number');
+  }
+  if (calories != null && typeof calories !== 'number') {
+    throw Error('Calories control value is not a number');
+  }
+  if (protein + fat + carbohydrates + calories === 0) {
+    return {
+      pfccIsZero: 'PFCC all zeroes'
+    };
+  }
+  return null;
+};
 
 /***/ }),
 
@@ -1168,6 +1207,12 @@ class ProfileService {
   deleteDish(dishId) {
     return (0,rxjs__WEBPACK_IMPORTED_MODULE_3__.of)(null);
   }
+  addFood(food) {
+    return (0,rxjs__WEBPACK_IMPORTED_MODULE_3__.of)({
+      ...food,
+      id: Math.ceil(Math.random() * 10000)
+    });
+  }
 }
 ProfileService.ɵfac = function ProfileService_Factory(t) {
   return new (t || ProfileService)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_5__.HttpClient));
@@ -1455,11 +1500,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "CookADishAddIngredient": () => (/* binding */ CookADishAddIngredient),
 /* harmony export */   "CookADishRemoveIngredient": () => (/* binding */ CookADishRemoveIngredient),
 /* harmony export */   "CreateDishAction": () => (/* binding */ CreateDishAction),
+/* harmony export */   "CreateFoodAction": () => (/* binding */ CreateFoodAction),
+/* harmony export */   "CreateFoodFailedEvent": () => (/* binding */ CreateFoodFailedEvent),
 /* harmony export */   "DeleteDishAction": () => (/* binding */ DeleteDishAction),
 /* harmony export */   "DishCreatedEvent": () => (/* binding */ DishCreatedEvent),
 /* harmony export */   "DishCreationFailedEvent": () => (/* binding */ DishCreationFailedEvent),
 /* harmony export */   "DishDeletedEvent": () => (/* binding */ DishDeletedEvent),
 /* harmony export */   "DishDeletionFailedEvent": () => (/* binding */ DishDeletionFailedEvent),
+/* harmony export */   "FoodCreatedEvent": () => (/* binding */ FoodCreatedEvent),
 /* harmony export */   "InitiateCookADishForm": () => (/* binding */ InitiateCookADishForm),
 /* harmony export */   "MealAddedSuccessfullyEvent": () => (/* binding */ MealAddedSuccessfullyEvent),
 /* harmony export */   "MealAddingFailedEvent": () => (/* binding */ MealAddingFailedEvent),
@@ -1589,6 +1637,24 @@ class DishCreationFailedEvent {
   }
 }
 DishCreationFailedEvent.type = '[DOMAIN] Dish creation failed';
+class CreateFoodAction {
+  constructor(food) {
+    this.food = food;
+  }
+}
+CreateFoodAction.type = '[DOMAIN] Create food';
+class FoodCreatedEvent {
+  constructor(food) {
+    this.food = food;
+  }
+}
+FoodCreatedEvent.type = '[DOMAIN] Food created';
+class CreateFoodFailedEvent {
+  constructor(msg) {
+    this.msg = msg;
+  }
+}
+CreateFoodFailedEvent.type = '[DOMAIN] Food creation failed';
 
 /***/ }),
 
@@ -1661,7 +1727,7 @@ let DomainState = (_class = class DomainState {
     return (0,_commons_functions__WEBPACK_IMPORTED_MODULE_3__.sumPfccs)(...eaten);
   }
   static cookADishForm(state) {
-    return state.forms.cookADish.model != null ? state.forms.cookADish.model : null;
+    return state.forms.cookADish;
   }
   static cookADishUsedIngredients(state) {
     return (state.forms.cookADish.model?.ingredients || []).map(i => i.ingredient).filter(i => i != null);
@@ -1807,6 +1873,17 @@ let DomainState = (_class = class DomainState {
       value: [...ingredients?.slice(0, idx), ...ingredients?.slice(idx + 1, ingredients?.length)]
     }));
   }
+  handleCreateFoodAction(ctx, action) {
+    return this.service.addFood(action.food).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(food => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.FoodCreatedEvent(food)), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CreateFoodFailedEvent(err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(ctx.dispatch));
+  }
+  handleFoodCreatedEvent(ctx, action) {
+    ctx.patchState({
+      foods: [...ctx.getState().foods, action.food]
+    });
+  }
+  handleCreateFoodFailedEvent(ctx, action) {
+    console.warn(action.msg);
+  }
 }, _class.ɵfac = function DomainState_Factory(t) {
   return new (t || _class)(_angular_core__WEBPACK_IMPORTED_MODULE_10__["ɵɵinject"](_service_profile_service__WEBPACK_IMPORTED_MODULE_6__.ProfileService));
 }, _class.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_10__["ɵɵdefineInjectable"]({
@@ -1832,6 +1909,9 @@ let DomainState = (_class = class DomainState {
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.InitiateCookADishForm)], DomainState.prototype, "handleInitiateCookADishForm", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CookADishAddIngredient)], DomainState.prototype, "handleCookADishAddIngredient", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CookADishRemoveIngredient)], DomainState.prototype, "handleCookADishRemoveIngredient", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CreateFoodAction)], DomainState.prototype, "handleCreateFoodAction", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.FoodCreatedEvent)], DomainState.prototype, "handleFoodCreatedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CreateFoodFailedEvent)], DomainState.prototype, "handleCreateFoodFailedEvent", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "profile", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "dishes", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "foods", null);
@@ -1852,11 +1932,155 @@ DomainState = (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store
     meals: [],
     forms: {
       cookADish: {
-        model: undefined
+        model: {
+          name: null,
+          cookedWeight: 0,
+          ingredients: []
+        },
+        dirty: false,
+        status: 'PENDING',
+        errors: {}
       }
     }
   }
 })], DomainState);
+
+
+/***/ }),
+
+/***/ 8666:
+/*!**********************************************************!*\
+  !*** ./src/app/state/form/add-food-form.state-models.ts ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "AddFoodFormResetAction": () => (/* binding */ AddFoodFormResetAction),
+/* harmony export */   "AddFoodFormStatusChangedEvent": () => (/* binding */ AddFoodFormStatusChangedEvent),
+/* harmony export */   "AddFoodFormValueChangedEvent": () => (/* binding */ AddFoodFormValueChangedEvent),
+/* harmony export */   "AddFoodIngredientsCleanedUpEvent": () => (/* binding */ AddFoodIngredientsCleanedUpEvent),
+/* harmony export */   "AddFoodPfccRecalculatedEvent": () => (/* binding */ AddFoodPfccRecalculatedEvent)
+/* harmony export */ });
+class AddFoodFormResetAction {}
+AddFoodFormResetAction.type = '[ADD FOOD] Reset form';
+class AddFoodFormValueChangedEvent {
+  constructor(data) {
+    this.data = data;
+  }
+}
+AddFoodFormValueChangedEvent.type = '[ADD FOOD] Form value changed';
+class AddFoodFormStatusChangedEvent {
+  constructor(status, errors = null) {
+    this.status = status;
+    this.errors = errors;
+  }
+}
+AddFoodFormStatusChangedEvent.type = '[ADD FOOD] Form status changed';
+class AddFoodPfccRecalculatedEvent {
+  constructor(pfcc) {
+    this.pfcc = pfcc;
+  }
+}
+AddFoodPfccRecalculatedEvent.type = '[DOMAIN] Add food - pfcc recalculated';
+class AddFoodIngredientsCleanedUpEvent {
+  constructor() {}
+}
+AddFoodIngredientsCleanedUpEvent.type = '[DOMAIN] Add food - ingredients cleaned up';
+
+/***/ }),
+
+/***/ 4978:
+/*!***************************************************!*\
+  !*** ./src/app/state/form/add-food-form.state.ts ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ADD_FOOD_FORM_STATE_NAME": () => (/* binding */ ADD_FOOD_FORM_STATE_NAME),
+/* harmony export */   "AddFoodFormState": () => (/* binding */ AddFoodFormState)
+/* harmony export */ });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! tslib */ 4929);
+/* harmony import */ var _ngxs_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngxs/store */ 9307);
+/* harmony import */ var _add_food_form_state_models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./add-food-form.state-models */ 8666);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 2560);
+var _class;
+
+
+
+
+const ADD_FOOD_FORM_STATE_NAME = 'addFoodForm';
+const DEFAULTS = {
+  model: {
+    pfcc: {
+      protein: 0,
+      fat: 0,
+      carbohydrates: 0,
+      calories: 0
+    },
+    name: null,
+    description: null,
+    ingredients: []
+  },
+  dirty: false,
+  status: 'PENDING',
+  errors: null
+};
+let AddFoodFormState = (_class = class AddFoodFormState {
+  static model(state) {
+    return state.model;
+  }
+  static ingredients(state) {
+    return state.model.ingredients;
+  }
+  handleAddFoodFormValueChangedEvent(ctx, action) {
+    ctx.patchState({
+      model: action.data
+    });
+  }
+  handleAddFoodFormStatusChangedEvent(ctx, action) {
+    ctx.patchState({
+      status: action.status,
+      errors: action.errors
+    });
+  }
+  handleAddFoodFormResetAction(ctx, action) {
+    ctx.setState(DEFAULTS);
+  }
+  handleAddFoodPfccRecalculatedEvent(ctx, action) {
+    ctx.patchState({
+      model: {
+        ...ctx.getState().model,
+        pfcc: action.pfcc
+      }
+    });
+  }
+  handleAddFoodIngredientsChangedEvent(ctx, action) {
+    ctx.patchState({
+      model: {
+        ...ctx.getState().model,
+        ingredients: []
+      }
+    });
+  }
+}, _class.ɵfac = function AddFoodFormState_Factory(t) {
+  return new (t || _class)();
+}, _class.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({
+  token: _class,
+  factory: _class.ɵfac
+}), _class);
+(0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_add_food_form_state_models__WEBPACK_IMPORTED_MODULE_1__.AddFoodFormValueChangedEvent)], AddFoodFormState.prototype, "handleAddFoodFormValueChangedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_add_food_form_state_models__WEBPACK_IMPORTED_MODULE_1__.AddFoodFormStatusChangedEvent)], AddFoodFormState.prototype, "handleAddFoodFormStatusChangedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_add_food_form_state_models__WEBPACK_IMPORTED_MODULE_1__.AddFoodFormResetAction)], AddFoodFormState.prototype, "handleAddFoodFormResetAction", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_add_food_form_state_models__WEBPACK_IMPORTED_MODULE_1__.AddFoodPfccRecalculatedEvent)], AddFoodFormState.prototype, "handleAddFoodPfccRecalculatedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_add_food_form_state_models__WEBPACK_IMPORTED_MODULE_1__.AddFoodIngredientsCleanedUpEvent)], AddFoodFormState.prototype, "handleAddFoodIngredientsChangedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], AddFoodFormState, "model", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], AddFoodFormState, "ingredients", null);
+AddFoodFormState = (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.State)({
+  name: ADD_FOOD_FORM_STATE_NAME,
+  defaults: DEFAULTS
+})], AddFoodFormState);
 
 
 /***/ }),

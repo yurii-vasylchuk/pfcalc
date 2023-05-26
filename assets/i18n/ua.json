@@ -70,7 +70,8 @@
     "add-btn": "Зберегти",
     "edit-recipe": "Редагувати інгредієнти",
     "search-placeholder": "Пошук страви...",
-    "weight-input-placeholder": "Напр. 240"
+    "weight-input-placeholder": "Напр. 240",
+    "create-foot-btn": "Додати страву"
   },
   "cook-a-dish": {
     "title": "Приготувати страву",
@@ -79,5 +80,27 @@
     "ingredient-select-label": "Інгредієнт",
     "add-ingredient-btn": "Додати інгредієнт",
     "cooked-weight-label": "Вага страви"
+  },
+  "add-food": {
+    "title": "Додати їжу",
+    "name-input-label": "Назва їжі",
+    "name-input-placeholder": "Напр. Рис Басматі",
+    "recipe-switcher-label": "Підрахувати з інгредієнтів",
+    "protein-input-label": "Білки",
+    "protein-input-placeholder": "Напр. 123...",
+    "fat-input-label": "Жири",
+    "fat-input-placeholder": "Напр. 123...",
+    "carbohydrates-input-label": "Вуглеводи",
+    "carbohydrates-input-placeholder": "Напр. 123...",
+    "calories-input-label": "Калорії",
+    "calories-input-placeholder": "Напр. 567...",
+    "pfcc-inputs-hint": "На 100г",
+    "ingredient-select-label": "Інгредієнт",
+    "ingredient-select-placeholder": "Напр. Сир",
+    "ingredient-weight-label": "Вага",
+    "add-ingredient-btn": "Додати інгредієнт",
+    "description-input-label": "Опис",
+    "description-input-placeholder": "Опис страви, рецепт, тощо...",
+    "submit-btn-caption": "Зберегти"
   }
 }

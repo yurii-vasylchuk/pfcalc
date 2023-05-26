@@ -70,7 +70,8 @@
     "add-btn": "Save",
     "edit-recipe": "Edit ingredients",
     "search-placeholder": "Find a food...",
-    "weight-input-placeholder": "Ex. 240"
+    "weight-input-placeholder": "Ex. 240",
+    "create-foot-btn": "Add food"
   },
   "cook-a-dish": {
     "title": "Cook a dish",
@@ -79,5 +80,27 @@
     "ingredient-select-label": "Ingredient",
     "add-ingredient-btn": "Add ingredient",
     "cooked-weight-label": "Cooked weight"
+  },
+  "add-food": {
+    "title": "Add food",
+    "name-input-placeholder": "Ex: Basmati rice",
+    "name-input-label": "Food name",
+    "recipe-switcher-label": "Calc from Ingredients",
+    "protein-input-label": "Protein",
+    "protein-input-placeholder": "Ex. 123...",
+    "fat-input-label": "Fat",
+    "fat-input-placeholder": "Ex. 123...",
+    "carbohydrates-input-label": "Carbohydrates",
+    "carbohydrates-input-placeholder": "Ex. 123...",
+    "calories-input-label": "Calories",
+    "calories-input-placeholder": "Ex. 567...",
+    "pfcc-inputs-hint": "Per 100g",
+    "ingredient-select-label": "Ingredient",
+    "ingredient-select-placeholder": "Ex. Cheese",
+    "ingredient-weight-label": "Weight",
+    "add-ingredient-btn": "Add ingredient",
+    "description-input-label": "Description",
+    "description-input-placeholder": "Food description, or recipe...",
+    "submit-btn-caption": "Save"
   }
 }
