@@ -26,7 +26,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const routes = [{
   path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.dashboard,
-  loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_input_mjs"), __webpack_require__.e("default-node_modules_angular_material_fesm2020_slide-toggle_mjs"), __webpack_require__.e("common"), __webpack_require__.e("src_app_pages_dashboard-page_dashboard-page_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/dashboard-page/dashboard-page.component */ 2397)).then(mod => mod.DashboardPageComponent),
+  loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_input_mjs"), __webpack_require__.e("default-node_modules_angular_material_fesm2020_slide-toggle_mjs"), __webpack_require__.e("default-src_app_components_add-food_add-food_component_ts-node_modules_rxjs_dist_esm_internal-96d9f9"), __webpack_require__.e("src_app_pages_dashboard-page_dashboard-page_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/dashboard-page/dashboard-page.component */ 2397)).then(mod => mod.DashboardPageComponent),
   canActivate: [_service_is_authenticated_guard__WEBPACK_IMPORTED_MODULE_0__.IsAuthenticatedGuard, _service_profile_configured_guard__WEBPACK_IMPORTED_MODULE_1__.ProfileConfiguredGuard]
 }, {
   path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.signIn,
@@ -42,7 +42,7 @@ const routes = [{
   canActivate: [_service_is_authenticated_guard__WEBPACK_IMPORTED_MODULE_0__.IsAuthenticatedGuard]
 }, {
   path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.foodsManagement,
-  loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_input_mjs"), __webpack_require__.e("common"), __webpack_require__.e("src_app_pages_foods-management-page_foods-management-page_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/foods-management-page/foods-management-page.component */ 1997)).then(mod => mod.FoodsManagementPageComponent),
+  loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_input_mjs"), __webpack_require__.e("default-node_modules_angular_material_fesm2020_slide-toggle_mjs"), __webpack_require__.e("default-src_app_components_add-food_add-food_component_ts-node_modules_rxjs_dist_esm_internal-96d9f9"), __webpack_require__.e("src_app_pages_foods-management-page_foods-management-page_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/foods-management-page/foods-management-page.component */ 1997)).then(mod => mod.FoodsManagementPageComponent),
   canActivate: [_service_is_authenticated_guard__WEBPACK_IMPORTED_MODULE_0__.IsAuthenticatedGuard]
 }, {
   path: '**',
@@ -141,7 +141,7 @@ AppComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵ
     }
   },
   dependencies: [_angular_router__WEBPACK_IMPORTED_MODULE_9__.RouterOutlet, _components_heading_heading_component__WEBPACK_IMPORTED_MODULE_4__.HeadingComponent, _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_10__.MatDrawer, _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_10__.MatDrawerContainer, _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_10__.MatDrawerContent, _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_5__.MenuComponent, _angular_common__WEBPACK_IMPORTED_MODULE_11__.AsyncPipe],
-  styles: ["[_nghost-%COMP%] {\n  height: 100%;\n}\n\n.container[_ngcontent-%COMP%] {\n  height: 100%;\n}\n\n.content[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n\n.menu-container[_ngcontent-%COMP%] {\n  min-width: 180px;\n}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9hcHAvYXBwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsWUFBQTtBQUNGOztBQUVBO0VBQ0UsWUFBQTtBQUNGOztBQUVBO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsWUFBQTtBQUNGOztBQUVBO0VBQ0UsZ0JBQUE7QUFDRiIsInNvdXJjZXNDb250ZW50IjpbIjpob3N0IHtcbiAgaGVpZ2h0OiAxMDAlO1xufVxuXG4uY29udGFpbmVyIHtcbiAgaGVpZ2h0OiAxMDAlO1xufVxuXG4uY29udGVudCB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gIGhlaWdodDogMTAwJTtcbn1cblxuLm1lbnUtY29udGFpbmVyIHtcbiAgbWluLXdpZHRoOiAxODBweDtcbn1cbiJdLCJzb3VyY2VSb290IjoiIn0= */"]
+  styles: ["[_nghost-%COMP%] {\n  height: 100%;\n}\n\n.container[_ngcontent-%COMP%] {\n  height: 100%;\n}\n\n.content[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n\n.menu-container[_ngcontent-%COMP%] {\n  min-width: 220px;\n}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9hcHAvYXBwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsWUFBQTtBQUNGOztBQUVBO0VBQ0UsWUFBQTtBQUNGOztBQUVBO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsWUFBQTtBQUNGOztBQUVBO0VBQ0UsZ0JBQUE7QUFDRiIsInNvdXJjZXNDb250ZW50IjpbIjpob3N0IHtcbiAgaGVpZ2h0OiAxMDAlO1xufVxuXG4uY29udGFpbmVyIHtcbiAgaGVpZ2h0OiAxMDAlO1xufVxuXG4uY29udGVudCB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gIGhlaWdodDogMTAwJTtcbn1cblxuLm1lbnUtY29udGFpbmVyIHtcbiAgbWluLXdpZHRoOiAyMjBweDtcbn1cbiJdLCJzb3VyY2VSb290IjoiIn0= */"]
 });
 
 /***/ }),
@@ -2041,7 +2041,10 @@ let DomainState = (_class = class DomainState {
     }));
   }
   handleCreateFoodAction(ctx, action) {
-    return this.service.addFood(action.food).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(food => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.FoodCreatedEvent(food)), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CreateFoodFailedEvent(err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(ctx.dispatch));
+    return this.service.addFood({
+      ...action.food,
+      ownedByUser: true
+    }).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(food => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.FoodCreatedEvent(food)), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CreateFoodFailedEvent(err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(ctx.dispatch));
   }
   handleFoodCreatedEvent(ctx, action) {
     ctx.patchState({
