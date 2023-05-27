@@ -1,5 +1,17 @@
 :host {
+  height: 100%;
+}
+
+.container {
+  height: 100%;
+}
+
+.content {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.menu-container {
+  min-width: 180px;
 }

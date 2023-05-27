@@ -54,6 +54,14 @@ export class UnknownBoolean {
     }
   }
 
+  public get isTrue(): boolean {
+    return this === UnknownBoolean.TRUE;
+  }
+
+  public get isFalse(): boolean {
+    return this === UnknownBoolean.FALSE;
+  }
+
   static of(value: boolean) {
     return value ? UnknownBoolean.TRUE : UnknownBoolean.FALSE;
   }

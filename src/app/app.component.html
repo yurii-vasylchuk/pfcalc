@@ -1,2 +1,14 @@
-<pfc-heading></pfc-heading>
-<router-outlet></router-outlet>
+<mat-drawer-container autosize
+                      hasBackdrop="true"
+                      class="container">
+  <mat-drawer [opened]="(menuOpened | async) || false"
+              (closedStart)="handleMenuClosed()"
+              mode="over"
+              class="menu-container">
+    <pfc-menu></pfc-menu>
+  </mat-drawer>
+  <mat-drawer-content class="content">
+    <pfc-heading></pfc-heading>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

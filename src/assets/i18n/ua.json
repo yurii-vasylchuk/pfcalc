@@ -102,5 +102,15 @@
     "description-input-label": "Опис",
     "description-input-placeholder": "Опис страви, рецепт, тощо...",
     "submit-btn-caption": "Зберегти"
+  },
+  "side-menu": {
+    "title": "PFCC",
+    "dashboard": "Головна",
+    "foods-management": "Продукти і страви"
+  },
+  "foods-management": {
+    "ingredients-tab-label": "Інгредієнти",
+    "recipes-tab-label": "Рецепти",
+    "search-placeholder": "Search"
   }
 }

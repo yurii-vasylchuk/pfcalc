@@ -65,6 +65,16 @@ export class DomainState {
   }
 
   @Selector()
+  static ingredientFoods(state: IDomainState): IFood[] {
+    return state.foods.filter(f => f.type === 'ingredient');
+  }
+
+  @Selector()
+  static recipeFoods(state: IDomainState): IFood[] {
+    return state.foods.filter(f => f.type === 'recipe');
+  }
+
+  @Selector()
   static profile(state: IDomainState) {
     return state.profile;
   }

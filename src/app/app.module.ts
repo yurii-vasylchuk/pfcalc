@@ -17,6 +17,9 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HeadingComponent} from "./components/heading/heading.component";
 import {NgxsFormPluginModule} from "@ngxs/form-plugin";
 import {AddFoodFormState} from "./state/form/add-food-form.state";
+import {UiState} from "./state/ui/ui.state";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MenuComponent} from "./components/menu/menu.component";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -31,7 +34,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NgxsModule.forRoot([AuthState, DomainState, AddFoodFormState],
+    NgxsModule.forRoot([AuthState, DomainState, AddFoodFormState, UiState],
       {developmentMode: !environment.production}),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
@@ -51,6 +54,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       disabled: environment.production,
     }),
     HeadingComponent,
+    MatSidenavModule,
+    MenuComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],

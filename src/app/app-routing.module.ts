@@ -27,6 +27,11 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard],
   },
   {
+    path: fromRoutes.foodsManagement,
+    loadComponent: () => import('./pages/foods-management-page/foods-management-page.component').then(mod => mod.FoodsManagementPageComponent),
+    canActivate: [IsAuthenticatedGuard]
+  },
+  {
     path: '**',
     redirectTo: `/${fromRoutes.dashboard}`,
   },

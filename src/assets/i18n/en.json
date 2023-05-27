@@ -102,5 +102,17 @@
     "description-input-label": "Description",
     "description-input-placeholder": "Food description, or recipe...",
     "submit-btn-caption": "Save"
+  },
+  "side-menu": {
+    "title": "PFCC",
+    "dashboard": "Dashboard",
+    "foods-management": "Foods"
+  },
+  "foods-management": {
+    "ingredients-tab-label": "Ingredients",
+    "recipes-tab-label": "Recipes",
+    "add-ingredient-caption": "Add ingredient",
+    "add-recipe-caption": "Add recipe",
+    "search-placeholder": "Search"
   }
 }

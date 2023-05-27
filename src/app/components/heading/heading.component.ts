@@ -8,11 +8,13 @@ import {Language} from "../../commons/models/auth.models";
 import {LanguageChangedEvent} from "../../state/auth/auth.state-models";
 import {AuthState} from "../../state/auth/auth.state";
 import {take} from "rxjs";
+import {MatButtonModule} from "@angular/material/button";
+import {ToggleMenuAction} from "../../state/ui/ui.state-model";
 
 @Component({
   selector: 'pfc-heading',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatIconModule, MatSelectModule],
+  imports: [CommonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatButtonModule],
   templateUrl: './heading.component.html',
   styleUrls: ['./heading.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,6 +22,7 @@ import {take} from "rxjs";
 export class HeadingComponent implements AfterViewInit {
   //TODO: Auto-infer
   protected availableLanguages: Language[] = ['ua', 'en'];
+  protected isAuthenticated = this.store.select(AuthState.isAuthenticated);
 
   @ViewChild("langSelector")
   private langSelector!: MatSelect;
@@ -37,5 +40,9 @@ export class HeadingComponent implements AfterViewInit {
       .subscribe(value => {
         this.langSelector.writeValue(value);
       });
+  }
+
+  handleMenuClicked() {
+    this.store.dispatch(new ToggleMenuAction())
   }
 }
