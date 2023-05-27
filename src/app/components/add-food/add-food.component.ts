@@ -8,7 +8,7 @@ import {MatSlideToggleChange, MatSlideToggleModule} from "@angular/material/slid
 import {MatInputModule} from "@angular/material/input";
 import {Store} from "@ngxs/store";
 import {BehaviorSubject, distinct, filter, map, Observable, Subject, takeUntil} from "rxjs";
-import {IFood, IIngredient} from "../../commons/models/domain.models";
+import {FoodType, IFood, IIngredient} from "../../commons/models/domain.models";
 import {DomainState} from "../../state/domain/domain.state";
 import {MatSelectModule} from "@angular/material/select";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
@@ -86,7 +86,7 @@ export class AddFoodComponent implements OnDestroy {
     this.formGroup = fb.group({
       name: [data.name || null, Validators.compose([Validators.required])],
       description: [null],
-      isRecipe: [false, Validators.required],
+      isRecipe: [data?.type === 'recipe', Validators.required],
       pfcc: fb.group({
         protein: [0, Validators.compose([Validators.required, Validators.min(0)])],
         fat: [0, Validators.compose([Validators.required, Validators.min(0)])],
@@ -165,4 +165,5 @@ export class AddFoodComponent implements OnDestroy {
 
 export interface AddFoodModalData {
   name?: string;
+  type?: FoodType
 }

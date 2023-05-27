@@ -10,12 +10,14 @@
 <ng-template #ingredientsTemplate>
   <div class="content">
     <button mat-stroked-button
+            (click)="addFoodClick('ingredient')"
             class="content__add-btn"
             color="primary">
       {{'foods-management.add-ingredient-caption' | translate}}
     </button>
       <mat-form-field>
-        <input (input)="handleSearchInput($event)"
+        <input [formControl]="searchControl"
+               [value]="searchControl.value"
                matInput
                [placeholder]="'foods-management.search-placeholder' | translate"
                type="text">
@@ -29,6 +31,7 @@
       </mat-list-item>
     </mat-action-list>
     <button mat-stroked-button
+            (click)="addFoodClick('ingredient')"
             *ngIf="(ingredients | async)!.length > 10"
             class="content__add-btn"
             color="primary">
@@ -39,10 +42,12 @@
 <ng-template #recipesTemplate>
   <div class="content">
     <button mat-stroked-button
+            (click)="addFoodClick('recipe')"
             class="content__add-btn"
             color="primary">{{'foods-management.add-recipe-caption' | translate}}</button>
     <mat-form-field>
-      <input (input)="handleSearchInput($event)"
+      <input [formControl]="searchControl"
+             [value]="searchControl.value"
              matInput
              [placeholder]="'foods-management.search-placeholder' | translate"
              type="text">
@@ -55,6 +60,7 @@
       </mat-list-item>
     </mat-action-list>
     <button mat-stroked-button
+            (click)="addFoodClick('recipe')"
             *ngIf="(recipes | async)!.length > 10"
             class="content__add-btn"
             color="primary">{{'foods-management.add-recipe-caption' | translate}}</button>

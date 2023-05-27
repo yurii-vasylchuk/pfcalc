@@ -151,13 +151,13 @@ export class AddMealComponent {
       if (res == null || res.name == null) {
         return
       }
+
       this.store.dispatch(new CreateFoodAction({
         name: res.name,
         type: res.ingredients.length > 0 ? 'recipe' : 'ingredient',
         description: res.description || undefined,
         pfcc: res.pfcc,
         hidden: false, // TODO: Add to form
-        ownedByUser: true, // TODO
         consistOf: res.ingredients.length > 0 ?
           res.ingredients.map(i => {
             return {
@@ -166,7 +166,7 @@ export class AddMealComponent {
             } as IIngredient;
           }) :
           null
-      }))
+      }));
     });
   }
 }

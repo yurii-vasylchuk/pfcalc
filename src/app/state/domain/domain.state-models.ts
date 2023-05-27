@@ -170,7 +170,7 @@ export class DishCreationFailedEvent {
 export class CreateFoodAction {
   static readonly type = '[DOMAIN] Create food';
 
-  constructor(public readonly food: Omit<IFood, 'id'>) {
+  constructor(public readonly food: Omit<IFood, 'id'|'ownedByUser'>) {
   }
 }
 

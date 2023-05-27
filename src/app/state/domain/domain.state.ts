@@ -362,7 +362,10 @@ export class DomainState {
 
   @Action(CreateFoodAction)
   handleCreateFoodAction(ctx: StateContext<IDomainState>, action: CreateFoodAction) {
-    return this.service.addFood(action.food).pipe(
+    return this.service.addFood({
+      ...action.food,
+      ownedByUser: true
+    }).pipe(
       map(food => new FoodCreatedEvent(food)),
       catchError(err => of(new CreateFoodFailedEvent(err.message))),
       map(ctx.dispatch)
