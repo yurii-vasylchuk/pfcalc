@@ -87,6 +87,7 @@ export class AddFoodComponent implements OnDestroy {
       name: [data.name || null, Validators.compose([Validators.required])],
       description: [null],
       isRecipe: [data?.type === 'recipe', Validators.required],
+      isHidden: [false, Validators.required],
       pfcc: fb.group({
         protein: [0, Validators.compose([Validators.required, Validators.min(0)])],
         fat: [0, Validators.compose([Validators.required, Validators.min(0)])],

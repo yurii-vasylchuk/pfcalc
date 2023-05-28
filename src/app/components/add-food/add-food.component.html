@@ -37,6 +37,11 @@
       {{'add-food.recipe-switcher-label' | translate}}
     </mat-slide-toggle>
 
+    <mat-slide-toggle class="content__hidden-switcher"
+                      formControlName="isHidden">
+      {{'add-food.hidden-switcher-label' | translate}}
+    </mat-slide-toggle>
+
     <div class="content__pfcc-container"
          formGroupName="pfcc"
          *ngIf="!isRecipe">
