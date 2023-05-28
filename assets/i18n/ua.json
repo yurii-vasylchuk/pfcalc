@@ -86,6 +86,7 @@
     "name-input-label": "Назва їжі",
     "name-input-placeholder": "Напр. Рис Басматі",
     "recipe-switcher-label": "Підрахувати з інгредієнтів",
+    "hidden-switcher-label": "Тільки для приватного користування",
     "protein-input-label": "Білки",
     "protein-input-placeholder": "Напр. 123...",
     "fat-input-label": "Жири",

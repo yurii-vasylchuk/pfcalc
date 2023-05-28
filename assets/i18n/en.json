@@ -86,6 +86,7 @@
     "name-input-placeholder": "Ex: Basmati rice",
     "name-input-label": "Food name",
     "recipe-switcher-label": "Calc from Ingredients",
+    "hidden-switcher-label": "Hidden",
     "protein-input-label": "Protein",
     "protein-input-placeholder": "Ex. 123...",
     "fat-input-label": "Fat",

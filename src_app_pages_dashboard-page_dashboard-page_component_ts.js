@@ -429,7 +429,7 @@ class AddMealComponent {
         type: res.ingredients.length > 0 ? 'recipe' : 'ingredient',
         description: res.description || undefined,
         pfcc: res.pfcc,
-        hidden: false,
+        hidden: res.isHidden,
         consistOf: res.ingredients.length > 0 ? res.ingredients.map(i => {
           return {
             ...i.ingredient,

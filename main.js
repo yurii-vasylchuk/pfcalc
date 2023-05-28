@@ -2185,14 +2185,15 @@ var _class;
 const ADD_FOOD_FORM_STATE_NAME = 'addFoodForm';
 const DEFAULTS = {
   model: {
+    name: null,
+    description: null,
+    isHidden: false,
     pfcc: {
       protein: 0,
       fat: 0,
       carbohydrates: 0,
       calories: 0
     },
-    name: null,
-    description: null,
     ingredients: []
   },
   dirty: false,
