@@ -13,6 +13,7 @@ export interface FoodFormIngredient {
 }
 
 export interface IAddFoodFormModel {
+  id?: number;
   name: string | null;
   description: string | null;
   isHidden: boolean;

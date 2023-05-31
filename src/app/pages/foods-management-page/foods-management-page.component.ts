@@ -10,11 +10,11 @@ import {FoodType, IFood, IIngredient} from "../../commons/models/domain.models";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
-import {combineLatestWith, map, startWith} from "rxjs";
+import {combineLatestWith, map, Observable, startWith} from "rxjs";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {AddFoodComponent, AddFoodModalData} from "../../components/add-food/add-food.component";
 import {IAddFoodFormModel} from "../../state/form/add-food-form.state-models";
-import {CreateFoodAction} from "../../state/domain/domain.state-models";
+import {CreateFoodAction, DeleteFoodAction, EditFoodAction} from "../../state/domain/domain.state-models";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 
 @Component({
@@ -27,12 +27,12 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 })
 export class FoodsManagementPageComponent {
   protected searchControl = new FormControl<string | null>(null);
-  protected ingredients = this.store.select(DomainState.ingredientFoods)
+  protected ingredients: Observable<IFood[]> = this.store.select(DomainState.ingredientFoods)
     .pipe(
       combineLatestWith(this.searchControl.valueChanges.pipe(startWith(null))),
       map(([foods, search]) => search == null ? foods : foods.filter(food => food.name.toLowerCase().includes(search.toLowerCase())))
     );
-  protected recipes = this.store.select(DomainState.recipeFoods)
+  protected recipes: Observable<IFood[]> = this.store.select(DomainState.recipeFoods)
     .pipe(
       combineLatestWith(this.searchControl.valueChanges.pipe(startWith(null))),
       map(([foods, search]) => search == null ? foods : foods.filter(food => food.name.toLowerCase().includes(search.toLowerCase())))
@@ -64,7 +64,7 @@ export class FoodsManagementPageComponent {
         type: res.ingredients.length > 0 ? 'recipe' : 'ingredient',
         description: res.description || undefined,
         pfcc: res.pfcc,
-        hidden: false, // TODO: Add to form
+        hidden: res.isHidden,
         consistOf: res.ingredients.length > 0 ?
           res.ingredients.map(i => {
             return {
@@ -73,7 +73,45 @@ export class FoodsManagementPageComponent {
             } as IIngredient;
           }) :
           null
-      }))
+      }));
     });
   }
+
+  handleEditClick(id: number) {
+    const ref = this.dialog.open<AddFoodComponent, AddFoodModalData, IAddFoodFormModel>(AddFoodComponent, {
+      panelClass: 'fullscreen-dialog',
+      data: {
+        id: id
+      }
+    });
+
+    ref.afterClosed().subscribe(res => {
+      if (res == null) {
+        return;
+      }
+
+      this.store.dispatch(new EditFoodAction({
+        id: res.id!,
+        name: res.name!,
+        type: res.ingredients.length > 0 ? 'recipe' : 'ingredient',
+        description: res.description || undefined,
+        pfcc: res.pfcc,
+        hidden: res.isHidden,
+        consistOf: res.ingredients.length > 0 ?
+          res.ingredients.map(i => {
+            return {
+              ...i.ingredient,
+              ingredientWeight: i.weight
+            } as IIngredient;
+          }) :
+          null
+      }));
+    })
+  }
+
+  handleDeleteClick(id: number) {
+    this.store.dispatch(new DeleteFoodAction(id));
+  }
+
+  protected readonly JSON = JSON;
 }

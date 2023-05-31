@@ -1,13 +1,13 @@
 <mat-tab-group dynamicHeight="true">
   <mat-tab label="{{'foods-management.ingredients-tab-label' | translate}}">
-    <ng-template [ngTemplateOutlet]="ingredientsTemplate"></ng-template>
+    <ng-container *ngTemplateOutlet="foodListTemplate; context: {$implicit: ingredients}"></ng-container>
   </mat-tab>
   <mat-tab label="{{'foods-management.recipes-tab-label' | translate}}">
-    <ng-template [ngTemplateOutlet]="recipesTemplate"></ng-template>
+    <ng-container *ngTemplateOutlet="foodListTemplate; context: {$implicit: recipes}"></ng-container>
   </mat-tab>
 </mat-tab-group>
 
-<ng-template #ingredientsTemplate>
+<ng-template #foodListTemplate let-foods>
   <div class="content">
     <button mat-stroked-button
             (click)="addFoodClick('ingredient')"
@@ -15,36 +15,6 @@
             color="primary">
       {{'foods-management.add-ingredient-caption' | translate}}
     </button>
-      <mat-form-field>
-        <input [formControl]="searchControl"
-               [value]="searchControl.value"
-               matInput
-               [placeholder]="'foods-management.search-placeholder' | translate"
-               type="text">
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-
-    <mat-action-list>
-      <mat-list-item *ngFor="let ingredient of ingredients | async; trackBy: trackFoodById">
-        <span matListItemTitle>{{ingredient.name}}</span>
-        <span matListItemLine>{{'common.pfcc-values' | translate:ingredient.pfcc }}</span>
-      </mat-list-item>
-    </mat-action-list>
-    <button mat-stroked-button
-            (click)="addFoodClick('ingredient')"
-            *ngIf="(ingredients | async)!.length > 10"
-            class="content__add-btn"
-            color="primary">
-      {{'foods-management.add-ingredient-caption' | translate}}
-    </button>
-  </div>
-</ng-template>
-<ng-template #recipesTemplate>
-  <div class="content">
-    <button mat-stroked-button
-            (click)="addFoodClick('recipe')"
-            class="content__add-btn"
-            color="primary">{{'foods-management.add-recipe-caption' | translate}}</button>
     <mat-form-field>
       <input [formControl]="searchControl"
              [value]="searchControl.value"
@@ -53,16 +23,33 @@
              type="text">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
-    <mat-action-list>
-      <mat-list-item *ngFor="let recipe of recipes | async; trackBy: trackFoodById">
-        <span matListItemTitle>{{recipe.name}}</span>
-        <span matListItemLine>{{'common.pfcc-values' | translate:recipe.pfcc }}</span>
+
+    <mat-list>
+      <mat-list-item *ngFor="let food of foods | async; trackBy: trackFoodById">
+        <span matListItemTitle>{{food.name}}</span>
+        <span matListItemLine>{{'common.pfcc-values' | translate:food.pfcc }}</span>
+        <div class="content__food-actions"
+             matListItemMeta>
+          <button mat-icon-button
+                  color="primary"
+                  (click)="handleEditClick(food.id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button
+                  *ngIf="food.ownedByUser"
+                  (click)="handleDeleteClick(food.id)"
+                  color="warn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </mat-list-item>
-    </mat-action-list>
+    </mat-list>
     <button mat-stroked-button
-            (click)="addFoodClick('recipe')"
-            *ngIf="(recipes | async)!.length > 10"
+            (click)="addFoodClick('ingredient')"
+            *ngIf="(ingredients | async)!.length > 10"
             class="content__add-btn"
-            color="primary">{{'foods-management.add-recipe-caption' | translate}}</button>
+            color="primary">
+      {{'foods-management.add-ingredient-caption' | translate}}
+    </button>
   </div>
 </ng-template>

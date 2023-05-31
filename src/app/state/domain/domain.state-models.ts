@@ -187,3 +187,45 @@ export class CreateFoodFailedEvent {
   constructor(public readonly msg: string) {
   }
 }
+
+export class EditFoodAction {
+  static readonly type = '[DOMAIN] Edit food';
+
+  constructor(public readonly food: Omit<IFood, 'ownedByUser'>) {
+  }
+}
+
+export class FoodUpdatedEvent {
+  static readonly type = '[DOMAIN] Food updated';
+
+  constructor(public readonly newFood: IFood, public readonly originalFoodId: number) {
+  }
+}
+
+export class UpdateFoodFailedEvent {
+  static readonly type = '[DOMAIN] Food update failed';
+
+  constructor(public readonly msg: string) {
+  }
+}
+
+export class DeleteFoodAction {
+  static readonly type = '[DOMAIN] Delete food';
+
+  constructor(public readonly id: number) {
+  }
+}
+
+export class FoodDeletedEvent {
+  static readonly type = '[DOMAIN] Food deleted';
+
+  constructor(public readonly id: number) {
+  }
+}
+
+export class DeleteFoodFailedEvent {
+  static readonly type = '[DOMAIN] Food delete failed';
+
+  constructor(public readonly msg: string) {
+  }
+}

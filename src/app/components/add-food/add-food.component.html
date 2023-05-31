@@ -1,5 +1,5 @@
 <div class="heading">
-  <h1 class="heading__title">{{'add-food.title' | translate}}</h1>
+  <h1 class="heading__title">{{titleCode | translate}}</h1>
 
   <div class="flex-spacer"></div>
 
@@ -14,6 +14,7 @@
 <div class="content">
   <form [formGroup]="formGroup"
         (ngSubmit)="handleSubmit()">
+    <input hidden formControlName="id">
     <mat-form-field class="content__name">
       <mat-label>{{'add-food.name-input-label' | translate}}</mat-label>
       <input type="text"

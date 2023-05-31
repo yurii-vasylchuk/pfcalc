@@ -146,7 +146,7 @@ export class ProfileService {
           name: 'СВ Шея',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 16.1,
             fat: 22.8,
@@ -161,7 +161,7 @@ export class ProfileService {
           name: 'КУР Бедро б.к.',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 25.7,
             fat: 10.7,
@@ -176,7 +176,7 @@ export class ProfileService {
           name: 'КУР Филе',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 23,
             fat: 1.2,
@@ -191,7 +191,7 @@ export class ProfileService {
           name: 'ГОВ Лопатка',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 20.5,
             fat: 6.2,
@@ -206,7 +206,7 @@ export class ProfileService {
           name: 'ГОВ Вырезка',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 20.7,
             fat: 8.8,
@@ -221,7 +221,7 @@ export class ProfileService {
           name: 'Пельмени ГБ свинные',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 14,
             fat: 11.5,
@@ -236,7 +236,7 @@ export class ProfileService {
           name: 'Пельмени ГБ с/г',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 13,
             fat: 11.2,
@@ -251,7 +251,7 @@ export class ProfileService {
           name: 'Пельмени ГБ 3 мяса',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 13,
             fat: 11.2,
@@ -266,7 +266,7 @@ export class ProfileService {
           name: 'Гречка',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 13.2,
             fat: 3.4,
@@ -281,7 +281,7 @@ export class ProfileService {
           name: 'Рис/Макароны',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 7,
             fat: 0.6,
@@ -296,7 +296,7 @@ export class ProfileService {
           name: 'Булгур',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 12.3,
             fat: 1.3,
@@ -311,7 +311,7 @@ export class ProfileService {
           name: 'Горох',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 23,
             fat: 1.2,
@@ -326,7 +326,7 @@ export class ProfileService {
           name: 'Нут',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 19.3,
             fat: 6,
@@ -341,7 +341,7 @@ export class ProfileService {
           name: 'Яйцо',
           isCookable: false,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 6.3,
             fat: 5,
@@ -356,7 +356,7 @@ export class ProfileService {
           name: 'Полента',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 7.2,
             fat: 1.5,
@@ -371,7 +371,7 @@ export class ProfileService {
           isCookable: false,
           name: 'Моцарелла',
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 19,
             fat: 1,
@@ -386,7 +386,7 @@ export class ProfileService {
           name: 'Протеин',
           hidden: true,
           isCookable: false,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 80,
             fat: 0,
@@ -405,7 +405,7 @@ export class ProfileService {
               name: 'Рис/Макароны',
               isCookable: true,
               hidden: true,
-              ownedByUser: true,
+              ownedByUser: false,
               ingredientWeight: 200,
               pfcc: {
                 protein: 14,
@@ -421,7 +421,7 @@ export class ProfileService {
               name: 'Яйцо',
               isCookable: false,
               hidden: true,
-              ownedByUser: true,
+              ownedByUser: false,
               ingredientWeight: 200,
               pfcc: {
                 protein: 6.3,
@@ -437,7 +437,7 @@ export class ProfileService {
               isCookable: true,
               consistOf: null,
               hidden: true,
-              ownedByUser: true,
+              ownedByUser: false,
               ingredientWeight: 50,
               pfcc: {
                 protein: 10.5,
@@ -475,7 +475,7 @@ export class ProfileService {
               name: 'Рис/Макароны',
               isCookable: true,
               hidden: true,
-              ownedByUser: true,
+              ownedByUser: false,
               pfcc: {
                 protein: 7,
                 fat: 0.6,
@@ -541,7 +541,25 @@ export class ProfileService {
   addFood(food: Omit<IFood, "id">): Observable<IFood> {
     return of({
       ...food,
+      ownedByUser: false,
       id: Math.ceil(Math.random() * 10000),
     } as IFood);
+  }
+
+  /**
+   * Updating the food. A food might be literally updated if it's owned by the user, otherwise a new food will be created
+   * @param food a food to update
+   */
+  updateFood(food: Omit<IFood, 'ownedByUser'>): Observable<IFood> {
+    let {id: _, ...rest} = food;
+    return of({
+      ...rest,
+      id: Math.ceil(Math.random() * 10000),
+      ownedByUser: false
+    } as IFood);
+  }
+
+  deleteFood(id: number): Observable<number> {
+    return of(id);
   }
 }

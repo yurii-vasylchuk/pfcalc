@@ -50,7 +50,7 @@ export class AddFoodFormState {
   @Action(AddFoodFormValueChangedEvent)
   handleAddFoodFormValueChangedEvent(ctx: StateContext<IAddFoodFormState>, action: AddFoodFormValueChangedEvent) {
     ctx.patchState({
-      model: action.data
+      model: {...action.data}
     });
   }
 

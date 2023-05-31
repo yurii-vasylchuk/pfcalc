@@ -1,4 +1,4 @@
-import {Action, Selector, State, StateContext} from '@ngxs/store';
+import {Action, createSelector, Selector, State, StateContext} from '@ngxs/store';
 import {
   AddMealAction,
   ConfigureProfileAction,
@@ -7,12 +7,14 @@ import {
   CreateDishAction,
   CreateFoodAction,
   CreateFoodFailedEvent,
-  DeleteDishAction,
+  DeleteDishAction, DeleteFoodAction, DeleteFoodFailedEvent,
   DishCreatedEvent,
   DishCreationFailedEvent,
   DishDeletedEvent,
   DishDeletionFailedEvent,
-  FoodCreatedEvent,
+  EditFoodAction,
+  FoodCreatedEvent, FoodDeletedEvent,
+  FoodUpdatedEvent,
   ICookADishFormModel,
   IDomainState,
   InitiateCookADishForm,
@@ -24,6 +26,7 @@ import {
   ProfileConfiguredSuccessfullyEvent,
   ProfileLoadedEvent,
   RemoveMealAction,
+  UpdateFoodFailedEvent,
 } from './domain.state-models';
 import {Injectable} from '@angular/core';
 import {ProfileService} from '../../service/profile.service';
@@ -152,6 +155,12 @@ export class DomainState {
   static todayMeals(state: IDomainState): IMeal[] {
     return state.meals
       .filter(m => isToday(m.eatenOn));
+  }
+
+  static food(id: number) {
+    return createSelector([DomainState], (state: IDomainState) => {
+      return state.foods.find(f => f.id === id) || null;
+    });
   }
 
   @Action(ProfileLoadedEvent)
@@ -384,6 +393,54 @@ export class DomainState {
 
   @Action(CreateFoodFailedEvent)
   handleCreateFoodFailedEvent(ctx: StateContext<IDomainState>, action: CreateFoodFailedEvent) {
+    console.warn(action.msg);
+  }
+
+  @Action(EditFoodAction)
+  handleEditFoodAction(ctx: StateContext<IDomainState>, action: EditFoodAction) {
+    return this.service.updateFood({
+      ...action.food
+    }).pipe(
+      map(food => new FoodUpdatedEvent(food, action.food.id)),
+      catchError(err => of(new UpdateFoodFailedEvent(err.message))),
+      map(ctx.dispatch)
+    )
+  }
+
+  @Action(FoodUpdatedEvent)
+  handleFoodUpdatedEvent(ctx: StateContext<IDomainState>, action: FoodUpdatedEvent) {
+    ctx.patchState({
+      foods: [
+        ...ctx.getState().foods.map(f => f.id === action.originalFoodId ? action.newFood : f)
+      ]
+    })
+  }
+
+  @Action(UpdateFoodFailedEvent)
+  handleUpdateFoodFailedEvent(ctx: StateContext<IDomainState>, action: UpdateFoodFailedEvent) {
+    console.warn(action.msg);
+  }
+
+  @Action(DeleteFoodAction)
+  handleDeleteFoodAction(ctx: StateContext<IDomainState>, action: DeleteFoodAction) {
+    return this.service.deleteFood(action.id).pipe(
+      map(id => new FoodDeletedEvent(id)),
+      catchError(err => of(new DeleteFoodFailedEvent(err.message))),
+      map(ctx.dispatch)
+    )
+  }
+
+  @Action(FoodUpdatedEvent)
+  handleFoodDeletedEvent(ctx: StateContext<IDomainState>, action: FoodDeletedEvent) {
+    ctx.patchState({
+      foods: [
+        ...ctx.getState().foods.filter(f => f.id !== action.id)
+      ]
+    })
+  }
+
+  @Action(DeleteFoodFailedEvent)
+  handleDeleteFoodFailedEvent(ctx: StateContext<IDomainState>, action: DeleteFoodFailedEvent) {
     console.warn(action.msg);
   }
 }
