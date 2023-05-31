@@ -950,7 +950,7 @@ class ProfileService {
           name: 'СВ Шея',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 16.1,
             fat: 22.8,
@@ -964,7 +964,7 @@ class ProfileService {
           name: 'КУР Бедро б.к.',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 25.7,
             fat: 10.7,
@@ -978,7 +978,7 @@ class ProfileService {
           name: 'КУР Филе',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 23,
             fat: 1.2,
@@ -992,7 +992,7 @@ class ProfileService {
           name: 'ГОВ Лопатка',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 20.5,
             fat: 6.2,
@@ -1006,7 +1006,7 @@ class ProfileService {
           name: 'ГОВ Вырезка',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 20.7,
             fat: 8.8,
@@ -1020,7 +1020,7 @@ class ProfileService {
           name: 'Пельмени ГБ свинные',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 14,
             fat: 11.5,
@@ -1034,7 +1034,7 @@ class ProfileService {
           name: 'Пельмени ГБ с/г',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 13,
             fat: 11.2,
@@ -1048,7 +1048,7 @@ class ProfileService {
           name: 'Пельмени ГБ 3 мяса',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 13,
             fat: 11.2,
@@ -1062,7 +1062,7 @@ class ProfileService {
           name: 'Гречка',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 13.2,
             fat: 3.4,
@@ -1076,7 +1076,7 @@ class ProfileService {
           name: 'Рис/Макароны',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 7,
             fat: 0.6,
@@ -1090,7 +1090,7 @@ class ProfileService {
           name: 'Булгур',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 12.3,
             fat: 1.3,
@@ -1104,7 +1104,7 @@ class ProfileService {
           name: 'Горох',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 23,
             fat: 1.2,
@@ -1118,7 +1118,7 @@ class ProfileService {
           name: 'Нут',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 19.3,
             fat: 6,
@@ -1132,7 +1132,7 @@ class ProfileService {
           name: 'Яйцо',
           isCookable: false,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 6.3,
             fat: 5,
@@ -1146,7 +1146,7 @@ class ProfileService {
           name: 'Полента',
           isCookable: true,
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 7.2,
             fat: 1.5,
@@ -1160,7 +1160,7 @@ class ProfileService {
           isCookable: false,
           name: 'Моцарелла',
           hidden: true,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 19,
             fat: 1,
@@ -1174,7 +1174,7 @@ class ProfileService {
           name: 'Протеин',
           hidden: true,
           isCookable: false,
-          ownedByUser: true,
+          ownedByUser: false,
           pfcc: {
             protein: 80,
             fat: 0,
@@ -1191,7 +1191,7 @@ class ProfileService {
             name: 'Рис/Макароны',
             isCookable: true,
             hidden: true,
-            ownedByUser: true,
+            ownedByUser: false,
             ingredientWeight: 200,
             pfcc: {
               protein: 14,
@@ -1206,7 +1206,7 @@ class ProfileService {
             name: 'Яйцо',
             isCookable: false,
             hidden: true,
-            ownedByUser: true,
+            ownedByUser: false,
             ingredientWeight: 200,
             pfcc: {
               protein: 6.3,
@@ -1221,7 +1221,7 @@ class ProfileService {
             isCookable: true,
             consistOf: null,
             hidden: true,
-            ownedByUser: true,
+            ownedByUser: false,
             ingredientWeight: 50,
             pfcc: {
               protein: 10.5,
@@ -1257,7 +1257,7 @@ class ProfileService {
             name: 'Рис/Макароны',
             isCookable: true,
             hidden: true,
-            ownedByUser: true,
+            ownedByUser: false,
             pfcc: {
               protein: 7,
               fat: 0.6,
@@ -1371,8 +1371,27 @@ class ProfileService {
   addFood(food) {
     return (0,rxjs__WEBPACK_IMPORTED_MODULE_3__.of)({
       ...food,
+      ownedByUser: false,
       id: Math.ceil(Math.random() * 10000)
     });
+  }
+  /**
+   * Updating the food. A food might be literally updated if it's owned by the user, otherwise a new food will be created
+   * @param food a food to update
+   */
+  updateFood(food) {
+    let {
+      id: _,
+      ...rest
+    } = food;
+    return (0,rxjs__WEBPACK_IMPORTED_MODULE_3__.of)({
+      ...rest,
+      id: Math.ceil(Math.random() * 10000),
+      ownedByUser: false
+    });
+  }
+  deleteFood(id) {
+    return (0,rxjs__WEBPACK_IMPORTED_MODULE_3__.of)(id);
   }
 }
 ProfileService.ɵfac = function ProfileService_Factory(t) {
@@ -1664,11 +1683,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "CreateFoodAction": () => (/* binding */ CreateFoodAction),
 /* harmony export */   "CreateFoodFailedEvent": () => (/* binding */ CreateFoodFailedEvent),
 /* harmony export */   "DeleteDishAction": () => (/* binding */ DeleteDishAction),
+/* harmony export */   "DeleteFoodAction": () => (/* binding */ DeleteFoodAction),
+/* harmony export */   "DeleteFoodFailedEvent": () => (/* binding */ DeleteFoodFailedEvent),
 /* harmony export */   "DishCreatedEvent": () => (/* binding */ DishCreatedEvent),
 /* harmony export */   "DishCreationFailedEvent": () => (/* binding */ DishCreationFailedEvent),
 /* harmony export */   "DishDeletedEvent": () => (/* binding */ DishDeletedEvent),
 /* harmony export */   "DishDeletionFailedEvent": () => (/* binding */ DishDeletionFailedEvent),
+/* harmony export */   "EditFoodAction": () => (/* binding */ EditFoodAction),
 /* harmony export */   "FoodCreatedEvent": () => (/* binding */ FoodCreatedEvent),
+/* harmony export */   "FoodDeletedEvent": () => (/* binding */ FoodDeletedEvent),
+/* harmony export */   "FoodUpdatedEvent": () => (/* binding */ FoodUpdatedEvent),
 /* harmony export */   "InitiateCookADishForm": () => (/* binding */ InitiateCookADishForm),
 /* harmony export */   "MealAddedSuccessfullyEvent": () => (/* binding */ MealAddedSuccessfullyEvent),
 /* harmony export */   "MealAddingFailedEvent": () => (/* binding */ MealAddingFailedEvent),
@@ -1677,7 +1701,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ProfileConfigurationFailedEvent": () => (/* binding */ ProfileConfigurationFailedEvent),
 /* harmony export */   "ProfileConfiguredSuccessfullyEvent": () => (/* binding */ ProfileConfiguredSuccessfullyEvent),
 /* harmony export */   "ProfileLoadedEvent": () => (/* binding */ ProfileLoadedEvent),
-/* harmony export */   "RemoveMealAction": () => (/* binding */ RemoveMealAction)
+/* harmony export */   "RemoveMealAction": () => (/* binding */ RemoveMealAction),
+/* harmony export */   "UpdateFoodFailedEvent": () => (/* binding */ UpdateFoodFailedEvent)
 /* harmony export */ });
 class ProfileLoadedEvent {
   constructor(profile) {
@@ -1816,6 +1841,43 @@ class CreateFoodFailedEvent {
   }
 }
 CreateFoodFailedEvent.type = '[DOMAIN] Food creation failed';
+class EditFoodAction {
+  constructor(food) {
+    this.food = food;
+  }
+}
+EditFoodAction.type = '[DOMAIN] Edit food';
+class FoodUpdatedEvent {
+  constructor(newFood, originalFoodId) {
+    this.newFood = newFood;
+    this.originalFoodId = originalFoodId;
+  }
+}
+FoodUpdatedEvent.type = '[DOMAIN] Food updated';
+class UpdateFoodFailedEvent {
+  constructor(msg) {
+    this.msg = msg;
+  }
+}
+UpdateFoodFailedEvent.type = '[DOMAIN] Food update failed';
+class DeleteFoodAction {
+  constructor(id) {
+    this.id = id;
+  }
+}
+DeleteFoodAction.type = '[DOMAIN] Delete food';
+class FoodDeletedEvent {
+  constructor(id) {
+    this.id = id;
+  }
+}
+FoodDeletedEvent.type = '[DOMAIN] Food deleted';
+class DeleteFoodFailedEvent {
+  constructor(msg) {
+    this.msg = msg;
+  }
+}
+DeleteFoodFailedEvent.type = '[DOMAIN] Food delete failed';
 
 /***/ }),
 
@@ -1843,6 +1905,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/core */ 2560);
 /* harmony import */ var _service_profile_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../service/profile.service */ 9042);
 var _class;
+var DomainState_1;
 
 
 
@@ -1854,7 +1917,7 @@ var _class;
 
 
 const DOMAIN_STATE_NAME = 'domain';
-let DomainState = (_class = class DomainState {
+let DomainState = DomainState_1 = (_class = class DomainState {
   constructor(service) {
     this.service = service;
   }
@@ -1910,6 +1973,11 @@ let DomainState = (_class = class DomainState {
   }
   static todayMeals(state) {
     return state.meals.filter(m => (0,_commons_functions__WEBPACK_IMPORTED_MODULE_3__.isToday)(m.eatenOn));
+  }
+  static food(id) {
+    return (0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.createSelector)([DomainState_1], state => {
+      return state.foods.find(f => f.id === id) || null;
+    });
   }
   handleSuccessfulSignIn(ctx, action) {
     ctx.patchState({
@@ -2054,6 +2122,30 @@ let DomainState = (_class = class DomainState {
   handleCreateFoodFailedEvent(ctx, action) {
     console.warn(action.msg);
   }
+  handleEditFoodAction(ctx, action) {
+    return this.service.updateFood({
+      ...action.food
+    }).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(food => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.FoodUpdatedEvent(food, action.food.id)), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.UpdateFoodFailedEvent(err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(ctx.dispatch));
+  }
+  handleFoodUpdatedEvent(ctx, action) {
+    ctx.patchState({
+      foods: [...ctx.getState().foods.map(f => f.id === action.originalFoodId ? action.newFood : f)]
+    });
+  }
+  handleUpdateFoodFailedEvent(ctx, action) {
+    console.warn(action.msg);
+  }
+  handleDeleteFoodAction(ctx, action) {
+    return this.service.deleteFood(action.id).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(id => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.FoodDeletedEvent(id)), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.DeleteFoodFailedEvent(err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(ctx.dispatch));
+  }
+  handleFoodDeletedEvent(ctx, action) {
+    ctx.patchState({
+      foods: [...ctx.getState().foods.filter(f => f.id !== action.id)]
+    });
+  }
+  handleDeleteFoodFailedEvent(ctx, action) {
+    console.warn(action.msg);
+  }
 }, _class.ɵfac = function DomainState_Factory(t) {
   return new (t || _class)(_angular_core__WEBPACK_IMPORTED_MODULE_10__["ɵɵinject"](_service_profile_service__WEBPACK_IMPORTED_MODULE_6__.ProfileService));
 }, _class.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_10__["ɵɵdefineInjectable"]({
@@ -2082,6 +2174,12 @@ let DomainState = (_class = class DomainState {
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CreateFoodAction)], DomainState.prototype, "handleCreateFoodAction", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.FoodCreatedEvent)], DomainState.prototype, "handleFoodCreatedEvent", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.CreateFoodFailedEvent)], DomainState.prototype, "handleCreateFoodFailedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.EditFoodAction)], DomainState.prototype, "handleEditFoodAction", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.FoodUpdatedEvent)], DomainState.prototype, "handleFoodUpdatedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.UpdateFoodFailedEvent)], DomainState.prototype, "handleUpdateFoodFailedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.DeleteFoodAction)], DomainState.prototype, "handleDeleteFoodAction", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.FoodUpdatedEvent)], DomainState.prototype, "handleFoodDeletedEvent", null);
+(0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Action)(_domain_state_models__WEBPACK_IMPORTED_MODULE_1__.DeleteFoodFailedEvent)], DomainState.prototype, "handleDeleteFoodFailedEvent", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "ingredientFoods", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "recipeFoods", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "profile", null);
@@ -2095,7 +2193,7 @@ let DomainState = (_class = class DomainState {
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "cookADishUsedIngredients", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "weeklyNutrients", null);
 (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Selector)()], DomainState, "todayMeals", null);
-DomainState = (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.State)({
+DomainState = DomainState_1 = (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.State)({
   name: DOMAIN_STATE_NAME,
   defaults: {
     profile: null,
@@ -2209,7 +2307,9 @@ let AddFoodFormState = (_class = class AddFoodFormState {
   }
   handleAddFoodFormValueChangedEvent(ctx, action) {
     ctx.patchState({
-      model: action.data
+      model: {
+        ...action.data
+      }
     });
   }
   handleAddFoodFormStatusChangedEvent(ctx, action) {

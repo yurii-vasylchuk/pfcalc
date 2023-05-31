@@ -82,7 +82,8 @@
     "cooked-weight-label": "Вага страви"
   },
   "add-food": {
-    "title": "Додати їжу",
+    "title-create": "Додати їжу",
+    "title-edit": "Редагувати їжу",
     "name-input-label": "Назва їжі",
     "name-input-placeholder": "Напр. Рис Басматі",
     "recipe-switcher-label": "Підрахувати з інгредієнтів",
