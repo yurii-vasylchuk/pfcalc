@@ -11,57 +11,53 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "AppRoutingModule": () => (/* binding */ AppRoutingModule)
 /* harmony export */ });
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ 124);
-/* harmony import */ var _service_is_authenticated_guard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./service/is-authenticated.guard */ 4060);
-/* harmony import */ var _service_profile_configured_guard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service/profile-configured.guard */ 1989);
-/* harmony import */ var _commons_routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./commons/routes */ 5045);
-/* harmony import */ var _service_is_not_authenticated_guard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./service/is-not-authenticated.guard */ 3447);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 2560);
-
-
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ 124);
+/* harmony import */ var _commons_routes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./commons/routes */ 5045);
+/* harmony import */ var _service_guards__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service/guards */ 2269);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 2560);
 
 
 
 
 
 const routes = [{
-  path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.dashboard,
+  path: _commons_routes__WEBPACK_IMPORTED_MODULE_0__.dashboard,
   loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_input_mjs"), __webpack_require__.e("default-node_modules_angular_material_fesm2020_slide-toggle_mjs"), __webpack_require__.e("default-src_app_components_add-food_add-food_component_ts-node_modules_rxjs_dist_esm_internal-96d9f9"), __webpack_require__.e("src_app_pages_dashboard-page_dashboard-page_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/dashboard-page/dashboard-page.component */ 2397)).then(mod => mod.DashboardPageComponent),
-  canActivate: [_service_is_authenticated_guard__WEBPACK_IMPORTED_MODULE_0__.IsAuthenticatedGuard, _service_profile_configured_guard__WEBPACK_IMPORTED_MODULE_1__.ProfileConfiguredGuard]
+  canActivate: [_service_guards__WEBPACK_IMPORTED_MODULE_1__.isAuthenticatedGuardFn, _service_guards__WEBPACK_IMPORTED_MODULE_1__.profileConfiguredGuardFn]
 }, {
-  path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.signIn,
+  path: _commons_routes__WEBPACK_IMPORTED_MODULE_0__.signIn,
   loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_input_mjs"), __webpack_require__.e("src_app_pages_sign-in-page_sign-in-page_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/sign-in-page/sign-in-page.component */ 8924)).then(mod => mod.SignInPageComponent),
-  canActivate: [_service_is_not_authenticated_guard__WEBPACK_IMPORTED_MODULE_3__.IsNotAuthenticatedGuard]
+  canActivate: [_service_guards__WEBPACK_IMPORTED_MODULE_1__.isNotAuthenticatedGuardFn]
 }, {
-  path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.signUp,
+  path: _commons_routes__WEBPACK_IMPORTED_MODULE_0__.signUp,
   loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_input_mjs"), __webpack_require__.e("src_app_pages_sign-up-page_sign-up-page_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/sign-up-page/sign-up-page.component */ 3540)).then(mod => mod.SignUpPageComponent),
-  canActivate: [_service_is_not_authenticated_guard__WEBPACK_IMPORTED_MODULE_3__.IsNotAuthenticatedGuard]
+  canActivate: [_service_guards__WEBPACK_IMPORTED_MODULE_1__.isNotAuthenticatedGuardFn]
 }, {
-  path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.completeProfile,
+  path: _commons_routes__WEBPACK_IMPORTED_MODULE_0__.completeProfile,
   loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_input_mjs"), __webpack_require__.e("default-node_modules_angular_material_fesm2020_slide-toggle_mjs"), __webpack_require__.e("src_app_pages_configure-profile_configure-profile_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/configure-profile/configure-profile.component */ 6678)).then(mod => mod.ConfigureProfileComponent),
-  canActivate: [_service_is_authenticated_guard__WEBPACK_IMPORTED_MODULE_0__.IsAuthenticatedGuard]
+  canActivate: [_service_guards__WEBPACK_IMPORTED_MODULE_1__.isAuthenticatedGuardFn]
 }, {
-  path: _commons_routes__WEBPACK_IMPORTED_MODULE_2__.foodsManagement,
+  path: _commons_routes__WEBPACK_IMPORTED_MODULE_0__.foodsManagement,
   loadComponent: () => Promise.all(/*! import() */[__webpack_require__.e("default-node_modules_angular_material_fesm2020_input_mjs"), __webpack_require__.e("default-node_modules_angular_material_fesm2020_slide-toggle_mjs"), __webpack_require__.e("default-src_app_components_add-food_add-food_component_ts-node_modules_rxjs_dist_esm_internal-96d9f9"), __webpack_require__.e("src_app_pages_foods-management-page_foods-management-page_component_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/foods-management-page/foods-management-page.component */ 1997)).then(mod => mod.FoodsManagementPageComponent),
-  canActivate: [_service_is_authenticated_guard__WEBPACK_IMPORTED_MODULE_0__.IsAuthenticatedGuard]
+  canActivate: [_service_guards__WEBPACK_IMPORTED_MODULE_1__.isAuthenticatedGuardFn, _service_guards__WEBPACK_IMPORTED_MODULE_1__.profileConfiguredGuardFn]
 }, {
   path: '**',
-  redirectTo: `/${_commons_routes__WEBPACK_IMPORTED_MODULE_2__.dashboard}`
+  redirectTo: `/${_commons_routes__WEBPACK_IMPORTED_MODULE_0__.dashboard}`
 }];
 class AppRoutingModule {}
 AppRoutingModule.ɵfac = function AppRoutingModule_Factory(t) {
   return new (t || AppRoutingModule)();
 };
-AppRoutingModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineNgModule"]({
+AppRoutingModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineNgModule"]({
   type: AppRoutingModule
 });
-AppRoutingModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineInjector"]({
-  imports: [_angular_router__WEBPACK_IMPORTED_MODULE_5__.RouterModule.forRoot(routes), _angular_router__WEBPACK_IMPORTED_MODULE_5__.RouterModule]
+AppRoutingModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjector"]({
+  imports: [_angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule.forRoot(routes), _angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule]
 });
 (function () {
-  (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵsetNgModuleScope"](AppRoutingModule, {
-    imports: [_angular_router__WEBPACK_IMPORTED_MODULE_5__.RouterModule],
-    exports: [_angular_router__WEBPACK_IMPORTED_MODULE_5__.RouterModule]
+  (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵsetNgModuleScope"](AppRoutingModule, {
+    imports: [_angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule],
+    exports: [_angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterModule]
   });
 })();
 
@@ -679,74 +675,27 @@ MenuComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_3__["�
 
 /***/ }),
 
-/***/ 4060:
-/*!***************************************************!*\
-  !*** ./src/app/service/is-authenticated.guard.ts ***!
-  \***************************************************/
+/***/ 2269:
+/*!***********************************!*\
+  !*** ./src/app/service/guards.ts ***!
+  \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "IsAuthenticatedGuard": () => (/* binding */ IsAuthenticatedGuard)
+/* harmony export */   "isAuthenticatedGuardFn": () => (/* binding */ isAuthenticatedGuardFn),
+/* harmony export */   "isNotAuthenticatedGuardFn": () => (/* binding */ isNotAuthenticatedGuardFn),
+/* harmony export */   "profileConfiguredGuardFn": () => (/* binding */ profileConfiguredGuardFn)
 /* harmony export */ });
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ 116);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ 635);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ 9337);
-/* harmony import */ var _state_auth_auth_state__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../state/auth/auth.state */ 9305);
-/* harmony import */ var _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngxs/router-plugin */ 5417);
-/* harmony import */ var _commons_routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../commons/routes */ 5045);
-/* harmony import */ var _commons_models_common_models__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../commons/models/common.models */ 5291);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/core */ 2560);
-/* harmony import */ var _ngxs_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngxs/store */ 9307);
-
-
-
-
-
-
-
-class IsAuthenticatedGuard {
-  constructor(store) {
-    this.store = store;
-  }
-  canActivate(route, state) {
-    return this.store.select(_state_auth_auth_state__WEBPACK_IMPORTED_MODULE_0__.AuthState.isAuthenticated).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_5__.filter)(isAuthenticated => isAuthenticated !== _commons_models_common_models__WEBPACK_IMPORTED_MODULE_3__.UnknownBoolean.UNKNOWN), (0,rxjs__WEBPACK_IMPORTED_MODULE_6__.map)(value => value === _commons_models_common_models__WEBPACK_IMPORTED_MODULE_3__.UnknownBoolean.TRUE), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.tap)(isAuthenticated => {
-      if (!isAuthenticated) {
-        this.store.dispatch(new _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_1__.Navigate([`/${_commons_routes__WEBPACK_IMPORTED_MODULE_2__.signIn}`]));
-      }
-    }));
-  }
-}
-IsAuthenticatedGuard.ɵfac = function IsAuthenticatedGuard_Factory(t) {
-  return new (t || IsAuthenticatedGuard)(_angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵinject"](_ngxs_store__WEBPACK_IMPORTED_MODULE_4__.Store));
-};
-IsAuthenticatedGuard.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵdefineInjectable"]({
-  token: IsAuthenticatedGuard,
-  factory: IsAuthenticatedGuard.ɵfac,
-  providedIn: 'root'
-});
-
-/***/ }),
-
-/***/ 3447:
-/*!*******************************************************!*\
-  !*** ./src/app/service/is-not-authenticated.guard.ts ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "IsNotAuthenticatedGuard": () => (/* binding */ IsNotAuthenticatedGuard)
-/* harmony export */ });
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ 116);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ 635);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ 9337);
-/* harmony import */ var _state_auth_auth_state__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../state/auth/auth.state */ 9305);
-/* harmony import */ var _commons_models_common_models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../commons/models/common.models */ 5291);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 2560);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ 116);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ 635);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs */ 9337);
+/* harmony import */ var _ngxs_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngxs/store */ 9307);
+/* harmony import */ var _state_auth_auth_state__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../state/auth/auth.state */ 9305);
 /* harmony import */ var _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngxs/router-plugin */ 5417);
 /* harmony import */ var _commons_routes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../commons/routes */ 5045);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/core */ 2560);
-/* harmony import */ var _ngxs_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngxs/store */ 9307);
+/* harmony import */ var _commons_models_common_models__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../commons/models/common.models */ 5291);
 
 
 
@@ -754,26 +703,30 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class IsNotAuthenticatedGuard {
-  constructor(store) {
-    this.store = store;
-  }
-  canActivate(route, state) {
-    return this.store.select(_state_auth_auth_state__WEBPACK_IMPORTED_MODULE_0__.AuthState.isAuthenticated).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_5__.filter)(isAuthenticated => isAuthenticated !== _commons_models_common_models__WEBPACK_IMPORTED_MODULE_1__.UnknownBoolean.UNKNOWN), (0,rxjs__WEBPACK_IMPORTED_MODULE_6__.map)(value => value === _commons_models_common_models__WEBPACK_IMPORTED_MODULE_1__.UnknownBoolean.FALSE), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.tap)(isNotAuthenticated => {
-      if (!isNotAuthenticated) {
-        this.store.dispatch(new _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_2__.Navigate([`/${_commons_routes__WEBPACK_IMPORTED_MODULE_3__.dashboard}`]));
-      }
-    }));
-  }
-}
-IsNotAuthenticatedGuard.ɵfac = function IsNotAuthenticatedGuard_Factory(t) {
-  return new (t || IsNotAuthenticatedGuard)(_angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵinject"](_ngxs_store__WEBPACK_IMPORTED_MODULE_4__.Store));
+const isAuthenticatedGuardFn = () => {
+  const store = (0,_angular_core__WEBPACK_IMPORTED_MODULE_5__.inject)(_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Store);
+  return store.select(_state_auth_auth_state__WEBPACK_IMPORTED_MODULE_1__.AuthState.isAuthenticated).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_6__.filter)(isAuthenticated => isAuthenticated !== _commons_models_common_models__WEBPACK_IMPORTED_MODULE_4__.UnknownBoolean.UNKNOWN), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(value => value === _commons_models_common_models__WEBPACK_IMPORTED_MODULE_4__.UnknownBoolean.TRUE), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.tap)(isAuthenticated => {
+    if (!isAuthenticated) {
+      store.dispatch(new _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_2__.Navigate([`/${_commons_routes__WEBPACK_IMPORTED_MODULE_3__.signIn}`]));
+    }
+  }));
 };
-IsNotAuthenticatedGuard.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵdefineInjectable"]({
-  token: IsNotAuthenticatedGuard,
-  factory: IsNotAuthenticatedGuard.ɵfac,
-  providedIn: 'root'
-});
+const isNotAuthenticatedGuardFn = () => {
+  const store = (0,_angular_core__WEBPACK_IMPORTED_MODULE_5__.inject)(_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Store);
+  return store.select(_state_auth_auth_state__WEBPACK_IMPORTED_MODULE_1__.AuthState.isAuthenticated).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_6__.filter)(isAuthenticated => isAuthenticated !== _commons_models_common_models__WEBPACK_IMPORTED_MODULE_4__.UnknownBoolean.UNKNOWN), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(value => value === _commons_models_common_models__WEBPACK_IMPORTED_MODULE_4__.UnknownBoolean.FALSE), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.tap)(isNotAuthenticated => {
+    if (!isNotAuthenticated) {
+      store.dispatch(new _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_2__.Navigate([`/${_commons_routes__WEBPACK_IMPORTED_MODULE_3__.dashboard}`]));
+    }
+  }));
+};
+const profileConfiguredGuardFn = () => {
+  const store = (0,_angular_core__WEBPACK_IMPORTED_MODULE_5__.inject)(_ngxs_store__WEBPACK_IMPORTED_MODULE_0__.Store);
+  return store.select(_state_auth_auth_state__WEBPACK_IMPORTED_MODULE_1__.AuthState.profileConfigured).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_6__.filter)(value => value !== _commons_models_common_models__WEBPACK_IMPORTED_MODULE_4__.UnknownBoolean.UNKNOWN), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(value => value === _commons_models_common_models__WEBPACK_IMPORTED_MODULE_4__.UnknownBoolean.TRUE), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.tap)(isProfileConfigured => {
+    if (!isProfileConfigured) {
+      store.dispatch(new _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_2__.Navigate([`/${_commons_routes__WEBPACK_IMPORTED_MODULE_3__.completeProfile}`]));
+    }
+  }));
+};
 
 /***/ }),
 
@@ -809,55 +762,6 @@ LocalStoreService.ɵfac = function LocalStoreService_Factory(t) {
 LocalStoreService.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({
   token: LocalStoreService,
   factory: LocalStoreService.ɵfac,
-  providedIn: 'root'
-});
-
-/***/ }),
-
-/***/ 1989:
-/*!*****************************************************!*\
-  !*** ./src/app/service/profile-configured.guard.ts ***!
-  \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ProfileConfiguredGuard": () => (/* binding */ ProfileConfiguredGuard)
-/* harmony export */ });
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ 116);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ 635);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ 9337);
-/* harmony import */ var _state_auth_auth_state__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../state/auth/auth.state */ 9305);
-/* harmony import */ var _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngxs/router-plugin */ 5417);
-/* harmony import */ var _commons_routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../commons/routes */ 5045);
-/* harmony import */ var _commons_models_common_models__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../commons/models/common.models */ 5291);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/core */ 2560);
-/* harmony import */ var _ngxs_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngxs/store */ 9307);
-
-
-
-
-
-
-
-class ProfileConfiguredGuard {
-  constructor(store) {
-    this.store = store;
-  }
-  canActivate(route, state) {
-    return this.store.select(_state_auth_auth_state__WEBPACK_IMPORTED_MODULE_0__.AuthState.profileConfigured).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_5__.filter)(value => value !== _commons_models_common_models__WEBPACK_IMPORTED_MODULE_3__.UnknownBoolean.UNKNOWN), (0,rxjs__WEBPACK_IMPORTED_MODULE_6__.map)(value => value === _commons_models_common_models__WEBPACK_IMPORTED_MODULE_3__.UnknownBoolean.TRUE), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.tap)(isProfileConfigured => {
-      if (!isProfileConfigured) {
-        this.store.dispatch(new _ngxs_router_plugin__WEBPACK_IMPORTED_MODULE_1__.Navigate([`/${_commons_routes__WEBPACK_IMPORTED_MODULE_2__.completeProfile}`]));
-      }
-    }));
-  }
-}
-ProfileConfiguredGuard.ɵfac = function ProfileConfiguredGuard_Factory(t) {
-  return new (t || ProfileConfiguredGuard)(_angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵinject"](_ngxs_store__WEBPACK_IMPORTED_MODULE_4__.Store));
-};
-ProfileConfiguredGuard.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵdefineInjectable"]({
-  token: ProfileConfiguredGuard,
-  factory: ProfileConfiguredGuard.ɵfac,
   providedIn: 'root'
 });
 
