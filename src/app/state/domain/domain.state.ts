@@ -117,10 +117,6 @@ export class DomainState {
       .filter(m => isToday(m.eatenOn))
       .map(m => m.pfcc);
 
-    if (state.profile?.base != null) {
-      eaten.push(state.profile?.base);
-    }
-
     return sumPfccs(...eaten);
   }
 
@@ -141,12 +137,6 @@ export class DomainState {
     const eaten = state.meals
       .filter(m => isOnCurrentWeek(m.eatenOn))
       .map(m => m.pfcc);
-
-    if (state.profile?.base != null) {
-      for (let i = 0; i <= DateTime.now().weekday; i++) {
-        eaten.push(state.profile?.base);
-      }
-    }
 
     return sumPfccs(...eaten);
   }
@@ -210,7 +200,7 @@ export class DomainState {
   configureProfile(ctx: StateContext<IDomainState>, action: ConfigureProfileAction) {
     return this.service.configureProfile(action.aims)
       .pipe(
-        map(_ => new ProfileConfiguredSuccessfullyEvent(action.aims, action.base || null)),
+        map(_ => new ProfileConfiguredSuccessfullyEvent(action.aims)),
         catchError(err => of(new ProfileConfigurationFailedEvent(err.message))),
         map(ctx.dispatch),
       );
@@ -224,7 +214,6 @@ export class DomainState {
         ...profile,
         profileConfigured: true,
         aims: action.aims,
-        base: action.base,
       },
     });
   }
@@ -236,7 +225,6 @@ export class DomainState {
         ...ctx.getState().profile as IProfile,
         profileConfigured: false,
         aims: emptyPfcc,
-        base: null,
       },
     });
   }

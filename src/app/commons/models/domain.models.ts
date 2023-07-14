@@ -51,7 +51,6 @@ export interface IMeal {
 
 export interface IProfile {
   aims: IPfcc;
-  base: IPfcc | null;
   profileConfigured: boolean;
 }
 

@@ -86,12 +86,6 @@ export class ProfileService {
         carbohydrates: 180,
         calories: null,
       },
-      base: {
-        protein: null,
-        fat: null,
-        carbohydrates: 12.6,
-        calories: 49,
-      },
 
       foods: [
         {
