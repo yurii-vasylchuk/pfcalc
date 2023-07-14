@@ -41,7 +41,7 @@ export class ProfileLoadedEvent {
 export class ConfigureProfileAction {
   static readonly type = '[DOMAIN] Configure profile';
 
-  constructor(public readonly aims: IPfcc, public readonly base?: IPfcc) {
+  constructor(public readonly aims: IPfcc) {
   }
 }
 

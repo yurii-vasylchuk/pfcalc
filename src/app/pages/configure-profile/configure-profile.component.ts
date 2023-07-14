@@ -22,12 +22,7 @@ export class ConfigureProfileComponent {
     protein: [100, Validators.min(0)],
     fat: [40, Validators.min(0)],
     carbohydrates: [150, Validators.min(0)],
-    calories: [2000, Validators.min(0)],
-    baseValues: [false],
-    baseProtein: [0, Validators.min(0)],
-    baseFat: [0, Validators.min(0)],
-    baseCarbohydrates: [0, Validators.min(0)],
-    baseCalories: [0, Validators.min(0)],
+    calories: [2000, Validators.min(0)]
   });
 
   constructor(private store: Store, private fb: FormBuilder) {
@@ -39,11 +34,6 @@ export class ConfigureProfileComponent {
       fat: this.form.value.fat || null,
       carbohydrates: this.form.value.carbohydrates || null,
       calories: this.form.value.calories || null,
-    }, this.form.value.baseValues ? {
-      protein: this.form.value.baseProtein || null,
-      fat: this.form.value.baseFat || null,
-      carbohydrates: this.form.value.baseCarbohydrates || null,
-      calories: this.form.value.baseCalories || null,
-    } : undefined));
+    }));
   }
 }

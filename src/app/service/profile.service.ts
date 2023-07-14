@@ -40,7 +40,7 @@ export class ProfileService {
     });
   }
 
-  configureProfile(aims: IPfcc, base: IPfcc | null): Observable<null> {
+  configureProfile(aims: IPfcc): Observable<null> {
     return of(null);
   }
 

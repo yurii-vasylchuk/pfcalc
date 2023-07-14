@@ -47,14 +47,6 @@
     "sign-in-link": "Sign in"
   },
   "complete-profile": {
-    "base-values": {
-      "label": "Base values",
-      "description": "You can set any base values and they will be added to daily values automatically",
-      "calories": "Base calories",
-      "protein": "Base protein",
-      "carbohydrates": "Base carbohydrates",
-      "fat": "Base fat"
-    },
     "submit-btn": "Submit"
   },
   "dashboard": {

@@ -208,7 +208,7 @@ export class DomainState {
 
   @Action(ConfigureProfileAction)
   configureProfile(ctx: StateContext<IDomainState>, action: ConfigureProfileAction) {
-    return this.service.configureProfile(action.aims, action.base || null)
+    return this.service.configureProfile(action.aims)
       .pipe(
         map(_ => new ProfileConfiguredSuccessfullyEvent(action.aims, action.base || null)),
         catchError(err => of(new ProfileConfigurationFailedEvent(err.message))),
