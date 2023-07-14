@@ -799,12 +799,6 @@ class ProfileService {
           carbohydrates: 180,
           calories: null
         },
-        base: {
-          protein: null,
-          fat: null,
-          carbohydrates: 12.6,
-          calories: 49
-        },
         foods: [{
           id: 1,
           type: 'ingredient',
@@ -1235,7 +1229,7 @@ class ProfileService {
       token: 'test-token'
     });
   }
-  configureProfile(aims, base) {
+  configureProfile(aims) {
     return (0,rxjs__WEBPACK_IMPORTED_MODULE_3__.of)(null);
   }
   removeMeal(mealId) {
@@ -1615,16 +1609,14 @@ class ProfileLoadedEvent {
 }
 ProfileLoadedEvent.type = '[DOMAIN] Profile loaded';
 class ConfigureProfileAction {
-  constructor(aims, base) {
+  constructor(aims) {
     this.aims = aims;
-    this.base = base;
   }
 }
 ConfigureProfileAction.type = '[DOMAIN] Configure profile';
 class ProfileConfiguredSuccessfullyEvent {
-  constructor(aims, base) {
+  constructor(aims) {
     this.aims = aims;
-    this.base = base;
   }
 }
 ProfileConfiguredSuccessfullyEvent.type = '[DOMAIN] Profile configuration updated';
@@ -1855,9 +1847,6 @@ let DomainState = DomainState_1 = (_class = class DomainState {
   }
   static todayNutrients(state) {
     const eaten = state.meals.filter(m => (0,_commons_functions__WEBPACK_IMPORTED_MODULE_3__.isToday)(m.eatenOn)).map(m => m.pfcc);
-    if (state.profile?.base != null) {
-      eaten.push(state.profile?.base);
-    }
     return (0,_commons_functions__WEBPACK_IMPORTED_MODULE_3__.sumPfccs)(...eaten);
   }
   static cookADishForm(state) {
@@ -1868,11 +1857,6 @@ let DomainState = DomainState_1 = (_class = class DomainState {
   }
   static weeklyNutrients(state) {
     const eaten = state.meals.filter(m => (0,_commons_functions__WEBPACK_IMPORTED_MODULE_3__.isOnCurrentWeek)(m.eatenOn)).map(m => m.pfcc);
-    if (state.profile?.base != null) {
-      for (let i = 0; i <= luxon__WEBPACK_IMPORTED_MODULE_4__.DateTime.now().weekday; i++) {
-        eaten.push(state.profile?.base);
-      }
-    }
     return (0,_commons_functions__WEBPACK_IMPORTED_MODULE_3__.sumPfccs)(...eaten);
   }
   static todayMeals(state) {
@@ -1914,7 +1898,7 @@ let DomainState = DomainState_1 = (_class = class DomainState {
     console.warn(`Failed to delete dish#${action.dishId}: ${action.msg}`);
   }
   configureProfile(ctx, action) {
-    return this.service.configureProfile(action.aims, action.base || null).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(_ => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfiguredSuccessfullyEvent(action.aims, action.base || null)), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfigurationFailedEvent(err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(ctx.dispatch));
+    return this.service.configureProfile(action.aims).pipe((0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(_ => new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfiguredSuccessfullyEvent(action.aims)), (0,rxjs__WEBPACK_IMPORTED_MODULE_8__.catchError)(err => (0,rxjs__WEBPACK_IMPORTED_MODULE_9__.of)(new _domain_state_models__WEBPACK_IMPORTED_MODULE_1__.ProfileConfigurationFailedEvent(err.message))), (0,rxjs__WEBPACK_IMPORTED_MODULE_7__.map)(ctx.dispatch));
   }
   handleProfileConfiguredSuccessfullyEvent(ctx, action) {
     const profile = ctx.getState().profile;
@@ -1922,8 +1906,7 @@ let DomainState = DomainState_1 = (_class = class DomainState {
       profile: {
         ...profile,
         profileConfigured: true,
-        aims: action.aims,
-        base: action.base
+        aims: action.aims
       }
     });
   }
@@ -1932,8 +1915,7 @@ let DomainState = DomainState_1 = (_class = class DomainState {
       profile: {
         ...ctx.getState().profile,
         profileConfigured: false,
-        aims: _commons_models_common_models__WEBPACK_IMPORTED_MODULE_2__.emptyPfcc,
-        base: null
+        aims: _commons_models_common_models__WEBPACK_IMPORTED_MODULE_2__.emptyPfcc
       }
     });
   }
