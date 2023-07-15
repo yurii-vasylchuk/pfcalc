@@ -31,4 +31,4 @@ jobs:
           tar -czf pfcalc.tar.gz -C ./dist/frontend .
           ssh -i key.pem ec2-user@${{ secrets.AWS_HOST }} sudo rm -rf /usr/share/nginx/html/*
           scp -i key.pem pfcalc.tar.gz ec2-user@${{ secrets.AWS_HOST }}:/home/ec2-user/pfcalc.tar.gz
-          ssh -i key.pem ec2-user@${{ secrets.AWS_HOST }} sudo tar -xzf ./pfcalc.tar.gx -C /usr/share/nginx/html/
+          ssh -i key.pem ec2-user@${{ secrets.AWS_HOST }} sudo tar -xzf ./pfcalc.tar.gz -C /usr/share/nginx/html/
