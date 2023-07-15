@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of, throwError} from 'rxjs';
+import {map, Observable, of, throwError} from 'rxjs';
 import {ISignInResponse, ISignUpResponse} from '../commons/models/auth.models';
 import {ICreateDishResponse, IDishToCreate, IFood, IMeal, IProfileResponse} from '../commons/models/domain.models';
 import {DateTime} from 'luxon';
@@ -16,14 +16,11 @@ export class ProfileService {
   }
 
   signIn(email: string, password: string): Observable<ISignInResponse> {
-    if (email === 'error') {
-      return throwError(() => new Error('Sign in failed'));
-    }
-
-    return of({
-      token: 'test-token',
-      ...this.mockProfile(),
-    });
+    return this.http.post<ISignInResponse>('/api/user/login',
+      {
+        email,
+        password
+      });
   }
 
   getProfile(): Observable<IProfileResponse> {
@@ -31,12 +28,9 @@ export class ProfileService {
   }
 
   signUp(email: string, password: string): Observable<ISignUpResponse> {
-    if (email.includes('error')) {
-      return throwError(() => new Error('Sign up failed'));
-    }
-
-    return of({
-      token: 'test-token',
+    return this.http.post<ISignUpResponse>('/api/user/register', {
+      email,
+      password
     });
   }
 
