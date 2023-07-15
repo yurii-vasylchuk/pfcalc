@@ -22,20 +22,13 @@ jobs:
         run: npm i
       - name: Build
         run: npm run build
-      - name: Copy distribution
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          source: "dist/frontend/*"
-          target: "/home/ec2-user/"
-#      - name: Deploy distribution
-#        uses: appleboy/ssh-action@v0.1.10
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          key: ${{ secrets.SSH_KEY }}
-#          port: 22
-#          script: "sudo ./deploy.sh"
+      - name: Deploy to AWS
+        run: |
+          echo "${{ secrets.AWS_SSH_KEY }}" | tr -d '\r' > key.pem
+          chmod 400 key.pem
+          mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
+          ssh-keyscan ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
+          tar -czf pfcalc.tar.gz -C ./dist/frontend .
+          ssh -i key.pem ec2-user@${{ secrets.AWS_HOST }} sudo rm -rf /usr/share/nginx/html/*
+          scp -i key.pem pfcalc.tar.gz ec2-user@${{ secrets.AWS_HOST }}:/home/ec2-user/pfcalc.tar.gz
+          ssh -i key.pem ec2-user@${{ secrets.AWS_HOST }} sudo tar -xzf ./pfcalc.tar.gx -C /usr/share/nginx/html/
