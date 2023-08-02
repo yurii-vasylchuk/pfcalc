@@ -160,8 +160,7 @@ export class DomainState {
         ...action.profile,
       },
       meals: action.profile.meals,
-      dishes: action.profile.dishes,
-      foods: action.profile.foods,
+      dishes: action.profile.dishes
     });
   }
 

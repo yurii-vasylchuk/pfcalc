@@ -57,7 +57,6 @@ export interface IProfile {
 export interface IProfileResponse extends IProfile {
   meals: IMeal[];
   dishes: IDish[];
-  foods: IFood[];
   account: IAccount;
 }
 
