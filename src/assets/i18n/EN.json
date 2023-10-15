@@ -18,6 +18,10 @@
       "required": "Email is <strong>required</strong>",
       "email": "Invalid email"
     },
+    "name": {
+      "label": "Name",
+      "required": "Nae is <strong>required</strong>"
+    },
     "password": {
       "label": "Password",
       "required": "Password is <strong>required</strong>"

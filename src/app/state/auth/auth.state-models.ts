@@ -1,11 +1,14 @@
-import {UnknownBoolean} from '../../commons/models/common.models';
-import {IAccount, Language} from '../../commons/models/auth.models';
+import {IPfcc, UnknownBoolean} from '../../commons/models/common.models';
+import {Language} from '../../commons/models/auth.models';
 
 export interface IAuthState {
   loggedIn: UnknownBoolean,
   profileConfigured: UnknownBoolean,
   token: string | null,
-  account: IAccount | null,
+  email: string,
+  name: string,
+  preferredLanguage: Language,
+  aims: IPfcc,
   language: Language
 }
 
@@ -20,9 +23,7 @@ export class AuthSignInAction {
 export class AuthSignInSucceededEvent {
   static readonly type = '[AUTH] Sign in succeeded';
 
-  constructor(public readonly token: string,
-              public readonly isProfileConfigured: boolean,
-              public readonly account: IAccount) {
+  constructor(public readonly token: string) {
   }
 }
 
@@ -41,6 +42,7 @@ export class AuthSignUpAction {
   static readonly type = '[AUTH] Sign up';
 
   constructor(public readonly email: string,
+              public readonly name: string,
               public readonly password: string) {
   }
 }

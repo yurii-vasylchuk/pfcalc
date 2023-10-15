@@ -8,7 +8,7 @@ import {AuthLogOutAction} from '../state/auth/auth.state-models';
 @Injectable({
   providedIn: 'root',
 })
-class JwtInterceptor implements HttpInterceptor {
+export class JwtInterceptor implements HttpInterceptor {
   private token: string | null | undefined;
 
   constructor(private store: Store) {

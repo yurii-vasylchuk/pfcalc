@@ -24,8 +24,8 @@ import {MatButtonModule} from '@angular/material/button';
 export class SignInPageComponent implements OnInit {
 
   form = this.fb.group({
-    email: ['', Validators.compose([Validators.required, Validators.email])],
-    password: ['', Validators.compose([Validators.required])],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
   });
 
   constructor(private fb: FormBuilder,

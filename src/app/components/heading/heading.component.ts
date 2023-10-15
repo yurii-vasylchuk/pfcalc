@@ -21,7 +21,7 @@ import {ToggleMenuAction} from "../../state/ui/ui.state-model";
 })
 export class HeadingComponent implements AfterViewInit {
   //TODO: Auto-infer
-  protected availableLanguages: Language[] = ['ua', 'en'];
+  protected availableLanguages: Language[] = ['UA', 'EN'];
   protected isAuthenticated = this.store.select(AuthState.isAuthenticated);
 
   @ViewChild("langSelector")

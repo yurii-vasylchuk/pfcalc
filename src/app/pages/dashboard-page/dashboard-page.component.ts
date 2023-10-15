@@ -11,7 +11,12 @@ import {TranslateModule} from '@ngx-translate/core';
 import * as fromFunctions from '../../commons/functions';
 import {ceilPfcc, multiplyPfcc} from '../../commons/functions';
 import {MatIconModule} from '@angular/material/icon';
-import {AddMealAction, DeleteDishAction, RemoveMealAction} from '../../state/domain/domain.state-models';
+import {
+  AddMealAction,
+  DeleteDishAction,
+  LoadDishAction,
+  RemoveMealAction
+} from '../../state/domain/domain.state-models';
 import {
   AddMealComponent,
   AddMealDialogData,
@@ -81,14 +86,22 @@ export class DashboardPageComponent {
     this.eatenMeals$ = this.store.select(DomainState.todayMeals)
       .pipe(
         combineLatestWith(this.store.select(DomainState.dishesMap), this.store.select(DomainState.foodsMap)),
-        map(([meals, dishes, foods]) => {
+        map(([meals, loadedDishes, loadedFoods]) => {
           return meals.map(meal => {
-            const dish = meal.dishId != null ? dishes.get(meal.dishId) || null : null;
+            let dish: IDish = null;
+            if (meal.dishId != null) {
+              if (loadedDishes.has(meal.dishId)) {
+                dish = loadedDishes.get(meal.dishId)
+              } else {
+                this.store.dispatch(new LoadDishAction(meal.dishId))
+              }
+            }
+
             let food: any;
             if (meal.dishId != null) {
-              food = dish != null ? foods.get(dish.foodId) : null;
+              food = dish != null ? loadedFoods.get(dish.foodId) : null;
             } else {
-              food = foods.get(meal.foodId);
+              food = loadedFoods.get(meal.foodId);
             }
 
             const pfcc = ceilPfcc(meal.pfcc, 1);

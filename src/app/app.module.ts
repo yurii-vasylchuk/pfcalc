@@ -11,7 +11,7 @@ import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
 import {NgxsModule} from '@ngxs/store';
 import {AuthState} from './state/auth/auth.state';
 import {DomainState} from './state/domain/domain.state';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HeadingComponent} from "./components/heading/heading.component";
@@ -20,6 +20,8 @@ import {AddFoodFormState} from "./state/form/add-food-form.state";
 import {UiState} from "./state/ui/ui.state";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MenuComponent} from "./components/menu/menu.component";
+import {BaseUrlInterceptor} from "./base-url.interceptor";
+import {JwtInterceptor} from "./service/jwt-interceptor";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -42,7 +44,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     NgxsFormPluginModule.forRoot(),
     TranslateModule.forRoot({
-      defaultLanguage: 'ua',
+      defaultLanguage: 'UA',
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
@@ -57,7 +59,18 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatSidenavModule,
     MenuComponent,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BaseUrlInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {

@@ -59,15 +59,15 @@ export class AddFoodComponent implements OnDestroy {
 
     this.formGroup = fb.group({
       id: [data.id || null],
-      name: [data.name || null, Validators.compose([Validators.required])],
+      name: [data.name || null, [Validators.required]],
       description: [null],
       isRecipe: [data?.type === 'recipe', Validators.required],
       isHidden: [false, Validators.required],
       pfcc: fb.group({
-        protein: [0, Validators.compose([Validators.required, Validators.min(0)])],
-        fat: [0, Validators.compose([Validators.required, Validators.min(0)])],
-        carbohydrates: [0, Validators.compose([Validators.required, Validators.min(0)])],
-        calories: [0, Validators.compose([Validators.required, Validators.min(0)])],
+        protein: [0, [Validators.required, Validators.min(0)]],
+        fat: [0, [Validators.required, Validators.min(0)]],
+        carbohydrates: [0, [Validators.required, Validators.min(0)]],
+        calories: [0, [Validators.required, Validators.min(0)]],
       }, {
         validators: pfccFormGroupIsNotEmpty
       }),
@@ -128,7 +128,7 @@ export class AddFoodComponent implements OnDestroy {
     this.titleCode = AddFoodComponent.EDIT_TITLE;
     let nextValue: IAddFoodFormModel = {
       id: id,
-      isHidden: foodToEdit.hidden,
+      isHidden: foodToEdit.isHidden,
       pfcc: {
         ...foodToEdit.pfcc
       },
@@ -169,7 +169,7 @@ export class AddFoodComponent implements OnDestroy {
   private createIngredientFormGroup(): FormGroup {
     return this.fb.group({
       ingredient: [null, Validators.required],
-      weight: [100, Validators.compose([Validators.required, Validators.min(1)])],
+      weight: [100, [Validators.required, Validators.min(1)]],
       index: [this.nextIngredientIndex++, Validators.required]
     });
   }

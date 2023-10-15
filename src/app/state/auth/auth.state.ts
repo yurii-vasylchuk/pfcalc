@@ -12,13 +12,14 @@ import {
   LanguageChangedEvent,
 } from './auth.state-models';
 import {ProfileService} from '../../service/profile.service';
-import {catchError, map, mergeMap, of, tap} from 'rxjs';
+import {catchError, map, of, switchMap, tap} from 'rxjs';
 import {Navigate} from '@ngxs/router-plugin';
 import {ProfileConfiguredSuccessfullyEvent, ProfileLoadedEvent} from '../domain/domain.state-models';
 import * as fromRoutes from '../../commons/routes';
 import {LocalStoreService} from '../../service/local-store.service';
 import {UnknownBoolean} from '../../commons/models/common.models';
-import {IAccount, Language} from '../../commons/models/auth.models';
+import {Language} from '../../commons/models/auth.models';
+import {DateTime} from 'luxon';
 
 
 @State<IAuthState>({
@@ -27,8 +28,11 @@ import {IAccount, Language} from '../../commons/models/auth.models';
     profileConfigured: UnknownBoolean.UNKNOWN,
     loggedIn: UnknownBoolean.UNKNOWN,
     token: null,
-    account: null,
-    language: AuthState.DEFAULT_LANGUAGE
+    aims: null,
+    email: null,
+    name: null,
+    preferredLanguage: null,
+    language: AuthState.DEFAULT_LANGUAGE,
   },
 })
 @Injectable()
@@ -37,7 +41,7 @@ export class AuthState implements NgxsOnInit {
               private localStoreService: LocalStoreService) {
   }
 
-  public static readonly DEFAULT_LANGUAGE: Language = 'ua';
+  public static readonly DEFAULT_LANGUAGE: Language = 'UA';
 
   @Selector()
   static language(state: IAuthState): Language {
@@ -59,11 +63,6 @@ export class AuthState implements NgxsOnInit {
     return state.loggedIn;
   }
 
-  @Selector()
-  static account(state: IAuthState): IAccount | null {
-    return state.account;
-  }
-
   ngxsOnInit(ctx: StateContext<IAuthState>): void {
     const token = this.localStoreService.loadJwtToken();
     if (token == null) {
@@ -73,15 +72,39 @@ export class AuthState implements NgxsOnInit {
       return;
     }
 
+    try {
+      const s = JSON.parse(atob(token.split('.')[1]));
+      if (DateTime.fromSeconds(s.exp) < DateTime.now()) {
+        ctx.patchState({
+          loggedIn: UnknownBoolean.FALSE,
+        });
+        ctx.dispatch(new Navigate([fromRoutes.signIn]));
+        return;
+      }
+      ctx.patchState({
+        token: token,
+        loggedIn: UnknownBoolean.TRUE,
+      });
+    } catch (_) {
+      ctx.patchState({
+        loggedIn: UnknownBoolean.FALSE,
+      });
+      ctx.dispatch(new Navigate([fromRoutes.signIn]));
+      return;
+    }
+
     this.profileService.getProfile()
       .pipe(
         tap(profile => {
           ctx.patchState({
             loggedIn: UnknownBoolean.TRUE,
             token: token,
-            account: profile.account,
             profileConfigured: UnknownBoolean.of(profile.profileConfigured),
-            language: profile.account.preferredLanguage
+            language: ctx.getState().language ?? profile.preferredLanguage,
+            preferredLanguage: profile.preferredLanguage,
+            name: profile.name,
+            email: profile.email,
+            aims: profile.aims,
           });
 
           if (profile.profileConfigured) {
@@ -90,18 +113,23 @@ export class AuthState implements NgxsOnInit {
             ctx.dispatch(new Navigate([fromRoutes.completeProfile]));
           }
         }),
-        map(profile => new ProfileLoadedEvent(profile))
+        map(profile => new ProfileLoadedEvent(profile)),
       )
       .subscribe(ctx.dispatch);
   }
 
   @Action(AuthLogOutAction)
   handleAuthLogOutAction(ctx: StateContext<IAuthState>, action: AuthLogOutAction) {
+    this.localStoreService.dropJwtToken();
+
     ctx.patchState({
       token: null,
       loggedIn: UnknownBoolean.FALSE,
       profileConfigured: UnknownBoolean.UNKNOWN,
-      account: null,
+      aims: null,
+      email: null,
+      name: null,
+      preferredLanguage: null,
     });
   }
 
@@ -109,10 +137,7 @@ export class AuthState implements NgxsOnInit {
   signIn(ctx: StateContext<IAuthState>, action: AuthSignInAction) {
     return this.profileService.signIn(action.email, action.password)
       .pipe(
-        mergeMap(rsp => of(
-          new ProfileLoadedEvent(rsp),
-          new AuthSignInSucceededEvent(rsp.token, rsp.profileConfigured, rsp.account),
-        )),
+        map(signInRsp => new AuthSignInSucceededEvent(signInRsp.token)),
         catchError(err => of(new AuthSignInFailedEvent(err.message ?? 'Sign in failed'))),
         map(ctx.dispatch),
       );
@@ -123,14 +148,32 @@ export class AuthState implements NgxsOnInit {
     ctx.patchState({
       token: action.token,
       loggedIn: UnknownBoolean.TRUE,
-      profileConfigured: action.isProfileConfigured ? UnknownBoolean.TRUE : UnknownBoolean.FALSE,
-      account: action.account,
-      language: action.account.preferredLanguage
     });
 
     this.localStoreService.saveJwtToken(action.token);
 
-    return action.isProfileConfigured ? ctx.dispatch(new Navigate(['/'])) : ctx.dispatch(new Navigate([`/${fromRoutes.completeProfile}`]));
+    return this.profileService.getProfile()
+      .pipe(
+        switchMap(profile => {
+          ctx.patchState({
+            name: profile.name,
+            email: profile.email,
+            aims: profile.aims,
+            profileConfigured: UnknownBoolean.of(profile.profileConfigured),
+            preferredLanguage: profile.preferredLanguage,
+            language: ctx.getState().language ?? profile.preferredLanguage,
+          });
+
+          const navigationEvent = profile.profileConfigured ?
+                                  new Navigate([fromRoutes.dashboard]) :
+                                  new Navigate([fromRoutes.completeProfile]);
+
+          return ctx.dispatch([
+            navigationEvent,
+            new ProfileLoadedEvent(profile),
+          ]);
+        }),
+      );
   }
 
   @Action(AuthSignInFailedEvent)
@@ -146,7 +189,7 @@ export class AuthState implements NgxsOnInit {
 
   @Action(AuthSignUpAction)
   signUp(ctx: StateContext<IAuthState>, action: AuthSignUpAction) {
-    return this.profileService.signUp(action.email, action.password)
+    return this.profileService.signUp(action.email, action.name, action.password, ctx.getState().language)
       .pipe(
         map(rsp => new AuthSignUpSucceededEvent(rsp.token)),
         catchError(err => of(new AuthSignUpFailedEvent(err.message))),
@@ -199,18 +242,10 @@ export class AuthState implements NgxsOnInit {
 
   @Action(LanguageChangedEvent)
   handleLanguageChangedEvent(ctx: StateContext<IAuthState>, action: LanguageChangedEvent) {
-    const account = ctx.getState().account;
     ctx.patchState({
-      language: action.lang
-    })
-    if (account != null) {
-      ctx.patchState({
-        account: {
-          ...account,
-          preferredLanguage: action.lang
-        }
-      });
-    }
+      language: action.lang,
+      preferredLanguage: action.lang,
+    });
   }
 
 }

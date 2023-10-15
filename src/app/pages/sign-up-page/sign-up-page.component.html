@@ -7,7 +7,16 @@
                [innerHTML]="'sign-up.email.required' | translate">
     </mat-error>
     <mat-error *ngIf="form.controls.email.hasError('email')">
-      {{'sign-in.email.email' | translate}}
+      {{'sign-up.email.email' | translate}}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'sign-up.name.label' | translate}}</mat-label>
+    <input formControlName="name" matInput type="text"/>
+
+    <mat-error *ngIf="form.controls.email.hasError('required')"
+               [innerHTML]="'sign-up.name.required' | translate">
     </mat-error>
   </mat-form-field>
 

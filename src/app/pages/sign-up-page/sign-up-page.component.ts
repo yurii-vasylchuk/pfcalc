@@ -30,9 +30,10 @@ export class SignUpPageComponent implements OnInit {
 
   readonly minPasswordLength = 6;
   form = this.fb.group({
-    email: ['', Validators.compose([Validators.email, Validators.required])],
-    password: ['', Validators.compose([Validators.required, Validators.minLength(this.minPasswordLength)])],
-    confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(this.minPasswordLength)])],
+    email: ['', [Validators.email, Validators.required]],
+    name: ['', Validators.required],
+    password: ['', [Validators.required, Validators.minLength(this.minPasswordLength)]],
+    confirmPassword: ['', [Validators.required, Validators.minLength(this.minPasswordLength)]],
   }, {
     validators: fromPfccValidators.fieldsMatches('password', 'confirmPassword'),
   });
@@ -59,6 +60,7 @@ export class SignUpPageComponent implements OnInit {
   signUp() {
     const password = this.form.value.password as string;
     const email = this.form.value.email as string;
-    this.store.dispatch(new AuthSignUpAction(email, password));
+    const name = this.form.value.name as string;
+    this.store.dispatch(new AuthSignUpAction(email, name, password));
   }
 }

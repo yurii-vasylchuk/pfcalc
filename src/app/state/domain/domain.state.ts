@@ -17,7 +17,7 @@ import {
   FoodUpdatedEvent,
   ICookADishFormModel,
   IDomainState,
-  InitiateCookADishForm,
+  InitiateCookADishForm, LoadDishAction,
   MealAddedSuccessfullyEvent,
   MealAddingFailedEvent,
   MealRemovedSuccessfullyEvent,
@@ -252,7 +252,7 @@ export class DomainState {
   @Action(CreateDishAction)
   handleCreateDishAction(ctx: StateContext<IDomainState>, action: CreateDishAction) {
     return this.service.addDish(action.dish).pipe(
-      map(rsp => new DishCreatedEvent(rsp.dish)),
+      map(rsp => new DishCreatedEvent(rsp)),
       catchError(err => of(new DishCreationFailedEvent(err.message))),
       map(ctx.dispatch)
     )
@@ -276,7 +276,7 @@ export class DomainState {
   @Action(AddMealAction)
   handleAddMealAction(ctx: StateContext<IDomainState>, action: AddMealAction) {
     return this.service.addMeal(action.meal).pipe(
-      map(rsp => new MealAddedSuccessfullyEvent(rsp.meal)),
+      map(rsp => new MealAddedSuccessfullyEvent(rsp)),
       catchError(err => of(new MealAddingFailedEvent(action.meal, err.message))),
       map(ctx.dispatch)
     );
@@ -411,7 +411,7 @@ export class DomainState {
   @Action(DeleteFoodAction)
   handleDeleteFoodAction(ctx: StateContext<IDomainState>, action: DeleteFoodAction) {
     return this.service.deleteFood(action.id).pipe(
-      map(id => new FoodDeletedEvent(id)),
+      map(() => new FoodDeletedEvent(action.id)),
       catchError(err => of(new DeleteFoodFailedEvent(err.message))),
       map(ctx.dispatch)
     )
@@ -429,5 +429,10 @@ export class DomainState {
   @Action(DeleteFoodFailedEvent)
   handleDeleteFoodFailedEvent(ctx: StateContext<IDomainState>, action: DeleteFoodFailedEvent) {
     console.warn(action.msg);
+  }
+
+  @Action(LoadDishAction)
+  handleLoadDishAction(ctx: StateContext<IDomainState>, action: LoadDishAction) {
+    this.service.loadDish(action.dishId)
   }
 }

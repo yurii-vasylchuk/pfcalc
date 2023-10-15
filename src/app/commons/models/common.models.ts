@@ -2,6 +2,12 @@ export interface IApiError {
   message: string;
 }
 
+export type IApiResponse<T> = ({
+  data: T | null;
+  success: boolean;
+  error: string | null;
+});
+
 export interface IPfcc {
   protein: number | null;
   fat: number | null;

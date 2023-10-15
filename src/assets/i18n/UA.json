@@ -31,6 +31,10 @@
       "required": "Ємаіл є <strong>обовʼязковим</strong>",
       "email": "Невалідний ємаіл"
     },
+    "name": {
+      "label": "Імʼя",
+      "required": "Імʼя є <strong>обовʼязковим</strong>"
+    },
     "password": {
       "label": "Пароль",
       "required": "Пароль є <strong>обовʼязковим</strong>",
