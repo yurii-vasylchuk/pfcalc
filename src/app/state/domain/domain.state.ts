@@ -69,12 +69,12 @@ export class DomainState {
 
   @Selector()
   static ingredientFoods(state: IDomainState): IFood[] {
-    return state.foods.filter(f => f.type === 'ingredient');
+    return state.foods.filter(f => f.type === 'INGREDIENT');
   }
 
   @Selector()
   static recipeFoods(state: IDomainState): IFood[] {
-    return state.foods.filter(f => f.type === 'recipe');
+    return state.foods.filter(f => f.type === 'RECIPE');
   }
 
   @Selector()
@@ -301,14 +301,14 @@ export class DomainState {
   handleInitiateCookADishForm(ctx: StateContext<IDomainState>, action: InitiateCookADishForm) {
     const foods = ctx.getState().foods;
 
-    const recipe = foods.find(f => f.type === 'recipe' && f.id === action.recipeId);
+    const recipe = foods.find(f => f.type === 'RECIPE' && f.id === action.recipeId);
 
     if (recipe == null) {
       console.warn(`Can't find recipe with provided id == ${action.recipeId}`);
       return;
     }
 
-    const formIngredients = (recipe.consistOf || []).map((i, index) => {
+    const formIngredients = (recipe.ingredients || []).map((i, index) => {
       return {
         ingredient: foods.find(f => f.id === i.id),
         ingredientWeight: i.ingredientWeight,
@@ -321,7 +321,7 @@ export class DomainState {
       value: {
         name: `${recipe.name} ${DateTime.now().toFormat("dd.MM")}`,
         ingredients: formIngredients,
-        cookedWeight: recipe.consistOf
+        cookedWeight: recipe.ingredients
           ?.map(i => i.ingredientWeight)
           .reduce((w1, w2) => w1 + w2, 0) || 0
       }

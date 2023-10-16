@@ -77,7 +77,7 @@ export class AddMealComponent {
 
   handleDishSelected(option: IDishOption) {
     this.selectedDish = option;
-    if (option.type === 'recipe') {
+    if (option.type === 'RECIPE') {
       this.selectedDishWeight = option.ingredients?.map(i => i.ingredientWeight).reduce((w1, w2) => w1 + w2, 0) || 0;
     } else {
       this.selectedDishWeight = 100;
@@ -154,18 +154,18 @@ export class AddMealComponent {
 
       this.store.dispatch(new CreateFoodAction({
         name: res.name,
-        type: res.ingredients.length > 0 ? 'recipe' : 'ingredient',
+        type: res.ingredients.length > 0 ? 'RECIPE' : 'INGREDIENT',
         description: res.description || undefined,
         pfcc: res.pfcc,
         isHidden: !!res.isHidden,
-        consistOf: res.ingredients.length > 0 ?
-          res.ingredients.map(i => {
+        ingredients: res.ingredients.length > 0 ?
+                     res.ingredients.map(i => {
             return {
               ...i.ingredient,
               ingredientWeight: i.weight
             } as IIngredient;
           }) :
-          null
+                     null
       }));
     });
   }

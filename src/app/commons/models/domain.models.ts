@@ -18,15 +18,15 @@ export type IIngredient = (IFood & {
 
 export type IFood =
     (IBaseFood & {
-        type: 'ingredient',
-        consistOf: null
+        type: 'INGREDIENT',
+        ingredients: null
     }) |
     (IBaseFood & {
-        type: 'recipe',
-        consistOf: IIngredient[]
+        type: 'RECIPE',
+        ingredients: IIngredient[]
     });
 
-export type FoodType = 'ingredient' | 'recipe';
+export type FoodType = 'INGREDIENT' | 'RECIPE';
 
 export interface IDish {
     id: number;

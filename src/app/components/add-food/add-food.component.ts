@@ -61,7 +61,7 @@ export class AddFoodComponent implements OnDestroy {
       id: [data.id || null],
       name: [data.name || null, [Validators.required]],
       description: [null],
-      isRecipe: [data?.type === 'recipe', Validators.required],
+      isRecipe: [data?.type === 'RECIPE', Validators.required],
       isHidden: [false, Validators.required],
       pfcc: fb.group({
         protein: [0, [Validators.required, Validators.min(0)]],
@@ -134,7 +134,7 @@ export class AddFoodComponent implements OnDestroy {
       },
       name: foodToEdit.name,
       description: foodToEdit.description || null,
-      ingredients: foodToEdit.type === 'recipe' ? foodToEdit.consistOf.map((i, idx) => ({
+      ingredients: foodToEdit.type === 'RECIPE' ? foodToEdit.ingredients.map((i, idx) => ({
         weight: i.ingredientWeight,
         index: idx,
         ingredient: {

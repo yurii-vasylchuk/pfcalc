@@ -169,8 +169,8 @@ export class DashboardPageComponent {
               name: food.name,
               pfcc: food.pfcc,
               type: food.type,
-              ingredients: food.type !== 'recipe' ? null : [
-                ...food.consistOf
+              ingredients: food.type !== 'RECIPE' ? null : [
+                ...food.ingredients
               ]
             };
           }),

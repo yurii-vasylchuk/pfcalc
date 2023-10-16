@@ -10,7 +10,7 @@
 <ng-template #foodListTemplate let-foods>
   <div class="content">
     <button mat-stroked-button
-            (click)="addFoodClick('ingredient')"
+            (click)="addFoodClick('INGREDIENT')"
             class="content__add-btn"
             color="primary">
       {{'foods-management.add-ingredient-caption' | translate}}
@@ -45,7 +45,7 @@
       </mat-list-item>
     </mat-list>
     <button mat-stroked-button
-            (click)="addFoodClick('ingredient')"
+            (click)="addFoodClick('INGREDIENT')"
             *ngIf="(ingredients | async)!.length > 10"
             class="content__add-btn"
             color="primary">

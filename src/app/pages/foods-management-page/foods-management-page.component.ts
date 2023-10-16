@@ -61,18 +61,18 @@ export class FoodsManagementPageComponent {
 
       this.store.dispatch(new CreateFoodAction({
         name: res.name,
-        type: res.ingredients.length > 0 ? 'recipe' : 'ingredient',
+        type: res.ingredients.length > 0 ? 'RECIPE' : 'INGREDIENT',
         description: res.description || undefined,
         pfcc: res.pfcc,
         isHidden: !!res.isHidden,
-        consistOf: res.ingredients.length > 0 ?
-          res.ingredients.map(i => {
+        ingredients: res.ingredients.length > 0 ?
+                     res.ingredients.map(i => {
             return {
               ...i.ingredient,
               ingredientWeight: i.weight
             } as IIngredient;
           }) :
-          null
+                     null
       }));
     });
   }
@@ -93,18 +93,18 @@ export class FoodsManagementPageComponent {
       this.store.dispatch(new EditFoodAction({
         id: res.id!,
         name: res.name!,
-        type: res.ingredients.length > 0 ? 'recipe' : 'ingredient',
+        type: res.ingredients.length > 0 ? 'RECIPE' : 'INGREDIENT',
         description: res.description || undefined,
         pfcc: res.pfcc,
         isHidden: res.isHidden,
-        consistOf: res.ingredients.length > 0 ?
-          res.ingredients.map(i => {
+        ingredients: res.ingredients.length > 0 ?
+                     res.ingredients.map(i => {
             return {
               ...i.ingredient,
               ingredientWeight: i.weight
             } as IIngredient;
           }) :
-          null
+                     null
       }));
     })
   }
