@@ -84,6 +84,12 @@ export class AddMealComponent {
     }
   }
 
+  handleDishUnselected(option: IBaseDishOption) {
+    if (option && this.selectedDish?.id === option.id) {
+      this.selectedDish = null;
+    }
+  }
+
   handleDeleteOptionClick(option: IDishOption) {
     if (option.type === 'dish' && option.delete != null) {
       option.delete();
@@ -92,10 +98,6 @@ export class AddMealComponent {
 
   onClose() {
     this.dialogRef.close(null);
-  }
-
-  handleDishUnselected() {
-    this.selectedDish = null;
   }
 
   handleSaveClick() {
@@ -169,6 +171,8 @@ export class AddMealComponent {
       }));
     });
   }
+
+  protected readonly JSON = JSON;
 }
 
 export type DishOptionType = 'dish' | FoodType;

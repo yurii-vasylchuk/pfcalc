@@ -7,17 +7,24 @@ import {
   CreateDishAction,
   CreateFoodAction,
   CreateFoodFailedEvent,
-  DeleteDishAction, DeleteFoodAction, DeleteFoodFailedEvent,
+  DeleteDishAction,
+  DeleteFoodAction,
+  DeleteFoodFailedEvent,
   DishCreatedEvent,
   DishCreationFailedEvent,
   DishDeletedEvent,
   DishDeletionFailedEvent,
   EditFoodAction,
-  FoodCreatedEvent, FoodDeletedEvent,
+  FoodCreatedEvent,
+  FoodDeletedEvent,
+  FoodsListLoadedEvent,
+  FoodsListLoadingFailedEvent,
   FoodUpdatedEvent,
   ICookADishFormModel,
   IDomainState,
-  InitiateCookADishForm, LoadDishAction,
+  InitiateCookADishForm,
+  LoadDishAction,
+  LoadFoodsListAction,
   MealAddedSuccessfullyEvent,
   MealAddingFailedEvent,
   MealRemovedSuccessfullyEvent,
@@ -30,8 +37,8 @@ import {
 } from './domain.state-models';
 import {Injectable} from '@angular/core';
 import {ProfileService} from '../../service/profile.service';
-import {catchError, map, of} from 'rxjs';
-import {IDish, IFood, IMeal, IProfile} from '../../commons/models/domain.models';
+import {catchError, firstValueFrom, map, of} from 'rxjs';
+import {IDish, IFood, IIngredient, IMeal, IProfile} from '../../commons/models/domain.models';
 import {emptyPfcc, IPfcc} from '../../commons/models/common.models';
 import {isOnCurrentWeek, isToday, sumPfccs} from '../../commons/functions';
 import {DateTime} from 'luxon';
@@ -45,20 +52,20 @@ export const DOMAIN_STATE_NAME = 'domain';
   defaults: {
     profile: null,
     dishes: [],
-    foods: [],
+    foods: null,
     meals: [],
     forms: {
       cookADish: {
         model: {
           name: null,
           cookedWeight: 0,
-          ingredients: []
+          ingredients: [],
         },
         dirty: false,
         status: 'PENDING',
-        errors: {}
-      }
-    }
+        errors: {},
+      },
+    },
   },
 })
 @Injectable()
@@ -69,12 +76,12 @@ export class DomainState {
 
   @Selector()
   static ingredientFoods(state: IDomainState): IFood[] {
-    return state.foods.filter(f => f.type === 'INGREDIENT');
+    return state.foods.data.filter(f => f.type === 'INGREDIENT');
   }
 
   @Selector()
   static recipeFoods(state: IDomainState): IFood[] {
-    return state.foods.filter(f => f.type === 'RECIPE');
+    return state.foods.data.filter(f => f.type === 'RECIPE');
   }
 
   @Selector()
@@ -89,6 +96,10 @@ export class DomainState {
 
   @Selector()
   static foods(state: IDomainState) {
+    return state.foods.data;
+  }
+  @Selector()
+  static foodsPage(state: IDomainState) {
     return state.foods;
   }
 
@@ -100,7 +111,7 @@ export class DomainState {
   @Selector()
   static foodsMap(state: IDomainState): Map<number, IFood> {
     const result = new Map<number, IFood>();
-    state.foods.forEach(f => result.set(f.id, f));
+    state.foods.data.forEach(f => result.set(f.id, f));
     return result;
   }
 
@@ -149,7 +160,7 @@ export class DomainState {
 
   static food(id: number) {
     return createSelector([DomainState], (state: IDomainState) => {
-      return state.foods.find(f => f.id === id) || null;
+      return state.foods.data.find(f => f.id === id) || null;
     });
   }
 
@@ -160,7 +171,7 @@ export class DomainState {
         ...action.profile,
       },
       meals: action.profile.meals,
-      dishes: action.profile.dishes
+      dishes: action.profile.dishes,
     });
   }
 
@@ -170,7 +181,7 @@ export class DomainState {
       .pipe(
         map(_ => new DishDeletedEvent(action.dishId)),
         catchError(err => of(new DishDeletionFailedEvent(action.dishId, err.message))),
-        map(ctx.dispatch)
+        map(ctx.dispatch),
       );
   }
 
@@ -183,10 +194,10 @@ export class DomainState {
         } else {
           return {
             ...d,
-            deleted: true
-          }
+            deleted: true,
+          };
         }
-      })
+      }),
     });
   }
 
@@ -254,8 +265,8 @@ export class DomainState {
     return this.service.addDish(action.dish).pipe(
       map(rsp => new DishCreatedEvent(rsp)),
       catchError(err => of(new DishCreationFailedEvent(err.message))),
-      map(ctx.dispatch)
-    )
+      map(ctx.dispatch),
+    );
   }
 
   @Action(DishCreationFailedEvent)
@@ -268,9 +279,9 @@ export class DomainState {
     ctx.patchState({
       dishes: [
         ...ctx.getState().dishes,
-        action.dish
-      ]
-    })
+        action.dish,
+      ],
+    });
   }
 
   @Action(AddMealAction)
@@ -278,7 +289,7 @@ export class DomainState {
     return this.service.addMeal(action.meal).pipe(
       map(rsp => new MealAddedSuccessfullyEvent(rsp)),
       catchError(err => of(new MealAddingFailedEvent(action.meal, err.message))),
-      map(ctx.dispatch)
+      map(ctx.dispatch),
     );
   }
 
@@ -287,8 +298,8 @@ export class DomainState {
     ctx.patchState({
       meals: [
         ...ctx.getState().meals,
-        action.meal
-      ]
+        action.meal,
+      ],
     });
   }
 
@@ -298,23 +309,29 @@ export class DomainState {
   }
 
   @Action(InitiateCookADishForm)
-  handleInitiateCookADishForm(ctx: StateContext<IDomainState>, action: InitiateCookADishForm) {
+  async handleInitiateCookADishForm(ctx: StateContext<IDomainState>, action: InitiateCookADishForm) {
     const foods = ctx.getState().foods;
 
-    const recipe = foods.find(f => f.type === 'RECIPE' && f.id === action.recipeId);
+    const recipe =
+      foods.data.find(f => f.type === 'RECIPE' && f.id === action.recipeId) ??
+      await firstValueFrom(this.service.loadFood(action.recipeId));
 
     if (recipe == null) {
       console.warn(`Can't find recipe with provided id == ${action.recipeId}`);
       return;
     }
 
-    const formIngredients = (recipe.ingredients || []).map((i, index) => {
-      return {
-        ingredient: foods.find(f => f.id === i.id),
+    const formIngredients = [];
+
+    for (let index = 0; index < (recipe.ingredients ?? []).length; index++){
+      const i = (recipe.ingredients ?? [])[index];
+      formIngredients.push({
+        ingredient: foods.data.find(f => f.id === i.id) ??
+          await firstValueFrom(this.service.loadFood(i.id)),
         ingredientWeight: i.ingredientWeight,
-        index
-      };
-    });
+        index,
+      });
+    }
 
     ctx.dispatch(new ResetForm({
       path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
@@ -323,8 +340,8 @@ export class DomainState {
         ingredients: formIngredients,
         cookedWeight: recipe.ingredients
           ?.map(i => i.ingredientWeight)
-          .reduce((w1, w2) => w1 + w2, 0) || 0
-      }
+          .reduce((w1, w2) => w1 + w2, 0) || 0,
+      },
     }));
   }
 
@@ -333,7 +350,7 @@ export class DomainState {
     ctx.dispatch(new UpdateFormValue({
       path: `${DOMAIN_STATE_NAME}.forms.cookADish`,
       propertyPath: `ingredients.${ctx.getState().forms.cookADish?.model?.ingredients?.length || 0}`,
-      value: action.ingredient
+      value: action.ingredient,
     }));
   }
 
@@ -351,31 +368,49 @@ export class DomainState {
       propertyPath: 'ingredients',
       value: [
         ...ingredients?.slice(0, idx),
-        ...ingredients?.slice(idx + 1, ingredients?.length)
-      ]
+        ...ingredients?.slice(idx + 1, ingredients?.length),
+      ],
     }));
+  }
+
+  @Action(LoadFoodsListAction)
+  handleLoadFoodsListAction(ctx: StateContext<IDomainState>, action: LoadFoodsListAction) {
+    return this.service.loadFoodsList(action.page, action.pageSize, action.name, action.type)
+      .pipe(
+        map(foods => new FoodsListLoadedEvent(foods)),
+        catchError(err => of(new FoodsListLoadingFailedEvent(err.message))),
+        map(ctx.dispatch),
+      );
+  }
+
+  @Action(FoodsListLoadedEvent)
+  handleFoodsListLoadedEvent(ctx: StateContext<IDomainState>, action: FoodsListLoadedEvent) {
+    ctx.patchState({
+      foods: action.foods,
+    });
+  }
+
+  @Action(FoodsListLoadingFailedEvent)
+  handleFoodsListLoadingFailedEvent(ctx: StateContext<IDomainState>, action: FoodsListLoadingFailedEvent) {
+    console.warn(action.msg);
   }
 
   @Action(CreateFoodAction)
   handleCreateFoodAction(ctx: StateContext<IDomainState>, action: CreateFoodAction) {
     return this.service.addFood({
       ...action.food,
-      ownedByUser: true
+      ownedByUser: true,
     }).pipe(
       map(food => new FoodCreatedEvent(food)),
       catchError(err => of(new CreateFoodFailedEvent(err.message))),
-      map(ctx.dispatch)
-    )
+      map(ctx.dispatch),
+    );
   }
 
   @Action(FoodCreatedEvent)
   handleFoodCreatedEvent(ctx: StateContext<IDomainState>, action: FoodCreatedEvent) {
-    ctx.patchState({
-      foods: [
-        ...ctx.getState().foods,
-        action.food
-      ]
-    })
+    const {page, pageSize} = ctx.getState().foods;
+    return ctx.dispatch(new LoadFoodsListAction(page, pageSize));
   }
 
   @Action(CreateFoodFailedEvent)
@@ -386,21 +421,24 @@ export class DomainState {
   @Action(EditFoodAction)
   handleEditFoodAction(ctx: StateContext<IDomainState>, action: EditFoodAction) {
     return this.service.updateFood({
-      ...action.food
+      ...action.food,
     }).pipe(
       map(food => new FoodUpdatedEvent(food, action.food.id)),
       catchError(err => of(new UpdateFoodFailedEvent(err.message))),
-      map(ctx.dispatch)
-    )
+      map(ctx.dispatch),
+    );
   }
 
   @Action(FoodUpdatedEvent)
   handleFoodUpdatedEvent(ctx: StateContext<IDomainState>, action: FoodUpdatedEvent) {
     ctx.patchState({
-      foods: [
-        ...ctx.getState().foods.map(f => f.id === action.originalFoodId ? action.newFood : f)
-      ]
-    })
+      foods: {
+        ...ctx.getState().foods,
+        data: [
+          ...ctx.getState().foods?.data?.map(f => f.id === action.originalFoodId ? action.newFood : f),
+        ],
+      },
+    });
   }
 
   @Action(UpdateFoodFailedEvent)
@@ -413,17 +451,14 @@ export class DomainState {
     return this.service.deleteFood(action.id).pipe(
       map(() => new FoodDeletedEvent(action.id)),
       catchError(err => of(new DeleteFoodFailedEvent(err.message))),
-      map(ctx.dispatch)
-    )
+      map(ctx.dispatch),
+    );
   }
 
   @Action(FoodUpdatedEvent)
   handleFoodDeletedEvent(ctx: StateContext<IDomainState>, action: FoodDeletedEvent) {
-    ctx.patchState({
-      foods: [
-        ...ctx.getState().foods.filter(f => f.id !== action.id)
-      ]
-    })
+    const {page, pageSize} = ctx.getState().foods;
+    return ctx.dispatch(new LoadFoodsListAction());
   }
 
   @Action(DeleteFoodFailedEvent)
@@ -433,6 +468,6 @@ export class DomainState {
 
   @Action(LoadDishAction)
   handleLoadDishAction(ctx: StateContext<IDomainState>, action: LoadDishAction) {
-    this.service.loadDish(action.dishId)
+    this.service.loadDish(action.dishId);
   }
 }

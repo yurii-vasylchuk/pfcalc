@@ -8,6 +8,14 @@ export type IApiResponse<T> = ({
   error: string | null;
 });
 
+export interface IPage<T> {
+  data: T[];
+  page: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+}
+
 export interface IPfcc {
   protein: number | null;
   fat: number | null;

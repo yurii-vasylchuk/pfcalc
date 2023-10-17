@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, TrackByFunction} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, TrackByFunction} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {Store} from "@ngxs/store";
@@ -17,7 +17,7 @@ import {
   CookADishAddIngredient,
   CookADishRemoveIngredient,
   ICookADishFormModel,
-  InitiateCookADishForm
+  InitiateCookADishForm,
 } from "../../state/domain/domain.state-models";
 
 
@@ -27,13 +27,13 @@ import {
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule, MatSelectModule, TranslateModule, MatIconModule, NgxsFormPluginModule],
   templateUrl: './cook-a-dish.component.html',
   styleUrls: ['./cook-a-dish.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CookADishComponent {
+export class CookADishComponent implements OnDestroy {
   protected form = this.fb.group({
     name: [null, Validators.required],
     ingredients: this.fb.array([]),
-    cookedWeight: [0, Validators.required]
+    cookedWeight: [0, Validators.required],
   });
   protected $allIngredients: Observable<IFood[]>;
   protected $formData: Observable<ICookADishFormModel | null>;
@@ -44,7 +44,7 @@ export class CookADishComponent {
     index: number
   }> = (idx, i) => `${i.index}`;
 
-  private $destroyed: Observable<void> = new Subject();
+  private $destroyed = new Subject<void>();
 
   constructor(private store: Store,
               private dialogRef: MatDialogRef<CookADishComponent, ICookADishResult | null>,
@@ -58,7 +58,7 @@ export class CookADishComponent {
     this.$formData.pipe(
       takeUntil(this.$destroyed),
       map(fd => fd?.ingredients),
-      skipWhile(i => i == null)
+      skipWhile(i => i == null),
     ).subscribe(ingredients => {
       if (ingredients == null) {
         return;
@@ -71,7 +71,7 @@ export class CookADishComponent {
           this.ingredients.push(this.fb.group({
             ingredient: [ingredients[i].ingredient, Validators.required],
             ingredientWeight: [ingredients[i].ingredientWeight, Validators.required],
-            index: [ingredients[i].index]
+            index: [ingredients[i].index],
           }));
         }
       }
@@ -79,12 +79,17 @@ export class CookADishComponent {
 
     this.$allIngredients = store.select(DomainState.foods);
     this.$usedIngredientsIds = store.select(DomainState.cookADishUsedIngredients).pipe(
-      map(foods => foods.map(f => f.id))
+      map(foods => foods.map(f => f.id)),
     );
 
     if (data.recipeId != null) {
       this.store.dispatch(new InitiateCookADishForm(data.recipeId));
     }
+  }
+
+  ngOnDestroy(): void {
+    this.$destroyed.next();
+    this.$destroyed.complete();
   }
 
   protected get ingredients(): FormArray {
@@ -105,18 +110,18 @@ export class CookADishComponent {
     this.ingredients.push(this.fb.group({
       ingredient: [null, Validators.required],
       ingredientWeight: [100, Validators.required],
-      index: [nextIndex]
+      index: [nextIndex],
     }));
     this.store.dispatch(new CookADishAddIngredient({
       ingredientWeight: 100,
-      index: nextIndex
-    }))
+      index: nextIndex,
+    }));
   }
 
   handleSubmit() {
     this.store.select(DomainState.cookADishForm)
       .pipe(
-        map(form => form.model)
+        map(form => form.model),
       )
       .subscribe(form => {
         if (form == null) {
@@ -128,9 +133,9 @@ export class CookADishComponent {
           ingredients: form.ingredients.map(i => {
             return {
               ...i.ingredient,
-              ingredientWeight: i.ingredientWeight
-            }
-          })
+              ingredientWeight: i.ingredientWeight,
+            };
+          }),
         });
       });
   }
@@ -144,7 +149,7 @@ export class CookADishComponent {
 export interface ICookADishResult {
   name: string;
   ingredients: IIngredient[];
-  cookedWeight: number
+  cookedWeight: number;
 }
 
 export interface ICookADishDialogData {

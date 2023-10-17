@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable, throwError} from 'rxjs';
 import {ISignInResponse, ISignUpResponse, Language} from '../commons/models/auth.models';
-import {IDish, IDishToCreate, IFood, IMeal, IProfile} from '../commons/models/domain.models';
-import {IApiResponse, IPfcc} from '../commons/models/common.models';
+import {FoodType, IDish, IDishToCreate, IFood, IMeal, IProfile} from '../commons/models/domain.models';
+import {IApiResponse, IPage, IPfcc} from '../commons/models/common.models';
 
 @Injectable({
   providedIn: 'root',
@@ -51,7 +51,10 @@ export class ProfileService {
   }
 
   addMeal(meal: IMeal): Observable<IMeal> {
-    return this.http.post<IApiResponse<IMeal>>('/api/meal', meal)
+    return this.http.post<IApiResponse<IMeal>>('/api/meal', {
+      ...meal,
+      eatenOn: meal.eatenOn.toISO({includeOffset: false}),
+    })
       .pipe(map(this.extractResponseData));
   }
 
@@ -70,7 +73,7 @@ export class ProfileService {
   }
 
   addFood(food: Omit<IFood, "id">): Observable<IFood> {
-    return this.http.post<IApiResponse<IFood>>('/api/food/', food)
+    return this.http.post<IApiResponse<IFood>>('/api/food', food)
       .pipe(map(this.extractResponseData));
   }
 
@@ -104,4 +107,33 @@ export class ProfileService {
     this.extractResponseData(rsp);
     return null;
   });
+
+  loadFoodsList(page: number, pageSize: number, name?: string, type?: FoodType): Observable<IPage<IFood>> {
+    let params: any = {
+      page,
+      pageSize,
+    };
+
+    if (name != null && name !== '') {
+      params['name'] = name;
+    }
+
+    if (type != null) {
+      params['type'] = type;
+    }
+
+    return this.http.get<IApiResponse<IPage<IFood>>>(`/api/food`,
+      {
+        params: params,
+      })
+      .pipe(map(this.extractResponseData));
+
+  }
+
+  loadFood(id: number): Observable<IFood> {
+    return this.http.get<IApiResponse<IFood>>(`/api/food/${id}`)
+      .pipe(
+        map(this.extractResponseData),
+      );
+  }
 }

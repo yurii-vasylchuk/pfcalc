@@ -1,12 +1,13 @@
 import {
+  FoodType,
   IDish,
   IDishToCreate,
   IFood,
   IMeal,
   IProfile,
-  IProfileStatistics
+  IProfileStatistics,
 } from '../../commons/models/domain.models';
-import {IPfcc} from '../../commons/models/common.models';
+import {IPage, IPfcc} from '../../commons/models/common.models';
 import {IFormState} from "../form/form.commons";
 
 export interface ICookADishFormModel {
@@ -16,24 +17,50 @@ export interface ICookADishFormModel {
     ingredientWeight: number,
     index: number
   }[];
-  cookedWeight: number
+  cookedWeight: number;
 }
 
 export interface IDomainState {
   profile: IProfile | null;
-  foods: IFood[];
+  foods: IPage<IFood>;
   meals: IMeal[];
   dishes: IDish[];
   stats?: IProfileStatistics;
   forms: {
     cookADish: IFormState<ICookADishFormModel>
-  }
+  };
 }
 
 export class ProfileLoadedEvent {
   static readonly type = '[DOMAIN] Profile loaded';
 
   constructor(public readonly profile: IProfile) {
+  }
+}
+
+export class LoadFoodsListAction {
+  static readonly DEFAULT_PAGE = 0;
+  static readonly DEFAULT_PAGE_SIZE = 10;
+  static readonly type = '[DOMAIN] Load foods list';
+
+  constructor(public readonly page: number = LoadFoodsListAction.DEFAULT_PAGE,
+              public readonly pageSize: number = LoadFoodsListAction.DEFAULT_PAGE_SIZE,
+              public readonly name?: string,
+              public readonly type?: FoodType) {
+  }
+}
+
+export class FoodsListLoadedEvent {
+  static readonly type = '[DOMAIN] Foods list loaded';
+
+  constructor(public readonly foods: IPage<IFood>) {
+  }
+}
+
+export class FoodsListLoadingFailedEvent {
+  static readonly type = '[DOMAIN] Foods list loading failed';
+
+  constructor(public readonly msg: string) {
   }
 }
 
@@ -169,7 +196,7 @@ export class DishCreationFailedEvent {
 export class CreateFoodAction {
   static readonly type = '[DOMAIN] Create food';
 
-  constructor(public readonly food: Omit<IFood, 'id'|'ownedByUser'>) {
+  constructor(public readonly food: Omit<IFood, 'id' | 'ownedByUser'>) {
   }
 }
 

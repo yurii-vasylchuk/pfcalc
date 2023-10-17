@@ -1,6 +1,8 @@
 <div class="heading">
   <h1 class="heading__title">{{'add-meal.title' | translate}}</h1>
-  <button class="heading__close" mat-icon-button (click)="onClose()">
+  <button class="heading__close"
+          mat-icon-button
+          (click)="onClose()">
     <mat-icon>close</mat-icon>
   </button>
 </div>
@@ -15,12 +17,13 @@
   </mat-form-field>
 
   <div class="dishes">
-    <mat-accordion #dishesAccordion displayMode="flat">
+    <mat-accordion #dishesAccordion
+                   displayMode="flat">
       <mat-expansion-panel *ngFor="let option of data.items | async; trackBy: dishOptionTrackBy"
                            hideToggle
                            #dishesOption
                            (afterExpand)="handleDishSelected(option)"
-                           (afterCollapse)="handleDishUnselected()">
+                           (afterCollapse)="handleDishUnselected(option)">
         <mat-expansion-panel-header>
           <div class="dishes-header">
             <div class="dishes-header_title">
@@ -29,9 +32,11 @@
                  class="dishes-header_title-secondary"></p>
             </div>
 
-            <div *ngIf="option.type === 'dish'" class="flex-spacer"></div>
+            <div *ngIf="option.type === 'dish'"
+                 class="flex-spacer"></div>
 
-            <button (click)="handleDeleteOptionClick(option); $event.stopPropagation();" *ngIf="option.type === 'dish'"
+            <button (click)="handleDeleteOptionClick(option); $event.stopPropagation();"
+                    *ngIf="option.type === 'dish'"
                     color="accent"
                     mat-icon-button>
               <mat-icon>delete</mat-icon>
@@ -41,7 +46,8 @@
 
         <ng-template matExpansionPanelContent>
           <ng-container [ngSwitch]="option.type">
-            <div *ngSwitchCase="'dish'" class="dish-option dish-option_dish">
+            <div *ngSwitchCase="'dish'"
+                 class="dish-option dish-option_dish">
               <div class="dish-option__nutrients">
                 <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.protein || 0"
                                      [aim]="(data.dailyAims$ | async)?.protein || null"
@@ -72,7 +78,8 @@
                 <span matSuffix>{{'common.gram-sign' | translate}} &nbsp;</span>
               </mat-form-field>
             </div>
-            <div *ngSwitchCase="'recipe'" class="dish-option dish-option_recipe">
+            <div *ngSwitchCase="'RECIPE'"
+                 class="dish-option dish-option_recipe">
               <div class="dish-option__nutrients">
                 <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.protein || 0"
                                      [aim]="(data.dailyAims$ | async)?.protein || null"
@@ -95,8 +102,11 @@
                                      [addingValue]="Math.ceil((option.pfcc.calories || 0) * (selectedDishWeight * 0.01))"
                 ></pfc-nutrition-gauge>
               </div>
-              <p *ngFor="let ingredient of option.ingredients">{{ingredient.name}}
-                - {{ingredient.ingredientWeight}}{{'common.gram-sign' | translate}}</p>
+
+              <ng-container *ngIf="option.ingredients != null">
+                <p *ngFor="let ingredient of option.ingredients">{{ingredient.name}}
+                  - {{ingredient.ingredientWeight}}{{'common.gram-sign' | translate}}</p>
+              </ng-container>
 
               <mat-form-field class="dish-option__weight-input">
                 <input matInput
@@ -112,7 +122,8 @@
                 {{'add-meal.edit-recipe' | translate}}
               </button>
             </div>
-            <div *ngSwitchCase="'ingredient'" class="dish-option dish-option_raw-food">
+            <div *ngSwitchCase="'INGREDIENT'"
+                 class="dish-option dish-option_raw-food">
               <div class="dish-option__nutrients">
                 <pfc-nutrition-gauge [value]="(data.dailyNutrients$ | async)?.protein || 0"
                                      [aim]="(data.dailyAims$ | async)?.protein || null"
@@ -149,7 +160,8 @@
     </mat-accordion>
     <div class="add-food-btn-container">
       <button mat-button
-              color="primary" (click)="handleAddFoodClick(searchField.value)">
+              color="primary"
+              (click)="handleAddFoodClick(searchField.value)">
         {{'add-meal.create-foot-btn' | translate}}
       </button>
     </div>

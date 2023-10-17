@@ -1,13 +1,13 @@
-<mat-tab-group dynamicHeight="true">
-  <mat-tab label="{{'foods-management.ingredients-tab-label' | translate}}">
-    <ng-container *ngTemplateOutlet="foodListTemplate; context: {$implicit: ingredients}"></ng-container>
+<mat-tab-group dynamicHeight="true" (selectedTabChange)="handleTabSwitched($event)">
+  <mat-tab data-type="INGREDIENT" label="{{'foods-management.ingredients-tab-label' | translate}}">
+    <ng-container *ngTemplateOutlet="foodListTemplate"></ng-container>
   </mat-tab>
-  <mat-tab label="{{'foods-management.recipes-tab-label' | translate}}">
-    <ng-container *ngTemplateOutlet="foodListTemplate; context: {$implicit: recipes}"></ng-container>
+  <mat-tab data-type="RECIPE" label="{{'foods-management.recipes-tab-label' | translate}}">
+    <ng-container *ngTemplateOutlet="foodListTemplate"></ng-container>
   </mat-tab>
 </mat-tab-group>
 
-<ng-template #foodListTemplate let-foods>
+<ng-template #foodListTemplate>
   <div class="content">
     <button mat-stroked-button
             (click)="addFoodClick('INGREDIENT')"
@@ -46,7 +46,7 @@
     </mat-list>
     <button mat-stroked-button
             (click)="addFoodClick('INGREDIENT')"
-            *ngIf="(ingredients | async)!.length > 10"
+            *ngIf="(foods | async)?.length > 10 || false"
             class="content__add-btn"
             color="primary">
       {{'foods-management.add-ingredient-caption' | translate}}

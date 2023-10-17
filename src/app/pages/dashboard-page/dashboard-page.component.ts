@@ -15,7 +15,8 @@ import {
   AddMealAction,
   DeleteDishAction,
   LoadDishAction,
-  RemoveMealAction
+  LoadFoodsListAction,
+  RemoveMealAction,
 } from '../../state/domain/domain.state-models';
 import {
   AddMealComponent,
@@ -91,9 +92,9 @@ export class DashboardPageComponent {
             let dish: IDish = null;
             if (meal.dishId != null) {
               if (loadedDishes.has(meal.dishId)) {
-                dish = loadedDishes.get(meal.dishId)
+                dish = loadedDishes.get(meal.dishId);
               } else {
-                this.store.dispatch(new LoadDishAction(meal.dishId))
+                this.store.dispatch(new LoadDishAction(meal.dishId));
               }
             }
 
@@ -129,6 +130,8 @@ export class DashboardPageComponent {
   }
 
   addMeal() {
+    this.store.dispatch(new LoadFoodsListAction());
+
     const filter$ = new BehaviorSubject<string | null>(null);
 
     const allDishOptions$ = new BehaviorSubject<IDishOption[]>([]);
@@ -169,9 +172,9 @@ export class DashboardPageComponent {
               name: food.name,
               pfcc: food.pfcc,
               type: food.type,
-              ingredients: food.type !== 'RECIPE' ? null : [
-                ...food.ingredients
-              ]
+              ingredients: food.type === 'RECIPE' ?
+                           (food.ingredients != null ? [...food.ingredients] : []) :
+                           null,
             };
           }),
         ];
@@ -211,7 +214,6 @@ export class DashboardPageComponent {
           id: null,
           eatenOn: DateTime.now(),
           pfcc: selectedOption.pfcc,
-          cooked: selectedOption.type === 'dish',
           foodId: selectedOption.foodId,
           dishId: selectedOption.type === 'dish' ? selectedOption.dishId : null,
           weight: selected.weight,

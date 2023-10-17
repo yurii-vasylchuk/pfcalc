@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, TrackByFunction} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, TrackByFunction} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MatTabsModule} from "@angular/material/tabs";
+import {MatTabChangeEvent, MatTabsModule} from "@angular/material/tabs";
 import {TranslateModule} from "@ngx-translate/core";
 import {Store} from "@ngxs/store";
 import {DomainState} from "../../state/domain/domain.state";
@@ -10,11 +10,27 @@ import {FoodType, IFood, IIngredient} from "../../commons/models/domain.models";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
-import {combineLatestWith, map, Observable, startWith} from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatest,
+  debounce,
+  debounceTime,
+  map,
+  Observable,
+  startWith,
+  Subject,
+  takeUntil,
+  tap,
+} from "rxjs";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {AddFoodComponent, AddFoodModalData} from "../../components/add-food/add-food.component";
 import {IAddFoodFormModel} from "../../state/form/add-food-form.state-models";
-import {CreateFoodAction, DeleteFoodAction, EditFoodAction} from "../../state/domain/domain.state-models";
+import {
+  CreateFoodAction,
+  DeleteFoodAction,
+  EditFoodAction,
+  LoadFoodsListAction,
+} from "../../state/domain/domain.state-models";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 
 @Component({
@@ -23,26 +39,40 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
   imports: [CommonModule, MatTabsModule, TranslateModule, MatButtonModule, MatListModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, MatDialogModule],
   templateUrl: './foods-management-page.component.html',
   styleUrls: ['./foods-management-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FoodsManagementPageComponent {
+export class FoodsManagementPageComponent implements OnInit, OnDestroy {
   protected searchControl = new FormControl<string | null>(null);
-  protected ingredients: Observable<IFood[]> = this.store.select(DomainState.ingredientFoods)
-    .pipe(
-      combineLatestWith(this.searchControl.valueChanges.pipe(startWith(null))),
-      map(([foods, search]) => search == null ? foods : foods.filter(food => food.name.toLowerCase().includes(search.toLowerCase())))
-    );
-  protected recipes: Observable<IFood[]> = this.store.select(DomainState.recipeFoods)
-    .pipe(
-      combineLatestWith(this.searchControl.valueChanges.pipe(startWith(null))),
-      map(([foods, search]) => search == null ? foods : foods.filter(food => food.name.toLowerCase().includes(search.toLowerCase())))
-    );
+  protected foods: Observable<IFood[]> = this.store.select(DomainState.foods);
+  protected type = new BehaviorSubject<FoodType>('INGREDIENT');
+
   protected trackFoodById: TrackByFunction<IFood> = (_, item) => {
     return item.id;
   };
 
+  private $destroyed = new Subject<void>();
+
   constructor(private store: Store,
               private dialog: MatDialog) {
+  }
+
+  ngOnInit(): void {
+    combineLatest([
+      this.searchControl.valueChanges.pipe(startWith(null), debounceTime(200)),
+      this.type,
+    ]).pipe(
+      takeUntil(this.$destroyed),
+      map(([name, type]) => new LoadFoodsListAction(
+        LoadFoodsListAction.DEFAULT_PAGE,
+        LoadFoodsListAction.DEFAULT_PAGE_SIZE,
+        name,
+        type)),
+    ).subscribe(action => this.store.dispatch(action));
+  }
+
+  ngOnDestroy(): void {
+    this.$destroyed.next();
+    this.$destroyed.complete();
   }
 
   addFoodClick(type: FoodType) {
@@ -50,13 +80,13 @@ export class FoodsManagementPageComponent {
       panelClass: 'fullscreen-dialog',
       data: {
         type: type,
-        name: this.searchControl.value || undefined
-      }
+        name: this.searchControl.value || undefined,
+      },
     });
 
     dialogRef.afterClosed().subscribe(res => {
       if (res == null || res.name == null) {
-        return
+        return;
       }
 
       this.store.dispatch(new CreateFoodAction({
@@ -67,12 +97,12 @@ export class FoodsManagementPageComponent {
         isHidden: !!res.isHidden,
         ingredients: res.ingredients.length > 0 ?
                      res.ingredients.map(i => {
-            return {
-              ...i.ingredient,
-              ingredientWeight: i.weight
-            } as IIngredient;
-          }) :
-                     null
+                       return {
+                         ...i.ingredient,
+                         ingredientWeight: i.weight,
+                       } as IIngredient;
+                     }) :
+                     null,
       }));
     });
   }
@@ -81,8 +111,8 @@ export class FoodsManagementPageComponent {
     const ref = this.dialog.open<AddFoodComponent, AddFoodModalData, IAddFoodFormModel>(AddFoodComponent, {
       panelClass: 'fullscreen-dialog',
       data: {
-        id: id
-      }
+        id: id,
+      },
     });
 
     ref.afterClosed().subscribe(res => {
@@ -99,14 +129,14 @@ export class FoodsManagementPageComponent {
         isHidden: res.isHidden,
         ingredients: res.ingredients.length > 0 ?
                      res.ingredients.map(i => {
-            return {
-              ...i.ingredient,
-              ingredientWeight: i.weight
-            } as IIngredient;
-          }) :
-                     null
+                       return {
+                         ...i.ingredient,
+                         ingredientWeight: i.weight,
+                       } as IIngredient;
+                     }) :
+                     null,
       }));
-    })
+    });
   }
 
   handleDeleteClick(id: number) {
@@ -114,4 +144,17 @@ export class FoodsManagementPageComponent {
   }
 
   protected readonly JSON = JSON;
+
+  handleTabSwitched(event: MatTabChangeEvent) {
+    switch (event.index) {
+      case 0:
+        this.type.next('INGREDIENT');
+        break;
+      case 1:
+        this.type.next('RECIPE');
+        break;
+      default:
+        console.warn(`Unknown tab id: ${event.index}`);
+    }
+  }
 }
