@@ -1,11 +1,21 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, TrackByFunction} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  TrackByFunction,
+  ViewChildren,
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatTabChangeEvent, MatTabsModule} from "@angular/material/tabs";
 import {TranslateModule} from "@ngx-translate/core";
 import {Store} from "@ngxs/store";
 import {DomainState} from "../../state/domain/domain.state";
 import {MatButtonModule} from "@angular/material/button";
-import {MatListModule} from "@angular/material/list";
+import {MatListItem, MatListModule} from "@angular/material/list";
 import {FoodType, IFood, IIngredient} from "../../commons/models/domain.models";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
@@ -13,8 +23,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {
   BehaviorSubject,
   combineLatest,
-  debounce,
   debounceTime,
+  distinctUntilChanged,
   map,
   Observable,
   startWith,
@@ -30,6 +40,7 @@ import {
   DeleteFoodAction,
   EditFoodAction,
   LoadFoodsListAction,
+  LoadMoreFoodsAction,
 } from "../../state/domain/domain.state-models";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 
@@ -41,10 +52,14 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
   styleUrls: ['./foods-management-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FoodsManagementPageComponent implements OnInit, OnDestroy {
+export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterViewInit {
   protected searchControl = new FormControl<string | null>(null);
   protected foods: Observable<IFood[]> = this.store.select(DomainState.foods);
   protected type = new BehaviorSubject<FoodType>('INGREDIENT');
+  protected moreFoodsAvailable = this.store.select(DomainState.moreFoodsAvailable);
+
+  @ViewChildren(MatListItem, {read: ElementRef})
+  protected items!: QueryList<ElementRef>;
 
   protected trackFoodById: TrackByFunction<IFood> = (_, item) => {
     return item.id;
@@ -58,12 +73,12 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     combineLatest([
-      this.searchControl.valueChanges.pipe(startWith(null), debounceTime(200)),
-      this.type,
+      this.searchControl.valueChanges.pipe(startWith(null), debounceTime(200), distinctUntilChanged()),
+      this.type.pipe(distinctUntilChanged()),
     ]).pipe(
+      tap(console.log),
       takeUntil(this.$destroyed),
       map(([name, type]) => new LoadFoodsListAction(
-        LoadFoodsListAction.DEFAULT_PAGE,
         LoadFoodsListAction.DEFAULT_PAGE_SIZE,
         name,
         type)),
@@ -73,6 +88,10 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.$destroyed.next();
     this.$destroyed.complete();
+  }
+
+  ngAfterViewInit(): void {
+    //TODO: Add observer on last element
   }
 
   addFoodClick(type: FoodType) {
@@ -149,12 +168,18 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy {
     switch (event.index) {
       case 0:
         this.type.next('INGREDIENT');
+        console.log(`tab switched to ${event.index}`);
         break;
       case 1:
         this.type.next('RECIPE');
+        console.log(`tab switched to ${event.index}`);
         break;
       default:
         console.warn(`Unknown tab id: ${event.index}`);
     }
+  }
+
+  handleLoadMoreClicked() {
+    this.store.dispatch(new LoadMoreFoodsAction());
   }
 }

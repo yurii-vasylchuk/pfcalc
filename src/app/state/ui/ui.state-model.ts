@@ -3,8 +3,8 @@ export interface IUiStateModel {
 }
 
 export class ToggleMenuAction {
-   static readonly type = '[UI] Toggle side menu';
+  static readonly type = '[UI] Toggle side menu';
 
-   constructor(public readonly isOpened?: boolean) {
-   }
+  constructor(public readonly isOpened?: boolean) {
+  }
 }

@@ -22,7 +22,16 @@ export interface ICookADishFormModel {
 
 export interface IDomainState {
   profile: IProfile | null;
-  foods: IPage<IFood>;
+  foods: {
+    data: IFood[];
+    page: number;
+    pageSize: number;
+    totalElements: number;
+    totalPages: number;
+
+    name: string;
+    type: FoodType;
+  };
   meals: IMeal[];
   dishes: IDish[];
   stats?: IProfileStatistics;
@@ -39,14 +48,12 @@ export class ProfileLoadedEvent {
 }
 
 export class LoadFoodsListAction {
-  static readonly DEFAULT_PAGE = 0;
   static readonly DEFAULT_PAGE_SIZE = 10;
   static readonly type = '[DOMAIN] Load foods list';
 
-  constructor(public readonly page: number = LoadFoodsListAction.DEFAULT_PAGE,
-              public readonly pageSize: number = LoadFoodsListAction.DEFAULT_PAGE_SIZE,
+  constructor(public readonly pageSize: number = LoadFoodsListAction.DEFAULT_PAGE_SIZE,
               public readonly name?: string,
-              public readonly type?: FoodType) {
+              public readonly foodType?: FoodType) {
   }
 }
 
@@ -59,6 +66,24 @@ export class FoodsListLoadedEvent {
 
 export class FoodsListLoadingFailedEvent {
   static readonly type = '[DOMAIN] Foods list loading failed';
+
+  constructor(public readonly msg: string) {
+  }
+}
+
+export class LoadMoreFoodsAction {
+  static readonly type = '[DOMAIN] Load more foods';
+}
+
+export class MoreFoodsLoadedEvent {
+  static readonly type = '[DOMAIN] More foods loaded';
+
+  constructor(public readonly foods: IPage<IFood>) {
+  }
+}
+
+export class MoreFoodsLoadingFailedEvent {
+  static readonly type = '[DOMAIN] More foods loading failed';
 
   constructor(public readonly msg: string) {
   }

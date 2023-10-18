@@ -25,10 +25,13 @@ import {
   InitiateCookADishForm,
   LoadDishAction,
   LoadFoodsListAction,
+  LoadMoreFoodsAction,
   MealAddedSuccessfullyEvent,
   MealAddingFailedEvent,
   MealRemovedSuccessfullyEvent,
   MealRemovingFailedEvent,
+  MoreFoodsLoadedEvent,
+  MoreFoodsLoadingFailedEvent,
   ProfileConfigurationFailedEvent,
   ProfileConfiguredSuccessfullyEvent,
   ProfileLoadedEvent,
@@ -37,8 +40,8 @@ import {
 } from './domain.state-models';
 import {Injectable} from '@angular/core';
 import {ProfileService} from '../../service/profile.service';
-import {catchError, firstValueFrom, map, of} from 'rxjs';
-import {IDish, IFood, IIngredient, IMeal, IProfile} from '../../commons/models/domain.models';
+import {catchError, firstValueFrom, map, of, tap} from 'rxjs';
+import {IDish, IFood, IMeal, IProfile} from '../../commons/models/domain.models';
 import {emptyPfcc, IPfcc} from '../../commons/models/common.models';
 import {isOnCurrentWeek, isToday, sumPfccs} from '../../commons/functions';
 import {DateTime} from 'luxon';
@@ -85,22 +88,29 @@ export class DomainState {
   }
 
   @Selector()
-  static profile(state: IDomainState) {
+  static profile(state: IDomainState): IProfile {
     return state.profile;
   }
 
   @Selector()
-  static dishes(state: IDomainState) {
+  static dishes(state: IDomainState): IDish[] {
     return state.dishes;
   }
 
   @Selector()
-  static foods(state: IDomainState) {
+  static foods(state: IDomainState): IFood[] {
     return state.foods.data;
   }
+
   @Selector()
   static foodsPage(state: IDomainState) {
     return state.foods;
+  }
+
+  @Selector()
+  static moreFoodsAvailable(state: IDomainState): boolean {
+    const {page, totalPages} = state.foods;
+    return page != null && totalPages != null && page < (totalPages - 1);
   }
 
   @Selector()
@@ -323,7 +333,7 @@ export class DomainState {
 
     const formIngredients = [];
 
-    for (let index = 0; index < (recipe.ingredients ?? []).length; index++){
+    for (let index = 0; index < (recipe.ingredients ?? []).length; index++) {
       const i = (recipe.ingredients ?? [])[index];
       formIngredients.push({
         ingredient: foods.data.find(f => f.id === i.id) ??
@@ -375,8 +385,15 @@ export class DomainState {
 
   @Action(LoadFoodsListAction)
   handleLoadFoodsListAction(ctx: StateContext<IDomainState>, action: LoadFoodsListAction) {
-    return this.service.loadFoodsList(action.page, action.pageSize, action.name, action.type)
+    return this.service.loadFoodsList(0, action.pageSize, action.name, action.foodType)
       .pipe(
+        tap(_ => ctx.patchState({
+          foods: {
+            ...ctx.getState().foods,
+            name: action.name,
+            type: action.foodType,
+          },
+        })),
         map(foods => new FoodsListLoadedEvent(foods)),
         catchError(err => of(new FoodsListLoadingFailedEvent(err.message))),
         map(ctx.dispatch),
@@ -386,12 +403,46 @@ export class DomainState {
   @Action(FoodsListLoadedEvent)
   handleFoodsListLoadedEvent(ctx: StateContext<IDomainState>, action: FoodsListLoadedEvent) {
     ctx.patchState({
-      foods: action.foods,
+      foods: {
+        ...ctx.getState().foods,
+        ...action.foods,
+      },
     });
+
   }
 
   @Action(FoodsListLoadingFailedEvent)
   handleFoodsListLoadingFailedEvent(ctx: StateContext<IDomainState>, action: FoodsListLoadingFailedEvent) {
+    console.warn(action.msg);
+  }
+
+  @Action(LoadMoreFoodsAction)
+  handleLoadMoreFoodsAction(ctx: StateContext<IDomainState>, action: LoadMoreFoodsAction) {
+    const {page, pageSize, name, type} = ctx.getState().foods;
+
+    return this.service.loadFoodsList(page + 1, pageSize, name, type)
+      .pipe(
+        map(foods => new MoreFoodsLoadedEvent(foods)),
+        catchError(err => of(new MoreFoodsLoadingFailedEvent(err.message))),
+        map(ctx.dispatch),
+      );
+  }
+
+  @Action(MoreFoodsLoadedEvent)
+  handleMoreFoodsLoadedEvent(ctx: StateContext<IDomainState>, action: MoreFoodsLoadedEvent) {
+    const prev = ctx.getState().foods;
+    ctx.patchState({
+      foods: {
+        ...prev,
+        ...action.foods,
+        data: [...prev.data, ...action.foods.data],
+      },
+    });
+
+  }
+
+  @Action(MoreFoodsLoadingFailedEvent)
+  handleMoreFoodsLoadingFailedEvent(ctx: StateContext<IDomainState>, action: MoreFoodsLoadingFailedEvent) {
     console.warn(action.msg);
   }
 
@@ -409,8 +460,8 @@ export class DomainState {
 
   @Action(FoodCreatedEvent)
   handleFoodCreatedEvent(ctx: StateContext<IDomainState>, action: FoodCreatedEvent) {
-    const {page, pageSize} = ctx.getState().foods;
-    return ctx.dispatch(new LoadFoodsListAction(page, pageSize));
+    const {pageSize, name, type} = ctx.getState().foods;
+    return ctx.dispatch(new LoadFoodsListAction(pageSize, name, type));
   }
 
   @Action(CreateFoodFailedEvent)
@@ -457,7 +508,6 @@ export class DomainState {
 
   @Action(FoodUpdatedEvent)
   handleFoodDeletedEvent(ctx: StateContext<IDomainState>, action: FoodDeletedEvent) {
-    const {page, pageSize} = ctx.getState().foods;
     return ctx.dispatch(new LoadFoodsListAction());
   }
 
