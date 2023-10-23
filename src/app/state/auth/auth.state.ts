@@ -11,7 +11,7 @@ import {
   IAuthState,
   LanguageChangedEvent,
 } from './auth.state-models';
-import {ProfileService} from '../../service/profile.service';
+import {ApiService} from '../../service/api.service';
 import {catchError, map, of, switchMap, tap} from 'rxjs';
 import {Navigate} from '@ngxs/router-plugin';
 import {ProfileConfiguredSuccessfullyEvent, ProfileLoadedEvent} from '../domain/domain.state-models';
@@ -37,7 +37,7 @@ import {DateTime} from 'luxon';
 })
 @Injectable()
 export class AuthState implements NgxsOnInit {
-  constructor(private profileService: ProfileService,
+  constructor(private api: ApiService,
               private localStoreService: LocalStoreService) {
   }
 
@@ -93,7 +93,7 @@ export class AuthState implements NgxsOnInit {
       return;
     }
 
-    this.profileService.getProfile()
+    this.api.getProfile()
       .pipe(
         tap(profile => {
           ctx.patchState({
@@ -135,7 +135,7 @@ export class AuthState implements NgxsOnInit {
 
   @Action(AuthSignInAction)
   signIn(ctx: StateContext<IAuthState>, action: AuthSignInAction) {
-    return this.profileService.signIn(action.email, action.password)
+    return this.api.signIn(action.email, action.password)
       .pipe(
         map(signInRsp => new AuthSignInSucceededEvent(signInRsp.token)),
         catchError(err => of(new AuthSignInFailedEvent(err.message ?? 'Sign in failed'))),
@@ -152,7 +152,7 @@ export class AuthState implements NgxsOnInit {
 
     this.localStoreService.saveJwtToken(action.token);
 
-    return this.profileService.getProfile()
+    return this.api.getProfile()
       .pipe(
         switchMap(profile => {
           ctx.patchState({
@@ -189,7 +189,7 @@ export class AuthState implements NgxsOnInit {
 
   @Action(AuthSignUpAction)
   signUp(ctx: StateContext<IAuthState>, action: AuthSignUpAction) {
-    return this.profileService.signUp(action.email, action.name, action.password, ctx.getState().language)
+    return this.api.signUp(action.email, action.name, action.password, ctx.getState().language)
       .pipe(
         map(rsp => new AuthSignUpSucceededEvent(rsp.token)),
         catchError(err => of(new AuthSignUpFailedEvent(err.message))),

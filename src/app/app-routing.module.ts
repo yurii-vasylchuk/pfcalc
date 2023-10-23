@@ -4,7 +4,8 @@ import * as fromRoutes from './commons/routes';
 import {
   isAuthenticatedGuardFn,
   isNotAuthenticatedGuardFn,
-  profileConfiguredGuardFn
+  isTestEnvironment,
+  profileConfiguredGuardFn,
 } from "./service/guards";
 
 const routes: Routes = [
@@ -32,6 +33,11 @@ const routes: Routes = [
     path: fromRoutes.foodsManagement,
     loadComponent: () => import('./pages/foods-management-page/foods-management-page.component').then(mod => mod.FoodsManagementPageComponent),
     canActivate: [isAuthenticatedGuardFn, profileConfiguredGuardFn]
+  },
+  {
+    path: 'test',
+    loadComponent: () => import('./pages/test-page/test-page.component').then(mod => mod.TestPageComponent),
+    canMatch: [isTestEnvironment]
   },
   {
     path: '**',

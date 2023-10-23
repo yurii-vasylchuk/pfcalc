@@ -8,7 +8,7 @@ import {IApiResponse, IPage, IPfcc} from '../commons/models/common.models';
 @Injectable({
   providedIn: 'root',
 })
-export class ProfileService {
+export class ApiService {
 
   constructor(private http: HttpClient) {
   }

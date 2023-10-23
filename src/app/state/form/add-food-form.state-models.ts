@@ -41,15 +41,36 @@ export class AddFoodFormStatusChangedEvent {
 }
 
 export class AddFoodPfccRecalculatedEvent {
-  static readonly type = '[DOMAIN] Add food - pfcc recalculated';
+  static readonly type = '[ADD FOOD] Pfcc recalculated';
 
   constructor(public readonly pfcc: IPfcc) {
   }
 }
 
 export class AddFoodIngredientsCleanedUpEvent {
-  static readonly type = '[DOMAIN] Add food - ingredients cleaned up';
+  static readonly type = '[ADD FOOD] Ingredients cleaned up';
 
   constructor() {
+  }
+}
+
+export class LoadEditingFoodAction {
+  static readonly type = '[ADD FOOD] Load editing food';
+
+  constructor(public readonly id: number) {
+  }
+}
+
+export class EditingFoodLoadedEvent {
+  static readonly type = '[ADD FOOD] Editing food loaded';
+
+  constructor(public readonly food: IFood) {
+  }
+}
+
+export class EditingFoodLoadingFailedEvent {
+  static readonly type = '[ADD FOOD] Editing food loading failed';
+
+  constructor(public readonly msg: string) {
   }
 }

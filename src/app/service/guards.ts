@@ -1,11 +1,12 @@
 import {inject} from '@angular/core';
-import {CanActivateFn} from '@angular/router';
+import {CanActivateFn, CanMatchFn} from '@angular/router';
 import {filter, map, Observable, tap} from 'rxjs';
 import {Store} from '@ngxs/store';
 import {AuthState} from '../state/auth/auth.state';
 import {Navigate} from '@ngxs/router-plugin';
 import * as fromRoutes from '../commons/routes';
 import {UnknownBoolean} from '../commons/models/common.models';
+import {environment} from '../../environments/environment';
 
 export const isAuthenticatedGuardFn: CanActivateFn = (): Observable<boolean> => {
   const store = inject(Store);
@@ -20,6 +21,11 @@ export const isAuthenticatedGuardFn: CanActivateFn = (): Observable<boolean> => 
       }),
     );
 }
+
+export const isTestEnvironment: CanMatchFn = (): boolean => {
+    return !environment.production
+}
+
 export const isNotAuthenticatedGuardFn: CanActivateFn = (): Observable<boolean> => {
   const store = inject(Store);
   return store.select(AuthState.isAuthenticated)

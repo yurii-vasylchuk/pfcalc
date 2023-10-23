@@ -39,7 +39,7 @@ import {
   UpdateFoodFailedEvent,
 } from './domain.state-models';
 import {Injectable} from '@angular/core';
-import {ProfileService} from '../../service/profile.service';
+import {ApiService} from '../../service/api.service';
 import {catchError, firstValueFrom, map, of, tap} from 'rxjs';
 import {IDish, IFood, IMeal, IProfile} from '../../commons/models/domain.models';
 import {emptyPfcc, IPfcc} from '../../commons/models/common.models';
@@ -74,7 +74,7 @@ export const DOMAIN_STATE_NAME = 'domain';
 @Injectable()
 export class DomainState {
 
-  constructor(private service: ProfileService) {
+  constructor(private api: ApiService) {
   }
 
   @Selector()
@@ -187,7 +187,7 @@ export class DomainState {
 
   @Action(DeleteDishAction)
   handleDeleteDishAction(ctx: StateContext<IDomainState>, action: DeleteDishAction) {
-    return this.service.deleteDish(action.dishId)
+    return this.api.deleteDish(action.dishId)
       .pipe(
         map(_ => new DishDeletedEvent(action.dishId)),
         catchError(err => of(new DishDeletionFailedEvent(action.dishId, err.message))),
@@ -218,7 +218,7 @@ export class DomainState {
 
   @Action(ConfigureProfileAction)
   configureProfile(ctx: StateContext<IDomainState>, action: ConfigureProfileAction) {
-    return this.service.configureProfile(action.aims)
+    return this.api.configureProfile(action.aims)
       .pipe(
         map(_ => new ProfileConfiguredSuccessfullyEvent(action.aims)),
         catchError(err => of(new ProfileConfigurationFailedEvent(err.message))),
@@ -251,7 +251,7 @@ export class DomainState {
 
   @Action(RemoveMealAction)
   handleRemoveMealAction(ctx: StateContext<IDomainState>, action: RemoveMealAction) {
-    return this.service.removeMeal(action.mealId).pipe(
+    return this.api.removeMeal(action.mealId).pipe(
       map(_ => new MealRemovedSuccessfullyEvent(action.mealId)),
       catchError(err => of(new MealRemovingFailedEvent(action.mealId, err.message))),
       map(ctx.dispatch),
@@ -272,7 +272,7 @@ export class DomainState {
 
   @Action(CreateDishAction)
   handleCreateDishAction(ctx: StateContext<IDomainState>, action: CreateDishAction) {
-    return this.service.addDish(action.dish).pipe(
+    return this.api.addDish(action.dish).pipe(
       map(rsp => new DishCreatedEvent(rsp)),
       catchError(err => of(new DishCreationFailedEvent(err.message))),
       map(ctx.dispatch),
@@ -296,7 +296,7 @@ export class DomainState {
 
   @Action(AddMealAction)
   handleAddMealAction(ctx: StateContext<IDomainState>, action: AddMealAction) {
-    return this.service.addMeal(action.meal).pipe(
+    return this.api.addMeal(action.meal).pipe(
       map(rsp => new MealAddedSuccessfullyEvent(rsp)),
       catchError(err => of(new MealAddingFailedEvent(action.meal, err.message))),
       map(ctx.dispatch),
@@ -324,7 +324,7 @@ export class DomainState {
 
     const recipe =
       foods.data.find(f => f.type === 'RECIPE' && f.id === action.recipeId) ??
-      await firstValueFrom(this.service.loadFood(action.recipeId));
+      await firstValueFrom(this.api.loadFood(action.recipeId));
 
     if (recipe == null) {
       console.warn(`Can't find recipe with provided id == ${action.recipeId}`);
@@ -337,7 +337,7 @@ export class DomainState {
       const i = (recipe.ingredients ?? [])[index];
       formIngredients.push({
         ingredient: foods.data.find(f => f.id === i.id) ??
-          await firstValueFrom(this.service.loadFood(i.id)),
+          await firstValueFrom(this.api.loadFood(i.id)),
         ingredientWeight: i.ingredientWeight,
         index,
       });
@@ -385,7 +385,7 @@ export class DomainState {
 
   @Action(LoadFoodsListAction)
   handleLoadFoodsListAction(ctx: StateContext<IDomainState>, action: LoadFoodsListAction) {
-    return this.service.loadFoodsList(0, action.pageSize, action.name, action.foodType)
+    return this.api.loadFoodsList(0, action.pageSize, action.name, action.foodType)
       .pipe(
         tap(_ => ctx.patchState({
           foods: {
@@ -420,7 +420,7 @@ export class DomainState {
   handleLoadMoreFoodsAction(ctx: StateContext<IDomainState>, action: LoadMoreFoodsAction) {
     const {page, pageSize, name, type} = ctx.getState().foods;
 
-    return this.service.loadFoodsList(page + 1, pageSize, name, type)
+    return this.api.loadFoodsList(page + 1, pageSize, name, type)
       .pipe(
         map(foods => new MoreFoodsLoadedEvent(foods)),
         catchError(err => of(new MoreFoodsLoadingFailedEvent(err.message))),
@@ -448,7 +448,7 @@ export class DomainState {
 
   @Action(CreateFoodAction)
   handleCreateFoodAction(ctx: StateContext<IDomainState>, action: CreateFoodAction) {
-    return this.service.addFood({
+    return this.api.addFood({
       ...action.food,
       ownedByUser: true,
     }).pipe(
@@ -471,7 +471,7 @@ export class DomainState {
 
   @Action(EditFoodAction)
   handleEditFoodAction(ctx: StateContext<IDomainState>, action: EditFoodAction) {
-    return this.service.updateFood({
+    return this.api.updateFood({
       ...action.food,
     }).pipe(
       map(food => new FoodUpdatedEvent(food, action.food.id)),
@@ -499,7 +499,7 @@ export class DomainState {
 
   @Action(DeleteFoodAction)
   handleDeleteFoodAction(ctx: StateContext<IDomainState>, action: DeleteFoodAction) {
-    return this.service.deleteFood(action.id).pipe(
+    return this.api.deleteFood(action.id).pipe(
       map(() => new FoodDeletedEvent(action.id)),
       catchError(err => of(new DeleteFoodFailedEvent(err.message))),
       map(ctx.dispatch),
@@ -518,6 +518,6 @@ export class DomainState {
 
   @Action(LoadDishAction)
   handleLoadDishAction(ctx: StateContext<IDomainState>, action: LoadDishAction) {
-    this.service.loadDish(action.dishId);
+    this.api.loadDish(action.dishId);
   }
 }

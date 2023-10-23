@@ -22,6 +22,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MenuComponent} from "./components/menu/menu.component";
 import {BaseUrlInterceptor} from "./base-url.interceptor";
 import {JwtInterceptor} from "./service/jwt-interceptor";
+import {UiAddFoodState} from './state/ui/ui.add-food.state';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -36,7 +37,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NgxsModule.forRoot([AuthState, DomainState, AddFoodFormState, UiState],
+    NgxsModule.forRoot([AuthState, DomainState, AddFoodFormState, UiState, UiAddFoodState],
       {developmentMode: !environment.production}),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
