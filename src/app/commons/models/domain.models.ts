@@ -7,7 +7,7 @@ interface IBaseFood {
     name: string;
     description?: string;
     pfcc: IPfcc;
-    isHidden: boolean;
+    hidden: boolean;
     ownedByUser: boolean;
     type: FoodType;
 }

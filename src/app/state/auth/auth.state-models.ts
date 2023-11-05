@@ -10,6 +10,7 @@ export interface IAuthState {
   preferredLanguage: Language,
   aims: IPfcc,
   language: Language
+  afterAuthUrl?: string,
 }
 
 export class AuthSignInAction {

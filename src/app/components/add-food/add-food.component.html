@@ -39,7 +39,7 @@
         </mat-slide-toggle>
 
         <mat-slide-toggle class="content__hidden-switcher"
-                          formControlName="isHidden">
+                          formControlName="hidden">
             {{'add-food.hidden-switcher-label' | translate}}
         </mat-slide-toggle>
 
@@ -121,6 +121,8 @@
                     <mat-form-field class="content__ingredient-select">
                         <mat-label>{{'add-food.ingredient-select-label' | translate}}</mat-label>
                         <mat-select [placeholder]="'add-food.ingredient-select-placeholder' | translate"
+                                    #ingredientSelect
+                                    [compareWith]="compareIngredientsFn"
                                     formControlName="ingredient">
                             <mat-option>
                                 <ngx-mat-select-search formControlName="ingredientSearch"/>

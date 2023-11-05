@@ -111,7 +111,7 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
                 type: res.ingredients.length > 0 ? 'RECIPE' : 'INGREDIENT',
                 description: res.description || undefined,
                 pfcc: res.pfcc,
-                isHidden: !!res.isHidden,
+                hidden: !!res.hidden,
                 ingredients: res.ingredients.length > 0 ?
                              res.ingredients.map(i => {
                                  return {
@@ -143,7 +143,7 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
                 type: res.ingredients.length > 0 ? 'RECIPE' : 'INGREDIENT',
                 description: res.description || undefined,
                 pfcc: res.pfcc,
-                isHidden: res.isHidden,
+                hidden: res.hidden,
                 ingredients: res.ingredients.length > 0 ?
                              res.ingredients.map(i => {
                                  return {

@@ -33,6 +33,7 @@ import {DateTime} from 'luxon';
     name: null,
     preferredLanguage: null,
     language: AuthState.DEFAULT_LANGUAGE,
+    afterAuthUrl: null,
   },
 })
 @Injectable()
@@ -164,8 +165,17 @@ export class AuthState implements NgxsOnInit {
             language: ctx.getState().language ?? profile.preferredLanguage,
           });
 
+          let redirectUrl = ctx.getState().afterAuthUrl;
+          if (redirectUrl != null) {
+            ctx.patchState({
+              afterAuthUrl: null,
+            });
+          } else {
+            redirectUrl = fromRoutes.dashboard;
+          }
+
           const navigationEvent = profile.profileConfigured ?
-                                  new Navigate([fromRoutes.dashboard]) :
+                                  new Navigate([redirectUrl]) :
                                   new Navigate([fromRoutes.completeProfile]);
 
           return ctx.dispatch([
@@ -184,6 +194,17 @@ export class AuthState implements NgxsOnInit {
       token: null,
       loggedIn: UnknownBoolean.FALSE,
       profileConfigured: UnknownBoolean.FALSE,
+    });
+  }
+
+  @Action(Navigate)
+  handleNavigate(ctx: StateContext<IAuthState>, action: Navigate) {
+    if (action.path.length > 1 || action.path[0] !== `/${fromRoutes.signIn}`) {
+      return;
+    }
+
+    ctx.patchState({
+      afterAuthUrl: window.location.pathname,
     });
   }
 

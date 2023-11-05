@@ -16,7 +16,7 @@ export interface IAddFoodFormModel {
   id?: number;
   name: string | null;
   description: string | null;
-  isHidden: boolean;
+  hidden: boolean;
   pfcc: IPfcc;
   ingredients: FoodFormIngredient[];
 }

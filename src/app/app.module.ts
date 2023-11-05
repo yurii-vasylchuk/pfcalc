@@ -41,7 +41,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       {developmentMode: !environment.production}),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
-      disabled: environment.production,
+      // disabled: environment.production,
+      disabled: true,
     }),
     NgxsFormPluginModule.forRoot(),
     TranslateModule.forRoot({

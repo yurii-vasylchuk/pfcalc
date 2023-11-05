@@ -17,7 +17,7 @@ const DEFAULTS: IAddFoodFormState = {
     model: {
         name: null,
         description: null,
-        isHidden: false,
+        hidden: false,
         pfcc: {
             protein: 0,
             fat: 0,
