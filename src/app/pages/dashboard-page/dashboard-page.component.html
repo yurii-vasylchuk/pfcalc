@@ -41,7 +41,7 @@
   <div *ngFor="let meal of eatenMeals$ | async; let i=index; trackBy: mealTrackBy"
        [ngClass]="i % 2 === 1 ? 'meals__line_even' : ''" class="meals__line">
     <div class="meals__description">
-      <span class="meals__title">{{getMealName(meal)}} - {{meal.weight}}{{'common.gram-sign' | translate}}</span>
+      <span class="meals__title">{{meal.name}} - {{meal.weight}}{{'common.gram-sign' | translate}}</span>
       <span class="meals__weight">
           {{'common.pfcc-values' | translate:fromFunctions.ceilPfcc(fromFunctions.multiplyPfcc(meal.pfcc, meal.weight / 100))}}
         </span>

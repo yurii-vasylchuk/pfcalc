@@ -103,11 +103,6 @@
                 ></pfc-nutrition-gauge>
               </div>
 
-              <ng-container *ngIf="option.ingredients != null">
-                <p *ngFor="let ingredient of option.ingredients">{{ingredient.name}}
-                  - {{ingredient.ingredientWeight}}{{'common.gram-sign' | translate}}</p>
-              </ng-container>
-
               <mat-form-field class="dish-option__weight-input">
                 <input matInput
                        type="number"

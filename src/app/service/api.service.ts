@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, Observable, throwError} from 'rxjs';
+import {map, Observable, tap, throwError} from 'rxjs';
 import {ISignInResponse, ISignUpResponse, Language} from '../commons/models/auth.models';
 import {FoodType, IDish, IDishToCreate, IFood, IMeal, IProfile} from '../commons/models/domain.models';
 import {IApiResponse, IPage, IPfcc} from '../commons/models/common.models';
+import {DateTime} from 'luxon';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,10 @@ export class ApiService {
 
   getProfile(): Observable<IProfile> {
     return this.http.get<IApiResponse<IProfile>>('/api/user/profile')
-      .pipe(map(this.extractResponseData));
+      .pipe(
+        map(this.extractResponseData),
+        tap(rsp => rsp?.meals?.forEach((meal, idx) => rsp.meals[idx].eatenOn = DateTime.fromISO(meal.eatenOn as unknown as string)))
+      );
   }
 
   signUp(email: string, name: string, password: string, language: Language): Observable<ISignUpResponse> {

@@ -3,25 +3,24 @@ import {NutritionGaugeComponent} from '../../components/nutrition-gauge/nutritio
 import {Store} from '@ngxs/store';
 import {DomainState} from '../../state/domain/domain.state';
 import {IDish, IFood, IMeal, IProfile} from '../../commons/models/domain.models';
-import {BehaviorSubject, combineLatest, combineLatestWith, filter, map, Observable, take} from 'rxjs';
+import {BehaviorSubject, combineLatest, debounceTime, filter, map, Observable, take} from 'rxjs';
 import {AsyncPipe, CommonModule} from '@angular/common';
 import {emptyPfcc, IPfcc} from '../../commons/models/common.models';
 import {DateTime} from 'luxon';
 import {TranslateModule} from '@ngx-translate/core';
 import * as fromFunctions from '../../commons/functions';
-import {ceilPfcc, multiplyPfcc} from '../../commons/functions';
+import {ceilPfcc, isDefined} from '../../commons/functions';
 import {MatIconModule} from '@angular/material/icon';
 import {
   AddMealAction,
   DeleteDishAction,
-  LoadDishAction,
   LoadFoodsListAction,
   RemoveMealAction,
 } from '../../state/domain/domain.state-models';
 import {
   AddMealComponent,
   AddMealDialogData,
-  IDishOption,
+  IMealOption,
   ISelectedDish,
 } from '../../components/add-meal/add-meal.component';
 import {MatListModule} from '@angular/material/list';
@@ -49,7 +48,7 @@ export class DashboardPageComponent {
   dailyAims$: Observable<IPfcc>;
   weeklyAims$: Observable<IPfcc>;
 
-  eatenMeals$: Observable<IExtendedMeal[]>;
+  eatenMeals$: Observable<IMeal[]>;
 
   constructor(private store: Store, private dialog: MatDialog) {
     const weekday = DateTime.now().weekday;
@@ -77,53 +76,19 @@ export class DashboardPageComponent {
 
     this.weeklyNutrients$ = this.store.select(DomainState.weeklyNutrients)
       .pipe(
+        filter(isDefined),
         map(ceilPfcc),
       );
     this.dailyNutrients$ = this.store.select(DomainState.todayNutrients)
       .pipe(
+        filter(isDefined),
         map(ceilPfcc),
       );
 
-    this.eatenMeals$ = this.store.select(DomainState.todayMeals)
-      .pipe(
-        combineLatestWith(this.store.select(DomainState.dishesMap), this.store.select(DomainState.foodsMap)),
-        map(([meals, loadedDishes, loadedFoods]) => {
-          return meals.map(meal => {
-            let dish: IDish = null;
-            if (meal.dishId != null) {
-              if (loadedDishes.has(meal.dishId)) {
-                dish = loadedDishes.get(meal.dishId);
-              } else {
-                this.store.dispatch(new LoadDishAction(meal.dishId));
-              }
-            }
-
-            let food: any;
-            if (meal.dishId != null) {
-              food = dish != null ? loadedFoods.get(dish.foodId) : null;
-            } else {
-              food = loadedFoods.get(meal.foodId);
-            }
-
-            const pfcc = ceilPfcc(meal.pfcc, 1);
-            const extendedMeal: IExtendedMeal = {
-              ...meal,
-              pfcc: {
-                protein: pfcc.protein || 0,
-                fat: pfcc.fat || 0,
-                carbohydrates: pfcc.carbohydrates || 0,
-                calories: pfcc.calories || 0,
-              },
-              dish: dish,
-              food: food,
-            };
-            return extendedMeal;
-          });
-        }),
-      );
+    this.eatenMeals$ = this.store.select(DomainState.todayMeals);
   }
 
-  mealTrackBy = (idx: number, item: IExtendedMeal) => item.id;
+  mealTrackBy = (idx: number, item: IMeal) => item.id;
 
   removeMeal(mealId: number) {
     this.store.dispatch(new RemoveMealAction(mealId));
@@ -134,49 +99,15 @@ export class DashboardPageComponent {
 
     const filter$ = new BehaviorSubject<string | null>(null);
 
-    const allDishOptions$ = new BehaviorSubject<IDishOption[]>([]);
+    const allDishOptions$ = new BehaviorSubject<IMealOption[]>([]);
     combineLatest([
       this.store.select(DomainState.dishes),
-      this.store.select(DomainState.foodsMap),
+      this.store.select(DomainState.foods),
     ]).pipe(
-      map(([dishes, foodsMap]): IDishOption[] => {
+      map(([dishes, foods]): IMealOption[] => {
         return [
-          ...dishes.filter(d => {
-            const foodIsPresent = foodsMap.has(d.foodId);
-            if (!foodIsPresent) {
-              console.error(`Food with id ${d.foodId} is not found; dish: ${d}`);
-            }
-            return foodIsPresent;
-          }).filter(d => !d.deleted)
-            .map(dish => {
-              const food = foodsMap.get(dish.foodId) as IFood;
-              const item: IDishOption = {
-                id: `dish-${dish.id}`,
-                foodId: dish.foodId,
-                dishId: dish.id,
-                name: dish.name,
-                type: 'dish',
-                ingredients: null,
-                pfcc: ceilPfcc(multiplyPfcc(food.pfcc, (dish.cookedWeight / dish.recipeWeight)), 1),
-                delete: () => {
-                  this.store.dispatch(new DeleteDishAction(dish.id));
-                },
-              };
-              return item;
-            }),
-
-          ...Array.from(foodsMap.values()).map(food => {
-            return {
-              id: `food-${food.id}`,
-              foodId: food.id,
-              name: food.name,
-              pfcc: food.pfcc,
-              type: food.type,
-              ingredients: food.type === 'RECIPE' ?
-                           (food.ingredients != null ? [...food.ingredients] : []) :
-                           null,
-            };
-          }),
+          ...this.mealOptionFromDishes(dishes),
+          ...this.mealOptionsFromFoods(foods),
         ];
       }),
     ).subscribe(options => allDishOptions$.next(options));
@@ -188,12 +119,13 @@ export class DashboardPageComponent {
         filter: val => filter$.next(val),
         dailyNutrients$: this.dailyNutrients$,
         dailyAims$: this.dailyAims$,
-        items: combineLatest([allDishOptions$, filter$])
-          .pipe(
-            map(([options, filter]): IDishOption[] => options.filter(o => filter == null || o.name.toLowerCase().includes(filter.toLowerCase()))),
-          ),
+        items: allDishOptions$,
       },
     });
+
+    filter$.pipe(
+      debounceTime(200),
+    ).subscribe(value => this.store.dispatch(new LoadFoodsListAction(20, value)));
 
     combineLatest([
       allDishOptions$,
@@ -204,7 +136,7 @@ export class DashboardPageComponent {
           return null;
         }
 
-        const selectedOption: IDishOption = options.find(o => o.id === selected.id) as IDishOption;
+        const selectedOption: IMealOption = options.find(o => o.id === selected.id) as IMealOption;
 
         if (selectedOption == null) {
           return null;
@@ -230,13 +162,39 @@ export class DashboardPageComponent {
 
   }
 
-  getMealName(meal: IExtendedMeal): string | null {
-    return (meal.dishId != null ? meal.dish?.name : meal.food.name) || null;
+  private mealOptionsFromFoods(foods: IFood[]): IMealOption[] {
+    if (foods == null) {
+      return [];
+    }
+    return foods.map(food => {
+      return {
+        id: `food-${food.id}`,
+        foodId: food.id,
+        name: food.name,
+        pfcc: food.pfcc,
+        type: food.type,
+      };
+    });
+  }
+
+  private mealOptionFromDishes(dishes: IDish[]): IMealOption[] {
+    if (dishes == null) {
+      return [];
+    }
+    return dishes.filter(d => !d.deleted)
+      .map(dish => {
+        const item: IMealOption = {
+          id: `dish-${dish.id}`,
+          foodId: dish.foodId,
+          dishId: dish.id,
+          name: dish.name,
+          type: 'dish',
+          pfcc: ceilPfcc(dish.pfcc, 1),
+          delete: () => {
+            this.store.dispatch(new DeleteDishAction(dish.id));
+          },
+        };
+        return item;
+      });
   }
 }
-
-type IExtendedMeal = IMeal &
-  {
-    food: IFood,
-    dish: IDish | null
-  };

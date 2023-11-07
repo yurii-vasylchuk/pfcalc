@@ -119,21 +119,10 @@ export class DomainState {
   }
 
   @Selector()
-  static foodsMap(state: IDomainState): Map<number, IFood> {
-    const result = new Map<number, IFood>();
-    state.foods.data.forEach(f => result.set(f.id, f));
-    return result;
-  }
-
-  @Selector()
-  static dishesMap(state: IDomainState): Map<number, IDish> {
-    const result = new Map<number, IDish>();
-    state.dishes.forEach(d => result.set(d.id, d));
-    return result;
-  }
-
-  @Selector()
   static todayNutrients(state: IDomainState): IPfcc {
+    if (state.meals == null) {
+      return emptyPfcc;
+    }
     const eaten = state.meals
       .filter(m => isToday(m.eatenOn))
       .map(m => m.pfcc);
@@ -155,6 +144,9 @@ export class DomainState {
 
   @Selector()
   static weeklyNutrients(state: IDomainState): IPfcc {
+    if (state.meals == null) {
+      return emptyPfcc;
+    }
     const eaten = state.meals
       .filter(m => isOnCurrentWeek(m.eatenOn))
       .map(m => m.pfcc);
@@ -164,6 +156,9 @@ export class DomainState {
 
   @Selector()
   static todayMeals(state: IDomainState): IMeal[] {
+    if (state.meals == null) {
+      return [];
+    }
     return state.meals
       .filter(m => isToday(m.eatenOn));
   }
@@ -180,7 +175,7 @@ export class DomainState {
       profile: {
         ...action.profile,
       },
-      meals: action.profile.meals,
+      meals: action.profile.meals.map(meal => {meal.name = 'TEST MEAL NAME'; return meal;}),
       dishes: action.profile.dishes,
     });
   }
@@ -305,10 +300,12 @@ export class DomainState {
 
   @Action(MealAddedSuccessfullyEvent)
   handleMealAddedSuccessfullyEvent(ctx: StateContext<IDomainState>, action: MealAddedSuccessfullyEvent) {
+    const meal = action.meal;
+    meal.eatenOn = DateTime.fromISO(meal.eatenOn as unknown as string);
     ctx.patchState({
       meals: [
         ...ctx.getState().meals,
-        action.meal,
+        meal,
       ],
     });
   }

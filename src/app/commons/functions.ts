@@ -27,14 +27,14 @@ export function isOnCurrentWeek(date: DateTime): boolean {
     .equals((DateTime.now().set(atStartOfWeek)));
 }
 
-const atStartOfDay: DateObjectUnits = {hour: 0, minute: 0, second: 0, millisecond: 0};
-const atStartOfWeek: DateObjectUnits = {hour: 0, minute: 0, second: 0, millisecond: 0, weekday: 1};
+export const atStartOfDay: DateObjectUnits = {hour: 0, minute: 0, second: 0, millisecond: 0};
+export const atStartOfWeek: DateObjectUnits = {hour: 0, minute: 0, second: 0, millisecond: 0, weekday: 1};
 
-function isDefined<T>(value: T | null | undefined): value is T {
+export function isDefined<T>(value: T | null | undefined): value is T {
   return value != null;
 }
 
-function isValueAbsent<T>(value: T | null | undefined): value is null | undefined {
+export function isValueAbsent<T>(value: T | null | undefined): value is null | undefined {
   return !isDefined(value);
 }
 

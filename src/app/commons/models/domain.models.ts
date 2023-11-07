@@ -42,6 +42,7 @@ export interface IDish {
 
 export interface IMeal {
     id: number | null;
+    name: string;
     eatenOn: DateTime;
     weight: number;
     pfcc: IPfcc;
