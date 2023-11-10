@@ -38,6 +38,7 @@ export class CookADishComponent implements OnDestroy {
   protected $allIngredients: Observable<IFood[]>;
   protected $formData: Observable<ICookADishFormModel | null>;
   protected $usedIngredientsIds: Observable<number[]>;
+
   protected trackIngredientByIndexFn: TrackByFunction<{
     ingredient: IFood;
     ingredientWeight: number,

@@ -4,7 +4,7 @@ import {Language} from '../../commons/models/auth.models';
 export interface IAuthState {
   loggedIn: UnknownBoolean,
   profileConfigured: UnknownBoolean,
-  token: string | null,
+  refreshToken: string | null,
   email: string,
   name: string,
   preferredLanguage: Language,
@@ -24,7 +24,7 @@ export class AuthSignInAction {
 export class AuthSignInSucceededEvent {
   static readonly type = '[AUTH] Sign in succeeded';
 
-  constructor(public readonly token: string) {
+  constructor(public readonly refreshToken: string) {
   }
 }
 
@@ -51,7 +51,7 @@ export class AuthSignUpAction {
 export class AuthSignUpSucceededEvent {
   static readonly type = '[AUTH] Sign up succeeded';
 
-  constructor(public readonly token: string) {
+  constructor(public readonly refreshToken: string) {
   }
 }
 
@@ -66,5 +66,23 @@ export class LanguageChangedEvent {
   static readonly type = '[AUTH] Language changed';
 
   constructor(public readonly lang: Language) {
+  }
+}
+
+export class RefreshAuthAction {
+  static readonly type = '[AUTH] Refresh auth action';
+}
+
+export class RefreshAuthSucceededEvent {
+  static readonly type = '[AUTH] Refresh auth succeeded';
+
+  constructor(public readonly refreshToken: string) {
+  }
+}
+
+export class RefreshAuthFailedEvent {
+  static readonly type = '[AUTH] Refresh auth failed';
+
+  constructor(public readonly msg: string) {
   }
 }

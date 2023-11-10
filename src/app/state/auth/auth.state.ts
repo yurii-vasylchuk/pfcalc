@@ -10,6 +10,9 @@ import {
   AuthSignUpSucceededEvent,
   IAuthState,
   LanguageChangedEvent,
+  RefreshAuthAction,
+  RefreshAuthFailedEvent,
+  RefreshAuthSucceededEvent,
 } from './auth.state-models';
 import {ApiService} from '../../service/api.service';
 import {catchError, map, of, switchMap, tap} from 'rxjs';
@@ -19,7 +22,6 @@ import * as fromRoutes from '../../commons/routes';
 import {LocalStoreService} from '../../service/local-store.service';
 import {UnknownBoolean} from '../../commons/models/common.models';
 import {Language} from '../../commons/models/auth.models';
-import {DateTime} from 'luxon';
 
 
 @State<IAuthState>({
@@ -27,7 +29,7 @@ import {DateTime} from 'luxon';
   defaults: {
     profileConfigured: UnknownBoolean.UNKNOWN,
     loggedIn: UnknownBoolean.UNKNOWN,
-    token: null,
+    refreshToken: null,
     aims: null,
     email: null,
     name: null,
@@ -50,8 +52,8 @@ export class AuthState implements NgxsOnInit {
   }
 
   @Selector()
-  static token(state: IAuthState): string | null {
-    return state.token;
+  static refreshToken(state: IAuthState): string | null {
+    return state.refreshToken;
   }
 
   @Selector()
@@ -65,33 +67,11 @@ export class AuthState implements NgxsOnInit {
   }
 
   ngxsOnInit(ctx: StateContext<IAuthState>): void {
-    const token = this.localStoreService.loadJwtToken();
-    if (token == null) {
+    const refreshToken = this.localStoreService.loadRefreshToken();
+    if (refreshToken != null) {
       ctx.patchState({
-        loggedIn: UnknownBoolean.FALSE,
+        refreshToken,
       });
-      return;
-    }
-
-    try {
-      const s = JSON.parse(atob(token.split('.')[1]));
-      if (DateTime.fromSeconds(s.exp) < DateTime.now()) {
-        ctx.patchState({
-          loggedIn: UnknownBoolean.FALSE,
-        });
-        ctx.dispatch(new Navigate([fromRoutes.signIn]));
-        return;
-      }
-      ctx.patchState({
-        token: token,
-        loggedIn: UnknownBoolean.TRUE,
-      });
-    } catch (_) {
-      ctx.patchState({
-        loggedIn: UnknownBoolean.FALSE,
-      });
-      ctx.dispatch(new Navigate([fromRoutes.signIn]));
-      return;
     }
 
     this.api.getProfile()
@@ -99,7 +79,6 @@ export class AuthState implements NgxsOnInit {
         tap(profile => {
           ctx.patchState({
             loggedIn: UnknownBoolean.TRUE,
-            token: token,
             profileConfigured: UnknownBoolean.of(profile.profileConfigured),
             language: ctx.getState().language ?? profile.preferredLanguage,
             preferredLanguage: profile.preferredLanguage,
@@ -115,16 +94,23 @@ export class AuthState implements NgxsOnInit {
           }
         }),
         map(profile => new ProfileLoadedEvent(profile)),
+        catchError(_ => {
+          ctx.patchState({
+            loggedIn: UnknownBoolean.FALSE,
+          });
+
+          return of(new Navigate([fromRoutes.signIn]));
+        }),
       )
       .subscribe(ctx.dispatch);
   }
 
   @Action(AuthLogOutAction)
   handleAuthLogOutAction(ctx: StateContext<IAuthState>, action: AuthLogOutAction) {
-    this.localStoreService.dropJwtToken();
+    this.localStoreService.dropRefreshToken();
 
     ctx.patchState({
-      token: null,
+      refreshToken: null,
       loggedIn: UnknownBoolean.FALSE,
       profileConfigured: UnknownBoolean.UNKNOWN,
       aims: null,
@@ -138,7 +124,7 @@ export class AuthState implements NgxsOnInit {
   signIn(ctx: StateContext<IAuthState>, action: AuthSignInAction) {
     return this.api.signIn(action.email, action.password)
       .pipe(
-        map(signInRsp => new AuthSignInSucceededEvent(signInRsp.token)),
+        map(signInRsp => new AuthSignInSucceededEvent(signInRsp.refreshToken)),
         catchError(err => of(new AuthSignInFailedEvent(err.message ?? 'Sign in failed'))),
         map(ctx.dispatch),
       );
@@ -147,11 +133,11 @@ export class AuthState implements NgxsOnInit {
   @Action(AuthSignInSucceededEvent)
   signInSucceeded(ctx: StateContext<IAuthState>, action: AuthSignInSucceededEvent) {
     ctx.patchState({
-      token: action.token,
+      refreshToken: action.refreshToken,
       loggedIn: UnknownBoolean.TRUE,
     });
 
-    this.localStoreService.saveJwtToken(action.token);
+    this.localStoreService.saveRefreshToken(action.refreshToken);
 
     return this.api.getProfile()
       .pipe(
@@ -191,7 +177,7 @@ export class AuthState implements NgxsOnInit {
     console.warn(action.msg);
 
     ctx.patchState({
-      token: null,
+      refreshToken: null,
       loggedIn: UnknownBoolean.FALSE,
       profileConfigured: UnknownBoolean.FALSE,
     });
@@ -212,7 +198,7 @@ export class AuthState implements NgxsOnInit {
   signUp(ctx: StateContext<IAuthState>, action: AuthSignUpAction) {
     return this.api.signUp(action.email, action.name, action.password, ctx.getState().language)
       .pipe(
-        map(rsp => new AuthSignUpSucceededEvent(rsp.token)),
+        map(rsp => new AuthSignUpSucceededEvent(rsp.refreshToken)),
         catchError(err => of(new AuthSignUpFailedEvent(err.message))),
         map(ctx.dispatch),
       );
@@ -221,12 +207,12 @@ export class AuthState implements NgxsOnInit {
   @Action(AuthSignUpSucceededEvent)
   handleSignUpSuccess(ctx: StateContext<IAuthState>, action: AuthSignUpSucceededEvent) {
     ctx.patchState({
-      token: action.token,
+      refreshToken: action.refreshToken,
       loggedIn: UnknownBoolean.TRUE,
       profileConfigured: UnknownBoolean.FALSE,
     });
 
-    this.localStoreService.saveJwtToken(action.token);
+    this.localStoreService.saveRefreshToken(action.refreshToken);
 
     return ctx.dispatch(new Navigate([`/${fromRoutes.completeProfile}`]));
   }
@@ -236,7 +222,7 @@ export class AuthState implements NgxsOnInit {
     console.warn(action.msg);
 
     ctx.patchState({
-      token: null,
+      refreshToken: null,
       loggedIn: UnknownBoolean.FALSE,
       profileConfigured: UnknownBoolean.FALSE,
     });
@@ -269,4 +255,33 @@ export class AuthState implements NgxsOnInit {
     });
   }
 
+  @Action(RefreshAuthAction)
+  handleRefreshAuthAction(ctx: StateContext<IAuthState>, action: RefreshAuthAction) {
+    return this.api.refreshAuth(ctx.getState().refreshToken)
+      .pipe(
+        map(rsp => new RefreshAuthSucceededEvent(rsp.refreshToken)),
+        catchError(err => of(new RefreshAuthFailedEvent(err.message))),
+        map(ctx.dispatch),
+      );
+  }
+
+  @Action(RefreshAuthSucceededEvent)
+  handleRefreshAuthSucceededEvent(ctx: StateContext<IAuthState>, action: RefreshAuthSucceededEvent) {
+    this.localStoreService.saveRefreshToken(action.refreshToken);
+    ctx.patchState({
+      refreshToken: action.refreshToken,
+      loggedIn: UnknownBoolean.TRUE,
+    });
+  }
+
+  @Action(RefreshAuthFailedEvent)
+  handleRefreshAuthFailedEvent(ctx: StateContext<IAuthState>, action: RefreshAuthFailedEvent) {
+    console.warn(action.msg);
+
+    ctx.patchState({
+      refreshToken: null,
+      loggedIn: UnknownBoolean.FALSE,
+      profileConfigured: UnknownBoolean.FALSE,
+    });
+  }
 }

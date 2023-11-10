@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable, tap, throwError} from 'rxjs';
-import {ISignInResponse, ISignUpResponse, Language} from '../commons/models/auth.models';
+import {IAuthTokensResponse, Language} from '../commons/models/auth.models';
 import {FoodType, IDish, IDishToCreate, IFood, IMeal, IProfile} from '../commons/models/domain.models';
 import {IApiResponse, IPage, IPfcc} from '../commons/models/common.models';
 import {DateTime} from 'luxon';
@@ -14,8 +14,8 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
 
-  signIn(email: string, password: string): Observable<ISignInResponse> {
-    return this.http.post<IApiResponse<ISignInResponse>>('/api/user/login',
+  signIn(email: string, password: string): Observable<IAuthTokensResponse> {
+    return this.http.post<IApiResponse<IAuthTokensResponse>>('/api/user/login',
       {
         email,
         password,
@@ -30,8 +30,8 @@ export class ApiService {
       );
   }
 
-  signUp(email: string, name: string, password: string, language: Language): Observable<ISignUpResponse> {
-    return this.http.post<IApiResponse<ISignUpResponse>>('/api/user/register', {
+  signUp(email: string, name: string, password: string, language: Language): Observable<IAuthTokensResponse> {
+    return this.http.post<IApiResponse<IAuthTokensResponse>>('/api/user/register', {
       email,
       name,
       password,
@@ -63,7 +63,10 @@ export class ApiService {
   }
 
   addDish(dish: IDishToCreate): Observable<IDish> {
-    return this.http.post<IApiResponse<IDish>>('/api/dish', dish)
+    return this.http.post<IApiResponse<IDish>>('/api/dish', {
+      ...dish,
+      cookedOn: dish.cookedOn.toISO({includeOffset: false})
+    })
       .pipe(map(this.extractResponseData));
   }
 
@@ -99,19 +102,6 @@ export class ApiService {
     return this.http.get<IDish>(`/api/dish/${dishId}`);
   }
 
-  private extractResponseData<T>(rsp: IApiResponse<T>): T {
-    if (rsp.success) {
-      return rsp.data;
-    } else {
-      throw new Error(rsp.error);
-    }
-  }
-
-  private extractVoidResponse = map((rsp: IApiResponse<void>) => {
-    this.extractResponseData(rsp);
-    return null;
-  });
-
   loadFoodsList(page: number, pageSize: number, name?: string, type?: FoodType): Observable<IPage<IFood>> {
     let params: any = {
       page,
@@ -140,4 +130,23 @@ export class ApiService {
         map(this.extractResponseData),
       );
   }
+
+  refreshAuth(refreshToken: string): Observable<IAuthTokensResponse> {
+    return this.http.post<IApiResponse<IAuthTokensResponse>>('/api/user/refresh-auth-token', {
+      refreshToken,
+    }).pipe(map(this.extractResponseData));
+  }
+
+  private extractResponseData<T>(rsp: IApiResponse<T>): T {
+    if (rsp.success) {
+      return rsp.data;
+    } else {
+      throw new Error(rsp.error);
+    }
+  }
+
+  private extractVoidResponse = map((rsp: IApiResponse<void>) => {
+    this.extractResponseData(rsp);
+    return null;
+  });
 }

@@ -1,9 +1,5 @@
-export interface ISignInResponse {
-  token: string;
-}
-
-export interface ISignUpResponse {
-  token: string;
+export interface IAuthTokensResponse {
+  refreshToken: string;
 }
 
 export type Language = 'EN' | 'UA';

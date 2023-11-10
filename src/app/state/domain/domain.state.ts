@@ -175,7 +175,8 @@ export class DomainState {
       profile: {
         ...action.profile,
       },
-      meals: action.profile.meals.map(meal => {meal.name = 'TEST MEAL NAME'; return meal;}),
+      //TODO: Remove
+      meals: action.profile.meals,
       dishes: action.profile.dishes,
     });
   }
@@ -319,9 +320,7 @@ export class DomainState {
   async handleInitiateCookADishForm(ctx: StateContext<IDomainState>, action: InitiateCookADishForm) {
     const foods = ctx.getState().foods;
 
-    const recipe =
-      foods.data.find(f => f.type === 'RECIPE' && f.id === action.recipeId) ??
-      await firstValueFrom(this.api.loadFood(action.recipeId));
+    const recipe = await firstValueFrom(this.api.loadFood(action.recipeId));
 
     if (recipe == null) {
       console.warn(`Can't find recipe with provided id == ${action.recipeId}`);

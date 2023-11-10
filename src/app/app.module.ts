@@ -21,7 +21,7 @@ import {UiState} from "./state/ui/ui.state";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MenuComponent} from "./components/menu/menu.component";
 import {BaseUrlInterceptor} from "./base-url.interceptor";
-import {JwtInterceptor} from "./service/jwt-interceptor";
+import {AuthInterceptor} from "./service/auth.interceptor";
 import {UiAddFoodState} from './state/ui/ui.add-food.state';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -69,7 +69,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptor,
+      useClass: AuthInterceptor,
       multi: true,
     },
   ],

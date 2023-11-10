@@ -4,20 +4,20 @@ import {Injectable} from '@angular/core';
   providedIn: 'root',
 })
 export class LocalStoreService {
-  private readonly JWT_KEY = 'jwt';
+  private readonly REFRESH_TOKEN_KEY = 'refresh';
 
   constructor() {
   }
 
-  loadJwtToken(): string | null {
-    return localStorage.getItem(this.JWT_KEY);
+  loadRefreshToken(): string | null {
+    return localStorage.getItem(this.REFRESH_TOKEN_KEY);
   }
 
-  saveJwtToken(token: string) {
-    localStorage.setItem(this.JWT_KEY, token);
+  saveRefreshToken(token: string) {
+    localStorage.setItem(this.REFRESH_TOKEN_KEY, token);
   }
 
-  dropJwtToken() {
-    localStorage.removeItem(this.JWT_KEY);
+  dropRefreshToken() {
+    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
   }
 }
