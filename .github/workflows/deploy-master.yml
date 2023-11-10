@@ -21,7 +21,7 @@ jobs:
       - name: Download dependencies
         run: npm ci
       - name: Build
-        run: npm run build
+        run: npm run build:production
       - name: Deploy to AWS
         run: |
           echo "${{ secrets.AWS_SSH_KEY }}" | tr -d '\r' > key.pem

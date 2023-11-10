@@ -15,9 +15,9 @@ export class BaseUrlInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // @ts-ignore
-    if (request.url.startsWith('/api') && environment['baseUrl'] != null) {
+    if (request.url.startsWith('/api') && environment['apiUrl'] != null) {
       // @ts-ignore
-      return next.handle(request.clone({url: `${environment['baseUrl']}${request.url}`}));
+      return next.handle(request.clone({url: `${environment['apiUrl']}${request.url}`}));
     } else {
       return next.handle(request);
     }

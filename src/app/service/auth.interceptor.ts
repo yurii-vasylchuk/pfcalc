@@ -15,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url.startsWith(`${environment.baseUrl}/api`)) {
+    if (req.url.startsWith(`${environment.apiUrl}/api`)) {
       req = req.clone({withCredentials: true});
     }
 
