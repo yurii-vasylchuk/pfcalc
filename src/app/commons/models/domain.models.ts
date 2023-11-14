@@ -56,16 +56,6 @@ export interface IProfile {
     preferredLanguage: Language;
     aims: IPfcc;
     profileConfigured: boolean;
-    dishes: IDish[];
-    meals: IMeal[];
-}
-
-
-export interface IProfileStatistics {
-    nutrients: {
-        weeklyAverage: IPfcc,
-        monthlyAverage: IPfcc
-    }
 }
 
 export interface IDishToCreate {

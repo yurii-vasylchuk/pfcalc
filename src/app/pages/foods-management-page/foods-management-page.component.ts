@@ -44,138 +44,136 @@ import {
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 
 @Component({
-    selector: 'pfc-foods-management-page',
-    standalone: true,
-    imports: [CommonModule, MatTabsModule, TranslateModule, MatButtonModule, MatListModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, MatDialogModule],
-    templateUrl: './foods-management-page.component.html',
-    styleUrls: ['./foods-management-page.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'pfc-foods-management-page',
+  standalone: true,
+  imports: [CommonModule, MatTabsModule, TranslateModule, MatButtonModule, MatListModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, MatDialogModule],
+  templateUrl: './foods-management-page.component.html',
+  styleUrls: ['./foods-management-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterViewInit {
-    protected searchControl = new FormControl<string | null>(null);
-    protected foods: Observable<IFood[]> = this.store.select(DomainState.foods);
-    protected type = new BehaviorSubject<FoodType>('INGREDIENT');
-    protected moreFoodsAvailable = this.store.select(DomainState.moreFoodsAvailable);
+  protected searchControl = new FormControl<string | null>(null);
+  protected foods: Observable<IFood[]> = this.store.select(DomainState.foods);
+  protected type = new BehaviorSubject<FoodType>('INGREDIENT');
+  protected moreFoodsAvailable = this.store.select(DomainState.moreFoodsAvailable);
 
-    @ViewChildren(MatListItem, {read: ElementRef})
-    protected items!: QueryList<ElementRef>;
+  @ViewChildren(MatListItem, {read: ElementRef})
+  protected items!: QueryList<ElementRef>;
 
-    protected trackFoodById: TrackByFunction<IFood> = (_, item) => {
-        return item.id;
-    };
+  protected trackFoodById: TrackByFunction<IFood> = (_, item) => {
+    return item.id;
+  };
 
-    private $destroyed = new Subject<void>();
+  private $destroyed = new Subject<void>();
 
-    constructor(private store: Store,
-                private dialog: MatDialog) {
+  constructor(private store: Store,
+              private dialog: MatDialog) {
+  }
+
+  ngOnInit(): void {
+    combineLatest([
+      this.searchControl.valueChanges.pipe(startWith(null), debounceTime(200), distinctUntilChanged()),
+      this.type.pipe(distinctUntilChanged()),
+    ]).pipe(
+      takeUntil(this.$destroyed),
+      map(([name, type]) => new LoadFoodsListAction(
+        LoadFoodsListAction.DEFAULT_PAGE_SIZE,
+        name,
+        type)),
+    ).subscribe(action => this.store.dispatch(action));
+  }
+
+  ngOnDestroy(): void {
+    this.$destroyed.next();
+    this.$destroyed.complete();
+  }
+
+  ngAfterViewInit(): void {
+    //TODO: Add observer on last element
+  }
+
+  addFoodClick(type: FoodType) {
+    const dialogRef = this.dialog.open<AddFoodComponent, AddFoodModalData, IAddFoodFormModel>(AddFoodComponent, {
+      panelClass: 'fullscreen-dialog',
+      data: {
+        type: type,
+        name: this.searchControl.value || undefined,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res == null || res.name == null) {
+        return;
+      }
+
+      this.store.dispatch(new CreateFoodAction({
+        name: res.name,
+        type: res.ingredients.length > 0 ? 'RECIPE' : 'INGREDIENT',
+        description: res.description || undefined,
+        pfcc: res.pfcc,
+        hidden: !!res.hidden,
+        ingredients: res.ingredients.length > 0 ?
+                     res.ingredients.map(i => {
+                       return {
+                         ...i.ingredient,
+                         ingredientWeight: i.weight,
+                       } as IIngredient;
+                     }) :
+                     null,
+      }));
+    });
+  }
+
+  handleEditClick(id: number) {
+    const ref = this.dialog.open<AddFoodComponent, AddFoodModalData, IAddFoodFormModel>(AddFoodComponent, {
+      panelClass: 'fullscreen-dialog',
+      data: {
+        id: id,
+      },
+    });
+
+    ref.afterClosed().subscribe(res => {
+      if (res == null) {
+        return;
+      }
+
+      this.store.dispatch(new EditFoodAction({
+        id: res.id!,
+        name: res.name!,
+        type: res.ingredients.length > 0 ? 'RECIPE' : 'INGREDIENT',
+        description: res.description || undefined,
+        pfcc: res.pfcc,
+        hidden: res.hidden,
+        ingredients: res.ingredients.length > 0 ?
+                     res.ingredients.map(i => {
+                       return {
+                         ...i.ingredient,
+                         ingredientWeight: i.weight,
+                       } as IIngredient;
+                     }) :
+                     null,
+      }));
+    });
+  }
+
+  handleDeleteClick(id: number) {
+    this.store.dispatch(new DeleteFoodAction(id));
+  }
+
+  handleTabSwitched(event: MatTabChangeEvent) {
+    switch (event.index) {
+      case 0:
+        this.type.next('INGREDIENT');
+        break;
+      case 1:
+        this.type.next('RECIPE');
+        break;
+      default:
+        console.warn(`Unknown tab id: ${event.index}`);
     }
+  }
 
-    ngOnInit(): void {
-        combineLatest([
-            this.searchControl.valueChanges.pipe(startWith(null), debounceTime(200), distinctUntilChanged()),
-            this.type.pipe(distinctUntilChanged()),
-        ]).pipe(
-            takeUntil(this.$destroyed),
-            map(([name, type]) => new LoadFoodsListAction(
-                LoadFoodsListAction.DEFAULT_PAGE_SIZE,
-                name,
-                type)),
-        ).subscribe(action => this.store.dispatch(action));
-    }
-
-    ngOnDestroy(): void {
-        this.$destroyed.next();
-        this.$destroyed.complete();
-    }
-
-    ngAfterViewInit(): void {
-        //TODO: Add observer on last element
-    }
-
-    addFoodClick(type: FoodType) {
-        const dialogRef = this.dialog.open<AddFoodComponent, AddFoodModalData, IAddFoodFormModel>(AddFoodComponent, {
-            panelClass: 'fullscreen-dialog',
-            data: {
-                type: type,
-                name: this.searchControl.value || undefined,
-            },
-        });
-
-        dialogRef.afterClosed().subscribe(res => {
-            if (res == null || res.name == null) {
-                return;
-            }
-
-            this.store.dispatch(new CreateFoodAction({
-                name: res.name,
-                type: res.ingredients.length > 0 ? 'RECIPE' : 'INGREDIENT',
-                description: res.description || undefined,
-                pfcc: res.pfcc,
-                hidden: !!res.hidden,
-                ingredients: res.ingredients.length > 0 ?
-                             res.ingredients.map(i => {
-                                 return {
-                                     ...i.ingredient,
-                                     ingredientWeight: i.weight,
-                                 } as IIngredient;
-                             }) :
-                             null,
-            }));
-        });
-    }
-
-    handleEditClick(id: number) {
-        const ref = this.dialog.open<AddFoodComponent, AddFoodModalData, IAddFoodFormModel>(AddFoodComponent, {
-            panelClass: 'fullscreen-dialog',
-            data: {
-                id: id,
-            },
-        });
-
-        ref.afterClosed().subscribe(res => {
-            if (res == null) {
-                return;
-            }
-
-            this.store.dispatch(new EditFoodAction({
-                id: res.id!,
-                name: res.name!,
-                type: res.ingredients.length > 0 ? 'RECIPE' : 'INGREDIENT',
-                description: res.description || undefined,
-                pfcc: res.pfcc,
-                hidden: res.hidden,
-                ingredients: res.ingredients.length > 0 ?
-                             res.ingredients.map(i => {
-                                 return {
-                                     ...i.ingredient,
-                                     ingredientWeight: i.weight,
-                                 } as IIngredient;
-                             }) :
-                             null,
-            }));
-        });
-    }
-
-    handleDeleteClick(id: number) {
-        this.store.dispatch(new DeleteFoodAction(id));
-    }
-
-    protected readonly JSON = JSON;
-
-    handleTabSwitched(event: MatTabChangeEvent) {
-        switch (event.index) {
-            case 0:
-                this.type.next('INGREDIENT');
-                break;
-            case 1:
-                this.type.next('RECIPE');
-                break;
-            default:
-                console.warn(`Unknown tab id: ${event.index}`);
-        }
-    }
-
-    handleLoadMoreClicked() {
-        this.store.dispatch(new LoadMoreFoodsAction());
-    }
+  handleLoadMoreClicked() {
+    this.store.dispatch(new LoadMoreFoodsAction());
+  }
 }

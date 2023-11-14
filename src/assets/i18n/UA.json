@@ -107,10 +107,10 @@
     "foods-management": "Продукти і страви"
   },
   "foods-management": {
-    "ingredients-tab-label": "Інгредієнти",
+    "ingredients-tab-label": "Продукти",
     "recipes-tab-label": "Рецепти",
-    "add-ingredient-caption": "Створити інгредієнт",
-    "add-recipe-caption": "Створити рецепт",
+    "add-ingredient-caption": "Додати продукт",
+    "add-recipe-caption": "Додати рецепт",
     "search-placeholder": "Пошук"
   }
 }

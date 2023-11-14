@@ -26,7 +26,6 @@ export class ApiService {
     return this.http.get<IApiResponse<IProfile>>('/api/user/profile')
       .pipe(
         map(this.extractResponseData),
-        tap(rsp => rsp?.meals?.forEach((meal, idx) => rsp.meals[idx].eatenOn = DateTime.fromISO(meal.eatenOn as unknown as string)))
       );
   }
 
@@ -62,10 +61,33 @@ export class ApiService {
       .pipe(map(this.extractResponseData));
   }
 
+  loadMeals(page: number, pageSize: number, from: DateTime, to: DateTime): Observable<IPage<IMeal>> {
+    let params: any = {
+      page, pageSize,
+    };
+
+    if (from != null) {
+      params['from'] = from.toISO({includeOffset: false});
+    }
+
+    if (to != null) {
+      params['to'] = to.toISO({includeOffset: false});
+    }
+
+    return this.http.get<IApiResponse<IPage<IMeal>>>('/api/meal', {
+      params,
+    }).pipe(
+      map(this.extractResponseData),
+      tap(page => {
+        page.data.forEach(meal => meal.eatenOn = DateTime.fromISO(meal.eatenOn as unknown as string));
+      }),
+    );
+  }
+
   addDish(dish: IDishToCreate): Observable<IDish> {
     return this.http.post<IApiResponse<IDish>>('/api/dish', {
       ...dish,
-      cookedOn: dish.cookedOn.toISO({includeOffset: false})
+      cookedOn: dish.cookedOn.toISO({includeOffset: false}),
     })
       .pipe(map(this.extractResponseData));
   }

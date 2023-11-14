@@ -185,7 +185,7 @@ export class AuthState implements NgxsOnInit {
 
   @Action(Navigate)
   handleNavigate(ctx: StateContext<IAuthState>, action: Navigate) {
-    if (action.path.length > 1 || action.path[0] !== `/${fromRoutes.signIn}`) {
+    if (action.path.length > 1 || (action.path[0] !== `/${fromRoutes.signIn}` && action.path[0] !== `/${fromRoutes.signUp}`)) {
       return;
     }
 

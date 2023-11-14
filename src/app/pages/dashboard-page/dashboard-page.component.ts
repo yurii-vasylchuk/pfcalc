@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {NutritionGaugeComponent} from '../../components/nutrition-gauge/nutrition-gauge.component';
 import {Store} from '@ngxs/store';
 import {DomainState} from '../../state/domain/domain.state';
@@ -15,6 +15,7 @@ import {
   AddMealAction,
   DeleteDishAction,
   LoadFoodsListAction,
+  LoadMealsListAction,
   RemoveMealAction,
 } from '../../state/domain/domain.state-models';
 import {
@@ -36,7 +37,7 @@ import {MatLineModule} from "@angular/material/core";
   standalone: true,
   imports: [CommonModule, NutritionGaugeComponent, AsyncPipe, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule, MatLineModule],
 })
-export class DashboardPageComponent {
+export class DashboardPageComponent implements OnInit {
 
   protected readonly fromFunctions = fromFunctions;
 
@@ -51,7 +52,13 @@ export class DashboardPageComponent {
   eatenMeals$: Observable<IMeal[]>;
 
   constructor(private store: Store, private dialog: MatDialog) {
-    const weekday = DateTime.now().weekday;
+  }
+
+  ngOnInit() {
+    const now = DateTime.now();
+    const weekday = now.weekday;
+
+    this.store.dispatch(new LoadMealsListAction(0, 10, now.startOf('week'), now));
 
     this.profile$ = this.store.select(DomainState.profile)
       .pipe(

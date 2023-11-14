@@ -1,4 +1,4 @@
-import {AfterViewInit, Directive, ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Directive, ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {IGaugeCircleConf} from './gauge-component.interfaces';
 
 @Directive({
@@ -22,7 +22,8 @@ export class GaugeCircleDirective implements OnDestroy, OnInit, AfterViewInit {
   private radiusChangedObserver: MutationObserver;
   private maxValue: number = 100;
 
-  constructor(private el: ElementRef<SVGCircleElement>) {
+  constructor(private el: ElementRef<SVGCircleElement>,
+              private cdr: ChangeDetectorRef) {
     this.radiusChangedObserver = new MutationObserver((mutations: MutationRecord[]) => {
       const interestAttrPresent = mutations.some(m => m.type == 'attributes' &&
         m.attributeName != null &&
@@ -86,6 +87,7 @@ export class GaugeCircleDirective implements OnDestroy, OnInit, AfterViewInit {
     this.cy = newCy;
 
     this.recalculate();
+    this.cdr.detectChanges();
   }
 
 }

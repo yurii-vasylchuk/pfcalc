@@ -1,4 +1,4 @@
-import {Action, createSelector, Selector, State, StateContext} from '@ngxs/store';
+import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {
   AddMealAction,
   ConfigureProfileAction,
@@ -25,13 +25,19 @@ import {
   InitiateCookADishForm,
   LoadDishAction,
   LoadFoodsListAction,
+  LoadMealsListAction,
   LoadMoreFoodsAction,
+  LoadMoreMealsAction,
   MealAddedSuccessfullyEvent,
   MealAddingFailedEvent,
   MealRemovedSuccessfullyEvent,
   MealRemovingFailedEvent,
+  MealsListLoadedEvent,
+  MealsListLoadingFailedEvent,
   MoreFoodsLoadedEvent,
   MoreFoodsLoadingFailedEvent,
+  MoreMealsLoadedEvent,
+  MoreMealsLoadingFailedEvent,
   ProfileConfigurationFailedEvent,
   ProfileConfiguredSuccessfullyEvent,
   ProfileLoadedEvent,
@@ -56,7 +62,7 @@ export const DOMAIN_STATE_NAME = 'domain';
     profile: null,
     dishes: [],
     foods: null,
-    meals: [],
+    meals: null,
     forms: {
       cookADish: {
         model: {
@@ -78,16 +84,6 @@ export class DomainState {
   }
 
   @Selector()
-  static ingredientFoods(state: IDomainState): IFood[] {
-    return state.foods.data.filter(f => f.type === 'INGREDIENT');
-  }
-
-  @Selector()
-  static recipeFoods(state: IDomainState): IFood[] {
-    return state.foods.data.filter(f => f.type === 'RECIPE');
-  }
-
-  @Selector()
   static profile(state: IDomainState): IProfile {
     return state.profile;
   }
@@ -103,19 +99,14 @@ export class DomainState {
   }
 
   @Selector()
-  static foodsPage(state: IDomainState) {
-    return state.foods;
-  }
-
-  @Selector()
   static moreFoodsAvailable(state: IDomainState): boolean {
     const {page, totalPages} = state.foods;
     return page != null && totalPages != null && page < (totalPages - 1);
   }
 
   @Selector()
-  static meals(state: IDomainState) {
-    return state.meals;
+  static meals(state: IDomainState): IMeal[] {
+    return state.meals.data;
   }
 
   @Selector()
@@ -123,7 +114,7 @@ export class DomainState {
     if (state.meals == null) {
       return emptyPfcc;
     }
-    const eaten = state.meals
+    const eaten = state.meals.data
       .filter(m => isToday(m.eatenOn))
       .map(m => m.pfcc);
 
@@ -147,7 +138,7 @@ export class DomainState {
     if (state.meals == null) {
       return emptyPfcc;
     }
-    const eaten = state.meals
+    const eaten = state.meals.data
       .filter(m => isOnCurrentWeek(m.eatenOn))
       .map(m => m.pfcc);
 
@@ -159,14 +150,8 @@ export class DomainState {
     if (state.meals == null) {
       return [];
     }
-    return state.meals
+    return state.meals.data
       .filter(m => isToday(m.eatenOn));
-  }
-
-  static food(id: number) {
-    return createSelector([DomainState], (state: IDomainState) => {
-      return state.foods.data.find(f => f.id === id) || null;
-    });
   }
 
   @Action(ProfileLoadedEvent)
@@ -175,9 +160,6 @@ export class DomainState {
       profile: {
         ...action.profile,
       },
-      //TODO: Remove
-      meals: action.profile.meals,
-      dishes: action.profile.dishes,
     });
   }
 
@@ -256,14 +238,73 @@ export class DomainState {
 
   @Action(MealRemovedSuccessfullyEvent)
   handleMealRemovedEvent(ctx: StateContext<IDomainState>, action: MealRemovedSuccessfullyEvent) {
+    const oldMeals = ctx.getState().meals;
     ctx.patchState({
-      meals: ctx.getState().meals.filter(m => m.id !== action.mealId),
+      meals: {
+        ...oldMeals,
+        data: oldMeals.data.filter(m => m.id !== action.mealId),
+      },
     });
   }
 
   @Action(MealRemovingFailedEvent)
   handleMealRemovingFailed(ctx: StateContext<IDomainState>, action: MealRemovingFailedEvent) {
     console.error(`Failed to remove meal, reason: ${action.msg}`);
+  }
+
+  @Action(LoadMealsListAction)
+  handleLoadMealsListAction(ctx: StateContext<IDomainState>, action: LoadMealsListAction) {
+    return this.api.loadMeals(action.page, action.pageSize, action.from, action.to)
+      .pipe(
+        map(res => new MealsListLoadedEvent(res)),
+        catchError(err => of(new MealsListLoadingFailedEvent(err?.message))),
+        map(ctx.dispatch),
+      );
+
+  }
+
+  @Action(MealsListLoadedEvent)
+  handleMealsListLoadedEvent(ctx: StateContext<IDomainState>, action: MealsListLoadedEvent) {
+    ctx.patchState({
+      meals: {
+        ...ctx.getState().meals,
+        ...action.meals,
+      },
+    });
+  }
+
+  @Action(MealsListLoadingFailedEvent)
+  handleMealsListLoadingFailedEvent(ctx: StateContext<IDomainState>, action: MealsListLoadingFailedEvent) {
+    console.error(action.msg);
+  }
+
+  @Action(LoadMoreMealsAction)
+  handleLoadMoreMealsAction(ctx: StateContext<IDomainState>, action: LoadMoreMealsAction) {
+    const {page, pageSize, from, to} = ctx.getState().meals;
+
+    return this.api.loadMeals(page + 1, pageSize, from, to)
+      .pipe(
+        map(page => new MoreMealsLoadedEvent(page)),
+        catchError(err => of(new MoreMealsLoadingFailedEvent(err.message))),
+        map(ctx.dispatch),
+      );
+  }
+
+  @Action(MoreMealsLoadedEvent)
+  handleMoreMealsLoadedEvent(ctx: StateContext<IDomainState>, action: MoreMealsLoadedEvent) {
+    const prev = ctx.getState().meals;
+    ctx.patchState({
+      meals: {
+        ...prev,
+        ...action.meals,
+        data: [...prev.data, ...action.meals.data],
+      },
+    });
+  }
+
+  @Action(MoreMealsLoadingFailedEvent)
+  handleMoreMealsLoadingFailedEvent(ctx: StateContext<IDomainState>, action: MoreMealsLoadingFailedEvent) {
+    console.error(action.msg);
   }
 
   @Action(CreateDishAction)
@@ -303,11 +344,12 @@ export class DomainState {
   handleMealAddedSuccessfullyEvent(ctx: StateContext<IDomainState>, action: MealAddedSuccessfullyEvent) {
     const meal = action.meal;
     meal.eatenOn = DateTime.fromISO(meal.eatenOn as unknown as string);
+    const oldMeals = ctx.getState().meals;
     ctx.patchState({
-      meals: [
-        ...ctx.getState().meals,
-        meal,
-      ],
+      meals: {
+        ...oldMeals,
+        data: [...oldMeals.data, meal],
+      },
     });
   }
 
@@ -504,7 +546,14 @@ export class DomainState {
 
   @Action(FoodDeletedEvent)
   handleFoodDeletedEvent(ctx: StateContext<IDomainState>, action: FoodDeletedEvent) {
-    return ctx.dispatch(new LoadFoodsListAction());
+    const oldFoods = ctx.getState().foods;
+    ctx.patchState({
+      foods: {
+        ...oldFoods,
+        page: oldFoods.page - 1,
+      },
+    });
+    return ctx.dispatch(new LoadMoreFoodsAction());
   }
 
   @Action(DeleteFoodFailedEvent)

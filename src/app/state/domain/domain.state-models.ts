@@ -1,14 +1,7 @@
-import {
-  FoodType,
-  IDish,
-  IDishToCreate,
-  IFood,
-  IMeal,
-  IProfile,
-  IProfileStatistics,
-} from '../../commons/models/domain.models';
+import {FoodType, IDish, IDishToCreate, IFood, IMeal, IProfile} from '../../commons/models/domain.models';
 import {IPage, IPfcc} from '../../commons/models/common.models';
 import {IFormState} from "../form/form.commons";
+import {DateTime} from 'luxon';
 
 export interface ICookADishFormModel {
   name: string | null;
@@ -32,9 +25,17 @@ export interface IDomainState {
     name: string;
     type: FoodType;
   };
-  meals: IMeal[];
+  meals: {
+    data: IMeal[];
+    page: number;
+    pageSize: number;
+    totalElements: number;
+    totalPages: number;
+
+    from: DateTime;
+    to: DateTime;
+  };
   dishes: IDish[];
-  stats?: IProfileStatistics;
   forms: {
     cookADish: IFormState<ICookADishFormModel>
   };
@@ -129,6 +130,51 @@ export class MealRemovingFailedEvent {
 
   constructor(public readonly mealId: number,
               public readonly msg: string) {
+  }
+}
+
+export class LoadMealsListAction {
+  static readonly type = '[DOMAIN] Load meals list';
+
+  constructor(public readonly page: number,
+              public readonly pageSize: number,
+              public readonly from: DateTime,
+              public readonly to: DateTime) {
+  }
+}
+
+export class MealsListLoadedEvent {
+  static readonly type = '[DOMAIN] Meals list loaded';
+
+  constructor(public readonly meals: IPage<IMeal>) {
+  }
+}
+
+export class MealsListLoadingFailedEvent {
+  static readonly type = '[DOMAIN] Meals list loading failed';
+
+  constructor(public readonly msg: string) {
+  }
+}
+
+export class LoadMoreMealsAction {
+  static readonly type = '[DOMAIN] Load more meals';
+
+  constructor() {
+  }
+}
+
+export class MoreMealsLoadedEvent {
+  static readonly type = '[DOMAIN] More meals loaded';
+
+  constructor(public readonly meals: IPage<IMeal>) {
+  }
+}
+
+export class MoreMealsLoadingFailedEvent {
+  static readonly type = '[DOMAIN] More meals loading failed';
+
+  constructor(public readonly msg: string) {
   }
 }
 

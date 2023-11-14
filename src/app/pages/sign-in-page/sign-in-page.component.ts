@@ -6,6 +6,7 @@ import {AuthSignInAction} from '../../state/auth/auth.state-models';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'pfc-sign-in-page',
@@ -16,6 +17,7 @@ import {MatButtonModule} from '@angular/material/button';
     ReactiveFormsModule,
     MatButtonModule,
     TranslateModule,
+    RouterLink,
   ],
   templateUrl: './sign-in-page.component.html',
   styleUrls: ['./sign-in-page.component.scss'],

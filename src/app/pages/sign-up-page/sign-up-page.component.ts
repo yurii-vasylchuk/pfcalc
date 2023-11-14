@@ -1,14 +1,14 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import * as fromPfccValidators from '../../commons/pfcc-validators';
 import {Store} from '@ngxs/store';
 import {AuthSignUpAction} from '../../state/auth/auth.state-models';
-import {map} from 'rxjs';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'pfc-sign-up-page',
@@ -22,10 +22,11 @@ import {MatInputModule} from '@angular/material/input';
     MatButtonModule,
     MatInputModule,
     TranslateModule,
+    RouterLink,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignUpPageComponent implements OnInit {
+export class SignUpPageComponent {
 
 
   readonly minPasswordLength = 6;
@@ -39,22 +40,6 @@ export class SignUpPageComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder, private store: Store) {
-  }
-
-  ngOnInit(): void {
-    this.form.statusChanges
-      .pipe(
-        map(formStatus => {
-          return [
-            formStatus,
-            this.form.errors,
-            this.form.controls.email.errors,
-            this.form.controls.password.errors,
-            this.form.controls.confirmPassword.errors,
-          ];
-        }),
-      )
-      .subscribe(console.log);
   }
 
   signUp() {
