@@ -502,7 +502,7 @@ export class DomainState {
     );
   }
 
-  @Action(FoodUpdatedEvent)
+  @Action(FoodDeletedEvent)
   handleFoodDeletedEvent(ctx: StateContext<IDomainState>, action: FoodDeletedEvent) {
     return ctx.dispatch(new LoadFoodsListAction());
   }

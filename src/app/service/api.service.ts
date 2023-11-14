@@ -84,13 +84,9 @@ export class ApiService {
       .pipe(map(this.extractResponseData));
   }
 
-  /**
-   * Updating the food. A food might be literally updated if it's owned by the user, otherwise a new food will be
-   * created
-   * @param food a food to update
-   */
   updateFood(food: Omit<IFood, 'ownedByUser'>): Observable<IFood> {
-    return throwError(() => Error("Operation is not supported"));
+    return this.http.post<IApiResponse<IFood>>('/api/food', food)
+      .pipe(map(this.extractResponseData));
   }
 
   deleteFood(id: number): Observable<void> {
