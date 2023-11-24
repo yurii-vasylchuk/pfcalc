@@ -9,14 +9,14 @@
     "fat-sign": "ж",
     "carbohydrates-sign": "у",
     "pfcc-sign": "б/ж/у/к",
-    "pfcc-values": "{{protein}}г / {{fat}}г / {{carbohydrates}}г / {{calories}}кКал",
+    "pfcc-values": "{{protein}}г/{{fat}}г/{{carbohydrates}}г/{{calories}}кКал",
     "calories-sign": "ккал"
   },
   "sign-in": {
     "email": {
-      "label": "Ємаіл",
-      "required": "Ємаіл є <strong>обовʼязковим</strong>",
-      "email": "Невалідний ємаіл"
+      "label": "Email",
+      "required": "Email є <strong>обовʼязковим</strong>",
+      "email": "Невалідний Email"
     },
     "password": {
       "label": "Пароль",
@@ -27,9 +27,9 @@
   },
   "sign-up": {
     "email": {
-      "label": "Ємаіл",
-      "required": "Ємаіл є <strong>обовʼязковим</strong>",
-      "email": "Невалідний ємаіл"
+      "label": "Email",
+      "required": "Email є <strong>обовʼязковим</strong>",
+      "email": "Невалідний Email"
     },
     "name": {
       "label": "Імʼя",

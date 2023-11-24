@@ -61,19 +61,40 @@
 
   &__ingredient {
     display: flex;
-    flex-direction: row;
-    gap: 5px;
-    flex-wrap: wrap;
-    align-items: baseline;
+    width: 100%;
+    box-sizing: border-box;
+    flex-direction: column;
+
+    &-edit_row {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      flex-wrap: wrap;
+      align-items: baseline;
+    }
+
+    &-pfcc_row {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      flex-wrap: wrap;
+      align-items: baseline;
+
+      span {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+      }
+    }
+
+    &-select {
+      flex: 2 0 192px;
+    }
+
+    &-weight {
+      flex: 1 0 120px;
+    }
   }
 
-  &__ingredient-select {
-    flex: 2 0 192px;
-  }
-
-  &__ingredient-weight {
-    flex: 1 0 120px;
-  }
 
   &__remove-ingredient-btn {
     flex: 0 0 48px;

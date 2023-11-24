@@ -46,6 +46,9 @@ export class AddFoodComponent implements OnDestroy {
   private static readonly CREATE_TITLE = 'add-food.title-create';
   private static readonly EDIT_TITLE = 'add-food.title-edit';
 
+  protected readonly ceilPfcc = ceilPfcc;
+  protected readonly multiplyPfcc = multiplyPfcc;
+
   @ViewChildren('ingredientSelect', {read: MatSelect})
   protected ingredientsSelectsList: QueryList<MatSelect>;
 
@@ -61,7 +64,7 @@ export class AddFoodComponent implements OnDestroy {
 
   protected trackIngredientByIndexFn: TrackByFunction<{
     ingredient: IFood;
-    ingredientWeight: number,
+    weight: number,
     index: number
   }> = (_, i) => `${i.index}`;
 
@@ -166,7 +169,7 @@ export class AddFoodComponent implements OnDestroy {
 
       if (foodToEdit.type === 'RECIPE') {
         foodToEdit.ingredients.forEach(_ => {
-          this.handleAddIngredientClick()
+          this.handleAddIngredientClick();
         });
 
         this.formGroup.patchValue({
