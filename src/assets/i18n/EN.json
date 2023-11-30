@@ -105,7 +105,7 @@
   "side-menu": {
     "title": "PFCC",
     "dashboard": "Dashboard",
-    "foods-management": "Foods"
+    "foods-management": "Products & Recipes"
   },
   "foods-management": {
     "ingredients-tab-label": "Ingredients",

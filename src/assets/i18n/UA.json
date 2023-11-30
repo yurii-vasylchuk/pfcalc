@@ -105,7 +105,7 @@
   "side-menu": {
     "title": "PFCC",
     "dashboard": "Головна",
-    "foods-management": "Продукти і страви"
+    "foods-management": "Продукти і рецепти"
   },
   "foods-management": {
     "ingredients-tab-label": "Продукти",
