@@ -43,7 +43,9 @@ export class CookADishComponent implements OnDestroy {
     ingredient: IFood;
     ingredientWeight: number,
     index: number
-  }> = (idx, i) => `${i.index}`;
+  }> = (_, i) => `${i.index}`;
+  protected compareIngredientsFn = (ing1: any, ing2: any) => ing1?.id === ing2?.id;
+  protected trackFoodByIdFn: TrackByFunction<IFood> = (_, item) => item?.id;
 
   private $destroyed = new Subject<void>();
 

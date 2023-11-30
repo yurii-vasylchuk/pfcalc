@@ -1,25 +1,36 @@
-<div class="heading" mat-dialog-title>
+<div class="heading"
+     mat-dialog-title>
   <h1 class="heading__title">{{'cook-a-dish.title' | translate}}</h1>
   <div class="flex-spacer"></div>
-  <button class="heading__close" mat-icon-button (click)="onClose()">
+  <button class="heading__close"
+          mat-icon-button
+          (click)="onClose()">
     <mat-icon>close</mat-icon>
   </button>
 </div>
 
-<div class="content" mat-dialog-content>
-  <form [formGroup]="form" [ngxsForm]="formStateName" (ngSubmit)="handleSubmit()" id="cook-a-dish-form">
+<div class="content"
+     mat-dialog-content>
+  <form [formGroup]="form"
+        [ngxsForm]="formStateName"
+        (ngSubmit)="handleSubmit()"
+        id="cook-a-dish-form">
     <mat-form-field>
       <mat-label>{{'cook-a-dish.dish-name-label' | translate}}</mat-label>
-      <input type="text" matInput formControlName="name">
+      <input type="text"
+             matInput
+             formControlName="name">
     </mat-form-field>
 
     <ng-container formArrayName="ingredients">
       <ng-container *ngFor="let _ of ($formData | async)?.ingredients; let i = index; trackBy: trackIngredientByIndexFn">
-        <div [formGroupName]="i" class="content__ingredient-box">
+        <div [formGroupName]="i"
+             class="content__ingredient-box">
           <mat-form-field class="content__ingredient">
             <mat-label>{{'cook-a-dish.ingredient-select-label' | translate}}</mat-label>
-            <mat-select formControlName="ingredient">
-              <mat-option *ngFor="let food of $allIngredients | async;"
+            <mat-select formControlName="ingredient"
+                        [compareWith]="compareIngredientsFn">
+              <mat-option *ngFor="let food of $allIngredients | async; trackBy: trackFoodByIdFn"
                           [value]="food"
                           [disabled]="($usedIngredientsIds | async)!.includes(food.id)">
                 {{food.name}}
@@ -27,9 +38,12 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="content__ingredient-weight">
-            <input type="number" formControlName="ingredientWeight" matInput>
+            <input type="number"
+                   formControlName="ingredientWeight"
+                   matInput>
           </mat-form-field>
-          <input type="hidden" formControlName="index">
+          <input type="hidden"
+                 formControlName="index">
           <div class="content__ingredient-remove">
             <button mat-icon-button
                     color="warn"
@@ -50,7 +64,9 @@
 
     <mat-form-field>
       <mat-label>{{'cook-a-dish.cooked-weight-label' | translate}}</mat-label>
-      <input type="number" matInput formControlName="cookedWeight">
+      <input type="number"
+             matInput
+             formControlName="cookedWeight">
     </mat-form-field>
   </form>
 

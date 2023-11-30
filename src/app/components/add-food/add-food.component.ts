@@ -68,7 +68,7 @@ export class AddFoodComponent implements OnDestroy {
     index: number
   }> = (_, i) => `${i.index}`;
 
-  protected tackFoodByIdFn: TrackByFunction<IFood> = (_, item) => item.id;
+  protected trackFoodByIdFn: TrackByFunction<IFood> = (_, item) => item?.id;
 
   protected compareIngredientsFn = (ing1: any, ing2: any) => ing1?.id === ing2?.id;
 
@@ -254,6 +254,18 @@ export class AddFoodComponent implements OnDestroy {
 
   handleRemoveIngredientClick(idx: number) {
     this.ingredientsFormArray.removeAt(idx);
+  }
+
+  handleNutrientInputFocus(formElementName: string) {
+    if (this.formGroup.get(`pfcc.${formElementName}`).pristine && this.formGroup.get(`pfcc.${formElementName}`).value === 0) {
+      this.formGroup.get(`pfcc.${formElementName}`).setValue(null);
+    }
+  }
+
+  handleNutrientInputClick(event: MouseEvent) {
+    if (event.target instanceof HTMLInputElement) {
+      event.target.select();
+    }
   }
 }
 

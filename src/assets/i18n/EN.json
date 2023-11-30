@@ -96,6 +96,7 @@
     "ingredient-select-label": "Ingredient",
     "ingredient-select-placeholder": "Ex. Cheese",
     "ingredient-weight-label": "Weight",
+    "ingredient-search-placeholder": "Find...",
     "add-ingredient-btn": "Add ingredient",
     "description-input-label": "Description",
     "description-input-placeholder": "Food description, or recipe...",
