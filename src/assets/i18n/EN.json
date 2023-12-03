@@ -112,6 +112,7 @@
     "recipes-tab-label": "Recipes",
     "add-ingredient-caption": "Add ingredient",
     "add-recipe-caption": "Add recipe",
-    "search-placeholder": "Search"
+    "search-placeholder": "Search",
+    "load-more-btn-caption": "Load more"
   }
 }

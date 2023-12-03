@@ -9,7 +9,11 @@ import {LanguageChangedEvent} from "../../state/auth/auth.state-models";
 import {AuthState} from "../../state/auth/auth.state";
 import {take} from "rxjs";
 import {MatButtonModule} from "@angular/material/button";
-import {ToggleMenuAction} from "../../state/ui/ui.state-model";
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+import {UnknownBoolean} from '../../commons/models/common.models';
+import {Emittable, Emitter} from '@ngxs-labs/emitter';
+import {UiState} from '../../state/ui/ui.state';
+
 
 @Component({
   selector: 'pfc-heading',
@@ -17,12 +21,15 @@ import {ToggleMenuAction} from "../../state/ui/ui.state-model";
   imports: [CommonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatButtonModule],
   templateUrl: './heading.component.html',
   styleUrls: ['./heading.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeadingComponent implements AfterViewInit {
   //TODO: Auto-infer
   protected availableLanguages: Language[] = ['UA', 'EN'];
-  protected isAuthenticated = this.store.select(AuthState.isAuthenticated);
+  @SelectSnapshot(AuthState.isAuthenticated)
+  protected isAuthenticated: UnknownBoolean;
+  @Emitter(UiState.toggleSideMenu)
+  protected toggleMenuEmt: Emittable<boolean | void>;
 
   @ViewChild("langSelector")
   private langSelector!: MatSelect;
@@ -43,6 +50,6 @@ export class HeadingComponent implements AfterViewInit {
   }
 
   handleMenuClicked() {
-    this.store.dispatch(new ToggleMenuAction())
+    this.toggleMenuEmt.emit();
   }
 }

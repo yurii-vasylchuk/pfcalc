@@ -112,6 +112,7 @@
     "recipes-tab-label": "Рецепти",
     "add-ingredient-caption": "Додати продукт",
     "add-recipe-caption": "Додати рецепт",
-    "search-placeholder": "Пошук"
+    "search-placeholder": "Пошук",
+    "load-more-btn-caption": "Завантажити ще"
   }
 }

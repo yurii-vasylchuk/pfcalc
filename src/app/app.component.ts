@@ -4,7 +4,9 @@ import {Store} from '@ngxs/store';
 import {AuthState} from './state/auth/auth.state';
 import {filter} from 'rxjs';
 import {UiState} from "./state/ui/ui.state";
-import {ToggleMenuAction} from "./state/ui/ui.state-model";
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+import {Emittable, Emitter} from '@ngxs-labs/emitter';
+
 
 @Component({
   selector: 'pfc-root',
@@ -12,12 +14,16 @@ import {ToggleMenuAction} from "./state/ui/ui.state-model";
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  protected menuOpened = this.store.select(UiState.sideMenuOpened);
+  @SelectSnapshot(UiState.sideMenuOpened)
+  protected menuOpened: boolean;
+
+  @Emitter(UiState.toggleSideMenu)
+  protected toggleMenuEmt: Emittable<boolean>;
 
   constructor(private translateService: TranslateService, private store: Store) {
     store.select(AuthState.language)
       .pipe(
-        filter(lang => lang != null)
+        filter(lang => lang != null),
       )
       .subscribe(lang => translateService.use(lang));
 
@@ -25,6 +31,6 @@ export class AppComponent {
   }
 
   handleMenuClosed() {
-    this.store.dispatch(new ToggleMenuAction(false));
+    this.toggleMenuEmt.emit(false);
   }
 }

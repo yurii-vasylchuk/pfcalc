@@ -87,9 +87,7 @@ export class AuthState implements NgxsOnInit {
             aims: profile.aims,
           });
 
-          if (profile.profileConfigured) {
-            ctx.dispatch(new Navigate([fromRoutes.dashboard]));
-          } else {
+          if (!profile.profileConfigured) {
             ctx.dispatch(new Navigate([fromRoutes.completeProfile]));
           }
         }),

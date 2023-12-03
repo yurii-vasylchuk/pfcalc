@@ -1,21 +1,34 @@
 <mat-tab-group dynamicHeight="true"
                (selectedTabChange)="handleTabSwitched($event)">
   <mat-tab label="{{'foods-management.ingredients-tab-label' | translate}}">
-    <ng-container *ngTemplateOutlet="foodListTemplate"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="foodListTemplate; context: {
+      data: products,
+      moreDataAvailable: moreProductsAvailable,
+      loading: productsLoading}">
+    </ng-container>
   </mat-tab>
   <mat-tab label="{{'foods-management.recipes-tab-label' | translate}}">
-    <ng-container *ngTemplateOutlet="foodListTemplate"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="foodListTemplate; context: {
+       data: recipes,
+       moreDataAvailable: moreRecipesAvailable,
+       loading: recipesLoading}">
+    </ng-container>
   </mat-tab>
 </mat-tab-group>
 
-<ng-template #foodListTemplate>
+<ng-template #foodListTemplate
+             let-data="data"
+             let-loading="loading"
+             let-moreDataAvailable="moreDataAvailable">
   <div class="content">
     <button mat-stroked-button
-            (click)="addFoodClick('INGREDIENT')"
+            (click)="addFoodClick()"
             class="content__add-btn"
             color="primary">
       {{
-      (type | async) === 'INGREDIENT'
+      type === 'INGREDIENT'
         ? ('foods-management.add-ingredient-caption' | translate)
         : ('foods-management.add-recipe-caption' | translate)
       }}
@@ -30,7 +43,7 @@
     </mat-form-field>
 
     <mat-list>
-      <mat-list-item *ngFor="let food of foods | async; trackBy: trackFoodById">
+      <mat-list-item *ngFor="let food of data; trackBy: trackFoodById">
         <span matListItemTitle>{{food.name}}</span>
         <span matListItemLine>{{'common.pfcc-values' | translate:food.pfcc }}</span>
         <div class="content__food-actions"
@@ -49,18 +62,26 @@
         </div>
       </mat-list-item>
     </mat-list>
+
+    <div *ngIf="loading"
+         class="data-loading-bar-container">
+      <mat-progress-bar mode="indeterminate">
+      </mat-progress-bar>
+    </div>
+
     <button mat-stroked-button
-            (click)="addFoodClick('INGREDIENT')"
-            *ngIf="(foods | async)?.length > 10 || false"
+            (click)="addFoodClick()"
+            *ngIf="data?.length > 10 || false"
             class="content__add-btn"
             color="primary">
       {{'foods-management.add-ingredient-caption' | translate}}
     </button>
     <button mat-stroked-button
             (click)="handleLoadMoreClicked()"
-            [disabled]="!(moreFoodsAvailable | async)"
+            [disabled]="!moreDataAvailable || loading"
             class="content__add-btn"
-            color="primary">Load more
+            color="primary">
+      {{'foods-management.load-more-btn-caption' | translate}}
     </button>
   </div>
 </ng-template>

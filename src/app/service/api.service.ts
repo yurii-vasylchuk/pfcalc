@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, Observable, tap, throwError} from 'rxjs';
+import {delay, map, Observable, tap, throwError} from 'rxjs';
 import {IAuthTokensResponse, Language} from '../commons/models/auth.models';
 import {FoodType, IDish, IDishToCreate, IFood, IMeal, IProfile} from '../commons/models/domain.models';
 import {IApiResponse, IPage, IPfcc} from '../commons/models/common.models';
@@ -138,7 +138,10 @@ export class ApiService {
       {
         params: params,
       })
-      .pipe(map(this.extractResponseData));
+      .pipe(
+        delay(3000),
+        map(this.extractResponseData)
+      );
 
   }
 

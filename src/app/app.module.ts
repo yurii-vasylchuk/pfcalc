@@ -20,9 +20,13 @@ import {AddFoodFormState} from "./state/form/add-food-form.state";
 import {UiState} from "./state/ui/ui.state";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MenuComponent} from "./components/menu/menu.component";
-import {BaseUrlInterceptor} from "./base-url.interceptor";
+import {BaseUrlInterceptor} from "./service/base-url.interceptor";
 import {AuthInterceptor} from "./service/auth.interceptor";
 import {UiAddFoodState} from './state/ui/ui.add-food.state';
+import {FoodsManagementState} from './state/foods-management/foods-management.state';
+import {NgxsEmitPluginModule} from '@ngxs-labs/emitter';
+import {NgxsActionsExecutingModule} from '@ngxs-labs/actions-executing';
+import {NgxsSelectSnapshotModule} from '@ngxs-labs/select-snapshot';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -37,14 +41,16 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NgxsModule.forRoot([AuthState, DomainState, AddFoodFormState, UiState, UiAddFoodState],
-      {developmentMode: !environment.production}),
+    NgxsModule.forRoot([AuthState, DomainState, AddFoodFormState, UiState, UiAddFoodState, FoodsManagementState],
+      {developmentMode: environment.ngxs.developmentMode}),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
-      // disabled: environment.production,
-      disabled: true,
+      disabled: !environment.ngxs.logging,
     }),
     NgxsFormPluginModule.forRoot(),
+    NgxsEmitPluginModule.forRoot(),
+    NgxsActionsExecutingModule.forRoot(),
+    NgxsSelectSnapshotModule.forRoot(),
     TranslateModule.forRoot({
       defaultLanguage: 'UA',
       loader: {
@@ -55,7 +61,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
 
     NgxsReduxDevtoolsPluginModule.forRoot({
-      disabled: environment.production,
+      disabled: !environment.ngxs.developmentMode,
     }),
     HeadingComponent,
     MatSidenavModule,

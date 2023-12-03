@@ -1,7 +1,7 @@
 <mat-drawer-container autosize
                       hasBackdrop="true"
                       class="container">
-  <mat-drawer [opened]="(menuOpened | async) || false"
+  <mat-drawer [opened]="menuOpened ?? false"
               (closedStart)="handleMenuClosed()"
               mode="over"
               class="menu-container">

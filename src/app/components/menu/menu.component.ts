@@ -6,7 +6,9 @@ import {TranslateModule} from "@ngx-translate/core";
 import {MatButtonModule} from "@angular/material/button";
 import {Navigate} from "@ngxs/router-plugin";
 import {Store} from "@ngxs/store";
-import {ToggleMenuAction} from "../../state/ui/ui.state-model";
+import {Ui} from '../../state/ui/ui.state-model';
+import {EmitterAction, EmitterService} from '@ngxs-labs/emitter';
+
 
 @Component({
   selector: 'pfc-menu',
@@ -14,7 +16,7 @@ import {ToggleMenuAction} from "../../state/ui/ui.state-model";
   imports: [CommonModule, MatListModule, MatIconModule, TranslateModule, MatButtonModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuComponent {
 
@@ -22,6 +24,6 @@ export class MenuComponent {
   }
 
   handleRouteClick(url: string) {
-    this.store.dispatch([new Navigate([url]), new ToggleMenuAction(false)]);
+    this.store.dispatch([new Navigate([url]), new EmitterAction(false, Ui.TOGGLE_SIDE_MENU)]);
   }
 }

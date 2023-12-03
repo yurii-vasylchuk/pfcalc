@@ -1,6 +1,7 @@
-<button *ngIf="(isAuthenticated | async)?.isTrue"
+<button *ngIf="isAuthenticated?.isTrue ?? false"
         (click)="handleMenuClicked()"
-        mat-icon-button color="primary">
+        mat-icon-button
+        color="primary">
   <mat-icon>menu</mat-icon>
 </button>
 <div class="flex-spacer"></div>

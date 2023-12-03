@@ -4,7 +4,11 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://pfcalc.org.ua'
+  apiUrl: 'https://pfcalc.org.ua',
+  ngxs: {
+    logging: false,
+    developmentMode: true,
+  },
   // apiUrl: 'http://localhost:8080'
 };
 

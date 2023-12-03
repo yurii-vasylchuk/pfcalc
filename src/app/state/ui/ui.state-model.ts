@@ -2,9 +2,6 @@ export interface IUiStateModel {
   sideMenuOpened: boolean;
 }
 
-export class ToggleMenuAction {
-  static readonly type = '[UI] Toggle side menu';
-
-  constructor(public readonly isOpened?: boolean) {
-  }
+export namespace Ui {
+  export const TOGGLE_SIDE_MENU = '[UI] Toggle side menu';
 }
