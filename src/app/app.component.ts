@@ -4,7 +4,7 @@ import {Store} from '@ngxs/store';
 import {AuthState} from './state/auth/auth.state';
 import {filter} from 'rxjs';
 import {UiState} from "./state/ui/ui.state";
-import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {Emittable, Emitter} from '@ngxs-labs/emitter';
 
 
@@ -14,7 +14,7 @@ import {Emittable, Emitter} from '@ngxs-labs/emitter';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  @SelectSnapshot(UiState.sideMenuOpened)
+  @ViewSelectSnapshot(UiState.sideMenuOpened)
   protected menuOpened: boolean;
 
   @Emitter(UiState.toggleSideMenu)

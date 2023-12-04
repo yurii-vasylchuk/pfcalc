@@ -10,7 +10,7 @@ import {FoodsManagement} from '../../state/foods-management/foods-management.sta
 import {Select} from '@ngxs/store';
 import {ActionsExecuting, actionsExecuting} from '@ngxs-labs/actions-executing';
 import {Observable} from 'rxjs';
-import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {IPage} from '../../commons/models/common.models';
 import {IFood} from '../../commons/models/domain.models';
 
@@ -32,7 +32,7 @@ export class TestPageComponent {
   @Select(actionsExecuting([{type: FoodsManagement.LOAD_PRODUCTS}, {type: FoodsManagement.LOAD_MORE_PRODUCTS}]))
   protected loadingProductsExecution$: Observable<ActionsExecuting>;
 
-  @SelectSnapshot(FoodsManagementState.products)
+  @ViewSelectSnapshot(FoodsManagementState.products)
   protected products: IPage<IFood>;
 
   loadProducts() {

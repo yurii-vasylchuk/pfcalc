@@ -9,7 +9,7 @@ import {LanguageChangedEvent} from "../../state/auth/auth.state-models";
 import {AuthState} from "../../state/auth/auth.state";
 import {take} from "rxjs";
 import {MatButtonModule} from "@angular/material/button";
-import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {UnknownBoolean} from '../../commons/models/common.models';
 import {Emittable, Emitter} from '@ngxs-labs/emitter';
 import {UiState} from '../../state/ui/ui.state';
@@ -26,7 +26,7 @@ import {UiState} from '../../state/ui/ui.state';
 export class HeadingComponent implements AfterViewInit {
   //TODO: Auto-infer
   protected availableLanguages: Language[] = ['UA', 'EN'];
-  @SelectSnapshot(AuthState.isAuthenticated)
+  @ViewSelectSnapshot(AuthState.isAuthenticated)
   protected isAuthenticated: UnknownBoolean;
   @Emitter(UiState.toggleSideMenu)
   protected toggleMenuEmt: Emittable<boolean | void>;
