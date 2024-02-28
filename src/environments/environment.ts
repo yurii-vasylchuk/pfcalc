@@ -9,6 +9,10 @@ export const environment = {
     logging: false,
     developmentMode: true,
   },
+  navigation: {
+    maxHistorySize: 999,
+    defaultPage: 'dashboard',
+  },
   // apiUrl: 'http://localhost:8080'
 };
 

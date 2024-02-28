@@ -1,0 +1,14 @@
+.heading {
+  flex-grow: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 0 14px;
+  box-sizing: border-box;
+  align-items: center;
+
+  h1 {
+    text-align: end;
+    flex-grow: 1;
+  }
+}

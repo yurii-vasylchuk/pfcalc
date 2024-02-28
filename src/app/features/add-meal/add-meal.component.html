@@ -1,0 +1,101 @@
+<pfc-dialog-page-heading [title]="'add-meal.title'"></pfc-dialog-page-heading>
+
+<mat-form-field class="search-field">
+  <input [formControl]="filterFC"
+         [placeholder]="'add-meal.search-placeholder' | translate"
+         matInput
+         type="text">
+</mat-form-field>
+
+<mat-accordion [multi]="false"
+               [displayMode]="'flat'"
+               class="options-list">
+  <mat-expansion-panel *ngFor="let option of options; trackBy: optionTrackBy"
+                       [hideToggle]="false"
+                       (opened)="handleOptionOpened(option)">
+    <mat-expansion-panel-header>
+      <div class="dishes-header">
+        <div class="dishes-header_title">
+          <p class="dishes-header_title-primary">{{ option.name }}</p>
+          <p [innerHTML]="'common.pfcc-values' | translate:(ceilPfcc(option.pfcc))"
+             class="dishes-header_title-secondary"></p>
+        </div>
+
+        <div *ngIf="option.type === 'DISH'"
+             class="flex-spacer"></div>
+
+        <button (click)="handleEditOptionClick(option); $event.stopPropagation();"
+                *ngIf="option.type === 'DISH'"
+                color="accent"
+                mat-icon-button>
+          <mat-icon>pencil</mat-icon>
+        </button>
+
+        <button (click)="handleDeleteOptionClick(option); $event.stopPropagation();"
+                *ngIf="option.type === 'DISH'"
+                color="accent"
+                mat-icon-button>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent>
+      <div class="nutrients">
+        <pfc-nutrition-gauge
+          [aim]="aims.protein"
+          [value]="nutrients.protein"
+          [title]="'common.protein' | translate"
+          [addingValue]="ceilPfcc(addedPfcc$ | async).protein"/>
+        <pfc-nutrition-gauge
+          [aim]="aims.fat"
+          [value]="nutrients.fat"
+          [title]="'common.fat' | translate"
+          [addingValue]="ceilPfcc(addedPfcc$ | async).fat"/>
+        <pfc-nutrition-gauge
+          [aim]="aims.carbohydrates"
+          [value]="nutrients.carbohydrates"
+          [title]="'common.carbohydrates' | translate"
+          [addingValue]="ceilPfcc(addedPfcc$| async).carbohydrates"/>
+        <pfc-nutrition-gauge
+          [aim]="aims.calories"
+          [value]="nutrients.calories"
+          [title]="'common.calories' | translate"
+          [addingValue]="ceilPfcc(addedPfcc$ | async).calories"/>
+      </div>
+
+      <div class="weight-input-group">
+        <mat-form-field class="weight-field">
+          <input type="number"
+                 matInput
+                 [formControl]="weightFC"
+                 [placeholder]="'add-meal.weight-input-placeholder' | translate"
+                 (focus)="handleWeightInputFocus($event)">
+        </mat-form-field>
+        <mat-form-field class="measurement-select">
+          <mat-select [formControl]="measurementFC">
+            <mat-option *ngFor="let m of measurements"
+                        [value]="m">{{ 'measurements.' + m.name  | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button
+              class="cook-a-dish-btn"
+              color="primary"
+              *ngIf="option.type === 'RECIPE'"
+              (click)="handleCookADishClick(option)">
+        {{ 'add-meal.cook-a-dish-btn' | translate }}
+      </button>
+    </ng-template>
+  </mat-expansion-panel>
+
+  <div class="loading-bar">
+    <mat-progress-bar *ngIf="loading$ | async"
+                      mode="indeterminate">
+    </mat-progress-bar>
+  </div>
+
+  <div #endIndicator></div>
+</mat-accordion>

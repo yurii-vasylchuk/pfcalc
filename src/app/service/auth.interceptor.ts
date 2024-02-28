@@ -1,17 +1,27 @@
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {catchError, Observable, switchMap, throwError} from 'rxjs';
-import {Injectable} from '@angular/core';
-import {Store} from '@ngxs/store';
-import {AuthState} from '../state/auth/auth.state';
-import {RefreshAuthAction} from '../state/auth/auth.state-models';
+import {catchError, filter, Observable, Subject, switchMap, take, throwError} from 'rxjs';
+import {Injectable, OnDestroy} from '@angular/core';
+import {AuthState} from '../features/auth/auth.state';
 import {environment} from '../../environments/environment';
+import {Emittable, Emitter} from '@ngxs-labs/emitter';
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+import {Select} from '@ngxs/store';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AuthInterceptor implements HttpInterceptor {
+@Injectable({providedIn: 'root'})
+export class AuthInterceptor implements HttpInterceptor, OnDestroy {
 
-  constructor(private store: Store) {
+  @Emitter(AuthState.refreshAuth)
+  private refreshAuthEmitter: Emittable;
+  @SelectSnapshot(AuthState.refreshToken)
+  private refreshToken: Observable<string | null>;
+  @Select(AuthState.refreshInProgress)
+  private refreshInProgress$: Observable<boolean>;
+
+  private destroy$ = new Subject<void>();
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -23,8 +33,22 @@ export class AuthInterceptor implements HttpInterceptor {
       .pipe(
         catchError(err => {
           if (this.shouldRefreshAuth(err)) {
-            return this.store.dispatch(new RefreshAuthAction())
-              .pipe(switchMap(_ => next.handle(req)));
+            return this.refreshInProgress$.pipe(
+              take(1),
+              switchMap(isRefreshing => {
+                if (!isRefreshing) {
+                  this.refreshAuthEmitter.emit();
+                } else {
+                }
+                return this.refreshInProgress$.pipe(
+                  filter(isRefreshing => !isRefreshing),
+                  take(1),
+                );
+              }),
+              switchMap(_ => {
+                return next.handle(req);
+              }),
+            );
           }
 
           return throwError(() => err);
@@ -35,6 +59,7 @@ export class AuthInterceptor implements HttpInterceptor {
   private shouldRefreshAuth(err: Error): boolean {
     return err instanceof HttpErrorResponse &&
       err.status === 403 &&
-      this.store.selectSnapshot(AuthState.refreshToken) != null;
+      !err.url.startsWith(`${environment.apiUrl}/api/user/refresh-auth-token`) &&
+      this.refreshToken != null;
   }
 }

@@ -1,0 +1,69 @@
+<div class="nutrients">
+  <div class="nutrients__period-block">
+    <h1 class="nutrients__header">{{ 'dashboard.weekly-nutrients' | translate }}</h1>
+    <div class="nutrients__gauges">
+      <pfc-nutrition-gauge [aim]="weeklyAims?.protein || null"
+                           [title]="'common.protein' | translate"
+                           [value]="weeklyNutrients?.protein || 0"></pfc-nutrition-gauge>
+      <pfc-nutrition-gauge [aim]="weeklyAims?.fat || null"
+                           [title]="'common.fat' | translate"
+                           [value]="weeklyNutrients?.fat || 0"></pfc-nutrition-gauge>
+      <pfc-nutrition-gauge [aim]="weeklyAims?.carbohydrates || null"
+                           [title]="'common.carbohydrates' | translate"
+                           [value]="weeklyNutrients?.carbohydrates || 0"></pfc-nutrition-gauge>
+      <pfc-nutrition-gauge [aim]="weeklyAims?.calories || null"
+                           [title]="'common.calories' | translate"
+                           [value]="weeklyNutrients?.calories || 0"></pfc-nutrition-gauge>
+    </div>
+  </div>
+
+  <div class="nutrients__period-block">
+    <h1 class="nutrients__header">{{ 'dashboard.daily-nutrients' | translate }}</h1>
+    <div class="nutrients__gauges">
+      <pfc-nutrition-gauge [aim]="dailyAims?.protein || null"
+                           [title]="'common.protein' | translate"
+                           [value]="dailyNutrients?.protein || 0"></pfc-nutrition-gauge>
+      <pfc-nutrition-gauge [aim]="dailyAims?.fat || null"
+                           [title]="'common.fat' | translate"
+                           [value]="dailyNutrients?.fat || 0"></pfc-nutrition-gauge>
+      <pfc-nutrition-gauge [aim]="dailyAims?.carbohydrates || null"
+                           [title]="'common.carbohydrates' | translate"
+                           [value]="dailyNutrients?.carbohydrates || 0"></pfc-nutrition-gauge>
+      <pfc-nutrition-gauge [aim]="dailyAims?.calories || null"
+                           [title]="'common.calories' | translate"
+                           [value]="dailyNutrients?.calories || 0"></pfc-nutrition-gauge>
+    </div>
+  </div>
+</div>
+
+<div class="meals">
+  <h1 class="meals__header">{{ 'dashboard.meals-list.title' | translate }}</h1>
+  <div *ngFor="let meal of eatenMeals; let i=index; trackBy: mealTrackBy"
+       [ngClass]="i % 2 === 1 ? 'meals__line_even' : ''"
+       class="meals__line">
+    <!-- TODO: Implement loading more meals -->
+    <div class="meals__description">
+      <span class="meals__title">{{ meal.name }} - {{ meal.weight }}{{ 'common.gram-sign' | translate }}</span>
+      <span class="meals__weight">
+          {{ 'common.pfcc-values' | translate:fromFunctions.ceilPfcc(meal.pfcc) }}
+        </span>
+    </div>
+    <div class="flex-spacer"></div>
+    <button (click)="removeMeal(meal.id!)"
+            mat-icon-button>
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</div>
+
+
+<div class="flex-spacer"></div>
+
+<div class="add-meal">
+  <a [routerLink]="['/', fromRoutes.addMeal]"
+     [queryParams]="{date: currentDate.toISO({ includeOffset: false })}"
+     color="accent"
+     mat-raised-button>
+    {{ 'dashboard.add-meal-btn' | translate }}
+  </a>
+</div>

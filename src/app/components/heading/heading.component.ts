@@ -5,14 +5,14 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatSelect, MatSelectChange, MatSelectModule} from "@angular/material/select";
 import {Store} from "@ngxs/store";
 import {Language} from "../../commons/models/auth.models";
-import {LanguageChangedEvent} from "../../state/auth/auth.state-models";
-import {AuthState} from "../../state/auth/auth.state";
+import {AuthState} from "../../features/auth/auth.state";
 import {take} from "rxjs";
 import {MatButtonModule} from "@angular/material/button";
 import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {UnknownBoolean} from '../../commons/models/common.models';
 import {Emittable, Emitter} from '@ngxs-labs/emitter';
 import {UiState} from '../../state/ui/ui.state';
+import {ProfileState} from '../../state/profile.state';
 
 
 @Component({
@@ -30,6 +30,8 @@ export class HeadingComponent implements AfterViewInit {
   protected isAuthenticated: UnknownBoolean;
   @Emitter(UiState.toggleSideMenu)
   protected toggleMenuEmt: Emittable<boolean | void>;
+  @Emitter(ProfileState.languageChanged)
+  private languageChangedEmt: Emittable<Language>;
 
   @ViewChild("langSelector")
   private langSelector!: MatSelect;
@@ -37,16 +39,16 @@ export class HeadingComponent implements AfterViewInit {
   constructor(private store: Store) {
   }
 
-  handleLangChanged(selection: MatSelectChange) {
-    this.store.dispatch(new LanguageChangedEvent(selection.value));
-  }
-
   ngAfterViewInit(): void {
-    this.store.select(AuthState.language)
+    this.store.select(ProfileState.language)
       .pipe(take(1))
       .subscribe(value => {
         this.langSelector.writeValue(value);
       });
+  }
+
+  handleLangChanged(selection: MatSelectChange) {
+    this.languageChangedEmt.emit(selection.value);
   }
 
   handleMenuClicked() {

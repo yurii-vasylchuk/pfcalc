@@ -1,41 +1,8 @@
-import {DateObjectUnits, DateTime} from 'luxon';
-import {IPfcc} from './models/common.models';
-import {FormGroup, ValidatorFn} from "@angular/forms";
-
-export function sumUndefined(n1: number | null | undefined,
-                             n2: number | null | undefined): number | undefined {
-  if (isValueAbsent(n1) && isValueAbsent(n2)) {
-    return undefined;
-  } else if (isValueAbsent(n1) && isDefined(n2)) {
-    return n2;
-  } else if (isValueAbsent(n2) && isDefined(n1)) {
-    return n1;
-  } else if (isDefined(n1) && isDefined(n2)) {
-    return n1 + n2;
-  }
-
-  throw new Error('Illegal state');
-}
-
-export function isToday(date: DateTime): boolean {
-  return date.set(atStartOfDay)
-    .equals(DateTime.now().set(atStartOfDay));
-}
-
-export function isOnCurrentWeek(date: DateTime): boolean {
-  return date.set(atStartOfWeek)
-    .equals((DateTime.now().set(atStartOfWeek)));
-}
-
-export const atStartOfDay: DateObjectUnits = {hour: 0, minute: 0, second: 0, millisecond: 0};
-export const atStartOfWeek: DateObjectUnits = {hour: 0, minute: 0, second: 0, millisecond: 0, weekday: 1};
+import {IPage, IPfcc} from './models/common.models';
+import {combineLatest, map, Observable, of, OperatorFunction, switchMap} from 'rxjs';
 
 export function isDefined<T>(value: T | null | undefined): value is T {
   return value != null;
-}
-
-export function isValueAbsent<T>(value: T | null | undefined): value is null | undefined {
-  return !isDefined(value);
 }
 
 export function sumPfccs(...pfccs: IPfcc[]) {
@@ -68,54 +35,44 @@ export function multiplyPfcc(pfcc: IPfcc, multiplier: number): IPfcc {
   };
 }
 
+export function withDefaults<T>(input: Partial<T>, defaults: T): T {
+  const result = {...input};
+  for (const key in defaults) {
+    if (result[key] == null) {
+      result[key] = defaults[key];
+    }
+  }
+
+  return result as T;
+}
+
 export function ceil(value: number, afterDotSigns = 2): number {
   const multiplier = Math.pow(10, afterDotSigns);
 
   return Math.ceil(value * multiplier) / multiplier;
 }
 
-export function sum(v1: number, v2: number): number {
-  return v1 + v2;
+export function loadAllPages<T>(loadFunc: (page: number, pageSize: number) => Observable<IPage<T>>, pageSize: number): Observable<T[]> {
+  return loadFunc(0, pageSize)
+    .pipe(
+      switchMap(page0 => {
+        let loaders: Observable<T[]>[] = [];
+        for (let i = 1; i < page0.totalPages; i++) {
+          loaders.push(loadFunc(i, pageSize).pipe(map(page => page.data)));
+        }
+        return combineLatest([
+          of(page0.data),
+          ...loaders,
+        ]);
+      }),
+      map(data => {
+        let res: T[] = [];
+
+        data.forEach(page => res.push(...page));
+
+        return res;
+      }),
+    );
 }
 
-export const pfccFormGroupIsNotEmpty: ValidatorFn = control => {
-  if (!(control instanceof FormGroup)
-  ) {
-    throw new Error('This validator can be applied only to FormGroup');
-  }
-
-  const proteinControl = control.get('protein');
-  const fatControl = control.get('fat');
-  const carbohydratesControl = control.get('carbohydrates');
-  const caloriesControl = control.get('calories');
-
-  if (proteinControl == null || fatControl == null || carbohydratesControl == null || caloriesControl == null) {
-    throw new Error('This validator can be applied only to FormGroup containing "protein", "fat", "carbohydrates" and "calories" FormControl-s');
-  }
-
-  const protein = proteinControl.value;
-  const fat = fatControl.value;
-  const carbohydrates = carbohydratesControl.value;
-  const calories = caloriesControl.value;
-
-  if(protein != null && typeof protein !== 'number') {
-    throw Error('Protein control value is not a number');
-  }
-  if(fat != null && typeof fat !== 'number') {
-    throw Error('Fat control value is not a number');
-  }
-  if(carbohydrates != null && typeof carbohydrates !== 'number') {
-    throw Error('Carbohydrates control value is not a number');
-  }
-  if(calories != null && typeof calories !== 'number') {
-    throw Error('Calories control value is not a number');
-  }
-
-  if (protein + fat + carbohydrates + calories === 0) {
-    return {
-      pfccIsZero: 'PFCC all zeroes'
-    };
-  }
-
-  return null;
-};
+export const mapToVoid: () => OperatorFunction<unknown, null> = () => map(_ => null);

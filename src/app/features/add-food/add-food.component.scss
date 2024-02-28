@@ -1,0 +1,166 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  //overflow: hidden;
+}
+
+.main-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.name {
+  width: 100%;
+}
+
+.description {
+  width: 100%;
+}
+
+.recipe-switcher {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.hidden-switcher {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.pfcc-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+
+}
+
+.ingredients {
+  display: flex;
+  flex-direction: column;
+
+  > * {
+    width: 100%;
+  }
+}
+
+.ingredient {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+
+  &-edit_row {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+  &-pfcc_row {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: baseline;
+
+    span {
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+  }
+
+  &-select {
+    flex-basis: calc(100% - 53px);
+  }
+
+  &-weight-group {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    width: calc(100% - 53px);
+  }
+
+  &-measurement {
+    flex-basis: 70%;
+  }
+
+  &-weight {
+    flex-basis: 30%;
+  }
+}
+
+
+.remove-ingredient-btn {
+  flex: 0 0 48px;
+  width: 48px;
+}
+
+.add-ingredient-btn {
+  margin-bottom: 10px;
+}
+
+.add-measurement-btn {
+  margin-bottom: 10px;
+}
+
+.actions {
+  width: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+
+.pfcc-values {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr;
+  gap: 5px;
+  margin-bottom: 10px;
+
+  &__label, &__value {
+    margin: 0;
+  }
+
+  &__label {
+    place-self: center end;
+  }
+
+  &__value {
+    place-self: center start;
+  }
+}
+
+.measurements {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.measurement {
+  --gap: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+
+.measurement-name {
+  flex-basis: 100%;
+}
+
+.measurement-multiplier {
+  flex-basis: calc(50% - var(--gap) / 2);
+}
+
+.measurement-default {
+  flex-basis: calc(50% - var(--gap) / 2);
+}

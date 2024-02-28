@@ -1,0 +1,67 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+
+  > * {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+.ingredient {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  padding-top: 5px;
+
+  &:nth-child(even) {
+    background-color: #EFEFEF;
+  }
+
+  &__delete-btn {
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-bottom: 24px;
+  }
+
+  &__select {
+    flex-grow: 1;
+  }
+
+  &__select-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    align-items: center;
+  }
+
+  &__weight {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+    &-input {
+      flex-basis: 35%;
+
+    }
+
+    &-measurement {
+      flex-basis: 65%;
+    }
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  margin-top: 10px;
+  gap: 10px;
+}

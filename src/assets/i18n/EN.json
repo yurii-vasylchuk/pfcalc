@@ -64,22 +64,24 @@
   "add-meal": {
     "title": "Add meal",
     "add-btn": "Save",
-    "edit-recipe": "Edit ingredients",
+    "cook-a-dish-btn": "Cook a dish",
     "search-placeholder": "Find a food...",
     "weight-input-placeholder": "Ex. 240",
     "create-foot-btn": "Add food"
   },
-  "cook-a-dish": {
+  "add-dish": {
     "title-create": "Cook a dish",
     "title-edit": "Edit a dish",
     "dish-name-label": "Name",
     "save-btn": "Create",
     "ingredient-select-label": "Ingredient",
     "add-ingredient-btn": "Add ingredient",
-    "cooked-weight-label": "Cooked weight"
+    "cooked-weight-label": "Cooked weight",
+    "ingredient-select-placeholder": "Ex. Cheese"
   },
   "add-food": {
-    "title": "Add food",
+    "title-create": "Add food",
+    "title-edit": "Edit food",
     "name-input-placeholder": "Ex: Basmati rice",
     "name-input-label": "Food name",
     "recipe-switcher-label": "Calc from Ingredients",
@@ -98,9 +100,15 @@
     "ingredient-weight-label": "Weight",
     "ingredient-search-placeholder": "Find...",
     "add-ingredient-btn": "Add ingredient",
+    "add-measurement-btn": "Add measurement",
     "description-input-label": "Description",
     "description-input-placeholder": "Food description, or recipe...",
-    "submit-btn-caption": "Save"
+    "submit-btn-caption": "Save",
+    "measurement-name-label": "Measurement",
+    "measurement-multiplier-label": "Gram multiplier",
+    "measurement-default-label": "Default",
+    "additional-measurements-header": "Additional measurements",
+    "ingredients-header": "Ingredients"
   },
   "side-menu": {
     "title": "PFCC",
@@ -114,5 +122,10 @@
     "add-recipe-caption": "Add recipe",
     "search-placeholder": "Search",
     "load-more-btn-caption": "Load more"
+  },
+  "measurements": {
+    "g": "g",
+    "glass": "Glass",
+    "pcs": "pcs."
   }
 }

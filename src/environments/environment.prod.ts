@@ -5,4 +5,8 @@ export const environment = {
     logging: false,
     developmentMode: false,
   },
+  navigation: {
+    maxHistorySize: 20,
+    defaultPage: 'dashboard',
+  },
 };

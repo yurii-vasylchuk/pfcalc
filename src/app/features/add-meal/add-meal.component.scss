@@ -1,0 +1,82 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  max-height: 100dvh;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin: .5rem 0;
+}
+
+
+.dishes-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.dishes-header_title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.dishes-header_title-primary {
+  margin: 0;
+}
+
+.dishes-header_title-secondary {
+  margin: 0;
+  font-size: .8rem;
+  color: #707070;
+
+  strong {
+    font-weight: 900;
+    color: red;
+  }
+}
+
+.nutrients {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 5px;
+}
+
+.weight-input-group {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 10px;
+}
+
+.weight-field {
+  flex-basis: 40%;
+}
+
+.measurement-select {
+  flex-basis: 60%;
+}
+
+.cook-a-dish-btn {
+  width: 100%;
+}
+
+.search-field {
+  flex-grow: 0;
+}
+.options-list{
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.loading-bar {
+  width: 100%;
+}

@@ -64,18 +64,19 @@
   "add-meal": {
     "title": "Зʼїсти страву",
     "add-btn": "Зберегти",
-    "edit-recipe": "Редагувати інгредієнти",
+    "cook-a-dish-btn": "Редагувати інгредієнти",
     "search-placeholder": "Пошук страви...",
     "weight-input-placeholder": "Напр. 240",
     "create-foot-btn": "Додати страву"
   },
-  "cook-a-dish": {
+  "add-dish": {
     "title": "Приготувати страву",
     "dish-name-label": "Назва",
     "save-btn": "Зберегти",
     "ingredient-select-label": "Інгредієнт",
     "add-ingredient-btn": "Додати інгредієнт",
-    "cooked-weight-label": "Вага страви"
+    "cooked-weight-label": "Вага страви",
+    "ingredient-search-placeholder": "Пошук..."
   },
   "add-food": {
     "title-create": "Додати їжу",
@@ -98,9 +99,15 @@
     "ingredient-weight-label": "Вага",
     "ingredient-search-placeholder": "Пошук...",
     "add-ingredient-btn": "Додати інгредієнт",
+    "add-measurement-btn": "Додати од. виміру",
     "description-input-label": "Опис",
     "description-input-placeholder": "Опис страви, рецепт, тощо...",
-    "submit-btn-caption": "Зберегти"
+    "submit-btn-caption": "Зберегти",
+    "measurement-name-label": "Од. виміру",
+    "measurement-multiplier-label": "Грам на од.",
+    "measurement-default-label": "Замовч.",
+    "additional-measurements-header": "Додаткові од. виміру",
+    "ingredients-header": "Інгредієнти"
   },
   "side-menu": {
     "title": "PFCC",
@@ -114,5 +121,9 @@
     "add-recipe-caption": "Додати рецепт",
     "search-placeholder": "Пошук",
     "load-more-btn-caption": "Завантажити ще"
+  },
+  "measurements": {
+    "g": "г",
+    "glass": "Стакан"
   }
 }

@@ -2,7 +2,7 @@ import {inject} from '@angular/core';
 import {CanActivateFn, CanMatchFn} from '@angular/router';
 import {filter, map, Observable, tap} from 'rxjs';
 import {Store} from '@ngxs/store';
-import {AuthState} from '../state/auth/auth.state';
+import {AuthState} from '../features/auth/auth.state';
 import {Navigate} from '@ngxs/router-plugin';
 import * as fromRoutes from '../commons/routes';
 import {UnknownBoolean} from '../commons/models/common.models';

@@ -1,0 +1,89 @@
+<pfc-dialog-page-heading [title]="'add-dish.title'"></pfc-dialog-page-heading>
+
+<form [formGroup]="form"
+      (ngSubmit)="handleSubmit()"
+      *ngIf="!isLoading">
+  <div class="body">
+    <mat-form-field>
+      <mat-label>{{ 'add-dish.dish-name-label' | translate }}</mat-label>
+      <input matInput
+             formControlName="dishName"
+             type="text">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'add-dish.cooked-weight-label' | translate}}</mat-label>
+      <input matInput
+             formControlName="weight"
+             type="number">
+    </mat-form-field>
+
+    <ng-container formArrayName="ingredients">
+      <div class="ingredient"
+           [formGroupName]="idx"
+           *ngFor="let ing of formIngredients.value; let idx = index; trackBy: trackIngredientByIndexFn">
+        <div class="ingredient__select-group">
+          <mat-form-field class="ingredient__select">
+            <mat-select formControlName="ingredient"
+                        [compareWith]="compareIngredientsFn">
+              <!--              <mat-label>{{ 'add-dish.ingredient-select-label' | translate }}</mat-label>-->
+              <mat-option>
+                <ngx-mat-select-search formControlName="ingredientSearch"
+                                       [placeholderLabel]="'add-dish.ingredient-search-placeholder' | translate"/>
+              </mat-option>
+              <!-- Currently selected option -->
+              <mat-option [value]="ing.ingredient"
+                          [disabled]="true">
+                {{ ing.ingredient?.name }}
+              </mat-option>
+              <mat-option *ngFor="let opt of options[idx]; trackBy:trackFoodByIdFn"
+                          [value]="opt"
+                          [disabled]="false">
+                {{ opt?.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button class="ingredient__delete-btn"
+                  type="button"
+                  mat-icon-button
+                  color="warn"
+                  (click)="handleDeleteClicked(ing.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div class="ingredient__weight">
+          <mat-form-field class="ingredient__weight-input">
+            <input matInput
+                   formControlName="weight"
+                   type="number">
+          </mat-form-field>
+          <mat-form-field class="ingredient__weight-measurement">
+            <mat-select formControlName="measurement">
+              <mat-option [value]="defaultMeasurement">
+                {{'measurements.' + defaultMeasurement.name | translate}}
+              </mat-option>
+              <mat-option *ngFor="let measurement of formIngredients.at(idx).value.ingredient.measurements"
+                          [value]="measurement">
+                {{ 'measurements.' + measurement.name | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="buttons">
+      <button mat-raised-button
+              type="button"
+              (click)="handleAddIngredientClicked()">
+        {{ 'add-dish.add-ingredient-btn' | translate }}
+      </button>
+      <button mat-raised-button
+              color="primary"
+              [disabled]="form.invalid"
+              type="submit">
+        {{ 'add-dish.save-btn' | translate }}
+      </button>
+    </div>
+  </div>
+</form>

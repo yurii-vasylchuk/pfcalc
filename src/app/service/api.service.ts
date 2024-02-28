@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, Observable, tap, throwError} from 'rxjs';
+import {combineLatest, combineLatestWith, map, Observable, of, switchMap, tap, throwError} from 'rxjs';
 import {IAuthTokensResponse, Language} from '../commons/models/auth.models';
-import {FoodType, IDish, IDishToCreate, IFood, IMeal, IProfile} from '../commons/models/domain.models';
+import {FoodType, IDish, IDishToCreate, IFood, IMeal, IMeasurement, IProfile} from '../commons/models/domain.models';
 import {IApiResponse, IPage, IPfcc} from '../commons/models/common.models';
 import {DateTime} from 'luxon';
+import {AddMeal} from '../features/add-meal/add-meal.state-models';
+import IMealOption = AddMeal.IMealOption;
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({providedIn: 'root'})
 export class ApiService {
 
   constructor(private http: HttpClient) {
@@ -53,12 +53,16 @@ export class ApiService {
       .pipe(this.extractVoidResponse);
   }
 
-  addMeal(meal: IMeal): Observable<IMeal> {
+  addMeal(meal: Omit<IMeal, 'id'>): Observable<IMeal> {
     return this.http.post<IApiResponse<IMeal>>('/api/meal', {
       ...meal,
       eatenOn: meal.eatenOn.toISO({includeOffset: false}),
-    })
-      .pipe(map(this.extractResponseData));
+    }).pipe(
+      map(this.extractResponseData),
+      tap(meal => {
+        meal.eatenOn = DateTime.fromISO(meal.eatenOn as unknown as string);
+      }),
+    );
   }
 
   loadMeals(page: number, pageSize: number, from: DateTime, to: DateTime): Observable<IPage<IMeal>> {
@@ -92,6 +96,13 @@ export class ApiService {
       .pipe(map(this.extractResponseData));
   }
 
+  updateDish(id: number, dish: IDishToCreate): Observable<IDish> {
+    return this.http.put<IApiResponse<IDish>>(`/api/dish/${id}`, {
+      ...dish,
+      cookedOn: dish.cookedOn.toISO({includeOffset: false}),
+    }).pipe(map(this.extractResponseData));
+  }
+
   deleteDish(dishId: number): Observable<null> {
     if (dishId == null) {
       throwError(() => new Error('Dish id is required'));
@@ -117,7 +128,10 @@ export class ApiService {
   }
 
   loadDish(dishId: number): Observable<IDish> {
-    return this.http.get<IDish>(`/api/dish/${dishId}`);
+    return this.http.get<IApiResponse<IDish>>(`/api/dish/${dishId}`)
+      .pipe(
+        map(this.extractResponseData),
+      );
   }
 
   loadFoodsList(page: number, pageSize: number, name?: string, type?: FoodType): Observable<IPage<IFood>> {
@@ -126,8 +140,8 @@ export class ApiService {
       pageSize,
     };
 
-    if (name != null && name !== '') {
-      params['name'] = name;
+    if (name != null && name.trim() !== '') {
+      params['name'] = name.trim();
     }
 
     if (type != null) {
@@ -140,6 +154,23 @@ export class ApiService {
       })
       .pipe(
         map(this.extractResponseData),
+        tap(page => page.data.forEach(f => f.measurements = (f.measurements ?? []))),
+        switchMap(page => {
+          return combineLatest(page.data.map(food => this.loadMeasurements(food.id))).pipe(
+            map(measurements => {
+              measurements.flatMap(m => m).forEach(m => {
+                const food = page.data.find(f => f.id === m.foodId);
+                if (food == null) {
+                  console.warn(`Can't find appropriate food (#${m.foodId}) for measurement #${m.id} - ${m.name}`);
+                  return;
+                }
+                food.measurements.push(m);
+              });
+
+              return page;
+            }),
+          );
+        }),
       );
 
   }
@@ -148,6 +179,11 @@ export class ApiService {
     return this.http.get<IApiResponse<IFood>>(`/api/food/${id}`)
       .pipe(
         map(this.extractResponseData),
+        combineLatestWith(this.loadMeasurements(id)),
+        map(([food, measurements]) => {
+          food.measurements = measurements;
+          return food;
+        }),
       );
   }
 
@@ -155,6 +191,50 @@ export class ApiService {
     return this.http.post<IApiResponse<IAuthTokensResponse>>('/api/user/refresh-auth-token', {
       refreshToken,
     }).pipe(map(this.extractResponseData));
+  }
+
+  getMealOptions(filter: string, page: number, pageSize: number): Observable<IPage<IMealOption>> {
+    const params: any = {
+      page,
+      pageSize,
+    };
+
+    if (filter != null && filter.trim() !== '') {
+      params['filter'] = filter.trim();
+    }
+
+    return this.http.get<IApiResponse<IPage<IMealOption>>>('/api/meal/options', {
+      params,
+    }).pipe(
+      map(this.extractResponseData),
+      switchMap(data => {
+        const sources = data.data.filter(opt => opt.type === 'RECIPE' || 'INGREDIENT')
+          .map(opt => this.loadMeasurements(opt.foodId));
+
+        return combineLatest([of(data), combineLatest(sources)]);
+      }),
+      map(([options, allMeasurements]) => {
+        allMeasurements
+          .filter(measurements => measurements != null && measurements.length > 0)
+          .forEach(measurements => {
+            const food = options.data
+              .find(opt => opt.type === 'RECIPE' || 'INGREDIENT' && opt.foodId == measurements[0].foodId);
+
+            if (food != null) {
+              food.measurements = measurements;
+            }
+          });
+
+        return options;
+      }),
+    );
+  }
+
+  loadMeasurements(foodId: number): Observable<IMeasurement[]> {
+    return this.http.get<IApiResponse<IMeasurement[]>>(`/api/measurement`, {params: {foodId}})
+      .pipe(
+        map(this.extractResponseData),
+      );
   }
 
   private extractResponseData<T>(rsp: IApiResponse<T>): T {
@@ -169,4 +249,18 @@ export class ApiService {
     this.extractResponseData(rsp);
     return null;
   });
+
+  updateMeasurement(measurement: IMeasurement): Observable<IMeasurement> {
+    return this.http.put<IApiResponse<IMeasurement>>(`/api/measurement/${measurement.id}`, measurement)
+      .pipe(
+        map(this.extractResponseData),
+      );
+  }
+
+  createMeasurement(measurement: IMeasurement): Observable<IMeasurement> {
+    return this.http.post<IApiResponse<IMeasurement>>(`/api/measurement`, measurement)
+      .pipe(
+        map(this.extractResponseData),
+      );
+  }
 }
