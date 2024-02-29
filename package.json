@@ -8,9 +8,7 @@
     "build:production": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
-    "storybook": "npm run docs:json && start-storybook -p 6006 --no-open",
-    "build-storybook": "npm run docs:json && build-storybook"
+    "docs:json": "compodoc -p ./tsconfig.json -e json -d ."
   },
   "private": true,
   "dependencies": {
@@ -46,14 +44,6 @@
     "@babel/core": "^7.20.12",
     "@compodoc/compodoc": "^1.1.19",
     "@ngxs/devtools-plugin": "^3.7.6",
-    "@storybook/addon-actions": "^6.5.16",
-    "@storybook/addon-essentials": "^6.5.16",
-    "@storybook/addon-interactions": "^6.5.16",
-    "@storybook/addon-links": "^6.5.16",
-    "@storybook/angular": "^6.5.16",
-    "@storybook/builder-webpack5": "^6.5.16",
-    "@storybook/manager-webpack5": "^6.5.16",
-    "@storybook/testing-library": "0.0.13",
     "@types/jasmine": "~4.0.0",
     "@types/luxon": "^3.1.0",
     "babel-loader": "^8.3.0",
