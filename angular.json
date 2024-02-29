@@ -43,6 +43,11 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "optimization": {
+              "styles": {
+                "inlineCritical": false
+              }
+            },
             "assets": [
               "src/favicon.ico",
               "src/assets"
