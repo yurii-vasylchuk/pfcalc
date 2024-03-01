@@ -29,6 +29,16 @@
   }
 }
 
+.date {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 3vw;
+  align-items: center;
+}
+
 .add-meal {
   display: flex;
   flex-direction: column;

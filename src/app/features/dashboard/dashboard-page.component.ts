@@ -44,14 +44,24 @@ export class DashboardPageComponent {
   protected weeklyAims: IPfcc;
   @ViewSelectSnapshot(DashboardState.todayMeals)
   protected eatenMeals: IMeal[];
-  @ViewSelectSnapshot(DashboardState.date)
+  @ViewSelectSnapshot(DashboardState.currentDate)
   protected currentDate: DateTime;
   @Emitter(DashboardState.removeMeal)
   private removeMealEmt: Emittable<Dashboard.RemoveMealPayload>;
+  @Emitter(DashboardState.switchDate)
+  private switchDateEmt: Emittable<Dashboard.SwitchDatePayload>
 
   mealTrackBy = (idx: number, item: IMeal) => item.id;
 
   removeMeal(mealId: number) {
     this.removeMealEmt.emit({id: mealId});
+  }
+
+  protected handleNextDateClick() {
+    this.switchDateEmt.emit({date: this.currentDate.plus({day: 1})});
+  }
+
+  protected handlePrevDateClick() {
+    this.switchDateEmt.emit({date: this.currentDate.minus({day: 1})});
   }
 }

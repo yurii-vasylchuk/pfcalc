@@ -58,7 +58,8 @@
     "daily-nutrients": "Daily nutrients",
     "weekly-nutrients": "Weekly nutrients",
     "meals-list": {
-      "title": "Meals"
+      "title-today": "Eaten today",
+      "title-date": "Eaten on {{date}}"
     }
   },
   "add-meal": {

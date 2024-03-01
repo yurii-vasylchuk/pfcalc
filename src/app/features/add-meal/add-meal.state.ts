@@ -9,6 +9,7 @@ import {DateTime} from 'luxon';
 import {catchError, combineLatest, EMPTY, map, Observable, switchMap, tap} from 'rxjs';
 import {loadAllPages, sumPfccs} from '../../commons/functions';
 import {emptyPfcc, IPage, IPfcc} from '../../commons/models/common.models';
+import {Navigation} from '../../state/navigation.state-model';
 import IMealOption = AddMeal.IMealOption;
 
 
@@ -41,6 +42,11 @@ export class AddMealState {
   @Selector()
   static nutrients(state: AddMeal.IAddMealState): IPfcc {
     return state.nutrients;
+  }
+
+  @Selector()
+  static date(state: AddMeal.IAddMealState): DateTime {
+    return state.date;
   }
 
   constructor(api: ApiService) {
@@ -151,5 +157,28 @@ export class AddMealState {
           return EMPTY;
         }),
       );
+  }
+
+  @Receiver({type: AddMeal.SAVE_MEAL})
+  static saveMeal(ctx: StateContext<AddMeal.IAddMealState>, {payload}: EmitterAction<AddMeal.SaveMealPayload>) {
+    return this.api.addMeal(payload)
+      .pipe(
+        map(meal => {
+          return {
+            type: Navigation.NAVIGATE_BACK,
+            payload: {
+              additionalQueryParams: {
+                savedMealId: meal.id,
+              },
+            } as Navigation.NavigateBackPayload,
+          };
+        }),
+        catchError(err => {
+          console.warn('Error while saving dish: ', err);
+          //TODO: show error message
+          return EMPTY;
+        }),
+        switchMap(ctx.dispatch)
+      )
   }
 }

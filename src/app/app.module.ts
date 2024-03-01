@@ -11,7 +11,7 @@ import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
 import {NgxsModule} from '@ngxs/store';
 import {AuthState} from './features/auth/auth.state';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-import {MissingTranslationHandler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {MissingTranslationHandler, TranslateLoader, TranslateModule, TranslateParser} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HeadingComponent} from "./components/heading/heading.component";
 import {NgxsFormPluginModule} from "@ngxs/form-plugin";
@@ -32,6 +32,7 @@ import {provideRouter, RouterOutlet} from '@angular/router';
 import {NavigationState} from './state/navigation.state';
 import {AddFoodState} from './features/add-food/add-food.state';
 import {PfccMissingTranslationHandler} from './commons/pfcc-missing-translation-handler';
+import {PfccTranslateParser} from './commons/pfcc-translate-parser';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -61,6 +62,10 @@ export function HttpLoaderFactory(http: HttpClient) {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
+      },
+      parser: {
+        provide: TranslateParser,
+        useClass: PfccTranslateParser,
       },
       missingTranslationHandler: {
         provide: MissingTranslationHandler,

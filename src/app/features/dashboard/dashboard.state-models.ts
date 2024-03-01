@@ -6,7 +6,7 @@ export namespace Dashboard {
   export type IDashboardState = {
     aims: IPfcc;
     weekMeals: IMeal[];
-    currentDate: DateTime;
+    currentDate: string;
   }
 
   export const REMOVE_MEAL = '[DASHBOARD] Remove meal';

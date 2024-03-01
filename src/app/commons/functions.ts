@@ -1,5 +1,12 @@
 import {IPage, IPfcc} from './models/common.models';
 import {combineLatest, map, Observable, of, OperatorFunction, switchMap} from 'rxjs';
+import {DateTime} from 'luxon';
+
+export function isToday(date: DateTime): boolean {
+  const now = DateTime.now();
+  return now.hasSame(date, 'year') && now.hasSame(date, 'month') && now.hasSame(date, 'day');
+}
+
 
 export function isDefined<T>(value: T | null | undefined): value is T {
   return value != null;

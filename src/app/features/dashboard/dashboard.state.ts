@@ -10,6 +10,8 @@ import {IMeal} from '../../commons/models/domain.models';
 import {EmitterAction, Receiver} from '@ngxs-labs/emitter';
 import {sumPfccs} from '../../commons/functions';
 import {ProfileLoadedEvent} from '../../commons/models/state.models';
+import {RouterNavigated} from '@ngxs/router-plugin';
+import * as fromRoutes from '../../commons/routes';
 
 @State<Dashboard.IDashboardState>({
   name: 'dashboard',
@@ -24,8 +26,8 @@ export class DashboardState implements NgxsOnInit {
   private static api: ApiService;
 
   @Selector()
-  static date(state: Dashboard.IDashboardState): DateTime {
-    return state.currentDate;
+  static currentDate(state: Dashboard.IDashboardState): DateTime {
+    return DateTime.fromISO(state.currentDate);
   }
 
   @Selector()
@@ -66,7 +68,7 @@ export class DashboardState implements NgxsOnInit {
       return [];
     }
     return state.weekMeals
-      .filter(m => m.eatenOn.hasSame(state.currentDate, 'day'));
+      .filter(m => m.eatenOn.hasSame(this.currentDate(state), 'day'));
   }
 
   constructor(api: ApiService, private store: Store) {
@@ -76,11 +78,20 @@ export class DashboardState implements NgxsOnInit {
   ngxsOnInit(ctx: StateContext<Dashboard.IDashboardState>): void {
     const now = DateTime.now();
     ctx.patchState({
-      currentDate: now,
+      currentDate: now.toISODate(),
       aims: this.store.selectSnapshot(ProfileState.aims),
     });
 
     DashboardState.loadWeekMeals(now, ctx);
+  }
+
+  @Receiver({action: RouterNavigated})
+  static onNavigate(ctx: StateContext<Dashboard.IDashboardState>, action: RouterNavigated): void {
+    if (!action.routerState.url.match(`/${fromRoutes.dashboard}.*`)) {
+      return;
+    }
+
+    this.loadWeekMeals(this.currentDate(ctx.getState()), ctx);
   }
 
   @Receiver({type: Dashboard.REMOVE_MEAL})
@@ -117,10 +128,10 @@ export class DashboardState implements NgxsOnInit {
   @Receiver({type: Dashboard.SWITCH_DATE})
   static switchDate(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.SwitchDatePayload>) {
     const newDate = payload.date.startOf('day');
-    const oldDate = ctx.getState().currentDate;
+    const oldDate = this.currentDate(ctx.getState());
 
     ctx.patchState({
-      currentDate: newDate,
+      currentDate: newDate.toISODate(),
     });
 
     if (oldDate.weekNumber === newDate.weekNumber) {

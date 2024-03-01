@@ -58,7 +58,8 @@
     "daily-nutrients": "Сьогодні",
     "weekly-nutrients": "За тиждень",
     "meals-list": {
-      "title": "Зʼїдено сьогодні"
+      "today-title": "Зʼїдено сьогодні",
+      "date-title": "Зʼїдено {{date}}"
     }
   },
   "add-meal": {

@@ -41,6 +41,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import * as fromRoutes from '../../commons/routes';
 import {Navigate} from '@ngxs/router-plugin';
 import {DialogPageHeadingComponent} from '../../components/dialog-page-heading/dialog-page-heading.component';
+import {DateTime} from 'luxon';
 import IMealOption = AddMeal.IMealOption;
 
 @Component({
@@ -75,6 +76,8 @@ export class AddMealComponent implements OnInit, OnDestroy {
   protected options: IMealOption[];
   @ViewSelectSnapshot(AddMealState.nutrients)
   protected nutrients: IPfcc;
+  @ViewSelectSnapshot(AddMealState.date)
+  protected date: DateTime;
 
   @ViewSelectSnapshot(ProfileState.aims)
   protected aims: IPfcc;
@@ -85,6 +88,8 @@ export class AddMealComponent implements OnInit, OnDestroy {
   protected loadMore: Emittable<void>;
   @Emitter(AddMealState.deleteDish)
   protected deleteDish: Emittable<AddMeal.DeleteDishPayload>;
+  @Emitter(AddMealState.saveMeal)
+  protected saveDish: Emittable<AddMeal.SaveMealPayload>;
 
   protected filterFC = new FormControl<string>(null);
   protected weightFC = new FormControl<number>(100);
@@ -141,6 +146,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
       combineLatestWith(this.loading$.pipe(debounceTime(50)), this.moreDataAvailable$),
     ).subscribe(([scrolledTillEnd, loading, moreDataAvailable]) => {
       if (scrolledTillEnd && !loading && moreDataAvailable) {
+        debugger;
         this.loadMore.emit();
       }
     });
@@ -156,8 +162,8 @@ export class AddMealComponent implements OnInit, OnDestroy {
     this.measurementFC.patchValue(this.measurements[0]);
     this.measurements = [
       this.defaultMeasurement,
-      ...(option.measurements ?? [])
-    ]
+      ...(option.measurements ?? []),
+    ];
   }
 
   handleDeleteOptionClick(option: AddMeal.IMealOption) {
@@ -178,5 +184,16 @@ export class AddMealComponent implements OnInit, OnDestroy {
 
   handleWeightInputFocus($event: FocusEvent) {
     ($event.target as HTMLInputElement).select();
+  }
+
+  handleSaveMealClick(option: AddMeal.IMealOption) {
+    this.saveDish.emit({
+      pfcc: option.pfcc,
+      weight: this.weightFC.value,
+      name: option.name,
+      dishId: option.dishId,
+      foodId: option.foodId,
+      eatenOn: this.date,
+    });
   }
 }
