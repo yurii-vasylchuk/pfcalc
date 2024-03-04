@@ -1,10 +1,6 @@
 import {Routes} from '@angular/router';
 import * as fromRoutes from './commons/routes';
-import {
-  isAuthenticatedGuardFn,
-  isNotAuthenticatedGuardFn,
-  profileConfiguredGuardFn,
-} from "./service/guards";
+import {isAuthenticatedGuardFn, isNotAuthenticatedGuardFn, profileConfiguredGuardFn} from "./service/guards";
 
 export const routes: Routes = [
   {

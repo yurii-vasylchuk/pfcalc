@@ -10,7 +10,7 @@ export const UI_STATE_NAME = 'UI';
   name: UI_STATE_NAME,
   defaults: {
     sideMenuOpened: false,
-    showHeader: true
+    showHeader: true,
   },
 })
 @Injectable()
@@ -35,7 +35,7 @@ export class UiState {
   @Receiver({action: RouterDataResolved})
   static onNavigate(ctx: StateContext<Ui.IUiStateModel>, action: RouterDataResolved) {
     ctx.patchState({
-      showHeader: !action.routerState.root.firstChild.data?.['hideHeader'] ?? false
+      showHeader: !action.routerState.root.firstChild.data?.['hideHeader'] ?? false,
     });
   }
 }

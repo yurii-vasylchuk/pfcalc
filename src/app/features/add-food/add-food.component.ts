@@ -82,25 +82,17 @@ export class AddFoodComponent implements OnInit, OnDestroy {
 
   @ViewSelectSnapshot(AddFoodState.ingredients)
   protected ingredientsOptions: IFood[][];
-
-  @Emitter(AddFoodState.reloadIngredientOptions)
-  private reloadIngredientOptions: EventEmitter<AddFood.ReloadIngredientOptionsPayload>;
   @Emitter(AddFoodState.saveFood)
   protected saveFood: EventEmitter<AddFood.SaveFoodPayload>;
-
   protected title = AddFoodComponent.CREATE_TITLE;
   protected form: FormGroup<AddFoodForm>;
   protected usedIngredientsIds$ = new BehaviorSubject<number[]>([]);
+  protected readonly JSON = JSON;
+  @Emitter(AddFoodState.reloadIngredientOptions)
+  private reloadIngredientOptions: EventEmitter<AddFood.ReloadIngredientOptionsPayload>;
   private nextIngredientIndex = 1;
   private nextMeasurementIndex = 1;
-
   private $destroy = new Subject<void>();
-
-  protected trackByIndexFn: TrackByFunction<{
-    index: number
-  }> = (_, i) => `${i.index}`;
-  protected compareIngredientsFn = (ing1: any, ing2: any) => ing1?.id === ing2?.id;
-  protected trackFoodByIdFn: TrackByFunction<IFood> = (_, item) => item?.id;
 
   constructor(private fb: FormBuilder, private store: Store) {
   }
@@ -150,6 +142,14 @@ export class AddFoodComponent implements OnInit, OnDestroy {
     this.$destroy.complete();
     this.usedIngredientsIds$.complete();
   }
+
+  protected trackByIndexFn: TrackByFunction<{
+    index: number
+  }> = (_, i) => `${i.index}`;
+
+  protected compareIngredientsFn = (ing1: any, ing2: any) => ing1?.id === ing2?.id;
+
+  protected trackFoodByIdFn: TrackByFunction<IFood> = (_, item) => item?.id;
 
   protected handleRemoveIngredientClick(idx: number) {
     this.form.controls.ingredients.removeAt(idx);
@@ -300,6 +300,4 @@ export class AddFoodComponent implements OnInit, OnDestroy {
   private recalculateUsedIngredients(ingredients: IFood[]) {
     this.usedIngredientsIds$.next(ingredients.map(i => i?.id).filter(id => id != null));
   }
-
-  protected readonly JSON = JSON;
 }

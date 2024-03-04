@@ -19,15 +19,14 @@ import {Auth} from '../auth.state-models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigureProfileComponent {
-  @Emitter(AuthState.configureProfile)
-  private configureProfileEmt: Emittable<Auth.ConfigureProfilePayload>;
-
   protected form = this.fb.group({
     protein: [100, Validators.min(0)],
     fat: [40, Validators.min(0)],
     carbohydrates: [150, Validators.min(0)],
     calories: [2000, Validators.min(0)],
   });
+  @Emitter(AuthState.configureProfile)
+  private configureProfileEmt: Emittable<Auth.ConfigureProfilePayload>;
 
   constructor(private fb: FormBuilder) {
   }

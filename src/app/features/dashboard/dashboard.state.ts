@@ -27,6 +27,11 @@ export class DashboardState implements NgxsOnInit {
   private static api: ApiService;
   private static alert: AlertService;
 
+  constructor(api: ApiService, private store: Store, alertService: AlertService) {
+    DashboardState.api = api;
+    DashboardState.alert = alertService;
+  }
+
   @Selector()
   static currentDate(state: Dashboard.IDashboardState): DateTime {
     return DateTime.fromISO(state.currentDate);
@@ -73,21 +78,6 @@ export class DashboardState implements NgxsOnInit {
       .filter(m => m.eatenOn.hasSame(this.currentDate(state), 'day'));
   }
 
-  constructor(api: ApiService, private store: Store, alertService: AlertService) {
-    DashboardState.api = api;
-    DashboardState.alert = alertService;
-  }
-
-  ngxsOnInit(ctx: StateContext<Dashboard.IDashboardState>): void {
-    const now = DateTime.now();
-    ctx.patchState({
-      currentDate: now.toISODate(),
-      aims: this.store.selectSnapshot(ProfileState.aims),
-    });
-  //
-  //   DashboardState.loadWeekMeals(now, ctx);
-  }
-
   @Receiver({action: RouterNavigated})
   static onNavigate(ctx: StateContext<Dashboard.IDashboardState>, action: RouterNavigated): void {
     if (!action.routerState.url.match(`/${fromRoutes.dashboard}.*`)) {
@@ -104,7 +94,7 @@ export class DashboardState implements NgxsOnInit {
         tap(_ => ctx.patchState({weekMeals: ctx.getState().weekMeals.filter(m => m.id !== payload.id)})),
         catchError(err => {
           console.error(err);
-          this.alert.warn('alert.default-error')
+          this.alert.warn('alert.default-error');
 
           return EMPTY;
         }),
@@ -122,7 +112,7 @@ export class DashboardState implements NgxsOnInit {
         }),
         catchError(err => {
           console.error(err);
-          this.alert.warn('alert.default-error')
+          this.alert.warn('alert.default-error');
 
           return EMPTY;
         }),
@@ -173,12 +163,22 @@ export class DashboardState implements NgxsOnInit {
         }),
         catchError(err => {
           console.error(err);
-          this.alert.warn('alert.default-error')
+          this.alert.warn('alert.default-error');
 
           return EMPTY;
         }),
       ).subscribe(meals => {
-        ctx.patchState({weekMeals: meals});
+      ctx.patchState({weekMeals: meals});
     });
+  }
+
+  ngxsOnInit(ctx: StateContext<Dashboard.IDashboardState>): void {
+    const now = DateTime.now();
+    ctx.patchState({
+      currentDate: now.toISODate(),
+      aims: this.store.selectSnapshot(ProfileState.aims),
+    });
+    //
+    //   DashboardState.loadWeekMeals(now, ctx);
   }
 }

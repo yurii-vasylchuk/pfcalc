@@ -30,9 +30,6 @@ import {AuthState} from '../auth.state';
 })
 export class SignUpPageComponent {
 
-  @Emitter(AuthState.signUp)
-  private signUpEmt: Emittable<Auth.SignUpPayload>;
-
   protected readonly minPasswordLength = 6;
   protected form = this.fb.group({
     email: ['', [Validators.email, Validators.required]],
@@ -42,6 +39,8 @@ export class SignUpPageComponent {
   }, {
     validators: fromPfccValidators.fieldsMatches('password', 'confirmPassword'),
   });
+  @Emitter(AuthState.signUp)
+  private signUpEmt: Emittable<Auth.SignUpPayload>;
 
   constructor(private fb: FormBuilder) {
   }

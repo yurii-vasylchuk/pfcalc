@@ -11,6 +11,11 @@ import IMealOption = AddMeal.IMealOption;
 @Injectable({providedIn: 'root'})
 export class ApiService {
 
+  private extractVoidResponse = map((rsp: IApiResponse<void>) => {
+    this.extractResponseData(rsp);
+    return null;
+  });
+
   constructor(private http: HttpClient) {
   }
 
@@ -237,19 +242,6 @@ export class ApiService {
       );
   }
 
-  private extractResponseData<T>(rsp: IApiResponse<T>): T {
-    if (rsp.success) {
-      return rsp.data;
-    } else {
-      throw new Error(rsp.error);
-    }
-  }
-
-  private extractVoidResponse = map((rsp: IApiResponse<void>) => {
-    this.extractResponseData(rsp);
-    return null;
-  });
-
   updateMeasurement(measurement: IMeasurement): Observable<IMeasurement> {
     return this.http.put<IApiResponse<IMeasurement>>(`/api/measurement/${measurement.id}`, measurement)
       .pipe(
@@ -262,5 +254,13 @@ export class ApiService {
       .pipe(
         map(this.extractResponseData),
       );
+  }
+
+  private extractResponseData<T>(rsp: IApiResponse<T>): T {
+    if (rsp.success) {
+      return rsp.data;
+    } else {
+      throw new Error(rsp.error);
+    }
   }
 }

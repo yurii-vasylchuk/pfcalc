@@ -7,7 +7,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {Navigate} from "@ngxs/router-plugin";
 import {Store} from "@ngxs/store";
 import {Ui} from '../../state/ui/ui.state-model';
-import {EmitterAction, EmitterService} from '@ngxs-labs/emitter';
+import {EmitterAction} from '@ngxs-labs/emitter';
 
 
 @Component({

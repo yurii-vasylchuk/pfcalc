@@ -33,6 +33,7 @@ import {NavigationState} from './state/navigation.state';
 import {AddFoodState} from './features/add-food/add-food.state';
 import {PfccMissingTranslationHandler} from './commons/pfcc-missing-translation-handler';
 import {PfccTranslateParser} from './commons/pfcc-translate-parser';
+import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -69,8 +70,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
-        useClass: PfccMissingTranslationHandler
-      }
+        useClass: PfccMissingTranslationHandler,
+      },
     }),
 
     NgxsReduxDevtoolsPluginModule.forRoot({
@@ -83,6 +84,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [
     provideRouter(routes),
+    provideLuxonDateAdapter(),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: BaseUrlInterceptor,

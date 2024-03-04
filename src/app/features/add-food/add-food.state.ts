@@ -22,6 +22,10 @@ export class AddFoodState implements NgxsOnInit {
   private static readonly INGREDIENT_OPTIONS_PAGE_SIZE = 10;
   private static api: ApiService;
 
+  constructor(private api: ApiService) {
+    AddFoodState.api = api;
+  }
+
   @Selector()
   static initializationVector(state: AddFood.IAddFoodState): Partial<IFood> {
     return state.formInitialization;
@@ -30,19 +34,6 @@ export class AddFoodState implements NgxsOnInit {
   @Selector()
   static ingredients(state: AddFood.IAddFoodState): IFood[][] {
     return state.ingredientOptions.map(opt => opt.ingredients);
-  }
-
-
-  constructor(private api: ApiService) {
-    AddFoodState.api = api;
-  }
-
-  ngxsOnInit(ctx: StateContext<AddFood.IAddFoodState>): void {
-    this.api.loadFoodsList(0, AddFoodState.INGREDIENT_OPTIONS_PAGE_SIZE)
-      .pipe(
-        map(rsp => rsp.data),
-      )
-      .subscribe(opts => ctx.patchState({defaultIngredientOptions: opts}));
   }
 
   @Receiver({action: RouterNavigated})
@@ -150,7 +141,15 @@ export class AddFoodState implements NgxsOnInit {
     return combineLatest(
       measurements
         .map(m => ({...m, foodId: food.id}))
-        .map(m => m.id != null ? this.api.updateMeasurement(m) : this.api.createMeasurement(m))
+        .map(m => m.id != null ? this.api.updateMeasurement(m) : this.api.createMeasurement(m)),
     ).pipe(map(_ => (food)));
+  }
+
+  ngxsOnInit(ctx: StateContext<AddFood.IAddFoodState>): void {
+    this.api.loadFoodsList(0, AddFoodState.INGREDIENT_OPTIONS_PAGE_SIZE)
+      .pipe(
+        map(rsp => rsp.data),
+      )
+      .subscribe(opts => ctx.patchState({defaultIngredientOptions: opts}));
   }
 }

@@ -22,7 +22,7 @@ export class TestPageComponent {
     setTimeout(() => {
       s2.next('s2-1');
       s2.complete();
-    }, 500)
+    }, 500);
 
     combineLatest([s1, s2])
       .subscribe(res => console.log(res));

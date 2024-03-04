@@ -2,7 +2,7 @@ import {MissingTranslationHandler, MissingTranslationHandlerParams} from '@ngx-t
 
 export class PfccMissingTranslationHandler implements MissingTranslationHandler {
   private readonly skipPrefixes = [
-    'measurements.'
+    'measurements.',
   ];
 
   handle(params: MissingTranslationHandlerParams) {

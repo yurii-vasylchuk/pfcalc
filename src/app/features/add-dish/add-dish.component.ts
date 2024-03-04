@@ -54,7 +54,11 @@ export class AddDishComponent implements OnInit, OnDestroy {
   protected readonly measurements: IMeasurement[] = [
     this.defaultMeasurement,
   ];
-
+  @ViewSelectSnapshot(AddDishState.options)
+  protected options: IFood[][];
+  @ViewSelectSnapshot(hasActionsExecuting([{type: AddDish.LOAD_RECIPE}, {type: AddDish.LOAD_DISH}]))
+  protected isLoading: boolean;
+  protected form: AddDishFormGroup;
   @Emitter(AddDishState.addIngredient)
   private addIngredient: Emittable<AddDish.AddIngredientPayload>;
   @Emitter(AddDishState.deleteIngredient)
@@ -63,20 +67,8 @@ export class AddDishComponent implements OnInit, OnDestroy {
   private searchIngredientOptions: Emittable<AddDish.SearchIngredientOptionsPayload>;
   @Emitter(AddDishState.saveDish)
   private saveDish: Emittable<AddDish.SaveDishPayload>;
-
-  @ViewSelectSnapshot(AddDishState.options)
-  protected options: IFood[][];
-  @ViewSelectSnapshot(hasActionsExecuting([{type: AddDish.LOAD_RECIPE}, {type: AddDish.LOAD_DISH}]))
-  protected isLoading: boolean;
-
   private destroyed$ = new Subject<void>();
-
-  protected form: AddDishFormGroup;
   private nextIngredientIdx = 0;
-
-  protected trackIngredientByIndexFn: TrackByFunction<AddDish.IAddDishStateIngredient> = (_, i) => `${i.index}`;
-  protected compareIngredientsFn = (ing1: AddDish.IAddDishStateIngredient, ing2: AddDish.IAddDishStateIngredient) => ing1?.index === ing2?.index;
-  protected trackFoodByIdFn: TrackByFunction<IFood> = (_, item) => item?.id;
 
   constructor(private fb: FormBuilder, private store: Store) {
     this.form = fb.group({
@@ -86,6 +78,10 @@ export class AddDishComponent implements OnInit, OnDestroy {
       weight: [0, Validators.required],
       ingredients: fb.array<IngredientFormGroup>([]),
     });
+  }
+
+  protected get formIngredients(): FormArray<IngredientFormGroup> {
+    return this.form.controls.ingredients;
   }
 
   ngOnInit(): void {
@@ -110,10 +106,6 @@ export class AddDishComponent implements OnInit, OnDestroy {
           });
         });
       });
-  }
-
-  protected get formIngredients(): FormArray<IngredientFormGroup> {
-    return this.form.controls.ingredients;
   }
 
   ngOnDestroy(): void {
@@ -173,6 +165,12 @@ export class AddDishComponent implements OnInit, OnDestroy {
     this.addIngredient.emit();
     this.formIngredients.push(ingredientFg);
   }
+
+  protected trackIngredientByIndexFn: TrackByFunction<AddDish.IAddDishStateIngredient> = (_, i) => `${i.index}`;
+
+  protected compareIngredientsFn = (ing1: AddDish.IAddDishStateIngredient, ing2: AddDish.IAddDishStateIngredient) => ing1?.index === ing2?.index;
+
+  protected trackFoodByIdFn: TrackByFunction<IFood> = (_, item) => item?.id;
 
   private ingredientIndexById(id: number) {
     return this.formIngredients.value

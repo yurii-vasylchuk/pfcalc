@@ -1,15 +1,19 @@
-<button *ngIf="isAuthenticated?.isTrue ?? false"
-        (click)="handleMenuClicked()"
-        mat-icon-button
-        color="primary">
+<button (click)="handleMenuClicked()"
+        *ngIf="isAuthenticated?.isTrue ?? false"
+        color="primary"
+        mat-icon-button>
   <mat-icon>menu</mat-icon>
 </button>
 <div class="flex-spacer"></div>
-<mat-form-field appearance="outline" class="lang-select mat-form-field-no-bottom">
+<mat-form-field appearance="outline"
+                class="lang-select mat-form-field-no-bottom">
   <mat-label>
     <mat-icon fontIcon="public"></mat-icon>
   </mat-label>
-  <mat-select (selectionChange)="handleLangChanged($event)" #langSelector>
-    <mat-option *ngFor="let lang of availableLanguages" [value]="lang">{{lang}}</mat-option>
+  <mat-select #langSelector
+              (selectionChange)="handleLangChanged($event)">
+    <mat-option *ngFor="let lang of availableLanguages"
+                [value]="lang">{{ lang }}
+    </mat-option>
   </mat-select>
 </mat-form-field>

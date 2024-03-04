@@ -7,12 +7,12 @@
          type="text">
 </mat-form-field>
 
-<mat-accordion [multi]="false"
-               [displayMode]="'flat'"
+<mat-accordion [displayMode]="'flat'"
+               [multi]="false"
                class="options-list">
-  <mat-expansion-panel *ngFor="let option of options; trackBy: optionTrackBy"
-                       [hideToggle]="false"
-                       (opened)="handleOptionOpened(option)">
+  <mat-expansion-panel (opened)="handleOptionOpened(option)"
+                       *ngFor="let option of options; trackBy: optionTrackBy"
+                       [hideToggle]="false">
     <mat-expansion-panel-header>
       <div class="dishes-header">
         <div class="dishes-header_title">
@@ -43,34 +43,34 @@
     <ng-template matExpansionPanelContent>
       <div class="nutrients">
         <pfc-nutrition-gauge
+          [addingValue]="ceilPfcc(addedPfcc$ | async).protein"
           [aim]="aims.protein"
-          [value]="nutrients.protein"
           [title]="'common.protein' | translate"
-          [addingValue]="ceilPfcc(addedPfcc$ | async).protein"/>
+          [value]="nutrients.protein"/>
         <pfc-nutrition-gauge
+          [addingValue]="ceilPfcc(addedPfcc$ | async).fat"
           [aim]="aims.fat"
-          [value]="nutrients.fat"
           [title]="'common.fat' | translate"
-          [addingValue]="ceilPfcc(addedPfcc$ | async).fat"/>
+          [value]="nutrients.fat"/>
         <pfc-nutrition-gauge
+          [addingValue]="ceilPfcc(addedPfcc$| async).carbohydrates"
           [aim]="aims.carbohydrates"
-          [value]="nutrients.carbohydrates"
           [title]="'common.carbohydrates' | translate"
-          [addingValue]="ceilPfcc(addedPfcc$| async).carbohydrates"/>
+          [value]="nutrients.carbohydrates"/>
         <pfc-nutrition-gauge
+          [addingValue]="ceilPfcc(addedPfcc$ | async).calories"
           [aim]="aims.calories"
-          [value]="nutrients.calories"
           [title]="'common.calories' | translate"
-          [addingValue]="ceilPfcc(addedPfcc$ | async).calories"/>
+          [value]="nutrients.calories"/>
       </div>
 
       <div class="weight-input-group">
         <mat-form-field class="weight-field">
-          <input type="number"
-                 matInput
+          <input (focus)="handleWeightInputFocus($event)"
                  [formControl]="weightFC"
                  [placeholder]="'add-meal.weight-input-placeholder' | translate"
-                 (focus)="handleWeightInputFocus($event)">
+                 matInput
+                 type="number">
         </mat-form-field>
         <mat-form-field class="measurement-select">
           <mat-select [formControl]="measurementFC">
@@ -81,18 +81,18 @@
         </mat-form-field>
       </div>
 
-      <button mat-raised-button
+      <button (click)="handleCookADishClick(option)"
+              *ngIf="option.type === 'RECIPE'"
               class="cook-a-dish-btn"
               color="primary"
-              *ngIf="option.type === 'RECIPE'"
-              (click)="handleCookADishClick(option)">
+              mat-raised-button>
         {{ 'add-meal.cook-a-dish-btn' | translate }}
       </button>
-      <button mat-raised-button
+      <button (click)="handleSaveMealClick(option)"
               class="save-meal-btn"
               color="accent"
-              (click)="handleSaveMealClick(option)">
-        {{'add-meal.add-btn' | translate}}
+              mat-raised-button>
+        {{ 'add-meal.add-btn' | translate }}
       </button>
     </ng-template>
   </mat-expansion-panel>

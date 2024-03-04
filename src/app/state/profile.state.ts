@@ -31,28 +31,6 @@ export class ProfileState implements NgxsOnInit {
     return state.aims;
   }
 
-  ngxsOnInit(ctx: StateContext<Profile.IProfileState>): void {
-    const lang = navigator.language.substring(0, 2);
-    switch (lang) {
-      case 'ua':
-      case 'ru':
-        ctx.patchState({
-          language: 'UA',
-        });
-        break;
-      case 'en':
-        ctx.patchState({
-          language: 'EN',
-        });
-        break;
-      default:
-        console.warn(`Can't infer supported language from ${navigator.language}. Defaulting to EN`);
-        ctx.patchState({
-          language: 'EN',
-        });
-    }
-  }
-
   @Receiver({action: ProfileLoadedEvent})
   public static profileLoaded(ctx: StateContext<Profile.IProfileState>, {profile}: ProfileLoadedEvent) {
     ctx.patchState({
@@ -76,5 +54,27 @@ export class ProfileState implements NgxsOnInit {
     ctx.patchState({
       aims,
     });
+  }
+
+  ngxsOnInit(ctx: StateContext<Profile.IProfileState>): void {
+    const lang = navigator.language.substring(0, 2);
+    switch (lang) {
+      case 'ua':
+      case 'ru':
+        ctx.patchState({
+          language: 'UA',
+        });
+        break;
+      case 'en':
+        ctx.patchState({
+          language: 'EN',
+        });
+        break;
+      default:
+        console.warn(`Can't infer supported language from ${navigator.language}. Defaulting to EN`);
+        ctx.patchState({
+          language: 'EN',
+        });
+    }
   }
 }

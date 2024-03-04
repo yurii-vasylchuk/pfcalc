@@ -1,5 +1,5 @@
-<mat-tab-group dynamicHeight="true"
-               (selectedTabChange)="handleTabSwitched($event)">
+<mat-tab-group (selectedTabChange)="handleTabSwitched($event)"
+               dynamicHeight="true">
   <mat-tab label="{{'foods-management.ingredients-tab-label' | translate}}">
     <ng-container
       *ngTemplateOutlet="foodListTemplate; context: {
@@ -23,40 +23,40 @@
              let-loading="loading"
              let-moreDataAvailable="moreDataAvailable">
   <div class="content">
-    <button mat-stroked-button
-            (click)="addFoodClick()"
+    <button (click)="addFoodClick()"
             class="content__add-btn"
-            color="primary">
+            color="primary"
+            mat-stroked-button>
       {{
-      type === 'INGREDIENT'
-        ? ('foods-management.add-ingredient-caption' | translate)
-        : ('foods-management.add-recipe-caption' | translate)
+        type === 'INGREDIENT'
+          ? ('foods-management.add-ingredient-caption' | translate)
+          : ('foods-management.add-recipe-caption' | translate)
       }}
     </button>
     <mat-form-field>
       <input [formControl]="searchControl"
+             [placeholder]="'foods-management.search-placeholder' | translate"
              [value]="searchControl.value"
              matInput
-             [placeholder]="'foods-management.search-placeholder' | translate"
              type="text">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
     <mat-list>
       <mat-list-item *ngFor="let food of data; trackBy: trackFoodById">
-        <span matListItemTitle>{{food.name}}</span>
-        <span matListItemLine>{{'common.pfcc-values' | translate:food.pfcc }}</span>
+        <span matListItemTitle>{{ food.name }}</span>
+        <span matListItemLine>{{ 'common.pfcc-values' | translate:food.pfcc }}</span>
         <div class="content__food-actions"
              matListItemMeta>
-          <button mat-icon-button
+          <button (click)="handleEditClick(food.id)"
                   color="primary"
-                  (click)="handleEditClick(food.id)">
+                  mat-icon-button>
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button
+          <button (click)="handleDeleteClick(food.id)"
                   *ngIf="food.ownedByUser"
-                  (click)="handleDeleteClick(food.id)"
-                  color="warn">
+                  color="warn"
+                  mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -69,19 +69,19 @@
       </mat-progress-bar>
     </div>
 
-    <button mat-stroked-button
-            (click)="addFoodClick()"
+    <button (click)="addFoodClick()"
             *ngIf="data?.length > 10 || false"
             class="content__add-btn"
-            color="primary">
-      {{'foods-management.add-ingredient-caption' | translate}}
+            color="primary"
+            mat-stroked-button>
+      {{ 'foods-management.add-ingredient-caption' | translate }}
     </button>
-    <button mat-stroked-button
-            (click)="handleLoadMoreClicked()"
+    <button (click)="handleLoadMoreClicked()"
             [disabled]="!moreDataAvailable || loading"
             class="content__add-btn"
-            color="primary">
-      {{'foods-management.load-more-btn-caption' | translate}}
+            color="primary"
+            mat-stroked-button>
+      {{ 'foods-management.load-more-btn-caption' | translate }}
     </button>
   </div>
 </ng-template>

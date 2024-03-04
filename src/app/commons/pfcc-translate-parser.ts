@@ -20,6 +20,10 @@ export class PfccTranslateParser extends TranslateParser {
     return this.parser.interpolate(expr, params);
   }
 
+  override getValue(target: any, key: string) {
+    return this.parser.getValue(target, key);
+  }
+
   private replace(params: any): any {
     if (params == null || typeof params != 'object') {
       return params;
@@ -42,9 +46,5 @@ export class PfccTranslateParser extends TranslateParser {
       ...params,
       ...paramsPatch,
     };
-  }
-
-  override getValue(target: any, key: string) {
-    return this.parser.getValue(target, key);
   }
 }

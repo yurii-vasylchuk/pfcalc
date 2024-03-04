@@ -29,11 +29,9 @@ import {Dashboard} from './dashboard.state-models';
 })
 export class DashboardPageComponent {
 
+  profile$: Observable<IProfile>;
   protected readonly fromFunctions = fromFunctions;
   protected readonly fromRoutes = fromRoutes;
-
-  profile$: Observable<IProfile>;
-
   @ViewSelectSnapshot(DashboardState.todayNutrients)
   protected dailyNutrients: IPfcc;
   @ViewSelectSnapshot(DashboardState.weeklyNutrients)
@@ -49,7 +47,7 @@ export class DashboardPageComponent {
   @Emitter(DashboardState.removeMeal)
   private removeMealEmt: Emittable<Dashboard.RemoveMealPayload>;
   @Emitter(DashboardState.switchDate)
-  private switchDateEmt: Emittable<Dashboard.SwitchDatePayload>
+  private switchDateEmt: Emittable<Dashboard.SwitchDatePayload>;
 
   mealTrackBy = (idx: number, item: IMeal) => item.id;
 

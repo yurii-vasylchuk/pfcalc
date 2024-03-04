@@ -10,8 +10,8 @@ import {catchError, combineLatest, EMPTY, map, Observable, switchMap, tap} from 
 import {loadAllPages, sumPfccs} from '../../commons/functions';
 import {emptyPfcc, IPage, IPfcc} from '../../commons/models/common.models';
 import {Navigation} from '../../state/navigation.state-model';
-import IMealOption = AddMeal.IMealOption;
 import {AlertService} from '../../service/alert.service';
+import IMealOption = AddMeal.IMealOption;
 
 
 @State<AddMeal.IAddMealState>({
@@ -31,6 +31,11 @@ export class AddMealState {
   private static api: ApiService;
   private static alert: AlertService;
 
+  constructor(api: ApiService, alert: AlertService) {
+    AddMealState.api = api;
+    AddMealState.alert = alert;
+  }
+
   @Selector()
   static options(state: AddMeal.IAddMealState): AddMeal.IMealOption[] {
     return state.options;
@@ -49,11 +54,6 @@ export class AddMealState {
   @Selector()
   static date(state: AddMeal.IAddMealState): DateTime {
     return state.date;
-  }
-
-  constructor(api: ApiService, alert: AlertService) {
-    AddMealState.api = api;
-    AddMealState.alert = alert;
   }
 
   @Receiver({action: RouterNavigated})
@@ -95,7 +95,7 @@ export class AddMealState {
         }),
         catchError(err => {
           console.warn('Error while loading meal options: ', err);
-          this.alert.warn('alert.default-error')
+          this.alert.warn('alert.default-error');
 
 
           return EMPTY;
@@ -128,7 +128,7 @@ export class AddMealState {
         }),
         catchError(err => {
           console.warn('Error while loading meal options: ', err);
-          this.alert.warn('alert.default-error')
+          this.alert.warn('alert.default-error');
 
           return EMPTY;
         }),
@@ -157,7 +157,7 @@ export class AddMealState {
         }),
         catchError(err => {
           console.warn('Error while deleting dish: ', err);
-          this.alert.warn('alert.default-error')
+          this.alert.warn('alert.default-error');
 
           return EMPTY;
         }),
@@ -180,11 +180,11 @@ export class AddMealState {
         }),
         catchError(err => {
           console.warn('Error while saving dish: ', err);
-          this.alert.warn('alert.default-error')
+          this.alert.warn('alert.default-error');
 
           return EMPTY;
         }),
-        switchMap(ctx.dispatch)
-      )
+        switchMap(ctx.dispatch),
+      );
   }
 }

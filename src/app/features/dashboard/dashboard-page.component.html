@@ -66,18 +66,20 @@
 <div class="flex-spacer"></div>
 
 <div class="date">
-  <button mat-icon-button (click)="handlePrevDateClick()">
+  <button (click)="handlePrevDateClick()"
+          mat-icon-button>
     <mat-icon>chevron_left</mat-icon>
   </button>
-  {{currentDate.toLocaleString()}}
-  <button mat-icon-button (click)="handleNextDateClick()">
+  {{ currentDate.toLocaleString() }}
+  <button (click)="handleNextDateClick()"
+          mat-icon-button>
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
 
 <div class="add-meal">
-  <a [routerLink]="['/', fromRoutes.addMeal]"
-     [queryParams]="{date: currentDate.toISO({ includeOffset: false })}"
+  <a [queryParams]="{date: currentDate.toISO({ includeOffset: false })}"
+     [routerLink]="['/', fromRoutes.addMeal]"
      color="accent"
      mat-raised-button>
     {{ 'dashboard.add-meal-btn' | translate }}

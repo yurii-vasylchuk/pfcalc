@@ -6,7 +6,7 @@ export type IIngredient = (IFood & {
   ingredientWeight: number
 });
 
-export type IFood ={
+export type IFood = {
   id: number;
   name: string;
   description?: string;

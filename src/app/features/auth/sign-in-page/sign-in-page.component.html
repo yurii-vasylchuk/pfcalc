@@ -1,30 +1,39 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="form">
+<form (ngSubmit)="onSubmit()"
+      [formGroup]="form">
 
   <mat-form-field>
-    <mat-label>{{'sign-in.email.label' | translate}}</mat-label>
-    <input formControlName="email" matInput type="email"/>
+    <mat-label>{{ 'sign-in.email.label' | translate }}</mat-label>
+    <input formControlName="email"
+           matInput
+           type="email"/>
 
     <mat-error *ngIf="form.controls.email.hasError('required')"
                [innerHTML]="'sign-in.email.required' | translate">
     </mat-error>
     <mat-error *ngIf="form.controls.email.hasError('email')">
-      {{'sign-in.email.email' | translate}}
+      {{ 'sign-in.email.email' | translate }}
     </mat-error>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>{{'sign-in.password.label' | translate}}</mat-label>
-    <input formControlName="password" matInput type="password"/>
+    <mat-label>{{ 'sign-in.password.label' | translate }}</mat-label>
+    <input formControlName="password"
+           matInput
+           type="password"/>
 
     <mat-error *ngIf="form.controls.password.hasError('required')"
                [innerHTML]="'sign-in.password.required' | translate">
     </mat-error>
   </mat-form-field>
 
-  <button [disabled]="!form.valid" color="primary" mat-raised-button type="submit">
-    {{'sign-in.sign-in-btn' | translate}}
+  <button [disabled]="!form.valid"
+          color="primary"
+          mat-raised-button
+          type="submit">
+    {{ 'sign-in.sign-in-btn' | translate }}
   </button>
-  <a routerLink="/signup" mat-button>
-    {{'sign-in.sign-up-link' | translate}}
+  <a mat-button
+     routerLink="/signup">
+    {{ 'sign-in.sign-up-link' | translate }}
   </a>
 </form>

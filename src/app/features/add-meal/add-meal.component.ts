@@ -94,12 +94,8 @@ export class AddMealComponent implements OnInit, OnDestroy {
   protected filterFC = new FormControl<string>(null);
   protected weightFC = new FormControl<number>(100);
   protected measurementFC = new FormControl<IMeasurement>(this.defaultMeasurement);
-
-  protected optionTrackBy: TrackByFunction<AddMeal.IMealOption> = (_, opt) => `${opt.type}-${opt.foodId ?? '_'}-${opt.dishId ?? '_'}`;
-
   protected selectedOption$ = new ReplaySubject<AddMeal.IMealOption>();
   protected addedPfcc$ = new ReplaySubject<IPfcc>();
-
   @ViewChild('endIndicator', {static: true, read: ElementRef<HTMLDivElement>})
   private endIndicator: ElementRef<HTMLDivElement>;
   private endIntersectionObserver: IntersectionObserver;
@@ -178,10 +174,6 @@ export class AddMealComponent implements OnInit, OnDestroy {
     this.store.dispatch(new Navigate([fromRoutes.addDish], {recipeId: option.foodId}));
   }
 
-  private onEndIntersected(entry: IntersectionObserverEntry) {
-    this.isAccordionScrolledToEnd$.next(entry.isIntersecting);
-  }
-
   handleWeightInputFocus($event: FocusEvent) {
     ($event.target as HTMLInputElement).select();
   }
@@ -195,5 +187,11 @@ export class AddMealComponent implements OnInit, OnDestroy {
       foodId: option.foodId,
       eatenOn: this.date,
     });
+  }
+
+  protected optionTrackBy: TrackByFunction<AddMeal.IMealOption> = (_, opt) => `${opt.type}-${opt.foodId ?? '_'}-${opt.dishId ?? '_'}`;
+
+  private onEndIntersected(entry: IntersectionObserverEntry) {
+    this.isAccordionScrolledToEnd$.next(entry.isIntersecting);
   }
 }

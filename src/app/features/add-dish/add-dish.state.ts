@@ -25,16 +25,6 @@ export class AddDishState {
   private static api: ApiService;
   private static defaultOptions: IFood[] = [];
 
-  @Selector()
-  static options(state: AddDish.IAddDishState): IFood[][] {
-    return state.ingredientOptions;
-  }
-
-  @Selector()
-  static initialization(state: AddDish.IAddDishState): IDish {
-    return state.initialization;
-  }
-
   constructor(private api: ApiService) {
     AddDishState.api = api;
 
@@ -43,6 +33,16 @@ export class AddDishState {
         map(page => page.data),
       )
       .subscribe(foods => AddDishState.defaultOptions = foods);
+  }
+
+  @Selector()
+  static options(state: AddDish.IAddDishState): IFood[][] {
+    return state.ingredientOptions;
+  }
+
+  @Selector()
+  static initialization(state: AddDish.IAddDishState): IDish {
+    return state.initialization;
   }
 
   @Receiver({action: RouterNavigated})

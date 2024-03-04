@@ -1,66 +1,66 @@
 <pfc-dialog-page-heading [title]="'add-dish.title'"></pfc-dialog-page-heading>
 
-<form [formGroup]="form"
-      (ngSubmit)="handleSubmit()"
-      *ngIf="!isLoading">
+<form (ngSubmit)="handleSubmit()"
+      *ngIf="!isLoading"
+      [formGroup]="form">
   <div class="body">
     <mat-form-field>
       <mat-label>{{ 'add-dish.dish-name-label' | translate }}</mat-label>
-      <input matInput
-             formControlName="dishName"
+      <input formControlName="dishName"
+             matInput
              type="text">
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{'add-dish.cooked-weight-label' | translate}}</mat-label>
-      <input matInput
-             formControlName="weight"
+      <mat-label>{{ 'add-dish.cooked-weight-label' | translate }}</mat-label>
+      <input formControlName="weight"
+             matInput
              type="number">
     </mat-form-field>
 
     <ng-container formArrayName="ingredients">
-      <div class="ingredient"
+      <div *ngFor="let ing of formIngredients.value; let idx = index; trackBy: trackIngredientByIndexFn"
            [formGroupName]="idx"
-           *ngFor="let ing of formIngredients.value; let idx = index; trackBy: trackIngredientByIndexFn">
+           class="ingredient">
         <div class="ingredient__select-group">
           <mat-form-field class="ingredient__select">
-            <mat-select formControlName="ingredient"
-                        [compareWith]="compareIngredientsFn">
+            <mat-select [compareWith]="compareIngredientsFn"
+                        formControlName="ingredient">
               <!--              <mat-label>{{ 'add-dish.ingredient-select-label' | translate }}</mat-label>-->
               <mat-option>
-                <ngx-mat-select-search formControlName="ingredientSearch"
-                                       [placeholderLabel]="'add-dish.ingredient-search-placeholder' | translate"/>
+                <ngx-mat-select-search [placeholderLabel]="'add-dish.ingredient-search-placeholder' | translate"
+                                       formControlName="ingredientSearch"/>
               </mat-option>
               <!-- Currently selected option -->
-              <mat-option [value]="ing.ingredient"
-                          [disabled]="true">
+              <mat-option [disabled]="true"
+                          [value]="ing.ingredient">
                 {{ ing.ingredient?.name }}
               </mat-option>
               <mat-option *ngFor="let opt of options[idx]; trackBy:trackFoodByIdFn"
-                          [value]="opt"
-                          [disabled]="false">
+                          [disabled]="false"
+                          [value]="opt">
                 {{ opt?.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <button class="ingredient__delete-btn"
-                  type="button"
-                  mat-icon-button
+          <button (click)="handleDeleteClicked(ing.id)"
+                  class="ingredient__delete-btn"
                   color="warn"
-                  (click)="handleDeleteClicked(ing.id)">
+                  mat-icon-button
+                  type="button">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
         <div class="ingredient__weight">
           <mat-form-field class="ingredient__weight-input">
-            <input matInput
-                   formControlName="weight"
+            <input formControlName="weight"
+                   matInput
                    type="number">
           </mat-form-field>
           <mat-form-field class="ingredient__weight-measurement">
             <mat-select formControlName="measurement">
               <mat-option [value]="defaultMeasurement">
-                {{'measurements.' + defaultMeasurement.name | translate}}
+                {{ 'measurements.' + defaultMeasurement.name | translate }}
               </mat-option>
               <mat-option *ngFor="let measurement of formIngredients.at(idx).value.ingredient.measurements"
                           [value]="measurement">
@@ -73,14 +73,14 @@
     </ng-container>
 
     <div class="buttons">
-      <button mat-raised-button
-              type="button"
-              (click)="handleAddIngredientClicked()">
+      <button (click)="handleAddIngredientClicked()"
+              mat-raised-button
+              type="button">
         {{ 'add-dish.add-ingredient-btn' | translate }}
       </button>
-      <button mat-raised-button
+      <button [disabled]="form.invalid"
               color="primary"
-              [disabled]="form.invalid"
+              mat-raised-button
               type="submit">
         {{ 'add-dish.save-btn' | translate }}
       </button>

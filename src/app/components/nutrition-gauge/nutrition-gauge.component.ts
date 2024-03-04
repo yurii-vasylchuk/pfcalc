@@ -21,6 +21,7 @@ export class NutritionGaugeComponent {
   @Input() strokeWidth = 15;
   @Input() mainColor = '#ff4081';
   @Input() bgColor = '#bf3060';
+  protected readonly fromFunctions = fromFunctions;
 
   constructor() {
   }
@@ -48,13 +49,11 @@ export class NutritionGaugeComponent {
     if (this.addingValue) {
       result[0].circles.push({
         value: this.value + this.addingValue,
-        maxValue: this.aim|| (this.value + (this.addingValue > 0 ? this.addingValue : 0)),
+        maxValue: this.aim || (this.value + (this.addingValue > 0 ? this.addingValue : 0)),
         color: this.mainColor,
-        blink: true
+        blink: true,
       });
     }
     return result;
   }
-
-  protected readonly fromFunctions = fromFunctions;
 }

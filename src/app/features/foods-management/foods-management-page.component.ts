@@ -52,7 +52,11 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   protected productsLoading: boolean;
   @ViewSelectSnapshot(hasActionsExecuting([{type: FoodsManagement.LOAD_RECIPES}, {type: FoodsManagement.LOAD_MORE_RECIPES}]))
   protected recipesLoading: boolean;
-
+  protected type: FoodType = 'INGREDIENT';
+  @ViewChildren(MatListItem, {read: ElementRef})
+  protected items!: QueryList<ElementRef>;
+  protected searchControl = new FormControl<string | null>(null);
+  protected readonly JSON = JSON;
   @Emitter(FoodsManagementState.loadProducts)
   private loadProducts: Emittable<FoodsManagement.LoadFoodsActionPayload>;
   @Emitter(FoodsManagementState.loadRecipes)
@@ -67,17 +71,6 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   private editFood: Emittable<FoodsManagement.EditFoodActionPayload>;
   @Emitter(FoodsManagementState.deleteFood)
   private deleteFood: Emittable<FoodsManagement.DeleteFoodActionPayload>;
-
-  protected type: FoodType = 'INGREDIENT';
-
-  @ViewChildren(MatListItem, {read: ElementRef})
-  protected items!: QueryList<ElementRef>;
-  protected searchControl = new FormControl<string | null>(null);
-
-  protected trackFoodById: TrackByFunction<IFood> = (_, item) => {
-    return item.id;
-  };
-
   private $destroyed = new Subject<void>();
 
   constructor(private store: Store) {
@@ -162,5 +155,7 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
     }
   }
 
-  protected readonly JSON = JSON;
+  protected trackFoodById: TrackByFunction<IFood> = (_, item) => {
+    return item.id;
+  };
 }

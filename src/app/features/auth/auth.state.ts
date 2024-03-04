@@ -64,38 +64,6 @@ export class AuthState implements NgxsOnInit {
     return state.loggedIn;
   }
 
-  ngxsOnInit(ctx: StateContext<Auth.IAuthState>): void {
-    const refreshToken = this.localStoreService.loadRefreshToken();
-    if (refreshToken != null) {
-      ctx.patchState({
-        refreshToken,
-      });
-    }
-
-    this.api.getProfile()
-      .pipe(
-        tap(profile => {
-          ctx.patchState({
-            loggedIn: UnknownBoolean.TRUE,
-            profileConfigured: UnknownBoolean.of(profile.profileConfigured),
-          });
-
-          if (!profile.profileConfigured) {
-            ctx.dispatch(new Navigate([fromRoutes.completeProfile]));
-          }
-        }),
-        map(profile => new ProfileLoadedEvent(profile)),
-        catchError(_ => {
-          ctx.patchState({
-            loggedIn: UnknownBoolean.FALSE,
-          });
-
-          return of(new Navigate([fromRoutes.signIn]));
-        }),
-      )
-      .subscribe(ctx.dispatch);
-  }
-
   @Receiver({type: Auth.LOG_OUT})
   static logOut(ctx: StateContext<Auth.IAuthState>, _: EmitterAction) {
     this.localStoreService.dropRefreshToken();
@@ -245,6 +213,38 @@ export class AuthState implements NgxsOnInit {
         }),
         map(ctx.dispatch),
       );
+  }
+
+  ngxsOnInit(ctx: StateContext<Auth.IAuthState>): void {
+    const refreshToken = this.localStoreService.loadRefreshToken();
+    if (refreshToken != null) {
+      ctx.patchState({
+        refreshToken,
+      });
+    }
+
+    this.api.getProfile()
+      .pipe(
+        tap(profile => {
+          ctx.patchState({
+            loggedIn: UnknownBoolean.TRUE,
+            profileConfigured: UnknownBoolean.of(profile.profileConfigured),
+          });
+
+          if (!profile.profileConfigured) {
+            ctx.dispatch(new Navigate([fromRoutes.completeProfile]));
+          }
+        }),
+        map(profile => new ProfileLoadedEvent(profile)),
+        catchError(_ => {
+          ctx.patchState({
+            loggedIn: UnknownBoolean.FALSE,
+          });
+
+          return of(new Navigate([fromRoutes.signIn]));
+        }),
+      )
+      .subscribe(ctx.dispatch);
   }
 
   @Action(Auth.ProfileConfiguredSuccessfullyEvent)

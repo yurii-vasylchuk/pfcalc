@@ -38,6 +38,18 @@ export class UnknownBoolean {
   private constructor(public readonly value: string) {
   }
 
+  public get isTrue(): boolean {
+    return this === UnknownBoolean.TRUE;
+  }
+
+  public get isFalse(): boolean {
+    return this === UnknownBoolean.FALSE;
+  }
+
+  static of(value: boolean) {
+    return value ? UnknownBoolean.TRUE : UnknownBoolean.FALSE;
+  }
+
   public and(other: UnknownBoolean): UnknownBoolean {
     if (this == UnknownBoolean.UNKNOWN || other == UnknownBoolean.UNKNOWN) {
       return UnknownBoolean.UNKNOWN;
@@ -66,17 +78,5 @@ export class UnknownBoolean {
     } else {
       return UnknownBoolean.TRUE;
     }
-  }
-
-  public get isTrue(): boolean {
-    return this === UnknownBoolean.TRUE;
-  }
-
-  public get isFalse(): boolean {
-    return this === UnknownBoolean.FALSE;
-  }
-
-  static of(value: boolean) {
-    return value ? UnknownBoolean.TRUE : UnknownBoolean.FALSE;
   }
 }

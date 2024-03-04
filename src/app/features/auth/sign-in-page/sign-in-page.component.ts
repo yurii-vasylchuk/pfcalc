@@ -25,13 +25,12 @@ import {AuthState} from '../auth.state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInPageComponent {
-  @Emitter(AuthState.signIn)
-  private signInEmt: Emittable<Auth.SignInPayload>;
-
   protected form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
   });
+  @Emitter(AuthState.signIn)
+  private signInEmt: Emittable<Auth.SignInPayload>;
 
   constructor(private fb: FormBuilder) {
   }

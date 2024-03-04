@@ -20,11 +20,11 @@ export const isAuthenticatedGuardFn: CanActivateFn = (): Observable<boolean> => 
         }
       }),
     );
-}
+};
 
 export const isTestEnvironment: CanMatchFn = (): boolean => {
-    return !environment.production
-}
+  return !environment.production;
+};
 
 export const isNotAuthenticatedGuardFn: CanActivateFn = (): Observable<boolean> => {
   const store = inject(Store);
@@ -38,7 +38,7 @@ export const isNotAuthenticatedGuardFn: CanActivateFn = (): Observable<boolean> 
         }
       }),
     );
-}
+};
 export const profileConfiguredGuardFn: CanActivateFn = (): Observable<boolean> => {
   const store = inject(Store);
   return store.select(AuthState.profileConfigured)
@@ -52,4 +52,4 @@ export const profileConfiguredGuardFn: CanActivateFn = (): Observable<boolean> =
       }),
     );
 
-}
+};

@@ -20,7 +20,7 @@ export class DialogPageHeadingComponent {
   @Input()
   title: string;
   @Emitter(NavigationState.navigateBack)
-  protected goBack: Emittable<NavigateBackPayload>
+  protected goBack: Emittable<NavigateBackPayload>;
 
   constructor() {
   }

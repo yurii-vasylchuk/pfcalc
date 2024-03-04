@@ -1,10 +1,10 @@
 <mat-drawer-container autosize
-                      hasBackdrop="true"
-                      class="container">
-  <mat-drawer [opened]="menuOpened ?? false"
-              (closedStart)="handleMenuClosed()"
-              mode="over"
-              class="menu-container">
+                      class="container"
+                      hasBackdrop="true">
+  <mat-drawer (closedStart)="handleMenuClosed()"
+              [opened]="menuOpened ?? false"
+              class="menu-container"
+              mode="over">
     <pfc-menu></pfc-menu>
   </mat-drawer>
   <mat-drawer-content class="content">
