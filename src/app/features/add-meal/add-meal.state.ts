@@ -11,6 +11,7 @@ import {loadAllPages, sumPfccs} from '../../commons/functions';
 import {emptyPfcc, IPage, IPfcc} from '../../commons/models/common.models';
 import {Navigation} from '../../state/navigation.state-model';
 import IMealOption = AddMeal.IMealOption;
+import {AlertService} from '../../service/alert.service';
 
 
 @State<AddMeal.IAddMealState>({
@@ -28,6 +29,7 @@ import IMealOption = AddMeal.IMealOption;
 @Injectable({providedIn: 'root'})
 export class AddMealState {
   private static api: ApiService;
+  private static alert: AlertService;
 
   @Selector()
   static options(state: AddMeal.IAddMealState): AddMeal.IMealOption[] {
@@ -49,8 +51,9 @@ export class AddMealState {
     return state.date;
   }
 
-  constructor(api: ApiService) {
+  constructor(api: ApiService, alert: AlertService) {
     AddMealState.api = api;
+    AddMealState.alert = alert;
   }
 
   @Receiver({action: RouterNavigated})
@@ -92,8 +95,8 @@ export class AddMealState {
         }),
         catchError(err => {
           console.warn('Error while loading meal options: ', err);
+          this.alert.warn('alert.default-error')
 
-          //TODO: show error message
 
           return EMPTY;
         }),
@@ -125,7 +128,8 @@ export class AddMealState {
         }),
         catchError(err => {
           console.warn('Error while loading meal options: ', err);
-          //TODO: show error message
+          this.alert.warn('alert.default-error')
+
           return EMPTY;
         }),
       );
@@ -153,7 +157,8 @@ export class AddMealState {
         }),
         catchError(err => {
           console.warn('Error while deleting dish: ', err);
-          //TODO: show error message
+          this.alert.warn('alert.default-error')
+
           return EMPTY;
         }),
       );
@@ -175,7 +180,8 @@ export class AddMealState {
         }),
         catchError(err => {
           console.warn('Error while saving dish: ', err);
-          //TODO: show error message
+          this.alert.warn('alert.default-error')
+
           return EMPTY;
         }),
         switchMap(ctx.dispatch)

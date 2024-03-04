@@ -1,4 +1,8 @@
 {
+  "alert": {
+    "action": "Ок",
+    "default-error": "Йой, щось пішло не так"
+  },
   "common": {
     "calories": "Калорії",
     "protein": "Білки",

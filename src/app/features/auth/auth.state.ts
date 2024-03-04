@@ -12,6 +12,7 @@ import {ProfileState} from '../../state/profile.state';
 import {Language} from '../../commons/models/auth.models';
 import {EmitterAction, Receiver} from '@ngxs-labs/emitter';
 import {ProfileLoadedEvent} from '../../commons/models/state.models';
+import {AlertService} from '../../service/alert.service';
 import IAuthState = Auth.IAuthState;
 
 
@@ -30,14 +31,17 @@ export class AuthState implements NgxsOnInit {
   private static api: ApiService;
   private static localStoreService: LocalStoreService;
   private static store: Store;
+  private static alert: AlertService;
 
   @SelectSnapshot(ProfileState.language)
   language: Language;
 
   constructor(private api: ApiService,
-              private localStoreService: LocalStoreService) {
+              private localStoreService: LocalStoreService,
+              private alert: AlertService) {
     AuthState.api = api;
     AuthState.localStoreService = localStoreService;
+    AuthState.alert = alert;
   }
 
   @Selector()
@@ -146,8 +150,8 @@ export class AuthState implements NgxsOnInit {
             loggedIn: UnknownBoolean.FALSE,
             profileConfigured: UnknownBoolean.FALSE,
           });
-
-          //TODO: show error message
+          this.alert.warn('alert.default-error');
+          console.error(err);
 
           return EMPTY;
         }),
@@ -171,7 +175,8 @@ export class AuthState implements NgxsOnInit {
           return new Navigate([`/${fromRoutes.completeProfile}`]);
         }),
         catchError(err => {
-          //TODO: show error message
+          this.alert.warn('alert.default-error');
+
 
           console.warn(err.msg);
 
@@ -204,7 +209,8 @@ export class AuthState implements NgxsOnInit {
           this.localStoreService.saveRefreshToken(rsp.refreshToken);
         }),
         catchError(err => {
-          //TODO: show error message
+          this.alert.warn('alert.default-error');
+
 
           console.warn(err.msg);
 
@@ -232,8 +238,8 @@ export class AuthState implements NgxsOnInit {
         map(_ => new Auth.ProfileConfiguredSuccessfullyEvent(payload.aims)),
         catchError(err => {
           console.error(err);
+          this.alert.warn('alert.default-error');
 
-          //TODO: show error message
 
           return EMPTY;
         }),

@@ -3,8 +3,9 @@ import {FoodsManagement, IFoodsManagementState} from './foods-management.state-m
 import {Injectable} from '@angular/core';
 import {Emittable, Emitter, EmitterAction, Receiver} from '@ngxs-labs/emitter';
 import {ApiService} from '../../service/api.service';
-import {catchError, EMPTY, Observable, of, switchMap, tap} from 'rxjs';
+import {catchError, EMPTY, Observable, switchMap, tap} from 'rxjs';
 import {IFood} from '../../commons/models/domain.models';
+import {AlertService} from '../../service/alert.service';
 import LoadFoodsActionPayload = FoodsManagement.LoadFoodsActionPayload;
 
 @State<IFoodsManagementState>({
@@ -22,9 +23,11 @@ export class FoodsManagementState {
   private static loadRecipesEmitter: Emittable<FoodsManagement.LoadFoodsActionPayload>;
 
   private static api: ApiService;
+  private static alert: AlertService;
 
-  constructor(api: ApiService) {
+  constructor(api: ApiService, alert: AlertService) {
     FoodsManagementState.api = api;
+    FoodsManagementState.alert = alert;
   }
 
   @Selector()
@@ -52,7 +55,9 @@ export class FoodsManagementState {
     const productsState = ctx.getState().products;
 
     if (productsState.page >= productsState.totalPages - 1) {
-      return of();// TODO: return error action to show ui error badge
+      this.alert.warn('alert.default-error');
+
+      return EMPTY;
     }
 
     return this.api.loadFoodsList(productsState.page + 1, productsState.pageSize, productsState.name, 'INGREDIENT')
@@ -101,7 +106,7 @@ export class FoodsManagementState {
     const recipesState = ctx.getState().recipes;
 
     if (recipesState.page >= recipesState.totalPages - 1) {
-      return of();// TODO: return error action to show ui error badge
+      return EMPTY;
     }
 
     return this.api.loadFoodsList(recipesState.page + 1, recipesState.pageSize, recipesState.name, 'RECIPE')
@@ -139,8 +144,8 @@ export class FoodsManagementState {
           });
         }),
         catchError(err => {
-          //TODO: Fire some error action to show error notification
           console.error('Loading recipes failed', err);
+          this.alert.warn('alert.default-error');
           return EMPTY;
         }),
       );
@@ -173,7 +178,8 @@ export class FoodsManagementState {
       }),
       catchError(err => {
         console.error('Creating food failed', err);
-        //TODO: return error action to show ui error badge
+        this.alert.warn('alert.default-error');
+
         return EMPTY;
       }),
     );
@@ -196,8 +202,8 @@ export class FoodsManagementState {
         });
       }),
       catchError(err => {
-        //TODO: return error action to show ui error badge
         console.error('Editing food failed', err);
+        this.alert.warn('alert.default-error');
         return EMPTY;
       }),
     );
@@ -241,8 +247,8 @@ export class FoodsManagementState {
         }
       }),
       catchError(err => {
-        //TODO: return error action to show ui error badge
         console.error('Deleting food failed', err);
+        this.alert.warn('alert.default-error');
         return EMPTY;
       }),
     );

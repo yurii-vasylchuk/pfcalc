@@ -13,6 +13,9 @@ export const environment = {
     maxHistorySize: 999,
     defaultPage: 'dashboard',
   },
+  alert: {
+    duration: 1500,
+  },
   // apiUrl: 'http://localhost:8080'
 };
 

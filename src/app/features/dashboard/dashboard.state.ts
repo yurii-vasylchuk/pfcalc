@@ -12,6 +12,7 @@ import {sumPfccs} from '../../commons/functions';
 import {ProfileLoadedEvent} from '../../commons/models/state.models';
 import {RouterNavigated} from '@ngxs/router-plugin';
 import * as fromRoutes from '../../commons/routes';
+import {AlertService} from '../../service/alert.service';
 
 @State<Dashboard.IDashboardState>({
   name: 'dashboard',
@@ -24,6 +25,7 @@ import * as fromRoutes from '../../commons/routes';
 @Injectable({providedIn: 'root'})
 export class DashboardState implements NgxsOnInit {
   private static api: ApiService;
+  private static alert: AlertService;
 
   @Selector()
   static currentDate(state: Dashboard.IDashboardState): DateTime {
@@ -71,8 +73,9 @@ export class DashboardState implements NgxsOnInit {
       .filter(m => m.eatenOn.hasSame(this.currentDate(state), 'day'));
   }
 
-  constructor(api: ApiService, private store: Store) {
+  constructor(api: ApiService, private store: Store, alertService: AlertService) {
     DashboardState.api = api;
+    DashboardState.alert = alertService;
   }
 
   ngxsOnInit(ctx: StateContext<Dashboard.IDashboardState>): void {
@@ -81,8 +84,8 @@ export class DashboardState implements NgxsOnInit {
       currentDate: now.toISODate(),
       aims: this.store.selectSnapshot(ProfileState.aims),
     });
-
-    DashboardState.loadWeekMeals(now, ctx);
+  //
+  //   DashboardState.loadWeekMeals(now, ctx);
   }
 
   @Receiver({action: RouterNavigated})
@@ -101,7 +104,7 @@ export class DashboardState implements NgxsOnInit {
         tap(_ => ctx.patchState({weekMeals: ctx.getState().weekMeals.filter(m => m.id !== payload.id)})),
         catchError(err => {
           console.error(err);
-          //TODO: Show error message
+          this.alert.warn('alert.default-error')
 
           return EMPTY;
         }),
@@ -119,7 +122,8 @@ export class DashboardState implements NgxsOnInit {
         }),
         catchError(err => {
           console.error(err);
-          //TODO: Show error message
+          this.alert.warn('alert.default-error')
+
           return EMPTY;
         }),
       );
@@ -169,11 +173,12 @@ export class DashboardState implements NgxsOnInit {
         }),
         catchError(err => {
           console.error(err);
-
-          //TODO: Show error message
+          this.alert.warn('alert.default-error')
 
           return EMPTY;
         }),
-      ).subscribe(meals => ctx.patchState({weekMeals: meals}));
+      ).subscribe(meals => {
+        ctx.patchState({weekMeals: meals});
+    });
   }
 }

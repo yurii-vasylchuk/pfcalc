@@ -1,4 +1,8 @@
 {
+  "alert": {
+    "action": "Ok",
+    "default-error": "Something's went wrong"
+  },
   "common": {
     "calories": "Calories",
     "protein": "Protein",

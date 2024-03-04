@@ -9,4 +9,7 @@ export const environment = {
     maxHistorySize: 20,
     defaultPage: 'dashboard',
   },
+  alert: {
+    duration: 1500,
+  },
 };
