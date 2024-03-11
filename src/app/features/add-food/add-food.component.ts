@@ -133,8 +133,6 @@ export class AddFoodComponent implements OnInit, OnDestroy {
     ).subscribe(this.reloadIngredientOptions.emit);
 
     this.initializeFromData();
-
-    this.form.valueChanges.subscribe(v => console.log(v));
   }
 
   ngOnDestroy() {
@@ -272,6 +270,12 @@ export class AddFoodComponent implements OnInit, OnDestroy {
             description: food.description,
             isRecipe: food.type === 'RECIPE',
             hidden: food.hidden,
+            pfcc: {
+              protein: food.pfcc?.protein,
+              fat: food.pfcc?.fat,
+              carbohydrates: food.pfcc?.carbohydrates,
+              calories: food.pfcc?.calories,
+            },
             ingredients,
             measurements,
           });

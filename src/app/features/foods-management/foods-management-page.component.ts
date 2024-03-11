@@ -5,20 +5,19 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  QueryList,
   TrackByFunction,
-  ViewChildren,
+  ViewChild,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatTabChangeEvent, MatTabsModule} from "@angular/material/tabs";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatButtonModule} from "@angular/material/button";
-import {MatListItem, MatListModule} from "@angular/material/list";
+import {MatListModule} from "@angular/material/list";
 import {FoodType, IFood} from "../../commons/models/domain.models";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
-import {debounceTime, distinctUntilChanged, map, Subject, takeUntil} from "rxjs";
+import {BehaviorSubject, debounceTime, distinctUntilChanged, filter, identity, map, Subject, takeUntil} from "rxjs";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {MatDialogModule} from "@angular/material/dialog";
 import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot';
@@ -52,11 +51,10 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   protected productsLoading: boolean;
   @ViewSelectSnapshot(hasActionsExecuting([{type: FoodsManagement.LOAD_RECIPES}, {type: FoodsManagement.LOAD_MORE_RECIPES}]))
   protected recipesLoading: boolean;
-  protected type: FoodType = 'INGREDIENT';
-  @ViewChildren(MatListItem, {read: ElementRef})
-  protected items!: QueryList<ElementRef>;
-  protected searchControl = new FormControl<string | null>(null);
-  protected readonly JSON = JSON;
+
+  @ViewChild('endIndicator', {static: false, read: ElementRef<HTMLDivElement>})
+  private endIndicator: ElementRef<HTMLDivElement>;
+
   @Emitter(FoodsManagementState.loadProducts)
   private loadProducts: Emittable<FoodsManagement.LoadFoodsActionPayload>;
   @Emitter(FoodsManagementState.loadRecipes)
@@ -71,19 +69,42 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   private editFood: Emittable<FoodsManagement.EditFoodActionPayload>;
   @Emitter(FoodsManagementState.deleteFood)
   private deleteFood: Emittable<FoodsManagement.DeleteFoodActionPayload>;
-  private $destroyed = new Subject<void>();
+
+  protected type: FoodType = 'INGREDIENT';
+  protected searchControl = new FormControl<string | null>(null);
+  private endIntersectionObserver: IntersectionObserver;
+  private isAccordionScrolledToEnd$ = new BehaviorSubject<boolean>(false);
+  private destroyed$ = new Subject<void>();
 
   constructor(private store: Store) {
+    this.endIntersectionObserver = new IntersectionObserver((entries) => this.onEndIntersected(entries[0]), {
+      threshold: 0.5,
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.endIntersectionObserver.observe(this.endIndicator.nativeElement);
   }
 
   ngOnInit(): void {
     this.loadProducts.emit({name: null, page: 0, pageSize: 10});
     this.loadRecipes.emit({name: null, page: 0, pageSize: 10});
+    this.isAccordionScrolledToEnd$.pipe(
+      distinctUntilChanged(),
+      filter(identity),
+      map(scrolled => scrolled &&
+                      this.type === 'RECIPE' ?
+                      (!this.recipesLoading && this.moreRecipesAvailable) :
+                      (!this.productsLoading && this.moreProductsAvailable),
+      ),
+      filter(identity),
+    ).subscribe(_ => this.handleLoadMoreClicked());
+
     this.searchControl.valueChanges
       .pipe(
-        debounceTime(200),
+        debounceTime(300),
         distinctUntilChanged(),
-        takeUntil(this.$destroyed),
+        takeUntil(this.destroyed$),
         map(search => ({
           page: 0,
           pageSize: 10,
@@ -104,15 +125,13 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   }
 
   ngOnDestroy(): void {
-    this.$destroyed.next();
-    this.$destroyed.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
+
+    this.endIntersectionObserver.unobserve(this.endIndicator.nativeElement);
   }
 
-  ngAfterViewInit(): void {
-    //TODO: Add observer on last element
-  }
-
-  addFoodClick() {
+  handleAddFoodClick() {
     this.store.dispatch(new Navigate([fromRoutes.addFood], {
       type: this.type,
       name: this.searchControl.value || undefined,
@@ -158,4 +177,8 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   protected trackFoodById: TrackByFunction<IFood> = (_, item) => {
     return item.id;
   };
+
+  private onEndIntersected(entry: IntersectionObserverEntry) {
+    this.isAccordionScrolledToEnd$.next(entry.isIntersecting);
+  }
 }

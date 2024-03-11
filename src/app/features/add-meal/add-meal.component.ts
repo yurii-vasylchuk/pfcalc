@@ -142,7 +142,6 @@ export class AddMealComponent implements OnInit, OnDestroy {
       combineLatestWith(this.loading$.pipe(debounceTime(50)), this.moreDataAvailable$),
     ).subscribe(([scrolledTillEnd, loading, moreDataAvailable]) => {
       if (scrolledTillEnd && !loading && moreDataAvailable) {
-        debugger;
         this.loadMore.emit();
       }
     });

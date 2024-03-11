@@ -217,8 +217,8 @@ export class FoodsManagementState {
         const foodType = s.recipes.data.find(f => f.id === payload) ?
                          'RECIPE' : 'INGREDIENT';
         const pageSize = foodType === 'INGREDIENT' ?
-                         s.products.pageSize * s.products.page :
-                         s.recipes.pageSize * s.recipes.page;
+                         s.products.pageSize * (s.products.page + 1) :
+                         s.recipes.pageSize * (s.recipes.page + 1);
         const name = foodType === 'INGREDIENT' ? s.products.name : s.recipes.name;
 
 

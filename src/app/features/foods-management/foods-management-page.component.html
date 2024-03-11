@@ -23,7 +23,7 @@
              let-loading="loading"
              let-moreDataAvailable="moreDataAvailable">
   <div class="content">
-    <button (click)="addFoodClick()"
+    <button (click)="handleAddFoodClick()"
             class="content__add-btn"
             color="primary"
             mat-stroked-button>
@@ -62,6 +62,7 @@
         </div>
       </mat-list-item>
     </mat-list>
+    <div #endIndicator></div>
 
     <div *ngIf="loading"
          class="data-loading-bar-container">
@@ -69,19 +70,12 @@
       </mat-progress-bar>
     </div>
 
-    <button (click)="addFoodClick()"
+    <button (click)="handleAddFoodClick()"
             *ngIf="data?.length > 10 || false"
             class="content__add-btn"
             color="primary"
             mat-stroked-button>
       {{ 'foods-management.add-ingredient-caption' | translate }}
-    </button>
-    <button (click)="handleLoadMoreClicked()"
-            [disabled]="!moreDataAvailable || loading"
-            class="content__add-btn"
-            color="primary"
-            mat-stroked-button>
-      {{ 'foods-management.load-more-btn-caption' | translate }}
     </button>
   </div>
 </ng-template>
