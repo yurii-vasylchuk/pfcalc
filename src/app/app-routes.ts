@@ -32,6 +32,7 @@ export const routes: Routes = [
     path: fromRoutes.addMeal,
     data: {
       hideHeader: true,
+      defaultBackNavigationUrl: fromRoutes.dashboard,
     },
     loadComponent: () => import('./features/add-meal/add-meal.component').then(mod => mod.AddMealComponent),
     canActivate: [isAuthenticatedGuardFn, profileConfiguredGuardFn],
@@ -40,6 +41,7 @@ export const routes: Routes = [
     path: fromRoutes.addDish,
     data: {
       hideHeader: true,
+      defaultBackNavigationUrl: fromRoutes.addMeal,
     },
     loadComponent: () => import('./features/add-dish/add-dish.component').then(mod => mod.AddDishComponent),
     canActivate: [isAuthenticatedGuardFn, profileConfiguredGuardFn],
@@ -48,6 +50,7 @@ export const routes: Routes = [
     path: fromRoutes.addFood,
     data: {
       hideHeader: true,
+      defaultBackNavigationUrl: fromRoutes.foodsManagement,
     },
     loadComponent: () => import('./features/add-food/add-food.component').then(mod => mod.AddFoodComponent),
     canActivate: [isAuthenticatedGuardFn, profileConfiguredGuardFn],

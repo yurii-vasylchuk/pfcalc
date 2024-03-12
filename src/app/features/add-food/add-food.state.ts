@@ -26,6 +26,14 @@ export class AddFoodState implements NgxsOnInit {
     AddFoodState.api = api;
   }
 
+  ngxsOnInit(ctx: StateContext<AddFood.IAddFoodState>): void {
+    this.api.loadFoodsList(0, AddFoodState.INGREDIENT_OPTIONS_PAGE_SIZE)
+      .pipe(
+        map(rsp => rsp.data),
+      )
+      .subscribe(opts => ctx.patchState({defaultIngredientOptions: opts}));
+  }
+
   @Selector()
   static initializationVector(state: AddFood.IAddFoodState): Partial<IFood> {
     return state.formInitialization;
@@ -122,19 +130,18 @@ export class AddFoodState implements NgxsOnInit {
 
   @Receiver({type: AddFood.SAVE_FOOD_ACTION})
   static saveFood(ctx: StateContext<AddFood.IAddFoodState>, {payload}: EmitterAction<AddFood.SaveFoodPayload>): Observable<void> {
-    if (payload.id != null) {
-      return this.api.updateFood(payload).pipe(
-        switchMap(savedFood => this.saveMeasurements(savedFood, payload.measurements)),
-        map(food => new EmitterAction({additionalQueryParams: {selectedFoodId: food.id}} as Navigation.NavigateBackPayload, Navigation.NAVIGATE_BACK)),
-        switchMap(ctx.dispatch),
-      );
-    } else {
-      return this.api.addFood(payload).pipe(
-        switchMap(savedFood => this.saveMeasurements(savedFood, payload.measurements)),
-        map(food => new EmitterAction({additionalQueryParams: {selectedFoodId: food.id}} as Navigation.NavigateBackPayload, Navigation.NAVIGATE_BACK)),
-        switchMap(ctx.dispatch),
-      );
-    }
+    const saveFood$ = payload.id != null ? this.api.updateFood(payload) : this.api.addFood(payload);
+
+    return saveFood$.pipe(
+      switchMap(savedFood => {
+        if (payload.measurements == null || payload.measurements.length === 0) {
+          return of(savedFood);
+        }
+        return this.saveMeasurements(savedFood, payload.measurements);
+      }),
+      map(food => new EmitterAction({additionalQueryParams: {selectedFoodId: food.id}} as Navigation.NavigateBackPayload, Navigation.NAVIGATE_BACK)),
+      switchMap(ctx.dispatch),
+    );
   }
 
   private static saveMeasurements(food: IFood, measurements: IMeasurement[]): Observable<IFood> {
@@ -143,13 +150,5 @@ export class AddFoodState implements NgxsOnInit {
         .map(m => ({...m, foodId: food.id}))
         .map(m => m.id != null ? this.api.updateMeasurement(m) : this.api.createMeasurement(m)),
     ).pipe(map(_ => (food)));
-  }
-
-  ngxsOnInit(ctx: StateContext<AddFood.IAddFoodState>): void {
-    this.api.loadFoodsList(0, AddFoodState.INGREDIENT_OPTIONS_PAGE_SIZE)
-      .pipe(
-        map(rsp => rsp.data),
-      )
-      .subscribe(opts => ctx.patchState({defaultIngredientOptions: opts}));
   }
 }

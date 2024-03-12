@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {combineLatest, combineLatestWith, map, Observable, of, switchMap, tap, throwError} from 'rxjs';
+import {combineLatest, combineLatestWith, identity, map, Observable, of, switchMap, tap, throwError} from 'rxjs';
 import {IAuthTokensResponse, Language} from '../commons/models/auth.models';
 import {FoodType, IDish, IDishToCreate, IFood, IMeal, IMeasurement, IProfile} from '../commons/models/domain.models';
 import {IApiResponse, IPage, IPfcc} from '../commons/models/common.models';
@@ -163,7 +163,7 @@ export class ApiService {
         switchMap(page => {
           return combineLatest(page.data.map(food => this.loadMeasurements(food.id))).pipe(
             map(measurements => {
-              measurements.flatMap(m => m).forEach(m => {
+              measurements.flatMap(identity).forEach(m => {
                 const food = page.data.find(f => f.id === m.foodId);
                 if (food == null) {
                   console.warn(`Can't find appropriate food (#${m.foodId}) for measurement #${m.id} - ${m.name}`);

@@ -4,8 +4,9 @@ import {EmitterAction, Receiver} from '@ngxs-labs/emitter';
 import {RouterNavigated} from '@ngxs/router-plugin';
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import * as fromRoutes from '../commons/routes';
+import {Observable, of, switchMap, tap} from 'rxjs';
 import INavigationEntry = Navigation.INavigationEntry;
 
 @State<Navigation.INavigationState>({
@@ -16,6 +17,8 @@ import INavigationEntry = Navigation.INavigationEntry;
 })
 @Injectable()
 export class NavigationState {
+  private static readonly BACK_NAVIGATION_URL_PROP = 'defaultBackNavigationUrl';
+
   private static router: Router;
 
   constructor(router: Router) {
@@ -32,10 +35,20 @@ export class NavigationState {
   }
 
   @Receiver({type: Navigation.NAVIGATE_BACK})
-  static navigateBack(ctx: StateContext<Navigation.INavigationState>, {payload}: EmitterAction<Navigation.NavigateBackPayload>) {
+  static navigateBack(ctx: StateContext<Navigation.INavigationState>, {payload}: EmitterAction<Navigation.NavigateBackPayload>): Promise<unknown> | Observable<unknown> {
     if (ctx.getState().history.length <= 1) {
       console.warn('No history to go back, returning to defaultPage');
-      return this.router.navigate([environment.navigation.defaultPage]);
+
+      return this.extractBackNavigationUrl(this.router.routerState.root).pipe(
+        tap(_ => {
+          if (ctx.getState().history.length > 0) {
+            ctx.patchState({
+              history: ctx.getState().history.slice(0, -1),
+            });
+          }
+        }),
+        switchMap(backUrl => this.router.navigate([backUrl])),
+      );
     }
 
     ctx.patchState({
@@ -118,5 +131,20 @@ export class NavigationState {
     }
 
     return true;
+  }
+
+  private static extractBackNavigationUrl(route: ActivatedRoute): Observable<string> {
+    return route.data.pipe(
+      switchMap(data => {
+        const url = data[this.BACK_NAVIGATION_URL_PROP];
+        if (url != null && typeof url === 'string') {
+          return of(url);
+        }
+
+        return route.firstChild != null ?
+               this.extractBackNavigationUrl(route.firstChild) :
+               of(environment.navigation.defaultPage);
+      }),
+    );
   }
 }
