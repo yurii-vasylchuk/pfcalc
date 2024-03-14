@@ -1,4 +1,9 @@
-<button (click)="fireEvents()"
-        color="primary"
-        mat-raised-button>FIRE
-</button>
+<form (ngSubmit)="handleSubmit()">
+<mat-form-field>
+  <mat-select>
+    <mat-option *ngFor="let opt of options" [value]="opt.value">
+      {{opt.title}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+</form>

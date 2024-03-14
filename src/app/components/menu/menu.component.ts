@@ -8,6 +8,7 @@ import {Navigate} from "@ngxs/router-plugin";
 import {Store} from "@ngxs/store";
 import {Ui} from '../../state/ui/ui.state-model';
 import {EmitterAction} from '@ngxs-labs/emitter';
+import * as fromRoutes from '../../commons/routes'
 
 
 @Component({
@@ -19,6 +20,8 @@ import {EmitterAction} from '@ngxs-labs/emitter';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuComponent {
+
+  protected readonly fromRoutes = fromRoutes;
 
   constructor(private store: Store) {
   }

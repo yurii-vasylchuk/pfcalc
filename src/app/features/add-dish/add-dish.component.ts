@@ -21,7 +21,7 @@ import {DateTime} from 'luxon';
 
 type IngredientFormGroup = FormGroup<{
   ingredientSearch: FormControl<string>;
-  ingredient: FormControl<IFood>;
+  ingredient: FormControl<IFood | null>;
   weight: FormControl<number>;
   measurement: FormControl<IMeasurement>;
   id: FormControl<number>;

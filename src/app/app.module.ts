@@ -34,6 +34,7 @@ import {AddFoodState} from './features/add-food/add-food.state';
 import {PfccMissingTranslationHandler} from './commons/pfcc-missing-translation-handler';
 import {PfccTranslateParser} from './commons/pfcc-translate-parser';
 import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
+import {SettingsState} from './features/settings/settings.state';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -47,7 +48,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NgxsModule.forRoot([AuthState, UiState, FoodsManagementState, DashboardState, AddMealState, ProfileState, AddDishState, NavigationState, AddFoodState],
+    NgxsModule.forRoot([AuthState, UiState, FoodsManagementState, DashboardState, AddMealState, ProfileState, AddDishState, NavigationState, AddFoodState, SettingsState],
       {developmentMode: environment.ngxs.developmentMode}),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({

@@ -14,7 +14,18 @@
     "carbohydrates-sign": "у",
     "pfcc-sign": "б/ж/у/к",
     "pfcc-values": "{{protein}}г/{{fat}}г/{{carbohydrates}}г/{{calories}}кКал",
-    "calories-sign": "ккал"
+    "calories-sign": "ккал",
+    "page-titles": {
+      "add-dish": "Додати страву",
+      "add-meal": "Зʼїсти",
+      "add-food": "Додати їжу",
+      "dashboard": "Головна",
+      "signin": "Вхід",
+      "signup": "Реєстрація",
+      "complete-profile": "Заповнення профілю",
+      "foods": "Їжа",
+      "settings": "Налаштування"
+    }
   },
   "sign-in": {
     "email": {
@@ -117,7 +128,8 @@
   "side-menu": {
     "title": "PFCC",
     "dashboard": "Головна",
-    "foods-management": "Продукти і рецепти"
+    "foods-management": "Продукти і рецепти",
+    "settings": "Налаштування"
   },
   "foods-management": {
     "ingredients-tab-label": "Продукти",

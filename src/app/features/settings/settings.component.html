@@ -1,0 +1,16 @@
+<h1>Settings</h1>
+<h3>Hello {{username}}</h3>
+<form [formGroup]="aimsForm">
+  <mat-form-field>
+    <input matInput formControlName="protein" type="number" placeholder="PROTEIN">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="fat" type="number" placeholder="FAT">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="carbohydrates" type="number" placeholder="CARBOHYDRATES">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="calories" type="number" placeholder="CALORIES">
+  </mat-form-field>
+</form>

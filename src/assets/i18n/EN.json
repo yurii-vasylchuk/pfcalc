@@ -14,7 +14,18 @@
     "carbohydrates-sign": "c",
     "pfcc-sign": "p/f/c/kc",
     "pfcc-values": "{{protein}}g / {{fat}}g / {{carbohydrates}}g / {{calories}}kCal",
-    "calories-sign": "kcals"
+    "calories-sign": "kcals",
+    "page-titles": {
+      "add-dish": "Add Dish",
+      "add-meal": "Add Meal",
+      "add-food": "Add Food",
+      "dashboard": "Dashboard",
+      "signin": "Sign In",
+      "signup": "Sign Up",
+      "complete-profile": "Complete prrofile",
+      "foods": "Foods management",
+      "settings": "Settings"
+    }
   },
   "sign-in": {
     "email": {
@@ -118,7 +129,8 @@
   "side-menu": {
     "title": "PFCC",
     "dashboard": "Dashboard",
-    "foods-management": "Products & Recipes"
+    "foods-management": "Products & Recipes",
+    "settings": "Settings"
   },
   "foods-management": {
     "ingredients-tab-label": "Ingredients",

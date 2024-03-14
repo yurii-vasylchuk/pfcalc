@@ -6,3 +6,4 @@ export const signIn = 'signin';
 export const signUp = 'signup';
 export const completeProfile = 'complete-profile';
 export const foodsManagement = 'foods';
+export const settings = 'settings';

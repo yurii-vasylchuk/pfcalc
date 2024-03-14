@@ -62,7 +62,8 @@
               <mat-option [value]="defaultMeasurement">
                 {{ 'measurements.' + defaultMeasurement.name | translate }}
               </mat-option>
-              <mat-option *ngFor="let measurement of formIngredients.at(idx).value.ingredient.measurements"
+
+              <mat-option *ngFor="let measurement of formIngredients.at(idx).value.ingredient?.measurements ?? []"
                           [value]="measurement">
                 {{ 'measurements.' + measurement.name | translate }}
               </mat-option>
