@@ -166,9 +166,7 @@ export class AddDishComponent implements OnInit, OnDestroy {
     this.formIngredients.push(ingredientFg);
   }
 
-  protected trackIngredientByIndexFn: TrackByFunction<AddDish.IAddDishStateIngredient> = (_, i) => `${i.index}`;
-
-  protected compareIngredientsFn = (ing1: AddDish.IAddDishStateIngredient, ing2: AddDish.IAddDishStateIngredient) => ing1?.index === ing2?.index;
+  protected compareFoodFn = (ing1: IFood, ing2: IFood) => ing1?.id === ing2?.id;
 
   protected trackFoodByIdFn: TrackByFunction<IFood> = (_, item) => item?.id;
 

@@ -7,13 +7,6 @@ export namespace AddDish {
     ingredientOptions: IFood[][];
     initialization: IDish;
   };
-  export type IAddDishStateIngredient = {
-    index: number;
-    weight: number;
-    ingredient: IFood;
-    options: IFood[];
-    filter: string;
-  };
 
   export type LoadRecipePayload = number;
   export type LoadDishPayload = number;
