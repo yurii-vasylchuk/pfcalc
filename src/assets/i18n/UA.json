@@ -138,6 +138,16 @@
     "add-recipe-caption": "Додати рецепт",
     "search-placeholder": "Пошук"
   },
+  "settings": {
+    "title": "Налаштування",
+    "save-username-btn": "Зберегти",
+    "save-aims-btn": "Зберегти",
+    "protein-placeholder": "Напр. 120...",
+    "fat-placeholder": "Напр. 50...",
+    "carbohydrates-placeholder": "Напр. 160...",
+    "calories-placeholder": "Напр. 1500...",
+    "aims-saved-alert": "Нові цілі збережено!"
+  },
   "measurements": {
     "g": "г",
     "glass": "Стакан"

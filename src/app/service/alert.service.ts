@@ -16,14 +16,26 @@ export class AlertService {
       .subscribe(translatedMsg => {
         if (translatedMsg == null || translatedMsg.trim().length === 0) {
           console.warn(`Cannot find translation for alert msg: ${message}`);
-          this.openWarnBar(message);
+          this.openBar(message);
           return;
         }
-        this.openWarnBar(translatedMsg);
+        this.openBar(translatedMsg);
       });
   }
 
-  private openWarnBar(msg: string) {
+  success(message: string): void {
+    this.translate.get(message)
+      .subscribe(translatedMsg => {
+        if (translatedMsg == null || translatedMsg.trim().length === 0) {
+          console.warn(`Cannot find translation for alert msg: ${message}`);
+          this.openBar(message);
+          return;
+        }
+        this.openBar(translatedMsg);
+      });
+  }
+
+  private openBar(msg: string) {
     this.snackBar.open(msg, 'alert.action', {
       duration: environment.alert.duration,
       data: msg,

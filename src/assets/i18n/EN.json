@@ -139,6 +139,16 @@
     "add-recipe-caption": "Add recipe",
     "search-placeholder": "Search"
   },
+  "settings": {
+    "title": "Settings",
+    "save-username-btn": "Save",
+    "save-aims-btn": "Save",
+    "protein-placeholder": "Ex. 130...",
+    "fat-placeholder": "Ex. 50...",
+    "carbohydrates-placeholder": "Ex. 160...",
+    "calories-placeholder": "Ex. 2000...",
+    "aims-saved-alert": "New aims saved!"
+  },
   "measurements": {
     "g": "g",
     "glass": "Glass",
