@@ -148,7 +148,7 @@ export class AddFoodState implements NgxsOnInit {
     return combineLatest(
       measurements
         .map(m => ({...m, foodId: food.id}))
-        .map(m => m.id != null ? this.api.updateMeasurement(m) : this.api.createMeasurement(m)),
+        .map(m => this.api.saveMeasurement(m)),
     ).pipe(map(_ => (food)));
   }
 }

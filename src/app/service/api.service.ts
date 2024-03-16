@@ -242,14 +242,7 @@ export class ApiService {
       );
   }
 
-  updateMeasurement(measurement: IMeasurement): Observable<IMeasurement> {
-    return this.http.put<IApiResponse<IMeasurement>>(`/api/measurement/${measurement.id}`, measurement)
-      .pipe(
-        map(this.extractResponseData),
-      );
-  }
-
-  createMeasurement(measurement: IMeasurement): Observable<IMeasurement> {
+  saveMeasurement(measurement: IMeasurement): Observable<IMeasurement> {
     return this.http.post<IApiResponse<IMeasurement>>(`/api/measurement`, measurement)
       .pipe(
         map(this.extractResponseData),
