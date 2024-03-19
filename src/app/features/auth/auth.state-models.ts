@@ -4,7 +4,6 @@ import {IPfcc, UnknownBoolean} from '../../commons/models/common.models';
 export namespace Auth {
   export interface IAuthState {
     loggedIn: UnknownBoolean,
-    profileConfigured: UnknownBoolean,
     refreshToken: string | null,
     afterAuthUrl?: string,
     refreshInProgress: boolean,

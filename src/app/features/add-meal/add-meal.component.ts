@@ -178,9 +178,10 @@ export class AddMealComponent implements OnInit, OnDestroy {
   }
 
   handleSaveMealClick(option: AddMeal.IMealOption) {
+    const measurement = this.measurementFC.value;
     this.saveDish.emit({
       pfcc: option.pfcc,
-      weight: this.weightFC.value,
+      weight: measurement.toGramMultiplier * this.weightFC.value,
       name: option.name,
       dishId: option.dishId,
       foodId: option.foodId,

@@ -1,6 +1,7 @@
 <h1>{{ 'settings.title' | translate }}</h1>
 <form class="settings-block"
-      [formGroup]="nameForm">
+      [formGroup]="nameForm"
+      (ngSubmit)="handleNameFormSubmit()">
   <mat-form-field>
     <input matInput
            formControlName="username"
@@ -8,8 +9,8 @@
   </mat-form-field>
 
   <button mat-raised-button
-          disabled
           color="primary"
+          [disabled]="nameForm.invalid || nameForm.pristine"
           type="submit">
     {{ 'settings.save-username-btn' | translate }}
   </button>

@@ -19,7 +19,6 @@ import IAuthState = Auth.IAuthState;
 @State<Auth.IAuthState>({
   name: 'auth',
   defaults: {
-    profileConfigured: UnknownBoolean.UNKNOWN,
     loggedIn: UnknownBoolean.UNKNOWN,
     refreshToken: null,
     afterAuthUrl: null,
@@ -55,11 +54,6 @@ export class AuthState implements NgxsOnInit {
   }
 
   @Selector()
-  static profileConfigured(state: Auth.IAuthState): UnknownBoolean {
-    return state.loggedIn.and(state.profileConfigured);
-  }
-
-  @Selector()
   static isAuthenticated(state: Auth.IAuthState): UnknownBoolean {
     return state.loggedIn;
   }
@@ -71,7 +65,6 @@ export class AuthState implements NgxsOnInit {
     ctx.patchState({
       refreshToken: null,
       loggedIn: UnknownBoolean.FALSE,
-      profileConfigured: UnknownBoolean.UNKNOWN,
     });
   }
 
@@ -90,10 +83,6 @@ export class AuthState implements NgxsOnInit {
           return this.api.getProfile();
         }),
         switchMap(profile => {
-          ctx.patchState({
-            profileConfigured: UnknownBoolean.of(profile.profileConfigured),
-          });
-
           let redirectUrl = ctx.getState().afterAuthUrl;
           if (redirectUrl != null) {
             ctx.patchState({
@@ -103,9 +92,7 @@ export class AuthState implements NgxsOnInit {
             redirectUrl = fromRoutes.dashboard;
           }
 
-          const navigationEvent = profile.profileConfigured ?
-                                  new Navigate([redirectUrl]) :
-                                  new Navigate([fromRoutes.completeProfile]);
+          const navigationEvent = new Navigate([redirectUrl]);
 
           return ctx.dispatch([
             navigationEvent,
@@ -116,7 +103,6 @@ export class AuthState implements NgxsOnInit {
           ctx.patchState({
             refreshToken: null,
             loggedIn: UnknownBoolean.FALSE,
-            profileConfigured: UnknownBoolean.FALSE,
           });
           this.alert.warn('alert.default-error');
           console.error(err);
@@ -135,7 +121,6 @@ export class AuthState implements NgxsOnInit {
           ctx.patchState({
             refreshToken: rsp.refreshToken,
             loggedIn: UnknownBoolean.TRUE,
-            profileConfigured: UnknownBoolean.FALSE,
           });
 
           this.localStoreService.saveRefreshToken(rsp.refreshToken);
@@ -151,7 +136,6 @@ export class AuthState implements NgxsOnInit {
           ctx.patchState({
             refreshToken: null,
             loggedIn: UnknownBoolean.FALSE,
-            profileConfigured: UnknownBoolean.FALSE,
           });
           return EMPTY;
         }),
@@ -186,7 +170,6 @@ export class AuthState implements NgxsOnInit {
             refreshToken: null,
             refreshInProgress: false,
             loggedIn: UnknownBoolean.FALSE,
-            profileConfigured: UnknownBoolean.FALSE,
           });
 
           return EMPTY;
@@ -196,13 +179,8 @@ export class AuthState implements NgxsOnInit {
 
   @Receiver({type: Auth.CONFIGURE_PROFILE})
   static configureProfile(ctx: StateContext<Auth.IAuthState>, {payload}: EmitterAction<Auth.ConfigureProfilePayload>) {
-    return this.api.configureProfile(payload.aims)
+    return this.api.updateProfile({aims: payload.aims})
       .pipe(
-        tap(_ => {
-          ctx.patchState({
-            profileConfigured: UnknownBoolean.TRUE,
-          });
-        }),
         map(_ => new Auth.ProfileConfiguredSuccessfullyEvent(payload.aims)),
         catchError(err => {
           console.error(err);
@@ -225,15 +203,10 @@ export class AuthState implements NgxsOnInit {
 
     this.api.getProfile()
       .pipe(
-        tap(profile => {
+        tap(_ => {
           ctx.patchState({
             loggedIn: UnknownBoolean.TRUE,
-            profileConfigured: UnknownBoolean.of(profile.profileConfigured),
           });
-
-          if (!profile.profileConfigured) {
-            ctx.dispatch(new Navigate([fromRoutes.completeProfile]));
-          }
         }),
         map(profile => new ProfileLoadedEvent(profile)),
         catchError(_ => {
@@ -250,20 +223,9 @@ export class AuthState implements NgxsOnInit {
   @Action(Auth.ProfileConfiguredSuccessfullyEvent)
   handleProfileConfigured(ctx: StateContext<Auth.IAuthState>, _: Auth.ProfileConfiguredSuccessfullyEvent) {
     if (ctx.getState().loggedIn) {
-      ctx.patchState({
-        profileConfigured: UnknownBoolean.TRUE,
-      });
-
       return ctx.dispatch(new Navigate(['/']));
     }
     return null;
-  }
-
-  @Action(ProfileLoadedEvent)
-  handleProfileLoadedEvent(ctx: StateContext<Auth.IAuthState>, action: ProfileLoadedEvent) {
-    ctx.patchState({
-      profileConfigured: action.profile.profileConfigured ? UnknownBoolean.TRUE : UnknownBoolean.FALSE,
-    });
   }
 
   @Action(Navigate)

@@ -40,11 +40,16 @@ type AimsForm = FormGroup<{
 export class SettingsComponent implements OnInit {
   @Emitter(SettingsState.updateAims)
   private updateAimsEmt: Emittable<Settings.UpdateAimsPayload>;
+  @Emitter(SettingsState.updateUsername)
+  private updateUsernameEmt: Emittable<Settings.UpdateUsernamePayload>;
 
   protected aimsForm: AimsForm;
   protected nameForm: NameForm;
 
-  constructor(private fb: FormBuilder, private store: Store) {
+  private fb: FormBuilder;
+
+  constructor(fb: FormBuilder, private store: Store) {
+    this.fb = fb;
     this.aimsForm = fb.group({
       protein: [0],
       fat: [0],
@@ -76,7 +81,18 @@ export class SettingsComponent implements OnInit {
       protein: aims.protein ?? null,
       fat: aims.fat ?? null,
       carbohydrates: aims.carbohydrates ?? null,
-      calories: aims.calories ?? null
-    })
+      calories: aims.calories ?? null,
+    });
+    this.aimsForm.markAsPristine();
+  }
+
+  handleNameFormSubmit() {
+    if (this.nameForm.invalid) {
+      console.error(`Username is invalid '${this.nameForm.value.username}'`);
+      return;
+    }
+
+    this.updateUsernameEmt.emit(this.nameForm.value.username.trim());
+    this.nameForm.markAsPristine();
   }
 }

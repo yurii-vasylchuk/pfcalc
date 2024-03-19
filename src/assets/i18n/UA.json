@@ -146,7 +146,8 @@
     "fat-placeholder": "Напр. 50...",
     "carbohydrates-placeholder": "Напр. 160...",
     "calories-placeholder": "Напр. 1500...",
-    "aims-saved-alert": "Нові цілі збережено!"
+    "aims-saved-alert": "Нові цілі збережено!",
+    "name-saved-alert": "Нове імʼя збережено!"
   },
   "measurements": {
     "g": "г",

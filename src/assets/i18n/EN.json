@@ -147,7 +147,8 @@
     "fat-placeholder": "Ex. 50...",
     "carbohydrates-placeholder": "Ex. 160...",
     "calories-placeholder": "Ex. 2000...",
-    "aims-saved-alert": "New aims saved!"
+    "aims-saved-alert": "New aims saved!",
+    "name-saved-alert": "New username saved!"
   },
   "measurements": {
     "g": "g",

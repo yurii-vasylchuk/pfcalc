@@ -51,7 +51,6 @@ export interface IProfile {
   name: string;
   preferredLanguage: Language;
   aims: IPfcc;
-  profileConfigured: boolean;
 }
 
 export interface IDishToCreate {

@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {combineLatest, combineLatestWith, identity, map, Observable, of, switchMap, tap, throwError} from 'rxjs';
 import {IAuthTokensResponse, Language} from '../commons/models/auth.models';
 import {FoodType, IDish, IDishToCreate, IFood, IMeal, IMeasurement, IProfile} from '../commons/models/domain.models';
-import {IApiResponse, IPage, IPfcc} from '../commons/models/common.models';
+import {IApiResponse, IPage} from '../commons/models/common.models';
 import {DateTime} from 'luxon';
 import {AddMeal} from '../features/add-meal/add-meal.state-models';
 import IMealOption = AddMeal.IMealOption;
@@ -43,9 +43,10 @@ export class ApiService {
     }).pipe(map(this.extractResponseData));
   }
 
-  configureProfile(aims: IPfcc): Observable<null> {
+  updateProfile({aims, name}: Partial<Pick<IProfile, 'name' | 'aims'>>): Observable<null> {
     return this.http.post<IApiResponse<void>>('/api/user/profile', {
       aims,
+      name
     }).pipe(this.extractVoidResponse);
   }
 

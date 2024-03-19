@@ -39,17 +39,3 @@ export const isNotAuthenticatedGuardFn: CanActivateFn = (): Observable<boolean> 
       }),
     );
 };
-export const profileConfiguredGuardFn: CanActivateFn = (): Observable<boolean> => {
-  const store = inject(Store);
-  return store.select(AuthState.profileConfigured)
-    .pipe(
-      filter(value => value !== UnknownBoolean.UNKNOWN),
-      map(value => value === UnknownBoolean.TRUE),
-      tap(isProfileConfigured => {
-        if (!isProfileConfigured) {
-          store.dispatch(new Navigate([`/${fromRoutes.completeProfile}`]));
-        }
-      }),
-    );
-
-};

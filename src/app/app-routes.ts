@@ -4,7 +4,6 @@ import {
   isAuthenticatedGuardFn,
   isNotAuthenticatedGuardFn,
   isTestEnvironment,
-  profileConfiguredGuardFn,
 } from "./service/guards";
 import {inject} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
@@ -26,7 +25,7 @@ export const routes: Routes = [
     path: fromRoutes.dashboard,
     title: resolvePageTitle,
     loadComponent: () => import('./features/dashboard/dashboard-page.component').then(mod => mod.DashboardPageComponent),
-    canActivate: [isAuthenticatedGuardFn, profileConfiguredGuardFn],
+    canActivate: [isAuthenticatedGuardFn],
   },
   {
     path: fromRoutes.signIn,
@@ -50,7 +49,7 @@ export const routes: Routes = [
     path: fromRoutes.foodsManagement,
     title: resolvePageTitle,
     loadComponent: () => import('./features/foods-management/foods-management-page.component').then(mod => mod.FoodsManagementPageComponent),
-    canActivate: [isAuthenticatedGuardFn, profileConfiguredGuardFn],
+    canActivate: [isAuthenticatedGuardFn],
   },
   {
     path: fromRoutes.addMeal,
@@ -60,7 +59,7 @@ export const routes: Routes = [
       defaultBackNavigationUrl: fromRoutes.dashboard,
     },
     loadComponent: () => import('./features/add-meal/add-meal.component').then(mod => mod.AddMealComponent),
-    canActivate: [isAuthenticatedGuardFn, profileConfiguredGuardFn],
+    canActivate: [isAuthenticatedGuardFn],
   },
   {
     path: fromRoutes.addDish,
@@ -70,7 +69,7 @@ export const routes: Routes = [
       defaultBackNavigationUrl: fromRoutes.addMeal,
     },
     loadComponent: () => import('./features/add-dish/add-dish.component').then(mod => mod.AddDishComponent),
-    canActivate: [isAuthenticatedGuardFn, profileConfiguredGuardFn],
+    canActivate: [isAuthenticatedGuardFn],
   },
   {
     path: fromRoutes.addFood,
@@ -80,13 +79,13 @@ export const routes: Routes = [
       defaultBackNavigationUrl: fromRoutes.foodsManagement,
     },
     loadComponent: () => import('./features/add-food/add-food.component').then(mod => mod.AddFoodComponent),
-    canActivate: [isAuthenticatedGuardFn, profileConfiguredGuardFn],
+    canActivate: [isAuthenticatedGuardFn],
   },
   {
     path: fromRoutes.settings,
     title: resolvePageTitle,
     loadComponent: () => import('./features/settings/settings.component').then(mod => mod.SettingsComponent),
-    canActivate: [isAuthenticatedGuardFn, profileConfiguredGuardFn],
+    canActivate: [isAuthenticatedGuardFn],
   },
   {
     path: 'test',

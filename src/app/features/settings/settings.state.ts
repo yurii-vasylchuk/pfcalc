@@ -42,6 +42,23 @@ export class SettingsState implements NgxsOnInit {
     return state.name;
   }
 
+  @Receiver({type: Settings.UPDATE_USERNAME})
+  static updateUsername(ctx: StateContext<Settings.ISettingsState>,
+                        {payload}: EmitterAction<Settings.UpdateUsernamePayload>): Observable<void> {
+    return this.api.updateProfile({name: payload}).pipe(
+      tap(_ => {
+        ctx.patchState({
+          name: payload,
+        });
+        this.alerts.success('settings.name-saved-alert')
+      }),
+      catchError(_ => {
+        this.alerts.warn('alert.default-error');
+        return EMPTY;
+      }),
+    )
+  }
+
   @Receiver({type: Settings.UPDATE_AIMS})
   static updateAims(ctx: StateContext<Settings.ISettingsState>,
                     {payload}: EmitterAction<Settings.UpdateAimsPayload>): Observable<void> {
@@ -52,7 +69,7 @@ export class SettingsState implements NgxsOnInit {
       calories: payload.calories != null && payload.calories > 0 ? payload.calories : null,
     };
 
-    return this.api.configureProfile(newAims)
+    return this.api.updateProfile({aims: newAims})
       .pipe(
         tap(_ => {
           ctx.patchState({

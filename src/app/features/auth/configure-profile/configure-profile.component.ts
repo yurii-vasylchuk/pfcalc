@@ -34,10 +34,10 @@ export class ConfigureProfileComponent {
   protected submit() {
     this.configureProfileEmt.emit({
       aims: {
-        protein: this.form.value.protein || null,
-        fat: this.form.value.fat || null,
-        carbohydrates: this.form.value.carbohydrates || null,
-        calories: this.form.value.calories || null,
+        protein: this.form.value.protein ?? null,
+        fat: this.form.value.fat ?? null,
+        carbohydrates: this.form.value.carbohydrates ?? null,
+        calories: this.form.value.calories ?? null,
       },
     });
   }
