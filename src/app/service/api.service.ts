@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {combineLatest, combineLatestWith, identity, map, Observable, of, switchMap, tap, throwError} from 'rxjs';
 import {IAuthTokensResponse, Language} from '../commons/models/auth.models';
 import {FoodType, IDish, IDishToCreate, IFood, IMeal, IMeasurement, IProfile} from '../commons/models/domain.models';
-import {IApiResponse, IPage} from '../commons/models/common.models';
+import {IApiResponse, IPage, WithOptional} from '../commons/models/common.models';
 import {DateTime} from 'luxon';
 import {AddMeal} from '../features/add-meal/add-meal.state-models';
 import IMealOption = AddMeal.IMealOption;
@@ -118,12 +118,7 @@ export class ApiService {
       .pipe(this.extractVoidResponse);
   }
 
-  addFood(food: Omit<IFood, "id">): Observable<IFood> {
-    return this.http.post<IApiResponse<IFood>>('/api/food', food)
-      .pipe(map(this.extractResponseData));
-  }
-
-  updateFood(food: Omit<IFood, 'ownedByUser'>): Observable<IFood> {
+  saveFood(food: WithOptional<IFood, 'id' | 'ownedByUser'>): Observable<IFood> {
     return this.http.post<IApiResponse<IFood>>('/api/food', food)
       .pipe(map(this.extractResponseData));
   }

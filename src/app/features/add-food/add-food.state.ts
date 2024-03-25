@@ -130,9 +130,7 @@ export class AddFoodState implements NgxsOnInit {
 
   @Receiver({type: AddFood.SAVE_FOOD_ACTION})
   static saveFood(ctx: StateContext<AddFood.IAddFoodState>, {payload}: EmitterAction<AddFood.SaveFoodPayload>): Observable<void> {
-    const saveFood$ = payload.id != null ? this.api.updateFood(payload) : this.api.addFood(payload);
-
-    return saveFood$.pipe(
+    return this.api.saveFood(payload).pipe(
       switchMap(savedFood => {
         if (payload.measurements == null || payload.measurements.length === 0) {
           return of(savedFood);

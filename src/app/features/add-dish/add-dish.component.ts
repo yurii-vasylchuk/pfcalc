@@ -122,9 +122,10 @@ export class AddDishComponent implements OnInit, OnDestroy {
     this.saveDish.emit({
       name: form.dishName,
       foodId: form.foodId,
-      ingredients: form.ingredients.map(i => ({
+      ingredients: form.ingredients.map((i, index) => ({
         id: i.ingredient.id,
         ingredientWeight: i.weight,
+        ingredientIndex: index,
       })),
       cookedWeight: form.weight,
       cookedOn: DateTime.now(),
@@ -159,7 +160,7 @@ export class AddDishComponent implements OnInit, OnDestroy {
     ).subscribe(ing => this.searchIngredientOptions.emit({
       filter: ing.ingredientSearch,
       index: this.ingredientIndexById(ing.id),
-      id: ing.ingredient.id,
+      id: ing.ingredient?.id,
     }));
 
     this.addIngredient.emit();

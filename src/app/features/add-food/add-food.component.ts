@@ -214,9 +214,10 @@ export class AddFoodComponent implements OnInit, OnDestroy {
       hidden: f.hidden,
       ownedByUser: true,
       pfcc: withDefaults(f.pfcc, emptyPfcc),
-      ingredients: !f.isRecipe ? null : f.ingredients.map<IIngredient>(i => ({
+      ingredients: !f.isRecipe ? null : f.ingredients.map<IIngredient>((i, index) => ({
         ...i.ingredient,
         ingredientWeight: i.weight * i.measurement.toGramMultiplier,
+        ingredientIndex: index,
       })),
       measurements: f.measurements.map<IMeasurement>(m => ({
         id: m.id,

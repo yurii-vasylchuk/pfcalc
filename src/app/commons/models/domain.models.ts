@@ -3,7 +3,8 @@ import {IPfcc} from './common.models';
 import {Language} from './auth.models';
 
 export type IIngredient = (IFood & {
-  ingredientWeight: number
+  ingredientWeight: number;
+  ingredientIndex: number;
 });
 
 export type IFood = {
@@ -54,12 +55,14 @@ export interface IProfile {
 }
 
 export interface IDishToCreate {
+  id?: number;
   cookedOn: DateTime;
   name: string;
   foodId: number;
   ingredients: {
     id: number;
     ingredientWeight: number;
+    ingredientIndex: number;
   }[];
   cookedWeight: number;
 }

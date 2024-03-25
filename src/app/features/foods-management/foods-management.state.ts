@@ -153,7 +153,7 @@ export class FoodsManagementState {
 
   @Receiver({type: FoodsManagement.CREATE_FOOD})
   static createFood(ctx: StateContext<IFoodsManagementState>, {payload}: EmitterAction<FoodsManagement.CreateFoodActionPayload>): Observable<unknown> {
-    return FoodsManagementState.api.addFood({
+    return FoodsManagementState.api.saveFood({
       ...payload,
       ownedByUser: true,
     }).pipe(
@@ -188,7 +188,7 @@ export class FoodsManagementState {
 
   @Receiver({type: FoodsManagement.EDIT_FOOD})
   static editFood(ctx: StateContext<IFoodsManagementState>, {payload}: EmitterAction<FoodsManagement.EditFoodActionPayload>): Observable<unknown> {
-    return FoodsManagementState.api.updateFood({...payload}).pipe(
+    return FoodsManagementState.api.saveFood({...payload}).pipe(
       tap(food => {
         ctx.patchState({
           products: {
