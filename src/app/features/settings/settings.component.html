@@ -3,6 +3,7 @@
       [formGroup]="nameForm"
       (ngSubmit)="handleNameFormSubmit()">
   <mat-form-field>
+    <mat-label>{{'settings.username-label' | translate}}</mat-label>
     <input matInput
            formControlName="username"
            type="text">

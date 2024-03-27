@@ -33,10 +33,6 @@
       "required": "Email is <strong>required</strong>",
       "email": "Invalid email"
     },
-    "name": {
-      "label": "Name",
-      "required": "Nae is <strong>required</strong>"
-    },
     "password": {
       "label": "Password",
       "required": "Password is <strong>required</strong>"
@@ -49,6 +45,10 @@
       "label": "Email",
       "required": "Email is <strong>required</strong>",
       "email": "Invalid email"
+    },
+    "name": {
+      "label": "Name",
+      "required": "Name is <strong>required</strong>"
     },
     "password": {
       "label": "Password",
@@ -66,7 +66,9 @@
     "sign-in-link": "Sign in"
   },
   "complete-profile": {
-    "submit-btn": "Submit"
+    "submit-btn": "Submit",
+    "welcome-heading": "Welcome to PFCalc",
+    "welcome-text": "Please fill your aims on P/F/C/C or leave fields empty, if you don`t have any. You will be able to change them any time on profile settings page."
   },
   "dashboard": {
     "add-meal-btn": "Add meal",
@@ -141,6 +143,7 @@
   },
   "settings": {
     "title": "Settings",
+    "username-label": "Username",
     "save-username-btn": "Save",
     "save-aims-btn": "Save",
     "protein-placeholder": "Ex. 130...",

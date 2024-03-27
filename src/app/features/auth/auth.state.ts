@@ -37,9 +37,11 @@ export class AuthState implements NgxsOnInit {
 
   constructor(private api: ApiService,
               private localStoreService: LocalStoreService,
+              store: Store,
               private alert: AlertService) {
     AuthState.api = api;
     AuthState.localStoreService = localStoreService;
+    AuthState.store = store;
     AuthState.alert = alert;
   }
 
@@ -185,7 +187,6 @@ export class AuthState implements NgxsOnInit {
         catchError(err => {
           console.error(err);
           this.alert.warn('alert.default-error');
-
 
           return EMPTY;
         }),

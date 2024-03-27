@@ -13,6 +13,7 @@ import {ProfileLoadedEvent} from '../../commons/models/state.models';
 import {RouterNavigated} from '@ngxs/router-plugin';
 import * as fromRoutes from '../../commons/routes';
 import {AlertService} from '../../service/alert.service';
+import {Auth} from '../auth/auth.state-models';
 
 @State<Dashboard.IDashboardState>({
   name: 'dashboard',
@@ -139,6 +140,13 @@ export class DashboardState implements NgxsOnInit {
   public static profileLoaded(ctx: StateContext<Dashboard.IDashboardState>, {profile}: ProfileLoadedEvent) {
     ctx.patchState({
       aims: profile.aims,
+    });
+  }
+
+  @Receiver({action: Auth.ProfileConfiguredSuccessfullyEvent})
+  public static profileConfigured(ctx: StateContext<Dashboard.IDashboardState>, {aims}: Auth.ProfileConfiguredSuccessfullyEvent) {
+    ctx.patchState({
+      aims,
     });
   }
 

@@ -20,9 +20,9 @@ import {Auth} from '../auth.state-models';
 })
 export class ConfigureProfileComponent {
   protected form = this.fb.group({
-    protein: [100, Validators.min(0)],
-    fat: [40, Validators.min(0)],
-    carbohydrates: [150, Validators.min(0)],
+    protein: [130, Validators.min(0)],
+    fat: [50, Validators.min(0)],
+    carbohydrates: [160, Validators.min(0)],
     calories: [2000, Validators.min(0)],
   });
   @Emitter(AuthState.configureProfile)
