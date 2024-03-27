@@ -131,7 +131,8 @@
     "title": "PFCC",
     "dashboard": "Головна",
     "foods-management": "Продукти і рецепти",
-    "settings": "Налаштування"
+    "settings": "Налаштування",
+    "logout": "Вийти"
   },
   "foods-management": {
     "ingredients-tab-label": "Продукти",

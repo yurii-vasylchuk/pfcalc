@@ -68,6 +68,8 @@ export class AuthState implements NgxsOnInit {
       refreshToken: null,
       loggedIn: UnknownBoolean.FALSE,
     });
+
+    this.store.dispatch(new Navigate(['/signin']));
   }
 
   @Receiver({type: Auth.SIGN_IN})

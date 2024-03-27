@@ -132,7 +132,8 @@
     "title": "PFCC",
     "dashboard": "Dashboard",
     "foods-management": "Products & Recipes",
-    "settings": "Settings"
+    "settings": "Settings",
+    "logout": "Logout"
   },
   "foods-management": {
     "ingredients-tab-label": "Ingredients",
