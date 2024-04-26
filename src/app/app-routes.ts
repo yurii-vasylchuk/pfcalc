@@ -1,10 +1,6 @@
 import {ActivatedRouteSnapshot, RouterStateSnapshot, Routes} from '@angular/router';
 import * as fromRoutes from './commons/routes';
-import {
-  isAuthenticatedGuardFn,
-  isNotAuthenticatedGuardFn,
-  isTestEnvironment,
-} from "./service/guards";
+import {isAuthenticatedGuardFn, isNotAuthenticatedGuardFn, isTestEnvironment} from "./service/guards";
 import {inject} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {map, Observable} from 'rxjs';
@@ -85,6 +81,12 @@ export const routes: Routes = [
     path: fromRoutes.settings,
     title: resolvePageTitle,
     loadComponent: () => import('./features/settings/settings.component').then(mod => mod.SettingsComponent),
+    canActivate: [isAuthenticatedGuardFn],
+  },
+  {
+    path: fromRoutes.reports,
+    title: resolvePageTitle,
+    loadComponent: () => import('./features/reports/reports.component').then(mod => mod.ReportsComponent),
     canActivate: [isAuthenticatedGuardFn],
   },
   {

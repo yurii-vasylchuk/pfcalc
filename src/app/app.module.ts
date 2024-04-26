@@ -33,8 +33,10 @@ import {NavigationState} from './state/navigation.state';
 import {AddFoodState} from './features/add-food/add-food.state';
 import {PfccMissingTranslationHandler} from './commons/pfcc-missing-translation-handler';
 import {PfccTranslateParser} from './commons/pfcc-translate-parser';
-import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
+import {MAT_LUXON_DATE_ADAPTER_OPTIONS, provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
 import {SettingsState} from './features/settings/settings.state';
+import {DateAdapter, MAT_DATE_LOCALE} from '@angular/material/core';
+import {PfcalcLuxonDateAdapter} from './commons/pfcalc-luxon-date-adapter';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -86,6 +88,11 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     provideRouter(routes),
     provideLuxonDateAdapter(),
+    {
+      provide: DateAdapter,
+      useClass: PfcalcLuxonDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_LUXON_DATE_ADAPTER_OPTIONS]
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: BaseUrlInterceptor,

@@ -1,0 +1,40 @@
+<h1>{{ 'reports.period.title' | translate }}</h1>
+<form [formGroup]="periodReportForm">
+  <mat-form-field>
+    <mat-label>
+      {{ 'reports.period.from.label' | translate }}
+    </mat-label>
+    <input matInput
+           formControlName="from"
+           [matDatepicker]="fromDatepicker"
+           [placeholder]="'reports.period.from.placeholder' | translate">
+    <mat-datepicker-toggle matIconSuffix
+                           [for]="fromDatepicker"/>
+    <mat-datepicker #fromDatepicker/>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>
+      {{ 'reports.period.to.label' | translate }}
+    </mat-label>
+    <input matInput
+           formControlName="to"
+           [matDatepicker]="toDatepicker"
+           [placeholder]="'reports.period.to.placeholder' | translate">
+    <mat-datepicker-toggle matIconSuffix
+                           [for]="toDatepicker"/>
+    <mat-datepicker #toDatepicker/>
+  </mat-form-field>
+
+  <mat-error *ngIf="periodReportForm.errors?.['periodInvalid']">
+    {{ 'reports.period.invalidPeriod' | translate }}
+  </mat-error>
+
+  <a mat-raised-button
+     [disabled]="periodReportForm.invalid"
+     target="_blank"
+     download
+     [href]="periodReportLink">
+    {{ 'reports.period.generate' | translate }}
+  </a>
+</form>

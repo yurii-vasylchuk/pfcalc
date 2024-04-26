@@ -1,6 +1,7 @@
 import {IPage, IPfcc} from './models/common.models';
 import {combineLatest, map, Observable, of, OperatorFunction, switchMap} from 'rxjs';
 import {DateTime} from 'luxon';
+import {Language} from './models/auth.models';
 
 export function isToday(date: DateTime): boolean {
   const now = DateTime.now();
@@ -83,3 +84,17 @@ export function loadAllPages<T>(loadFunc: (page: number, pageSize: number) => Ob
 }
 
 export const mapToVoid: () => OperatorFunction<unknown, null> = () => map(_ => null);
+
+export function resolveLocale(language: Language): string {
+  let locale = 'en-US';
+  switch (language) {
+    case "UA":
+      locale = 'uk-UA';
+      break;
+    case "EN":
+      locale = 'en-US';
+      break;
+  }
+
+  return locale;
+}

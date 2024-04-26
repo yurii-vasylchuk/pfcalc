@@ -133,7 +133,8 @@
     "dashboard": "Dashboard",
     "foods-management": "Products & Recipes",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "reports": "Reports"
   },
   "foods-management": {
     "ingredients-tab-label": "Ingredients",
@@ -158,5 +159,20 @@
     "g": "g",
     "glass": "Glass",
     "pcs": "pcs."
+  },
+  "reports": {
+    "period": {
+      "title": "Period report",
+      "from": {
+        "label": "From",
+        "placeholder": "2024-01-12"
+      },
+      "to": {
+        "label": "To",
+        "placeholder": "2024-02-12"
+      },
+      "invalidPeriod": "'From' should not exceed 'To'",
+      "generate": "Generate"
+    }
   }
 }

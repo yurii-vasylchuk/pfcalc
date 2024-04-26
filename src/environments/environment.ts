@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'https://pfcalc.org.ua',
+  // apiUrl: 'http://localhost:4200',
   ngxs: {
     logging: false,
     developmentMode: true,
@@ -15,8 +16,7 @@ export const environment = {
   },
   alert: {
     duration: 1500,
-  },
-  // apiUrl: 'http://localhost:8080'
+  }
 };
 
 /*

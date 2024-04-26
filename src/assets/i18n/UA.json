@@ -132,7 +132,8 @@
     "dashboard": "Головна",
     "foods-management": "Продукти і рецепти",
     "settings": "Налаштування",
-    "logout": "Вийти"
+    "logout": "Вийти",
+    "reports": "Звіти"
   },
   "foods-management": {
     "ingredients-tab-label": "Продукти",
@@ -156,5 +157,20 @@
   "measurements": {
     "g": "г",
     "glass": "Стакан"
+  },
+  "reports": {
+    "period": {
+      "title": "Звіт за період",
+      "from": {
+        "label": "Початок",
+        "placeholder": "2024-01-12"
+      },
+      "to": {
+        "label": "Кінець",
+        "placeholder": "2024-02-12"
+      },
+      "invalidPeriod": "'Початок' не має перевищувати 'Кінець'",
+      "generate": "Згенерувати"
+    }
   }
 }
