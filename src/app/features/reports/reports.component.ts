@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, TrackByFunction} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatError, MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
 import {
@@ -12,10 +12,25 @@ import {
   Validators,
 } from '@angular/forms';
 import {MatInput} from '@angular/material/input';
-import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDateRangeInput,
+  MatDateRangePicker,
+  MatEndDate,
+  MatStartDate,
+} from '@angular/material/datepicker';
 import {DateTime} from 'luxon';
-import {MatAnchor} from '@angular/material/button';
+import {MatAnchor, MatButton} from '@angular/material/button';
 import {CommonModule} from '@angular/common';
+import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot';
+import {ReportsState} from './reports.state';
+import {IReport} from '../../commons/models/domain.models';
+import {Emitter} from '@ngxs-labs/emitter';
+import {Reports} from './reports.state-models';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatIcon} from '@angular/material/icon';
 
 type PeriodReportFormGroup = FormGroup<{
   from: FormControl<DateTime>;
@@ -25,19 +40,6 @@ type PeriodReportFormGroup = FormGroup<{
 @Component({
   selector: 'pfc-reports',
   standalone: true,
-  providers: [
-    // provideLuxonDateAdapter({
-    //   parse: {
-    //     dateInput: 'yyyy-MM-dd',
-    //   },
-    //   display: {
-    //     dateInput: 'yyyy-MM-dd',
-    //     monthYearLabel: 'MMM yyyy',
-    //     dateA11yLabel: 'yyyy-MM-dd',
-    //     monthYearA11yLabel: 'MMMM yyyy',
-    //   },
-    // })
-  ],
   imports: [
     CommonModule,
     TranslateModule,
@@ -52,6 +54,13 @@ type PeriodReportFormGroup = FormGroup<{
     MatError,
     MatAnchor,
     MatLabel,
+    MatButton,
+    MatDateRangeInput,
+    MatDateRangePicker,
+    MatStartDate,
+    MatEndDate,
+    MatProgressSpinner,
+    MatIcon,
   ],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss',
@@ -59,6 +68,14 @@ type PeriodReportFormGroup = FormGroup<{
 })
 export class ReportsComponent {
   protected periodReportForm: PeriodReportFormGroup;
+
+  @Emitter(ReportsState.requestPeriodReport)
+  private requestPeriodReportEmt: EventEmitter<Reports.RequestPeriodReportPayload>;
+
+  @ViewSelectSnapshot(ReportsState.reports)
+  protected reports: IReport[];
+
+  protected trackReportById: TrackByFunction<IReport> = (_, report) => report.id;
 
   constructor() {
     const now = DateTime.now();
@@ -72,10 +89,6 @@ export class ReportsComponent {
     });
   }
 
-  get periodReportLink(): string {
-    return `/api/report/period?from=${this.periodReportForm.value.from.toFormat("yyyy-MM-dd")}&to=${this.periodReportForm.value.to.toFormat("yyyy-MM-dd")}`;
-  };
-
   private validatePeriod: ValidatorFn = (form: AbstractControl): ValidationErrors => {
     if (form.value.from > form.value.to) {
       return {
@@ -86,4 +99,20 @@ export class ReportsComponent {
     return null;
   };
 
+  protected generatePeriodReport() {
+    const form = this.periodReportForm;
+    if (form.invalid) {
+      return;
+    }
+    this.requestPeriodReportEmt.emit({
+      from: form.value.from,
+      to: form.value.to,
+    });
+  }
+
+  protected reportHref(report: IReport): string {
+    return report.status === 'INITIALIZED' ?
+           'javascript:void(0)' :
+           `/api/report/${report.id}/file`;
+  }
 }

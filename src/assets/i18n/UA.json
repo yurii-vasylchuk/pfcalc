@@ -1,7 +1,13 @@
 {
   "alert": {
     "action": "Ок",
-    "default-error": "Йой, щось пішло не так"
+    "default-error": "Йой, щось пішло не так",
+    "reports": {
+      "period": {
+        "request-failed": "Не вдалося ЗАМОВИТИ звіт, спробуйте пізніше",
+        "requested-successfully": "Ваш звіт скоро буде згенеровано"
+      }
+    }
   },
   "common": {
     "calories": "Калорії",
@@ -159,15 +165,15 @@
     "glass": "Стакан"
   },
   "reports": {
+    "list": {
+      "title": "Звіти"
+    },
     "period": {
       "title": "Звіт за період",
-      "from": {
-        "label": "Початок",
-        "placeholder": "2024-01-12"
-      },
-      "to": {
-        "label": "Кінець",
-        "placeholder": "2024-02-12"
+      "range": {
+        "label": "Період звіту",
+        "from-placeholder": "2024-01-12",
+        "to-placeholder": "2024-02-12"
       },
       "invalidPeriod": "'Початок' не має перевищувати 'Кінець'",
       "generate": "Згенерувати"

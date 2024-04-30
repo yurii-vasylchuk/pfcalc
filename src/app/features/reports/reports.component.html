@@ -1,40 +1,54 @@
+<h1>{{ 'reports.list.title'|translate }}</h1>
+<div class="reports-list">
+  <ng-container *ngFor="let report of reports; trackBy: trackReportById">
+      <a *ngIf="report.status === 'GENERATED'; else placeholder"
+         download
+         [href]="reportHref(report)">
+        <span>{{report.name}}</span>
+        <mat-icon>download</mat-icon>
+      </a>
+    <ng-template #placeholder>
+      <span>
+        <span>{{report.name}}</span>
+        <mat-spinner mode="indeterminate"
+                     diameter="20"></mat-spinner>
+      </span>
+    </ng-template>
+  </ng-container>
+</div>
+
 <h1>{{ 'reports.period.title' | translate }}</h1>
 <form [formGroup]="periodReportForm">
   <mat-form-field>
     <mat-label>
-      {{ 'reports.period.from.label' | translate }}
+      {{ 'reports.period.range.label' | translate }}
     </mat-label>
-    <input matInput
-           formControlName="from"
-           [matDatepicker]="fromDatepicker"
-           [placeholder]="'reports.period.from.placeholder' | translate">
-    <mat-datepicker-toggle matIconSuffix
-                           [for]="fromDatepicker"/>
-    <mat-datepicker #fromDatepicker/>
-  </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>
-      {{ 'reports.period.to.label' | translate }}
-    </mat-label>
-    <input matInput
-           formControlName="to"
-           [matDatepicker]="toDatepicker"
-           [placeholder]="'reports.period.to.placeholder' | translate">
+    <mat-date-range-input [rangePicker]="periodRangePicker">
+      <input matInput
+             matStartDate
+             formControlName="from"
+             [placeholder]="'reports.period.range.from-placeholder' | translate">
+
+      <input matInput
+             matEndDate
+             formControlName="to"
+             [placeholder]="'reports.period.range.to-placeholder' | translate">
+    </mat-date-range-input>
+
     <mat-datepicker-toggle matIconSuffix
-                           [for]="toDatepicker"/>
-    <mat-datepicker #toDatepicker/>
+                           [for]="periodRangePicker"/>
+
+    <mat-date-range-picker #periodRangePicker/>
   </mat-form-field>
 
   <mat-error *ngIf="periodReportForm.errors?.['periodInvalid']">
     {{ 'reports.period.invalidPeriod' | translate }}
   </mat-error>
 
-  <a mat-raised-button
-     [disabled]="periodReportForm.invalid"
-     target="_blank"
-     download
-     [href]="periodReportLink">
+  <button mat-raised-button
+          [disabled]="periodReportForm.invalid"
+          (click)="generatePeriodReport()">
     {{ 'reports.period.generate' | translate }}
-  </a>
+  </button>
 </form>

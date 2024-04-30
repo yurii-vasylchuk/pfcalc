@@ -1,7 +1,13 @@
 {
   "alert": {
     "action": "Ok",
-    "default-error": "Something's went wrong"
+    "default-error": "Something's went wrong",
+    "reports": {
+      "period": {
+        "request-failed": "Failed to request period report, try again later",
+        "requested-successfully": "Your report will be ready soon"
+      }
+    }
   },
   "common": {
     "calories": "Calories",
@@ -161,15 +167,15 @@
     "pcs": "pcs."
   },
   "reports": {
+    "list": {
+      "title": "Available reports"
+    },
     "period": {
       "title": "Period report",
-      "from": {
-        "label": "From",
-        "placeholder": "2024-01-12"
-      },
-      "to": {
-        "label": "To",
-        "placeholder": "2024-02-12"
+      "range": {
+        "label": "Report period",
+        "from-placeholder": "2024-01-12",
+        "to-placeholder": "2024-02-12"
       },
       "invalidPeriod": "'From' should not exceed 'To'",
       "generate": "Generate"

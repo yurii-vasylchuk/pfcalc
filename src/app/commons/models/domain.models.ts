@@ -74,3 +74,13 @@ export type IMeasurement = {
   defaultValue: number;
   toGramMultiplier: number;
 };
+
+export type IReport = {
+  id: number;
+  name: string;
+  status: ReportStatus;
+  type: ReportType;
+};
+
+export type ReportStatus = 'INITIALIZED' | 'GENERATED';
+export type ReportType = 'PERIOD';

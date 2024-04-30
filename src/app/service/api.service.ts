@@ -2,11 +2,21 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {combineLatest, combineLatestWith, identity, map, Observable, of, switchMap, tap, throwError} from 'rxjs';
 import {IAuthTokensResponse, Language} from '../commons/models/auth.models';
-import {FoodType, IDish, IDishToCreate, IFood, IMeal, IMeasurement, IProfile} from '../commons/models/domain.models';
+import {
+  FoodType,
+  IDish,
+  IDishToCreate,
+  IFood,
+  IMeal,
+  IMeasurement,
+  IProfile,
+  IReport,
+} from '../commons/models/domain.models';
 import {IApiResponse, IPage, WithOptional} from '../commons/models/common.models';
 import {DateTime} from 'luxon';
 import {AddMeal} from '../features/add-meal/add-meal.state-models';
 import IMealOption = AddMeal.IMealOption;
+import {loadAllPages} from '../commons/functions';
 
 @Injectable({providedIn: 'root'})
 export class ApiService {
@@ -46,7 +56,7 @@ export class ApiService {
   updateProfile({aims, name}: Partial<Pick<IProfile, 'name' | 'aims'>>): Observable<null> {
     return this.http.post<IApiResponse<void>>('/api/user/profile', {
       aims,
-      name
+      name,
     }).pipe(this.extractVoidResponse);
   }
 
@@ -243,6 +253,24 @@ export class ApiService {
       .pipe(
         map(this.extractResponseData),
       );
+  }
+
+  requestPeriodReport(from: DateTime, to: DateTime): Observable<void> {
+    return this.http.post<IApiResponse<void>>('/api/report/period', null, {
+      params: {
+        from: from.toISODate(),
+        to: to.toISODate(),
+      },
+    }).pipe(this.extractVoidResponse);
+  }
+
+  loadReports(): Observable<IReport[]> {
+    return loadAllPages<IReport>(
+      (page, pageSize) => this.http.get<IApiResponse<IPage<IReport>>>('/api/report', {
+        params: {page, pageSize}
+      }).pipe(map(rsp => this.extractResponseData(rsp))),
+      5
+    )
   }
 
   private extractResponseData<T>(rsp: IApiResponse<T>): T {

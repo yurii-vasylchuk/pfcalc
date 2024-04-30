@@ -37,6 +37,7 @@ import {MAT_LUXON_DATE_ADAPTER_OPTIONS, provideLuxonDateAdapter} from '@angular/
 import {SettingsState} from './features/settings/settings.state';
 import {DateAdapter, MAT_DATE_LOCALE} from '@angular/material/core';
 import {PfcalcLuxonDateAdapter} from './commons/pfcalc-luxon-date-adapter';
+import {ReportsState} from './features/reports/reports.state';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -50,7 +51,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NgxsModule.forRoot([AuthState, UiState, FoodsManagementState, DashboardState, AddMealState, ProfileState, AddDishState, NavigationState, AddFoodState, SettingsState],
+    NgxsModule.forRoot([AuthState, UiState, FoodsManagementState, DashboardState, AddMealState, ProfileState,
+        AddDishState, NavigationState, AddFoodState, SettingsState, ReportsState],
       {developmentMode: environment.ngxs.developmentMode}),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
@@ -91,7 +93,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: DateAdapter,
       useClass: PfcalcLuxonDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_LUXON_DATE_ADAPTER_OPTIONS]
+      deps: [MAT_DATE_LOCALE, MAT_LUXON_DATE_ADAPTER_OPTIONS],
     },
     {
       provide: HTTP_INTERCEPTORS,
