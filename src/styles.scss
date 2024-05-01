@@ -28,3 +28,13 @@ body {
     display: none;
   }
 }
+
+a, .link-like {
+  color: #3986ef;
+}
+
+button.link-like {
+  text-decoration: underline;
+  background: none;
+  border: none;
+}

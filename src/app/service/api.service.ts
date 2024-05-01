@@ -15,8 +15,8 @@ import {
 import {IApiResponse, IPage, WithOptional} from '../commons/models/common.models';
 import {DateTime} from 'luxon';
 import {AddMeal} from '../features/add-meal/add-meal.state-models';
-import IMealOption = AddMeal.IMealOption;
 import {loadAllPages} from '../commons/functions';
+import IMealOption = AddMeal.IMealOption;
 
 @Injectable({providedIn: 'root'})
 export class ApiService {
@@ -267,10 +267,15 @@ export class ApiService {
   loadReports(): Observable<IReport[]> {
     return loadAllPages<IReport>(
       (page, pageSize) => this.http.get<IApiResponse<IPage<IReport>>>('/api/report', {
-        params: {page, pageSize}
+        params: {page, pageSize},
       }).pipe(map(rsp => this.extractResponseData(rsp))),
-      5
-    )
+      5,
+    );
+  }
+
+  deleteReport(id: number): Observable<void> {
+    return this.http.delete<IApiResponse<void>>(`/api/report/${id}`)
+      .pipe(this.extractVoidResponse);
   }
 
   private extractResponseData<T>(rsp: IApiResponse<T>): T {

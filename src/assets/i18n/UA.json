@@ -6,6 +6,10 @@
       "period": {
         "request-failed": "Не вдалося ЗАМОВИТИ звіт, спробуйте пізніше",
         "requested-successfully": "Ваш звіт скоро буде згенеровано"
+      },
+      "delete": {
+        "success": "Звіт видалено",
+        "failed": "При видаленні звіту сталась помилка"
       }
     }
   },
@@ -174,6 +178,11 @@
         "label": "Період звіту",
         "from-placeholder": "2024-01-12",
         "to-placeholder": "2024-02-12"
+      },
+      "presets": {
+        "previous-week-label": "попередній тижд.",
+        "current-week-label": "поточний тижд.",
+        "current-month-label": "поточний місяць"
       },
       "invalidPeriod": "'Початок' не має перевищувати 'Кінець'",
       "generate": "Згенерувати"

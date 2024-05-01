@@ -68,4 +68,21 @@ export class ReportsState {
       this.loadReportsSubscription?.unsubscribe();
     }
   }
+
+  @Receiver({type: Reports.DELETE_REPORT})
+  static deleteReport(ctx: StateContext<Reports.IReportsState>, {payload}: EmitterAction<Reports.DeleteReportPayload>): Observable<void> {
+    return this.api.deleteReport(payload).pipe(
+      tap(_ => {
+        ctx.patchState({
+          reports: ctx.getState().reports.filter(r => r.id !== payload),
+        });
+        this.alert.success("alert.reports.delete.success");
+      }),
+      catchError(_ => {
+        this.alert.warn("alert.reports.delete.failed");
+        return EMPTY;
+      }),
+    );
+
+  }
 }

@@ -22,7 +22,7 @@ import {
   MatStartDate,
 } from '@angular/material/datepicker';
 import {DateTime} from 'luxon';
-import {MatAnchor, MatButton} from '@angular/material/button';
+import {MatAnchor, MatButton, MatIconButton} from '@angular/material/button';
 import {CommonModule} from '@angular/common';
 import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot';
 import {ReportsState} from './reports.state';
@@ -36,6 +36,8 @@ type PeriodReportFormGroup = FormGroup<{
   from: FormControl<DateTime>;
   to: FormControl<DateTime>;
 }>;
+
+type PeriodPreset = 'previous-week' | 'current-week' | 'current-month';
 
 @Component({
   selector: 'pfc-reports',
@@ -61,6 +63,7 @@ type PeriodReportFormGroup = FormGroup<{
     MatEndDate,
     MatProgressSpinner,
     MatIcon,
+    MatIconButton,
   ],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss',
@@ -71,6 +74,9 @@ export class ReportsComponent {
 
   @Emitter(ReportsState.requestPeriodReport)
   private requestPeriodReportEmt: EventEmitter<Reports.RequestPeriodReportPayload>;
+
+  @Emitter(ReportsState.deleteReport)
+  private deleteReportEmt: EventEmitter<Reports.DeleteReportPayload>;
 
   @ViewSelectSnapshot(ReportsState.reports)
   protected reports: IReport[];
@@ -114,5 +120,34 @@ export class ReportsComponent {
     return report.status === 'INITIALIZED' ?
            'javascript:void(0)' :
            `/api/report/${report.id}/file`;
+  }
+
+  handleDeleteReport(id: number) {
+    this.deleteReportEmt.emit(id);
+  }
+
+  handlePresetClick(preset: PeriodPreset) {
+    const now = DateTime.now();
+
+    switch (preset) {
+      case 'previous-week': {
+        const from = now.startOf('week').minus({weeks: 1});
+        const to = now.startOf('week').minus({days: 1});
+        this.periodReportForm.setValue({from, to});
+        break;
+      }
+      case 'current-week': {
+        const from = now.startOf('week');
+        const to = now.endOf('week');
+        this.periodReportForm.setValue({from, to});
+        break;
+      }
+      case 'current-month': {
+        const from = now.startOf('month');
+        const to = now.endOf('month');
+        this.periodReportForm.setValue({from, to});
+        break;
+      }
+    }
   }
 }

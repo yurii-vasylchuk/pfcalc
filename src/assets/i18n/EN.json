@@ -6,6 +6,10 @@
       "period": {
         "request-failed": "Failed to request period report, try again later",
         "requested-successfully": "Your report will be ready soon"
+      },
+      "delete": {
+        "success": "Report has been deleted",
+        "failed": "Filed to delete report"
       }
     }
   },
@@ -176,6 +180,11 @@
         "label": "Report period",
         "from-placeholder": "2024-01-12",
         "to-placeholder": "2024-02-12"
+      },
+      "presets": {
+        "previous-week-label": "previous week",
+        "current-week-label": "current week",
+        "current-month-label": "current month"
       },
       "invalidPeriod": "'From' should not exceed 'To'",
       "generate": "Generate"

@@ -17,15 +17,15 @@ export class AlertService {
       [
         this.translate.get(message),
         this.translate.get('alert.action'),
-      ]
+      ],
     ).subscribe(([translatedMsg, actionMsg]) => {
-        if (translatedMsg == null || translatedMsg.trim().length === 0) {
-          console.warn(`Cannot find translation for alert msg: ${message}`);
-          this.openBar(message, actionMsg);
-          return;
-        }
-        this.openBar(translatedMsg, actionMsg);
-      });
+      if (translatedMsg == null || translatedMsg.trim().length === 0) {
+        console.error(`Cannot find translation for alert msg: ${message}`);
+        this.openBar(message, actionMsg);
+        return;
+      }
+      this.openBar(translatedMsg, actionMsg);
+    });
   }
 
   success(message: string): void {
@@ -33,15 +33,15 @@ export class AlertService {
       [
         this.translate.get(message),
         this.translate.get('alert.action'),
-      ]
+      ],
     ).subscribe(([translatedMsg, actionMsg]) => {
-        if (translatedMsg == null || translatedMsg.trim().length === 0) {
-          console.warn(`Cannot find translation for alert msg: ${message}`);
-          this.openBar(message, actionMsg);
-          return;
-        }
-        this.openBar(translatedMsg, actionMsg);
-      });
+      if (translatedMsg == null || translatedMsg.trim().length === 0) {
+        console.error(`Cannot find translation for alert msg: ${message}`);
+        this.openBar(message, actionMsg);
+        return;
+      }
+      this.openBar(translatedMsg, actionMsg);
+    });
   }
 
   private openBar(msg: string, action: string) {

@@ -1,24 +1,38 @@
 <h1>{{ 'reports.list.title'|translate }}</h1>
 <div class="reports-list">
   <ng-container *ngFor="let report of reports; trackBy: trackReportById">
+
+    <div class="reports-list__link-container">
       <a *ngIf="report.status === 'GENERATED'; else placeholder"
          download
+         target="_blank"
+         class="reports-list__name"
          [href]="reportHref(report)">
-        <span>{{report.name}}</span>
-        <mat-icon>download</mat-icon>
+        <span>{{ report.name }}</span>
       </a>
+      <div class="reports-list__actions">
+        <button mat-icon-button
+                color="warn"
+                (click)="handleDeleteReport(report.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
     <ng-template #placeholder>
-      <span>
-        <span>{{report.name}}</span>
-        <mat-spinner mode="indeterminate"
-                     diameter="20"></mat-spinner>
-      </span>
+      <div class="reports-list__link-container">
+        <span class="reports-list__name">{{ report.name }}</span>
+        <div class="reports-list__actions">
+          <mat-spinner mode="indeterminate"
+                       diameter="24">
+          </mat-spinner>
+        </div>
+      </div>
     </ng-template>
   </ng-container>
 </div>
 
 <h1>{{ 'reports.period.title' | translate }}</h1>
-<form [formGroup]="periodReportForm">
+<form [formGroup]="periodReportForm" class="period-reports">
   <mat-form-field>
     <mat-label>
       {{ 'reports.period.range.label' | translate }}
@@ -51,4 +65,17 @@
           (click)="generatePeriodReport()">
     {{ 'reports.period.generate' | translate }}
   </button>
+
+  <div class="period-reports__presets">
+    <button class="link-like" (click)="handlePresetClick('previous-week')">
+      {{'reports.period.presets.previous-week-label' | translate}}
+    </button>
+    <button class="link-like" (click)="handlePresetClick('current-week')">
+      {{'reports.period.presets.current-week-label' | translate}}
+    </button>
+    <button class="link-like" (click)="handlePresetClick('current-month')">
+      {{'reports.period.presets.current-month-label' | translate}}
+    </button>
+  </div>
+
 </form>

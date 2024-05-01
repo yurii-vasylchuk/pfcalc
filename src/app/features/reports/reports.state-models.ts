@@ -11,6 +11,8 @@ export namespace Reports {
     from: DateTime;
     to: DateTime;
   };
+  export type DeleteReportPayload = number;
 
   export const REQUEST_PERIOD_REPORT = "[Reports] Request period report";
+  export const DELETE_REPORT = "[Reports] delete report";
 }
