@@ -6,6 +6,8 @@ import {IPfcc} from '../commons/models/common.models';
 import {ProfileLoadedEvent} from '../commons/models/state.models';
 import {Injectable} from '@angular/core';
 import {Auth} from '../features/auth/auth.state-models';
+import {catchError, EMPTY, Observable} from 'rxjs';
+import {ApiService} from '../service/api.service';
 import IProfileState = Profile.IProfileState;
 
 @State<Profile.IProfileState>({
@@ -20,6 +22,11 @@ import IProfileState = Profile.IProfileState;
 })
 @Injectable({providedIn: 'root'})
 export class ProfileState implements NgxsOnInit {
+  private static api: ApiService;
+
+  constructor(api: ApiService) {
+    ProfileState.api = api;
+  }
 
   @Selector()
   static language(state: IProfileState): Language {
@@ -43,10 +50,17 @@ export class ProfileState implements NgxsOnInit {
   }
 
   @Receiver({type: Profile.LANGUAGE_CHANGED_EVENT})
-  static languageChanged(ctx: StateContext<Profile.IProfileState>, {payload}: EmitterAction<Profile.LanguageChangedEventPayload>) {
+  static languageChanged(ctx: StateContext<Profile.IProfileState>, {payload}: EmitterAction<Profile.LanguageChangedEventPayload>): Observable<void> {
     ctx.patchState({
       language: payload,
     });
+
+    return this.api.updateProfile({preferredLanguage: payload}).pipe(
+      catchError(err => {
+        console.log("Failed to save preferred language, ", err);
+        return EMPTY;
+      }),
+    );
   }
 
   @Receiver(Auth.ProfileConfiguredSuccessfullyEvent)

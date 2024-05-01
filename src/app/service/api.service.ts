@@ -53,10 +53,11 @@ export class ApiService {
     }).pipe(map(this.extractResponseData));
   }
 
-  updateProfile({aims, name}: Partial<Pick<IProfile, 'name' | 'aims'>>): Observable<null> {
+  updateProfile({aims, name, preferredLanguage}: Partial<Pick<IProfile, 'name' | 'aims' | 'preferredLanguage'>>): Observable<null> {
     return this.http.post<IApiResponse<void>>('/api/user/profile', {
       aims,
       name,
+      preferredLanguage
     }).pipe(this.extractVoidResponse);
   }
 
