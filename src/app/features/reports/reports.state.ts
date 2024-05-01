@@ -48,7 +48,7 @@ export class ReportsState {
   static onNavigate(ctx: StateContext<Reports.IReportsState>, action: RouterNavigated): void {
     if (action.routerState.url.match(`/${fromRoutes.reports}.*`)) {
       if (this.loadReportsSubscription == null || this.loadReportsSubscription.closed) {
-        this.loadReportsSubscription = interval(5000).pipe(
+        this.loadReportsSubscription = interval(1000).pipe(
           startWith(1),
           switchMap(_ => this.api.loadReports()),
           map(reports => {
