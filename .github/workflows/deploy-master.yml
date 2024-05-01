@@ -1,5 +1,4 @@
 name: Build & deploy master
-run-name: Deploying latest master to AWS
 on:
   push:
     branches:
