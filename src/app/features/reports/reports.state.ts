@@ -50,16 +50,19 @@ export class ReportsState {
       if (this.loadReportsSubscription == null || this.loadReportsSubscription.closed) {
         this.loadReportsSubscription = interval(1000).pipe(
           startWith(1),
-          switchMap(_ => this.api.loadReports()),
+          switchMap(_ => this.api.loadReports().pipe(
+            catchError(_ => {
+              console.error("Unable to load reports");
+              return of(null);
+            }),
+          )),
           map(reports => {
+            console.log('Reports loaded');
+            console.log(reports);
             ctx.patchState({
               reports,
             });
             return null;
-          }),
-          catchError(_ => {
-            console.error("Unable to load reports");
-            return of(null);
           }),
         ).subscribe(_ => {
         });

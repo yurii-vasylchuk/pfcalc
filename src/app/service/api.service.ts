@@ -53,11 +53,15 @@ export class ApiService {
     }).pipe(map(this.extractResponseData));
   }
 
-  updateProfile({aims, name, preferredLanguage}: Partial<Pick<IProfile, 'name' | 'aims' | 'preferredLanguage'>>): Observable<null> {
+  updateProfile({
+                  aims,
+                  name,
+                  preferredLanguage,
+                }: Partial<Pick<IProfile, 'name' | 'aims' | 'preferredLanguage'>>): Observable<null> {
     return this.http.post<IApiResponse<void>>('/api/user/profile', {
       aims,
       name,
-      preferredLanguage
+      preferredLanguage,
     }).pipe(this.extractVoidResponse);
   }
 
@@ -269,7 +273,15 @@ export class ApiService {
     return loadAllPages<IReport>(
       (page, pageSize) => this.http.get<IApiResponse<IPage<IReport>>>('/api/report', {
         params: {page, pageSize},
-      }).pipe(map(rsp => this.extractResponseData(rsp))),
+      }).pipe(
+        map(rsp => this.extractResponseData(rsp)),
+        map(res => {
+          if (Math.random() > 0.7) {
+            throw new Error("TEST");
+          }
+          return res;
+        }),
+      ),
       5,
     );
   }
