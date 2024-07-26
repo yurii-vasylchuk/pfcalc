@@ -43,15 +43,25 @@ export class DashboardState implements NgxsOnInit {
     return aims;
   }
 
-  @Selector()
-  static weeklyAims({aims}: Dashboard.IDashboardState): IPfcc {
-    const weekday = DateTime.now().weekday;
+  @Selector([DashboardState.weeklyCountingDays])
+  static weeklyAims({aims}: Dashboard.IDashboardState, countingDays: number): IPfcc {
     return {
-      protein: (aims.protein || 0) * weekday,
-      fat: (aims.fat || 0) * weekday,
-      carbohydrates: (aims.carbohydrates || 0) * weekday,
-      calories: (aims.calories || 0) * weekday,
+      protein: (aims.protein || 0) * countingDays,
+      fat: (aims.fat || 0) * countingDays,
+      carbohydrates: (aims.carbohydrates || 0) * countingDays,
+      calories: (aims.calories || 0) * countingDays,
     };
+  }
+
+  @Selector()
+  static weeklyCountingDays({weekMeals}: Dashboard.IDashboardState): number {
+    if (weekMeals == null) {
+      return 0;
+    }
+
+    return weekMeals.map(m => m.eatenOn.toISODate())
+      .filter((value, index, array) => array.indexOf(value) === index)
+      .length;
   }
 
   @Selector([DashboardState.todayMeals])

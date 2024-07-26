@@ -83,7 +83,8 @@
   "dashboard": {
     "add-meal-btn": "Зʼїсти страву",
     "daily-nutrients": "Сьогодні",
-    "weekly-nutrients": "За тиждень",
+    "weekly-nutrients": "За тиждень - {{days}}д.",
+    "weekly-nutrients.help": "Враховуються лише ті дні, в які були внесені хоч якісь данні",
     "meals-list": {
       "today-title": "Зʼїдено сьогодні",
       "date-title": "Зʼїдено {{date}}"

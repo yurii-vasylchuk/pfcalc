@@ -83,7 +83,7 @@
   "dashboard": {
     "add-meal-btn": "Add meal",
     "daily-nutrients": "Daily nutrients",
-    "weekly-nutrients": "Weekly nutrients",
+    "weekly-nutrients": "Weekly nutrients {{days}}d.",
     "meals-list": {
       "title-today": "Eaten today",
       "title-date": "Eaten on {{date}}"

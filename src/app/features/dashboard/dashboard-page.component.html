@@ -1,6 +1,12 @@
 <div class="nutrients">
   <div class="nutrients__period-block">
-    <h1 class="nutrients__header">{{ 'dashboard.weekly-nutrients' | translate }}</h1>
+    <h1 class="nutrients__header">
+      {{ 'dashboard.weekly-nutrients' | translate:{days: countedDaysOnWeek} }}
+      <button mat-icon-button
+              [matTooltip]="'sssss'">
+        <mat-icon>help</mat-icon>
+      </button>
+    </h1>
     <div class="nutrients__gauges">
       <pfc-nutrition-gauge [aim]="weeklyAims?.protein || null"
                            [title]="'common.protein' | translate"

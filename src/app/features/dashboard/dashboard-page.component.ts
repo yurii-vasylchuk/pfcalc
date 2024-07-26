@@ -18,6 +18,7 @@ import {DashboardState} from './dashboard.state';
 import {RouterLink} from '@angular/router';
 import {Emittable, Emitter} from '@ngxs-labs/emitter';
 import {Dashboard} from './dashboard.state-models';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
   selector: 'pfc-dashboard-page',
@@ -25,7 +26,7 @@ import {Dashboard} from './dashboard.state-models';
   styleUrls: ['./dashboard-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, NutritionGaugeComponent, AsyncPipe, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule, MatLineModule, RouterLink],
+  imports: [CommonModule, NutritionGaugeComponent, AsyncPipe, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule, MatLineModule, RouterLink, MatTooltipModule],
 })
 export class DashboardPageComponent {
 
@@ -44,6 +45,8 @@ export class DashboardPageComponent {
   protected eatenMeals: IMeal[];
   @ViewSelectSnapshot(DashboardState.currentDate)
   protected currentDate: DateTime;
+  @ViewSelectSnapshot(DashboardState.weeklyCountingDays)
+  protected countedDaysOnWeek: number;
   @Emitter(DashboardState.removeMeal)
   private removeMealEmt: Emittable<Dashboard.RemoveMealPayload>;
   @Emitter(DashboardState.switchDate)
