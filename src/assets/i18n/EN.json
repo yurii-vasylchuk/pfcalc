@@ -87,7 +87,8 @@
     "meals-list": {
       "title-today": "Eaten today",
       "title-date": "Eaten on {{date}}"
-    }
+    },
+    "counted-days-on-week-info": "We only count the days on which you logged at least one meal."
   },
   "add-meal": {
     "title": "Add meal",

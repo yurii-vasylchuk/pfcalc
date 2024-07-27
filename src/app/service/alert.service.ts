@@ -44,6 +44,22 @@ export class AlertService {
     });
   }
 
+  info(message: string): void {
+    combineLatest(
+      [
+        this.translate.get(message),
+        this.translate.get('alert.action'),
+      ],
+    ).subscribe(([translatedMsg, actionMsg]) => {
+      if (translatedMsg == null || translatedMsg.trim().length === 0) {
+        console.error(`Cannot find translation for alert msg: ${message}`);
+        this.openBar(message, actionMsg);
+        return;
+      }
+      this.openBar(translatedMsg, actionMsg);
+    });
+  }
+
   private openBar(msg: string, action: string) {
     this.snackBar.open(msg, action, {
       duration: environment.alert.duration,

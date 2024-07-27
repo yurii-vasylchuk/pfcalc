@@ -3,7 +3,7 @@
     <h1 class="nutrients__header">
       {{ 'dashboard.weekly-nutrients' | translate:{days: countedDaysOnWeek} }}
       <button mat-icon-button
-              [matTooltip]="'sssss'">
+              (click)="showCountedDaysOnWeekInfo()">
         <mat-icon>help</mat-icon>
       </button>
     </h1>

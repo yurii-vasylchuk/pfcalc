@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {NutritionGaugeComponent} from '../../components/nutrition-gauge/nutrition-gauge.component';
 import {IMeal, IProfile} from '../../commons/models/domain.models';
 import {Observable} from 'rxjs';
@@ -19,6 +19,7 @@ import {RouterLink} from '@angular/router';
 import {Emittable, Emitter} from '@ngxs-labs/emitter';
 import {Dashboard} from './dashboard.state-models';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {AlertService} from '../../service/alert.service';
 
 @Component({
   selector: 'pfc-dashboard-page',
@@ -52,6 +53,8 @@ export class DashboardPageComponent {
   @Emitter(DashboardState.switchDate)
   private switchDateEmt: Emittable<Dashboard.SwitchDatePayload>;
 
+  private alertService = inject(AlertService);
+
   mealTrackBy = (idx: number, item: IMeal) => item.id;
 
   removeMeal(mealId: number) {
@@ -64,5 +67,9 @@ export class DashboardPageComponent {
 
   protected handlePrevDateClick() {
     this.switchDateEmt.emit({date: this.currentDate.minus({day: 1})});
+  }
+
+  showCountedDaysOnWeekInfo() {
+    this.alertService.info('dashboard.counted-days-on-week-info');
   }
 }
