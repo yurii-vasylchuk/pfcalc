@@ -3,7 +3,7 @@
       [formGroup]="nameForm"
       (ngSubmit)="handleNameFormSubmit()">
   <mat-form-field>
-    <mat-label>{{'settings.username-label' | translate}}</mat-label>
+    <mat-label>{{ 'settings.username-label' | translate }}</mat-label>
     <input matInput
            formControlName="username"
            type="text">
@@ -58,5 +58,41 @@
           [disabled]="aimsForm.pristine || aimsForm.invalid"
           type="submit">
     {{ 'settings.save-aims-btn' | translate }}
+  </button>
+</form>
+
+<form class="settings-block"
+      [formGroup]="passwordForm"
+      (ngSubmit)="handlePasswordFormSubmit()">
+  <input style="display: none;"
+         autocomplete="username"
+         formControlName="username">
+  <mat-form-field>
+    <mat-label>{{ 'settings.current-password-label' | translate }}</mat-label>
+    <input matInput
+           autocomplete="current-password"
+           formControlName="currentPassword"
+           type="password">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{ 'settings.new-password-label' | translate }}</mat-label>
+    <input matInput
+           autocomplete="new-password"
+           formControlName="newPassword"
+           type="password">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{ 'settings.confirm-new-password-label' | translate }}</mat-label>
+    <input matInput
+           autocomplete="off"
+           formControlName="confirmNewPassword"
+           type="password">
+  </mat-form-field>
+
+  <button mat-raised-button
+          color="primary"
+          [disabled]="passwordForm.pristine || passwordForm.invalid"
+          type="submit">
+    {{ 'settings.save-password' | translate }}
   </button>
 </form>

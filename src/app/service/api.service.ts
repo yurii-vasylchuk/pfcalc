@@ -10,6 +10,7 @@ import {
   IMeal,
   IMeasurement,
   IProfile,
+  IProfileUpdate,
   IReport,
 } from '../commons/models/domain.models';
 import {IApiResponse, IPage, WithOptional} from '../commons/models/common.models';
@@ -57,11 +58,15 @@ export class ApiService {
                   aims,
                   name,
                   preferredLanguage,
-                }: Partial<Pick<IProfile, 'name' | 'aims' | 'preferredLanguage'>>): Observable<null> {
+                  currentPassword,
+                  newPassword,
+                }: IProfileUpdate): Observable<null> {
     return this.http.post<IApiResponse<void>>('/api/user/profile', {
       aims,
       name,
       preferredLanguage,
+      currentPassword,
+      newPassword,
     }).pipe(this.extractVoidResponse);
   }
 

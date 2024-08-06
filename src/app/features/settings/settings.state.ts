@@ -13,6 +13,7 @@ import {AlertService} from '../../service/alert.service';
   defaults: {
     aims: null,
     name: null,
+    email: null
   },
 })
 @Injectable()
@@ -29,6 +30,7 @@ export class SettingsState implements NgxsOnInit {
     this.api.getProfile().subscribe(profile => ctx.patchState({
       aims: profile.aims,
       name: profile.name,
+      email: profile.email,
     }));
   }
 
@@ -40,6 +42,11 @@ export class SettingsState implements NgxsOnInit {
   @Selector()
   static username(state: Settings.ISettingsState): string {
     return state.name;
+  }
+
+  @Selector()
+  static email(state: Settings.ISettingsState): string {
+    return state.email;
   }
 
   @Receiver({type: Settings.UPDATE_USERNAME})
@@ -82,5 +89,16 @@ export class SettingsState implements NgxsOnInit {
           return EMPTY;
         }),
       );
+  }
+  @Receiver({type: Settings.UPDATE_PASSWORD})
+  static updatePassword(ctx: StateContext<Settings.ISettingsState>,
+                        {payload}: EmitterAction<Settings.UpdatePasswordPayload>): Observable<void> {
+    return this.api.updateProfile({...payload}).pipe(
+      tap(_ => this.alerts.success('settings.password-updated-alert')),
+      catchError(_ => {
+        this.alerts.warn('alert.default-error');
+        return EMPTY;
+      }),
+    );
   }
 }

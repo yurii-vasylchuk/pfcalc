@@ -164,7 +164,12 @@
     "carbohydrates-placeholder": "Напр. 160...",
     "calories-placeholder": "Напр. 1500...",
     "aims-saved-alert": "Нові цілі збережено!",
-    "name-saved-alert": "Нове імʼя збережено!"
+    "name-saved-alert": "Нове імʼя збережено!",
+    "password-updated-alert": "Новий пароль збережено!",
+    "current-password": "Поточний пароль",
+    "new-password-label": "Новий пароль",
+    "confirm-new-password-label": "Підтвердіть новий пароль",
+    "save-password": "Зберегти новий пароль"
   },
   "measurements": {
     "g": "г",

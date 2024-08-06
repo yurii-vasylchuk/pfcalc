@@ -54,6 +54,11 @@ export interface IProfile {
   aims: IPfcc;
 }
 
+export type IProfileUpdate = Partial<Pick<IProfile, 'aims' | 'name' | 'preferredLanguage'> & {
+  currentPassword: string;
+  newPassword: string
+}>
+
 export interface IDishToCreate {
   id?: number;
   cookedOn: DateTime;
