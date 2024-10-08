@@ -29,5 +29,5 @@ jobs:
           ssh-keyscan ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
           tar -czf pfcalc.tar.gz -C ./dist/frontend .
           ssh -i key.pem ubuntu@${{ secrets.AWS_HOST }} sudo rm -rf /var/www/pfcalc/*
-          scp -i key.pem pfcalc.tar.gz ubuntu@${{ secrets.AWS_HOST }}:/home/ubuntu/pfcalc.tar.gz
-          ssh -i key.pem ubuntu@${{ secrets.AWS_HOST }} sudo tar -xzf ./pfcalc.tar.gz -C /var/www/pfcalc/
+          scp -i key.pem pfcalc.tar.gz ubuntu@${{ secrets.AWS_HOST }}:/home/ubuntu/pfcalc/pfcalc.tar.gz
+          ssh -i key.pem ubuntu@${{ secrets.AWS_HOST }} sudo tar -xzf .~/pfcalc/pfcalc.tar.gz -C /var/www/pfcalc/
