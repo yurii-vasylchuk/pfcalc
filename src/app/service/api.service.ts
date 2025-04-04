@@ -239,7 +239,7 @@ export class ApiService {
           .filter(measurements => measurements != null && measurements.length > 0)
           .forEach(measurements => {
             const food = options.data
-              .find(opt => opt.type === 'RECIPE' || 'INGREDIENT' && opt.foodId == measurements[0].foodId);
+              .find(opt => ['RECIPE', 'INGREDIENT'].includes(opt.type) && opt.foodId === measurements[0].foodId);
 
             if (food != null) {
               food.measurements = measurements;
