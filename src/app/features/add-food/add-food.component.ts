@@ -235,7 +235,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
 
     const measurementsToDelete = f.measurements.filter(m => m.deleted && m.id != null).map(m => m.id as number);
 
-    if (f.portions.enabled) {
+    if (f.isRecipe && f.portions.enabled) {
       measurements.push({
         id: null,
         foodId: f.id,
