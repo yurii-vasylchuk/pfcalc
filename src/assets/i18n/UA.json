@@ -25,6 +25,8 @@
     "pfcc-sign": "б/ж/у/к",
     "pfcc-values": "{{protein}}г/{{fat}}г/{{carbohydrates}}г/{{calories}}кКал",
     "calories-sign": "ккал",
+    "weight": "Вага",
+    "total-weight": "Загальна вага",
     "page-titles": {
       "add-dish": "Додати страву",
       "add-meal": "Зʼїсти",
@@ -137,7 +139,11 @@
     "measurement-multiplier-label": "Грам на од.",
     "measurement-default-label": "Замовч.",
     "additional-measurements-header": "Додаткові од. виміру",
-    "ingredients-header": "Інгредієнти"
+    "ingredients-header": "Інгредієнти",
+    "default-portion-name": "Порція",
+    "enable-portions-measurement": "Створити порції?",
+    "portion-name-label": "Назва",
+    "portions-count-label": "Кількість на рецепт"
   },
   "side-menu": {
     "title": "PFCC",

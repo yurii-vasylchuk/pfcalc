@@ -13,6 +13,7 @@ export namespace AddFood {
 
   export const RELOAD_INGREDIENT_OPTIONS_ACTION = '[AddFood] Reload ingredients options';
   export const SAVE_FOOD_ACTION = '[AddFood] Save food';
+  export const DROP_MEASUREMENTS_ACTION = '[AddFood] Drop measurements';
 
 
   export type ReloadIngredientOptionsPayload = {
@@ -21,4 +22,6 @@ export namespace AddFood {
   }[];
 
   export type SaveFoodPayload = IFood;
+
+  export type DropMeasurementsPayload = number[];
 }

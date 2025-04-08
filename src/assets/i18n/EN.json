@@ -25,6 +25,8 @@
     "pfcc-sign": "p/f/c/kc",
     "pfcc-values": "{{protein}}g / {{fat}}g / {{carbohydrates}}g / {{calories}}kCal",
     "calories-sign": "kcals",
+    "weight": "Weight",
+    "total-weight": "Total weight",
     "page-titles": {
       "add-dish": "Add Dish",
       "add-meal": "Add Meal",
@@ -137,7 +139,11 @@
     "measurement-multiplier-label": "Gram multiplier",
     "measurement-default-label": "Default",
     "additional-measurements-header": "Additional measurements",
-    "ingredients-header": "Ingredients"
+    "ingredients-header": "Ingredients",
+    "default-portion-name": "Portion",
+    "enable-portions-measurement": "Create portions?",
+    "portion-name-label": "Name",
+    "portions-count-label": "Count per recipe"
   },
   "side-menu": {
     "title": "PFCC",

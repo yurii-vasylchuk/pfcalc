@@ -112,6 +112,9 @@
 
       <p class="pfcc-values__label">{{ 'common.calories' | translate }} :</p>
       <p class="pfcc-values__value">{{ ceiledPfcc.calories }}</p>
+
+      <p class="pfcc-values__label">{{ 'common.total-weight' | translate }} :</p>
+      <p class="pfcc-values__value">{{ totalRecipeWeight }}</p>
     </div>
 
     <h2>{{ 'add-food.ingredients-header' | translate }}</h2>
@@ -123,7 +126,7 @@
         <div class="ingredient-pfcc_row">
             <span *ngIf="fi != null && fi.ingredient != null">
               {{ 'common.pfcc-sign' | translate }} :
-              {{ 'common.pfcc-values' | translate:ceilPfcc(multiplyPfcc(fi.ingredient.pfcc, fi.weight / 100), 0) }}
+              {{ 'common.pfcc-values' | translate:ceilPfcc(multiplyPfcc(fi.ingredient.pfcc, (fi.weight * fi.measurement.toGramMultiplier) / 100), 0) }}
             </span>
         </div>
         <div [formGroupName]="idx"
@@ -192,9 +195,39 @@
 
   <h2>{{ 'add-food.additional-measurements-header' | translate }}</h2>
 
+  @if (form.value.isRecipe) {
+    <div class="portions" formGroupName="portions">
+      <mat-checkbox formControlName="enabled">
+        {{ 'add-food.enable-portions-measurement' | translate }}
+      </mat-checkbox>
+
+      @if (form.value.portions.enabled) {
+        <mat-form-field>
+          <mat-label>
+            {{ 'add-food.portion-name-label' | translate }}
+          </mat-label>
+          <input formControlName="name"
+                 matInput
+                 type="text">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>
+            {{ 'add-food.portions-count-label' | translate }}
+          </mat-label>
+          <input formControlName="portionsCount"
+                 matInput
+                 min="1"
+                 type="number">
+        </mat-form-field>
+      }
+
+    </div>
+  }
+
   <div class="measurements"
        formArrayName="measurements">
-    <div *ngFor="let m of form.value.measurements; index as idx; trackBy: trackByIndexFn "
+    @for (m of form.value.measurements; let idx = $index; track trackByIndexFn) {
+    <div *ngIf="!m.deleted"
          [formGroupName]="idx"
          class="measurement">
 
@@ -207,6 +240,11 @@
                matInput
                type="text">
       </mat-form-field>
+      <button mat-icon-button
+              (click)="handleDeleteMeasurement(idx)"
+              color="warn">
+        <mat-icon>delete</mat-icon>
+      </button>
       <mat-form-field class="measurement-multiplier">
         <mat-label>{{ 'add-food.measurement-multiplier-label' | translate }}</mat-label>
         <input formControlName="multiplier"
@@ -220,7 +258,7 @@
                type="number">
       </mat-form-field>
     </div>
-
+    }
     <button (click)="handleAddMeasurementClick()"
             class="add-measurement-btn"
             color="primary"

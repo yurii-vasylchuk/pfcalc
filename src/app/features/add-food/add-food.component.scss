@@ -139,6 +139,12 @@
   }
 }
 
+.portions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .measurements {
   display: flex;
   flex-direction: column;
@@ -154,7 +160,7 @@
 }
 
 .measurement-name {
-  flex-basis: 100%;
+  flex-grow: 1;
 }
 
 .measurement-multiplier {

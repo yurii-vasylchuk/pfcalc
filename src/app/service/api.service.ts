@@ -258,6 +258,11 @@ export class ApiService {
       );
   }
 
+  dropMeasurement(measurementId: number): Observable<void> {
+    return this.http.delete<IApiResponse<void>>(`/api/measurement/${measurementId}`)
+      .pipe(this.extractVoidResponse)
+  }
+
   saveMeasurement(measurement: IMeasurement): Observable<IMeasurement> {
     return this.http.post<IApiResponse<IMeasurement>>(`/api/measurement`, measurement)
       .pipe(

@@ -3,6 +3,7 @@
   <mat-tab label="{{'foods-management.ingredients-tab-label' | translate}}">
     <ng-container
       *ngTemplateOutlet="foodListTemplate; context: {
+      type: 'ingredients',
       data: products,
       moreDataAvailable: moreProductsAvailable,
       loading: productsLoading}">
@@ -11,6 +12,7 @@
   <mat-tab label="{{'foods-management.recipes-tab-label' | translate}}">
     <ng-container
       *ngTemplateOutlet="foodListTemplate; context: {
+       type: 'recipes',
        data: recipes,
        moreDataAvailable: moreRecipesAvailable,
        loading: recipesLoading}">
@@ -62,7 +64,7 @@
         </div>
       </mat-list-item>
     </mat-list>
-    <div #endIndicator></div>
+    <div id="end-indicator-{{type}}" #endIndicator></div>
 
     <div *ngIf="loading"
          class="data-loading-bar-container">
