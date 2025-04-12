@@ -32,8 +32,8 @@
                                        formControlName="ingredientSearch"/>
               </mat-option>
               <!-- Currently selected option -->
-              <mat-option [disabled]="true"
-                          *ngIf="ing.ingredient != null"
+              <mat-option *ngIf="ing.ingredient != null"
+                          [disabled]="true"
                           [value]="ing.ingredient">
                 {{ ing.ingredient?.name }}
               </mat-option>

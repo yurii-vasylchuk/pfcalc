@@ -1,19 +1,19 @@
-import {ActivatedRouteSnapshot, RouterStateSnapshot, Routes} from '@angular/router';
-import * as fromRoutes from './commons/routes';
-import {isAuthenticatedGuardFn, isNotAuthenticatedGuardFn, isTestEnvironment} from "./service/guards";
-import {inject} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {map, Observable} from 'rxjs';
+import {ActivatedRouteSnapshot, RouterStateSnapshot, Routes} from '@angular/router'
+import * as fromRoutes from './commons/routes'
+import {isAuthenticatedGuardFn, isNotAuthenticatedGuardFn, isTestEnvironment} from './service/guards'
+import {inject} from '@angular/core'
+import {TranslateService} from '@ngx-translate/core'
+import {map, Observable} from 'rxjs'
 
 function resolvePageTitle(route: ActivatedRouteSnapshot, _: RouterStateSnapshot): Observable<string> {
-  const translateService = inject(TranslateService);
+  const translateService = inject(TranslateService)
   return translateService.get(`common.page-titles.${route.root.firstChild.url[0].path}`).pipe(
     map(translated => {
       return translated == null || typeof translated != 'string' || translated.length === 0 ?
-             'PFCalc' :
-             `PFCalc | ${translated}`;
+        'PFCalc' :
+        `PFCalc | ${translated}`
     }),
-  );
+  )
 }
 
 export const routes: Routes = [
@@ -100,4 +100,4 @@ export const routes: Routes = [
     title: resolvePageTitle,
     redirectTo: `/${fromRoutes.dashboard}`,
   },
-];
+]

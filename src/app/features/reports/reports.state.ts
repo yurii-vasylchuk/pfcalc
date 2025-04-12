@@ -1,13 +1,13 @@
-import {Selector, State, StateContext} from '@ngxs/store';
-import {Injectable} from '@angular/core';
-import {ApiService} from '../../service/api.service';
-import {EmitterAction, Receiver} from '@ngxs-labs/emitter';
-import {Reports} from './reports.state-models';
-import {catchError, EMPTY, interval, map, Observable, of, startWith, Subscription, switchMap, tap} from 'rxjs';
-import {AlertService} from '../../service/alert.service';
-import {IReport} from '../../commons/models/domain.models';
-import {RouterNavigated} from '@ngxs/router-plugin';
-import * as fromRoutes from '../../commons/routes';
+import {Selector, State, StateContext} from '@ngxs/store'
+import {Injectable} from '@angular/core'
+import {ApiService} from '../../service/api.service'
+import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
+import {Reports} from './reports.state-models'
+import {catchError, EMPTY, interval, map, Observable, of, startWith, Subscription, switchMap, tap} from 'rxjs'
+import {AlertService} from '../../service/alert.service'
+import {IReport} from '../../commons/models/domain.models'
+import {RouterNavigated} from '@ngxs/router-plugin'
+import * as fromRoutes from '../../commons/routes'
 
 @State<Reports.IReportsState>({
   name: 'reports',
@@ -17,31 +17,31 @@ import * as fromRoutes from '../../commons/routes';
 })
 @Injectable()
 export class ReportsState {
-  private static api: ApiService;
-  private static alert: AlertService;
+  private static api: ApiService
+  private static alert: AlertService
 
-  private static loadReportsSubscription: Subscription;
+  private static loadReportsSubscription: Subscription
 
   constructor(api: ApiService, alert: AlertService) {
-    ReportsState.api = api;
-    ReportsState.alert = alert;
+    ReportsState.api = api
+    ReportsState.alert = alert
   }
 
   @Selector()
   static reports(state: Reports.IReportsState): IReport[] {
-    return state.reports;
+    return state.reports
   }
 
   @Receiver({type: Reports.REQUEST_PERIOD_REPORT})
   static requestPeriodReport(ctx: StateContext<Reports.IReportsState>,
                              {payload}: EmitterAction<Reports.RequestPeriodReportPayload>): Observable<void> {
     return this.api.requestPeriodReport(payload.from, payload.to).pipe(
-      tap(_ => this.alert.success("alert.reports.period.requested-successfully")),
+      tap(_ => this.alert.success('alert.reports.period.requested-successfully')),
       catchError(_ => {
-        this.alert.warn("alert.reports.period.request-failed");
-        return EMPTY;
+        this.alert.warn('alert.reports.period.request-failed')
+        return EMPTY
       }),
-    );
+    )
   }
 
   @Receiver({action: RouterNavigated})
@@ -52,25 +52,25 @@ export class ReportsState {
           startWith(1),
           switchMap(_ => this.api.loadReports().pipe(
             catchError(err => {
-              console.error("Unable to load reports");
-              console.error(err);
-              return of(null);
+              console.error('Unable to load reports')
+              console.error(err)
+              return of(null)
             }),
           )),
           map(reports => {
             if (reports == null) {
-              return null;
+              return null
             }
             ctx.patchState({
               reports,
-            });
-            return null;
+            })
+            return null
           }),
         ).subscribe(_ => {
-        });
+        })
       }
     } else {
-      this.loadReportsSubscription?.unsubscribe();
+      this.loadReportsSubscription?.unsubscribe()
     }
   }
 
@@ -80,14 +80,14 @@ export class ReportsState {
       tap(_ => {
         ctx.patchState({
           reports: ctx.getState().reports.filter(r => r.id !== payload),
-        });
-        this.alert.success("alert.reports.delete.success");
+        })
+        this.alert.success('alert.reports.delete.success')
       }),
       catchError(_ => {
-        this.alert.warn("alert.reports.delete.failed");
-        return EMPTY;
+        this.alert.warn('alert.reports.delete.failed')
+        return EMPTY
       }),
-    );
+    )
 
   }
 }

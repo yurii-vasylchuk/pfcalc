@@ -10,7 +10,7 @@
   </mat-list-item>
 
   <mat-list-item (click)="handleRouteClick('/' + fromRoutes.reports)">
-    <span matListItemTitle>{{'side-menu.reports' | translate}}</span>
+    <span matListItemTitle>{{ 'side-menu.reports' | translate }}</span>
   </mat-list-item>
 </mat-action-list>
 
@@ -18,9 +18,9 @@
 
 <mat-action-list class="pages">
   <mat-list-item (click)="handleRouteClick('/' + fromRoutes.settings)">
-    <span matListItemTitle>{{'side-menu.settings' | translate}}</span>
+    <span matListItemTitle>{{ 'side-menu.settings' | translate }}</span>
   </mat-list-item>
   <mat-list-item (click)="handleLogoutClick()">
-    <span matListItemTitle>{{'side-menu.logout' | translate}}</span>
+    <span matListItemTitle>{{ 'side-menu.logout' | translate }}</span>
   </mat-list-item>
 </mat-action-list>

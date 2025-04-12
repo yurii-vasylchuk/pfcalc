@@ -2,10 +2,15 @@
   <div class="nutrients__period-block">
     <h1 class="nutrients__header">
       {{ 'dashboard.weekly-nutrients' | translate:{days: countedDaysOnWeek} }}
-      <button mat-icon-button
-              (click)="showCountedDaysOnWeekInfo()">
+      <button (click)="showCountedDaysOnWeekInfo()"
+              mat-icon-button>
         <mat-icon>help</mat-icon>
       </button>
+      <div class="flex-spacer"></div>
+      <mat-slide-toggle (toggleChange)="onWeeklyNutrientsTypeChange()" [checked]="state.weeklyNutrientsType == 'AVERAGE'"
+                        labelPosition="before">
+        {{ weeklyNutrientsLabel | translate }}
+      </mat-slide-toggle>
     </h1>
     <div class="nutrients__gauges">
       <pfc-nutrition-gauge [aim]="weeklyAims?.protein || null"

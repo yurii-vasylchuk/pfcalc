@@ -8,7 +8,6 @@ import * as fromRoutes from '../../commons/routes'
 import {FoodType, IFood, IMeasurement, isFoodType} from '../../commons/models/domain.models'
 import {catchError, combineLatest, EMPTY, map, Observable, of, switchMap, tap} from 'rxjs'
 import {Navigation} from '../../state/navigation.state-model'
-import {log} from '@angular-devkit/build-angular/src/builders/ssr-dev-server'
 
 @State<AddFood.IAddFoodState>({
   name: 'addFood',
@@ -25,14 +24,6 @@ export class AddFoodState implements NgxsOnInit {
 
   constructor(private api: ApiService) {
     AddFoodState.api = api
-  }
-
-  ngxsOnInit(ctx: StateContext<AddFood.IAddFoodState>): void {
-    this.api.loadFoodsList(0, AddFoodState.INGREDIENT_OPTIONS_PAGE_SIZE)
-      .pipe(
-        map(rsp => rsp.data),
-      )
-      .subscribe(opts => ctx.patchState({defaultIngredientOptions: opts}))
   }
 
   @Selector()
@@ -105,8 +96,8 @@ export class AddFoodState implements NgxsOnInit {
           catchError(err => {
             console.error(`Unable to drop measurement ${id}; error: ${err}`)
             return of(null)
-          })
-        )
+          }),
+        ),
       ),
     ).pipe(
       map(_ => null),
@@ -165,5 +156,13 @@ export class AddFoodState implements NgxsOnInit {
         .map(m => ({...m, foodId: food.id}))
         .map(m => this.api.saveMeasurement(m)),
     ).pipe(map(_ => (food)))
+  }
+
+  ngxsOnInit(ctx: StateContext<AddFood.IAddFoodState>): void {
+    this.api.loadFoodsList(0, AddFoodState.INGREDIENT_OPTIONS_PAGE_SIZE)
+      .pipe(
+        map(rsp => rsp.data),
+      )
+      .subscribe(opts => ctx.patchState({defaultIngredientOptions: opts}))
   }
 }

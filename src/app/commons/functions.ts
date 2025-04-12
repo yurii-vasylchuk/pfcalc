@@ -1,16 +1,16 @@
-import {IPage, IPfcc} from './models/common.models';
-import {combineLatest, map, Observable, of, OperatorFunction, switchMap} from 'rxjs';
-import {DateTime} from 'luxon';
-import {Language} from './models/auth.models';
+import {IPage, IPfcc} from './models/common.models'
+import {combineLatest, map, Observable, of, OperatorFunction, switchMap} from 'rxjs'
+import {DateTime} from 'luxon'
+import {Language} from './models/auth.models'
 
 export function isToday(date: DateTime): boolean {
-  const now = DateTime.now();
-  return now.hasSame(date, 'year') && now.hasSame(date, 'month') && now.hasSame(date, 'day');
+  const now = DateTime.now()
+  return now.hasSame(date, 'year') && now.hasSame(date, 'month') && now.hasSame(date, 'day')
 }
 
 
 export function isDefined<T>(value: T | null | undefined): value is T {
-  return value != null;
+  return value != null
 }
 
 export function sumPfccs(...pfccs: IPfcc[]) {
@@ -21,8 +21,8 @@ export function sumPfccs(...pfccs: IPfcc[]) {
         fat: (m1.fat || 0) + (m2.fat || 0),
         carbohydrates: (m1.carbohydrates || 0) + (m2.carbohydrates || 0),
         calories: (m1.calories || 0) + (m2.calories || 0),
-      };
-    }, {} as IPfcc);
+      }
+    }, {} as IPfcc)
 }
 
 export function ceilPfcc(pfcc: IPfcc, afterDotSigns = 2, caloriesAfterDotSign = 0): IPfcc {
@@ -31,7 +31,7 @@ export function ceilPfcc(pfcc: IPfcc, afterDotSigns = 2, caloriesAfterDotSign = 
     fat: pfcc.fat != null ? ceil(pfcc.fat, afterDotSigns) : null,
     carbohydrates: pfcc.carbohydrates != null ? ceil(pfcc.carbohydrates, afterDotSigns) : null,
     calories: pfcc.calories != null ? ceil(pfcc.calories, caloriesAfterDotSign) : null,
-  };
+  }
 }
 
 export function multiplyPfcc(pfcc: IPfcc, multiplier: number): IPfcc {
@@ -40,61 +40,61 @@ export function multiplyPfcc(pfcc: IPfcc, multiplier: number): IPfcc {
     fat: pfcc.fat != null ? (pfcc.fat * multiplier) : null,
     carbohydrates: pfcc.carbohydrates != null ? (pfcc.carbohydrates * multiplier) : null,
     calories: pfcc.calories != null ? (pfcc.calories * multiplier) : null,
-  };
+  }
 }
 
 export function withDefaults<T>(input: Partial<T>, defaults: T): T {
-  const result = {...input};
+  const result = {...input}
   for (const key in defaults) {
     if (result[key] == null) {
-      result[key] = defaults[key];
+      result[key] = defaults[key]
     }
   }
 
-  return result as T;
+  return result as T
 }
 
 export function ceil(value: number, afterDotSigns = 2): number {
-  const multiplier = Math.pow(10, afterDotSigns);
+  const multiplier = Math.pow(10, afterDotSigns)
 
-  return Math.ceil(value * multiplier) / multiplier;
+  return Math.ceil(value * multiplier) / multiplier
 }
 
 export function loadAllPages<T>(loadFunc: (page: number, pageSize: number) => Observable<IPage<T>>, pageSize: number): Observable<T[]> {
   return loadFunc(0, pageSize)
     .pipe(
       switchMap(page0 => {
-        let loaders: Observable<T[]>[] = [];
+        let loaders: Observable<T[]>[] = []
         for (let i = 1; i < page0.totalPages; i++) {
-          loaders.push(loadFunc(i, pageSize).pipe(map(page => page.data)));
+          loaders.push(loadFunc(i, pageSize).pipe(map(page => page.data)))
         }
         return combineLatest([
           of(page0.data),
           ...loaders,
-        ]);
+        ])
       }),
       map(data => {
-        let res: T[] = [];
+        let res: T[] = []
 
-        data.forEach(page => res.push(...page));
+        data.forEach(page => res.push(...page))
 
-        return res;
+        return res
       }),
-    );
+    )
 }
 
-export const mapToVoid: () => OperatorFunction<unknown, null> = () => map(_ => null);
+export const mapToVoid: () => OperatorFunction<unknown, null> = () => map(_ => null)
 
 export function resolveLocale(language: Language): string {
-  let locale = 'en-US';
+  let locale = 'en-US'
   switch (language) {
-    case "UA":
-      locale = 'uk-UA';
-      break;
-    case "EN":
-      locale = 'en-US';
-      break;
+    case 'UA':
+      locale = 'uk-UA'
+      break
+    case 'EN':
+      locale = 'en-US'
+      break
   }
 
-  return locale;
+  return locale
 }

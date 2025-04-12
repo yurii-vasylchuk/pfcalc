@@ -87,6 +87,10 @@
     "daily-nutrients": "Сьогодні",
     "weekly-nutrients": "За тиждень - {{days}}д.",
     "weekly-nutrients.help": "Враховуються лише ті дні, в які були внесені хоч якісь данні",
+    "weekly-nutrients.label": {
+      "total": "Всього",
+      "average": "В середньому"
+    },
     "meals-list": {
       "today-title": "Зʼїдено сьогодні",
       "date-title": "Зʼїдено {{date}}"

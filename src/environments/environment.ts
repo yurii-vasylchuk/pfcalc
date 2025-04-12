@@ -16,8 +16,8 @@ export const environment = {
   },
   alert: {
     duration: 2500,
-  }
-};
+  },
+}
 
 /*
  * For easier debugging in development mode, you can import the following file

@@ -1,12 +1,12 @@
-import {Selector, State, StateContext} from '@ngxs/store';
-import {FoodsManagement, IFoodsManagementState} from './foods-management.state-models';
-import {Injectable} from '@angular/core';
-import {Emittable, Emitter, EmitterAction, Receiver} from '@ngxs-labs/emitter';
-import {ApiService} from '../../service/api.service';
-import {catchError, EMPTY, Observable, switchMap, tap} from 'rxjs';
-import {IFood} from '../../commons/models/domain.models';
-import {AlertService} from '../../service/alert.service';
-import LoadFoodsActionPayload = FoodsManagement.LoadFoodsActionPayload;
+import {Selector, State, StateContext} from '@ngxs/store'
+import {FoodsManagement, IFoodsManagementState} from './foods-management.state-models'
+import {Injectable} from '@angular/core'
+import {Emittable, Emitter, EmitterAction, Receiver} from '@ngxs-labs/emitter'
+import {ApiService} from '../../service/api.service'
+import {catchError, EMPTY, Observable, switchMap, tap} from 'rxjs'
+import {IFood} from '../../commons/models/domain.models'
+import {AlertService} from '../../service/alert.service'
+import LoadFoodsActionPayload = FoodsManagement.LoadFoodsActionPayload
 
 @State<IFoodsManagementState>({
   name: 'foodsManagement',
@@ -18,46 +18,46 @@ import LoadFoodsActionPayload = FoodsManagement.LoadFoodsActionPayload;
 @Injectable()
 export class FoodsManagementState {
   @Emitter(FoodsManagementState.loadProducts)
-  private static loadProductsEmitter: Emittable<FoodsManagement.LoadFoodsActionPayload>;
+  private static loadProductsEmitter: Emittable<FoodsManagement.LoadFoodsActionPayload>
   @Emitter(FoodsManagementState.loadRecipes)
-  private static loadRecipesEmitter: Emittable<FoodsManagement.LoadFoodsActionPayload>;
+  private static loadRecipesEmitter: Emittable<FoodsManagement.LoadFoodsActionPayload>
 
-  private static api: ApiService;
-  private static alert: AlertService;
+  private static api: ApiService
+  private static alert: AlertService
 
   constructor(api: ApiService, alert: AlertService) {
-    FoodsManagementState.api = api;
-    FoodsManagementState.alert = alert;
+    FoodsManagementState.api = api
+    FoodsManagementState.alert = alert
   }
 
   @Selector()
   static products(state: IFoodsManagementState): IFood[] {
-    return state.products.data;
+    return state.products.data
   }
 
   @Selector()
   static recipes(state: IFoodsManagementState): IFood[] {
-    return state.recipes.data;
+    return state.recipes.data
   }
 
   @Selector()
   static moreProductsAvailable(state: IFoodsManagementState): boolean {
-    return state.products.page < state.products.totalPages - 1;
+    return state.products.page < state.products.totalPages - 1
   }
 
   @Selector()
   static moreRecipesAvailable(state: IFoodsManagementState): boolean {
-    return state.recipes.page < state.recipes.totalPages - 1;
+    return state.recipes.page < state.recipes.totalPages - 1
   }
 
   @Receiver({type: FoodsManagement.LOAD_MORE_PRODUCTS})
   static loadMoreProducts(ctx: StateContext<IFoodsManagementState>): Observable<unknown> {
-    const productsState = ctx.getState().products;
+    const productsState = ctx.getState().products
 
     if (productsState.page >= productsState.totalPages - 1) {
-      this.alert.warn('alert.default-error');
+      this.alert.warn('alert.default-error')
 
-      return EMPTY;
+      return EMPTY
     }
 
     return this.api.loadFoodsList(productsState.page + 1, productsState.pageSize, productsState.name, 'INGREDIENT')
@@ -72,9 +72,9 @@ export class FoodsManagementState {
               totalPages: rsp.totalPages,
               name: productsState.name,
             },
-          });
+          })
         }),
-      );
+      )
   };
 
   @Receiver({type: FoodsManagement.LOAD_PRODUCTS})
@@ -92,21 +92,21 @@ export class FoodsManagementState {
               totalPages: rsp.totalPages,
               name: payload.name,
             },
-          });
+          })
         }),
         catchError(err => {
-          console.error('Loading products failed', err);
-          return EMPTY;
+          console.error('Loading products failed', err)
+          return EMPTY
         }),
-      );
+      )
   }
 
   @Receiver({type: FoodsManagement.LOAD_MORE_RECIPES})
   static loadMoreRecipes(ctx: StateContext<IFoodsManagementState>): Observable<unknown> {
-    const recipesState = ctx.getState().recipes;
+    const recipesState = ctx.getState().recipes
 
     if (recipesState.page >= recipesState.totalPages - 1) {
-      return EMPTY;
+      return EMPTY
     }
 
     return this.api.loadFoodsList(recipesState.page + 1, recipesState.pageSize, recipesState.name, 'RECIPE')
@@ -121,9 +121,9 @@ export class FoodsManagementState {
               totalPages: rsp.totalPages,
               name: recipesState.name,
             },
-          });
+          })
         }),
-      );
+      )
   }
 
   @Receiver({type: FoodsManagement.LOAD_RECIPES})
@@ -141,14 +141,14 @@ export class FoodsManagementState {
               totalPages: rsp.totalPages,
               name: payload.name,
             },
-          });
+          })
         }),
         catchError(err => {
-          console.error('Loading recipes failed', err);
-          this.alert.warn('alert.default-error');
-          return EMPTY;
+          console.error('Loading recipes failed', err)
+          this.alert.warn('alert.default-error')
+          return EMPTY
         }),
-      );
+      )
   }
 
   @Receiver({type: FoodsManagement.CREATE_FOOD})
@@ -158,31 +158,31 @@ export class FoodsManagementState {
       ownedByUser: true,
     }).pipe(
       tap(_ => {
-        const {pageSize, name} = payload.type === 'INGREDIENT' ? ctx.getState().products : ctx.getState().recipes;
+        const {pageSize, name} = payload.type === 'INGREDIENT' ? ctx.getState().products : ctx.getState().recipes
         const loadFoodsPayload: LoadFoodsActionPayload = {
           page: 0,
           pageSize,
           name,
-        };
+        }
 
         switch (payload.type) {
           case 'INGREDIENT':
-            FoodsManagementState.loadProductsEmitter.emit(loadFoodsPayload);
-            break;
+            FoodsManagementState.loadProductsEmitter.emit(loadFoodsPayload)
+            break
           case 'RECIPE':
-            FoodsManagementState.loadRecipesEmitter.emit(loadFoodsPayload);
-            break;
+            FoodsManagementState.loadRecipesEmitter.emit(loadFoodsPayload)
+            break
           default:
-            console.warn(`Unknown food type: ${payload.type}`);
+            console.warn(`Unknown food type: ${payload.type}`)
         }
       }),
       catchError(err => {
-        console.error('Creating food failed', err);
-        this.alert.warn('alert.default-error');
+        console.error('Creating food failed', err)
+        this.alert.warn('alert.default-error')
 
-        return EMPTY;
+        return EMPTY
       }),
-    );
+    )
 
   }
 
@@ -199,34 +199,34 @@ export class FoodsManagementState {
             ...ctx.getState().recipes,
             data: ctx.getState().recipes.data.map(f => f.id === payload.id ? food : f),
           },
-        });
+        })
       }),
       catchError(err => {
-        console.error('Editing food failed', err);
-        this.alert.warn('alert.default-error');
-        return EMPTY;
+        console.error('Editing food failed', err)
+        this.alert.warn('alert.default-error')
+        return EMPTY
       }),
-    );
+    )
   }
 
   @Receiver({type: FoodsManagement.DELETE_FOOD})
   static deleteFood(ctx: StateContext<IFoodsManagementState>, {payload}: EmitterAction<FoodsManagement.DeleteFoodActionPayload>): Observable<unknown> {
     return FoodsManagementState.api.deleteFood(payload).pipe(
       switchMap(_ => {
-        const s = ctx.getState();
+        const s = ctx.getState()
         const foodType = s.recipes.data.find(f => f.id === payload) ?
-                         'RECIPE' : 'INGREDIENT';
+          'RECIPE' : 'INGREDIENT'
         const pageSize = foodType === 'INGREDIENT' ?
-                         s.products.pageSize * (s.products.page + 1) :
-                         s.recipes.pageSize * (s.recipes.page + 1);
-        const name = foodType === 'INGREDIENT' ? s.products.name : s.recipes.name;
+          s.products.pageSize * (s.products.page + 1) :
+          s.recipes.pageSize * (s.recipes.page + 1)
+        const name = foodType === 'INGREDIENT' ? s.products.name : s.recipes.name
 
 
-        return this.api.loadFoodsList(0, pageSize, name, foodType);
+        return this.api.loadFoodsList(0, pageSize, name, foodType)
       }),
       tap(foods => {
         const foodType = ctx.getState().recipes.data.find(f => f.id === payload) ?
-                         'RECIPE' : 'INGREDIENT';
+          'RECIPE' : 'INGREDIENT'
         switch (foodType) {
           case 'INGREDIENT':
             ctx.patchState({
@@ -234,23 +234,23 @@ export class FoodsManagementState {
                 ...ctx.getState().products,
                 data: foods.data,
               },
-            });
-            break;
+            })
+            break
           case 'RECIPE':
             ctx.patchState({
               recipes: {
                 ...ctx.getState().recipes,
                 data: foods.data,
               },
-            });
-            break;
+            })
+            break
         }
       }),
       catchError(err => {
-        console.error('Deleting food failed', err);
-        this.alert.warn('alert.default-error');
-        return EMPTY;
+        console.error('Deleting food failed', err)
+        this.alert.warn('alert.default-error')
+        return EMPTY
       }),
-    );
+    )
   }
 }

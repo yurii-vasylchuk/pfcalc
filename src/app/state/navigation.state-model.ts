@@ -8,7 +8,7 @@ export namespace Navigation {
     queryParams: { [key: string]: any };
   }
 
-  export const NAVIGATE_BACK = "[Navigation] Navigate back";
+  export const NAVIGATE_BACK = '[Navigation] Navigate back'
 
   export type NavigateBackPayload = {
     additionalQueryParams?: { [key: string]: any };

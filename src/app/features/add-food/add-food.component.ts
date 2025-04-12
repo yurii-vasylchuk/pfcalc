@@ -159,6 +159,12 @@ export class AddFoodComponent implements OnInit, OnDestroy {
     this.usedIngredientsIds$.complete()
   }
 
+  handleDeleteMeasurement(idx: number) {
+    this.form.controls.measurements.at(idx).patchValue({
+      deleted: true,
+    })
+  }
+
   protected trackByIndexFn: TrackByFunction<{
     index: number
   }> = (_, i) => `${i.index}`
@@ -233,7 +239,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
       defaultValue: m.defaultValue,
     }))
 
-    const measurementsToDelete = f.measurements.filter(m => m.deleted && m.id != null).map(m => m.id as number);
+    const measurementsToDelete = f.measurements.filter(m => m.deleted && m.id != null).map(m => m.id as number)
 
     if (f.isRecipe && f.portions.enabled) {
       measurements.push({
@@ -262,7 +268,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
     }
 
     this.saveFood.emit(foodToSave)
-    this.dropMeasurements.emit(measurementsToDelete);
+    this.dropMeasurements.emit(measurementsToDelete)
   }
 
   private initializeFromData() {
@@ -306,7 +312,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
             isRecipe: food.type === 'RECIPE',
             hidden: food.hidden,
             portions: {
-              enabled: false
+              enabled: false,
             },
             pfcc: {
               protein: food.pfcc?.protein,
@@ -352,11 +358,5 @@ export class AddFoodComponent implements OnInit, OnDestroy {
 
   private recalculateUsedIngredients(ingredients: IFood[]) {
     this.usedIngredientsIds$.next(ingredients.map(i => i?.id).filter(id => id != null))
-  }
-
-  handleDeleteMeasurement(idx: number) {
-    this.form.controls.measurements.at(idx).patchValue({
-      deleted: true,
-    })
   }
 }

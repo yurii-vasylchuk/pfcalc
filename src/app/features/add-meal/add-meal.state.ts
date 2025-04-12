@@ -1,17 +1,17 @@
-import {Selector, State, StateContext} from '@ngxs/store';
-import {AddMeal} from './add-meal.state-models';
-import {ApiService} from '../../service/api.service';
-import {EmitterAction, Receiver} from '@ngxs-labs/emitter';
-import {RouterNavigated} from '@ngxs/router-plugin';
-import * as fromRoutes from '../../commons/routes';
-import {Injectable} from '@angular/core';
-import {DateTime} from 'luxon';
-import {catchError, combineLatest, EMPTY, map, Observable, switchMap, tap} from 'rxjs';
-import {loadAllPages, sumPfccs} from '../../commons/functions';
-import {emptyPfcc, IPage, IPfcc} from '../../commons/models/common.models';
-import {Navigation} from '../../state/navigation.state-model';
-import {AlertService} from '../../service/alert.service';
-import IMealOption = AddMeal.IMealOption;
+import {Selector, State, StateContext} from '@ngxs/store'
+import {AddMeal} from './add-meal.state-models'
+import {ApiService} from '../../service/api.service'
+import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
+import {RouterNavigated} from '@ngxs/router-plugin'
+import * as fromRoutes from '../../commons/routes'
+import {Injectable} from '@angular/core'
+import {DateTime} from 'luxon'
+import {catchError, combineLatest, EMPTY, map, Observable, switchMap, tap} from 'rxjs'
+import {loadAllPages, sumPfccs} from '../../commons/functions'
+import {emptyPfcc, IPage, IPfcc} from '../../commons/models/common.models'
+import {Navigation} from '../../state/navigation.state-model'
+import {AlertService} from '../../service/alert.service'
+import IMealOption = AddMeal.IMealOption
 
 
 @State<AddMeal.IAddMealState>({
@@ -28,60 +28,60 @@ import IMealOption = AddMeal.IMealOption;
 })
 @Injectable({providedIn: 'root'})
 export class AddMealState {
-  private static api: ApiService;
-  private static alert: AlertService;
+  private static api: ApiService
+  private static alert: AlertService
 
   constructor(api: ApiService, alert: AlertService) {
-    AddMealState.api = api;
-    AddMealState.alert = alert;
+    AddMealState.api = api
+    AddMealState.alert = alert
   }
 
   @Selector()
   static options(state: AddMeal.IAddMealState): AddMeal.IMealOption[] {
-    return state.options;
+    return state.options
   }
 
   @Selector()
   static moreDataAvailable(state: AddMeal.IAddMealState): boolean {
-    return state.optionsPage < (state.optionsTotalPages - 1);
+    return state.optionsPage < (state.optionsTotalPages - 1)
   }
 
   @Selector()
   static nutrients(state: AddMeal.IAddMealState): IPfcc {
-    return state.nutrients;
+    return state.nutrients
   }
 
   @Selector()
   static date(state: AddMeal.IAddMealState): DateTime {
-    return state.date;
+    return state.date
   }
 
   @Receiver({action: RouterNavigated})
   static onNavigate(ctx: StateContext<AddMeal.IAddMealState>, action: RouterNavigated) {
     if (!action.routerState.url.match(`/${fromRoutes.addMeal}.*`)) {
-      return EMPTY;
+      return EMPTY
     }
 
-    const dateStr = action.routerState.root.queryParams?.['date'];
-    const date = dateStr ? DateTime.fromISO(dateStr) : DateTime.now();
+    const dateStr = action.routerState.root.queryParams?.['date']
+    const date = dateStr ? DateTime.fromISO(dateStr) : DateTime.now()
     ctx.patchState({
       filter: null,
       date: date,
-    });
+    })
 
 
     return loadAllPages((page, pageSize) => this.api.loadMeals(page, pageSize, date.startOf('day'), date.endOf('day')), 10)
       .pipe(
         map(meals => sumPfccs(emptyPfcc, ...meals.map(m => m.pfcc))),
         tap(nutrients => ctx.patchState({nutrients})),
-      );
+      )
   }
 
   @Receiver({type: AddMeal.LOAD_MEAL_OPTIONS, cancelUncompleted: true})
   static loadMealOptions(ctx: StateContext<AddMeal.IAddMealState>, {payload}: EmitterAction<AddMeal.LoadMealOptionsPayload>) {
-    const filter = payload.filter;
-    const page = payload.page;
-    const pageSize = payload.pageSize;
+    const filter = payload.filter
+    const page = payload.page
+    const pageSize = payload.pageSize
 
     return AddMealState.api.getMealOptions(filter, page, pageSize)
       .pipe(
@@ -91,27 +91,27 @@ export class AddMealState {
             optionsPage: res.page,
             optionsPageSize: res.pageSize,
             optionsTotalPages: res.totalPages,
-          });
+          })
         }),
         catchError(err => {
-          console.warn('Error while loading meal options: ', err);
-          this.alert.warn('alert.default-error');
+          console.warn('Error while loading meal options: ', err)
+          this.alert.warn('alert.default-error')
 
 
-          return EMPTY;
+          return EMPTY
         }),
-      );
+      )
   }
 
   @Receiver({type: AddMeal.LOAD_MORE_MEAL_OPTIONS})
   static loadMoreMealOptions(ctx: StateContext<AddMeal.IAddMealState>, _: EmitterAction) {
-    const state = ctx.getState();
+    const state = ctx.getState()
 
-    let page = state.optionsPage + 1;
-    let pageSize = state.optionsPageSize;
+    let page = state.optionsPage + 1
+    let pageSize = state.optionsPageSize
 
     if (page >= state.optionsTotalPages) {
-      console.error('Can\'t load more meal options: all data is loaded');
+      console.error('Can\'t load more meal options: all data is loaded')
     }
 
     return this.api.getMealOptions(state.filter, page, pageSize)
@@ -124,15 +124,15 @@ export class AddMealState {
             ],
             optionsPage: page,
             optionsTotalPages: rsp.totalPages,
-          });
+          })
         }),
         catchError(err => {
-          console.warn('Error while loading meal options: ', err);
-          this.alert.warn('alert.default-error');
+          console.warn('Error while loading meal options: ', err)
+          this.alert.warn('alert.default-error')
 
-          return EMPTY;
+          return EMPTY
         }),
-      );
+      )
   }
 
   @Receiver({type: AddMeal.DELETE_DISH})
@@ -140,28 +140,28 @@ export class AddMealState {
     return this.api.deleteDish(payload)
       .pipe(
         switchMap(_ => {
-          let loaders: Observable<IPage<IMealOption>>[] = [];
+          let loaders: Observable<IPage<IMealOption>>[] = []
 
-          const state = ctx.getState();
+          const state = ctx.getState()
           for (let i = 0; i <= state.optionsPage; i++) {
-            loaders.push(this.api.getMealOptions(state.filter, i, state.optionsPageSize));
+            loaders.push(this.api.getMealOptions(state.filter, i, state.optionsPageSize))
           }
 
-          return combineLatest(loaders);
+          return combineLatest(loaders)
         }),
         tap(pages => {
           ctx.patchState({
             options: pages.map(p => p.data).reduce((data1, data2) => [...data1, ...data2], []),
             optionsTotalPages: pages[pages.length - 1].totalPages,
-          });
+          })
         }),
         catchError(err => {
-          console.warn('Error while deleting dish: ', err);
-          this.alert.warn('alert.default-error');
+          console.warn('Error while deleting dish: ', err)
+          this.alert.warn('alert.default-error')
 
-          return EMPTY;
+          return EMPTY
         }),
-      );
+      )
   }
 
   @Receiver({type: AddMeal.SAVE_MEAL})
@@ -176,15 +176,15 @@ export class AddMealState {
                 savedMealId: meal.id,
               },
             } as Navigation.NavigateBackPayload,
-          };
+          }
         }),
         catchError(err => {
-          console.warn('Error while saving dish: ', err);
-          this.alert.warn('alert.default-error');
+          console.warn('Error while saving dish: ', err)
+          this.alert.warn('alert.default-error')
 
-          return EMPTY;
+          return EMPTY
         }),
         switchMap(ctx.dispatch),
-      );
+      )
   }
 }

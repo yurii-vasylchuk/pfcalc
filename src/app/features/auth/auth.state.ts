@@ -1,19 +1,19 @@
-import {Injectable} from '@angular/core';
-import {Action, NgxsOnInit, Selector, State, StateContext, Store} from '@ngxs/store';
-import {Auth} from './auth.state-models';
-import {ApiService} from '../../service/api.service';
-import {catchError, EMPTY, map, of, switchMap, tap} from 'rxjs';
-import {Navigate} from '@ngxs/router-plugin';
-import * as fromRoutes from '../../commons/routes';
-import {LocalStoreService} from '../../service/local-store.service';
-import {UnknownBoolean} from '../../commons/models/common.models';
-import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
-import {ProfileState} from '../../state/profile.state';
-import {Language} from '../../commons/models/auth.models';
-import {EmitterAction, Receiver} from '@ngxs-labs/emitter';
-import {ProfileLoadedEvent} from '../../commons/models/state.models';
-import {AlertService} from '../../service/alert.service';
-import IAuthState = Auth.IAuthState;
+import {Injectable} from '@angular/core'
+import {Action, NgxsOnInit, Selector, State, StateContext, Store} from '@ngxs/store'
+import {Auth} from './auth.state-models'
+import {ApiService} from '../../service/api.service'
+import {catchError, EMPTY, map, of, switchMap, tap} from 'rxjs'
+import {Navigate} from '@ngxs/router-plugin'
+import * as fromRoutes from '../../commons/routes'
+import {LocalStoreService} from '../../service/local-store.service'
+import {UnknownBoolean} from '../../commons/models/common.models'
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot'
+import {ProfileState} from '../../state/profile.state'
+import {Language} from '../../commons/models/auth.models'
+import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
+import {ProfileLoadedEvent} from '../../commons/models/state.models'
+import {AlertService} from '../../service/alert.service'
+import IAuthState = Auth.IAuthState
 
 
 @State<Auth.IAuthState>({
@@ -27,49 +27,49 @@ import IAuthState = Auth.IAuthState;
 })
 @Injectable()
 export class AuthState implements NgxsOnInit {
-  private static api: ApiService;
-  private static localStoreService: LocalStoreService;
-  private static store: Store;
-  private static alert: AlertService;
+  private static api: ApiService
+  private static localStoreService: LocalStoreService
+  private static store: Store
+  private static alert: AlertService
 
   @SelectSnapshot(ProfileState.language)
-  language: Language;
+  language: Language
 
   constructor(private api: ApiService,
               private localStoreService: LocalStoreService,
               store: Store,
               private alert: AlertService) {
-    AuthState.api = api;
-    AuthState.localStoreService = localStoreService;
-    AuthState.store = store;
-    AuthState.alert = alert;
+    AuthState.api = api
+    AuthState.localStoreService = localStoreService
+    AuthState.store = store
+    AuthState.alert = alert
   }
 
   @Selector()
   static refreshToken(state: Auth.IAuthState): string | null {
-    return state.refreshToken;
+    return state.refreshToken
   }
 
   @Selector()
   static refreshInProgress(state: Auth.IAuthState): boolean {
-    return state.refreshInProgress;
+    return state.refreshInProgress
   }
 
   @Selector()
   static isAuthenticated(state: Auth.IAuthState): UnknownBoolean {
-    return state.loggedIn;
+    return state.loggedIn
   }
 
   @Receiver({type: Auth.LOG_OUT})
   static logOut(ctx: StateContext<Auth.IAuthState>, _: EmitterAction) {
-    this.localStoreService.dropRefreshToken();
+    this.localStoreService.dropRefreshToken()
 
     ctx.patchState({
       refreshToken: null,
       loggedIn: UnknownBoolean.FALSE,
-    });
+    })
 
-    this.store.dispatch(new Navigate(['/signin']));
+    this.store.dispatch(new Navigate(['/signin']))
   }
 
   @Receiver({type: Auth.SIGN_IN})
@@ -80,40 +80,40 @@ export class AuthState implements NgxsOnInit {
           ctx.patchState({
             refreshToken: rsp.refreshToken,
             loggedIn: UnknownBoolean.TRUE,
-          });
+          })
 
-          this.localStoreService.saveRefreshToken(rsp.refreshToken);
+          this.localStoreService.saveRefreshToken(rsp.refreshToken)
 
-          return this.api.getProfile();
+          return this.api.getProfile()
         }),
         switchMap(profile => {
-          let redirectUrl = ctx.getState().afterAuthUrl;
+          let redirectUrl = ctx.getState().afterAuthUrl
           if (redirectUrl != null) {
             ctx.patchState({
               afterAuthUrl: null,
-            });
+            })
           } else {
-            redirectUrl = fromRoutes.dashboard;
+            redirectUrl = fromRoutes.dashboard
           }
 
-          const navigationEvent = new Navigate([redirectUrl]);
+          const navigationEvent = new Navigate([redirectUrl])
 
           return ctx.dispatch([
             navigationEvent,
             new ProfileLoadedEvent(profile),
-          ]);
+          ])
         }),
         catchError(err => {
           ctx.patchState({
             refreshToken: null,
             loggedIn: UnknownBoolean.FALSE,
-          });
-          this.alert.warn('alert.default-error');
-          console.error(err);
+          })
+          this.alert.warn('alert.default-error')
+          console.error(err)
 
-          return EMPTY;
+          return EMPTY
         }),
-      );
+      )
   }
 
   @Receiver({type: Auth.SIGN_UP})
@@ -125,33 +125,33 @@ export class AuthState implements NgxsOnInit {
           ctx.patchState({
             refreshToken: rsp.refreshToken,
             loggedIn: UnknownBoolean.TRUE,
-          });
+          })
 
-          this.localStoreService.saveRefreshToken(rsp.refreshToken);
+          this.localStoreService.saveRefreshToken(rsp.refreshToken)
 
-          return new Navigate([`/${fromRoutes.completeProfile}`]);
+          return new Navigate([`/${fromRoutes.completeProfile}`])
         }),
         catchError(err => {
-          this.alert.warn('alert.default-error');
+          this.alert.warn('alert.default-error')
 
 
-          console.warn(err.msg);
+          console.warn(err.msg)
 
           ctx.patchState({
             refreshToken: null,
             loggedIn: UnknownBoolean.FALSE,
-          });
-          return EMPTY;
+          })
+          return EMPTY
         }),
         map(ctx.dispatch),
-      );
+      )
   }
 
   @Receiver({type: Auth.REFRESH_AUTH, cancelUncompleted: false})
   static refreshAuth(ctx: StateContext<Auth.IAuthState>, _: EmitterAction) {
     ctx.patchState({
       refreshInProgress: true,
-    });
+    })
 
     return this.api.refreshAuth(ctx.getState().refreshToken)
       .pipe(
@@ -160,25 +160,25 @@ export class AuthState implements NgxsOnInit {
             refreshToken: rsp.refreshToken,
             refreshInProgress: false,
             loggedIn: UnknownBoolean.TRUE,
-          });
+          })
 
-          this.localStoreService.saveRefreshToken(rsp.refreshToken);
+          this.localStoreService.saveRefreshToken(rsp.refreshToken)
         }),
         catchError(err => {
-          this.alert.warn('alert.default-error');
+          this.alert.warn('alert.default-error')
 
 
-          console.warn(err.msg);
+          console.warn(err.msg)
 
           ctx.patchState({
             refreshToken: null,
             refreshInProgress: false,
             loggedIn: UnknownBoolean.FALSE,
-          });
+          })
 
-          return EMPTY;
+          return EMPTY
         }),
-      );
+      )
   }
 
   @Receiver({type: Auth.CONFIGURE_PROFILE})
@@ -187,21 +187,21 @@ export class AuthState implements NgxsOnInit {
       .pipe(
         map(_ => new Auth.ProfileConfiguredSuccessfullyEvent(payload.aims)),
         catchError(err => {
-          console.error(err);
-          this.alert.warn('alert.default-error');
+          console.error(err)
+          this.alert.warn('alert.default-error')
 
-          return EMPTY;
+          return EMPTY
         }),
         map(ctx.dispatch),
-      );
+      )
   }
 
   ngxsOnInit(ctx: StateContext<Auth.IAuthState>): void {
-    const refreshToken = this.localStoreService.loadRefreshToken();
+    const refreshToken = this.localStoreService.loadRefreshToken()
     if (refreshToken != null) {
       ctx.patchState({
         refreshToken,
-      });
+      })
     }
 
     this.api.getProfile()
@@ -209,36 +209,36 @@ export class AuthState implements NgxsOnInit {
         tap(_ => {
           ctx.patchState({
             loggedIn: UnknownBoolean.TRUE,
-          });
+          })
         }),
         map(profile => new ProfileLoadedEvent(profile)),
         catchError(_ => {
           ctx.patchState({
             loggedIn: UnknownBoolean.FALSE,
-          });
+          })
 
-          return of(new Navigate([fromRoutes.signIn]));
+          return of(new Navigate([fromRoutes.signIn]))
         }),
       )
-      .subscribe(ctx.dispatch);
+      .subscribe(ctx.dispatch)
   }
 
   @Action(Auth.ProfileConfiguredSuccessfullyEvent)
   handleProfileConfigured(ctx: StateContext<Auth.IAuthState>, _: Auth.ProfileConfiguredSuccessfullyEvent) {
     if (ctx.getState().loggedIn) {
-      return ctx.dispatch(new Navigate(['/']));
+      return ctx.dispatch(new Navigate(['/']))
     }
-    return null;
+    return null
   }
 
   @Action(Navigate)
   handleNavigate(ctx: StateContext<IAuthState>, action: Navigate) {
     if (action.path.length > 1 || (action.path[0] !== `/${fromRoutes.signIn}` && action.path[0] !== `/${fromRoutes.signUp}`)) {
-      return;
+      return
     }
 
     ctx.patchState({
       afterAuthUrl: window.location.pathname,
-    });
+    })
   }
 }

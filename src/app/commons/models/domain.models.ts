@@ -1,6 +1,6 @@
-import {DateTime} from 'luxon';
-import {IPfcc} from './common.models';
-import {Language} from './auth.models';
+import {DateTime} from 'luxon'
+import {IPfcc} from './common.models'
+import {Language} from './auth.models'
 
 export type IIngredient = (IFood & {
   ingredientWeight: number;
@@ -22,7 +22,7 @@ export type IFood = {
 export type FoodType = 'INGREDIENT' | 'RECIPE';
 
 export function isFoodType(input: string): input is FoodType {
-  return ['RECIPE', 'INGREDIENT'].includes(input);
+  return ['RECIPE', 'INGREDIENT'].includes(input)
 }
 
 export interface IDish {
@@ -89,3 +89,10 @@ export type IReport = {
 
 export type ReportStatus = 'INITIALIZED' | 'GENERATED';
 export type ReportType = 'PERIOD';
+
+export type WeeklyNutrientsType = 'TOTAL' | 'AVERAGE';
+export const defaultWeeklyNutrientsType = 'AVERAGE'
+
+export function isWeeklyNutrientsType(value: string): value is WeeklyNutrientsType {
+  return value === 'TOTAL' as WeeklyNutrientsType || value === 'AVERAGE'
+}

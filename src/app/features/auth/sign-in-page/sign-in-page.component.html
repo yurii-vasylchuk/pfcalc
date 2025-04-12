@@ -3,9 +3,9 @@
 
   <mat-form-field>
     <mat-label>{{ 'sign-in.email.label' | translate }}</mat-label>
-    <input formControlName="email"
+    <input autocomplete="username"
+           formControlName="email"
            matInput
-           autocomplete="username"
            type="email"/>
 
     <mat-error *ngIf="form.controls.email.hasError('required')"
@@ -18,9 +18,9 @@
 
   <mat-form-field>
     <mat-label>{{ 'sign-in.password.label' | translate }}</mat-label>
-    <input formControlName="password"
+    <input autocomplete="current-password"
+           formControlName="password"
            matInput
-           autocomplete="current-password"
            type="password"/>
 
     <mat-error *ngIf="form.controls.password.hasError('required')"

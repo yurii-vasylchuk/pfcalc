@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {TranslateService} from '@ngx-translate/core';
-import {environment} from '../../environments/environment';
-import {combineLatest} from 'rxjs';
+import {Injectable} from '@angular/core'
+import {MatSnackBar} from '@angular/material/snack-bar'
+import {TranslateService} from '@ngx-translate/core'
+import {environment} from '../../environments/environment'
+import {combineLatest} from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
@@ -20,12 +20,12 @@ export class AlertService {
       ],
     ).subscribe(([translatedMsg, actionMsg]) => {
       if (translatedMsg == null || translatedMsg.trim().length === 0) {
-        console.error(`Cannot find translation for alert msg: ${message}`);
-        this.openBar(message, actionMsg);
-        return;
+        console.error(`Cannot find translation for alert msg: ${message}`)
+        this.openBar(message, actionMsg)
+        return
       }
-      this.openBar(translatedMsg, actionMsg);
-    });
+      this.openBar(translatedMsg, actionMsg)
+    })
   }
 
   success(message: string): void {
@@ -36,12 +36,12 @@ export class AlertService {
       ],
     ).subscribe(([translatedMsg, actionMsg]) => {
       if (translatedMsg == null || translatedMsg.trim().length === 0) {
-        console.error(`Cannot find translation for alert msg: ${message}`);
-        this.openBar(message, actionMsg);
-        return;
+        console.error(`Cannot find translation for alert msg: ${message}`)
+        this.openBar(message, actionMsg)
+        return
       }
-      this.openBar(translatedMsg, actionMsg);
-    });
+      this.openBar(translatedMsg, actionMsg)
+    })
   }
 
   info(message: string): void {
@@ -52,18 +52,18 @@ export class AlertService {
       ],
     ).subscribe(([translatedMsg, actionMsg]) => {
       if (translatedMsg == null || translatedMsg.trim().length === 0) {
-        console.error(`Cannot find translation for alert msg: ${message}`);
-        this.openBar(message, actionMsg);
-        return;
+        console.error(`Cannot find translation for alert msg: ${message}`)
+        this.openBar(message, actionMsg)
+        return
       }
-      this.openBar(translatedMsg, actionMsg);
-    });
+      this.openBar(translatedMsg, actionMsg)
+    })
   }
 
   private openBar(msg: string, action: string) {
     this.snackBar.open(msg, action, {
       duration: environment.alert.duration,
       data: msg,
-    });
+    })
   }
 }

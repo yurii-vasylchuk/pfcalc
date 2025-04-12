@@ -4,16 +4,16 @@
 
     <div class="reports-list__link-container">
       <a *ngIf="report.status === 'GENERATED'; else placeholder"
-         download
-         target="_blank"
+         [href]="reportHref(report)"
          class="reports-list__name"
-         [href]="reportHref(report)">
+         download
+         target="_blank">
         <span>{{ report.name }}</span>
       </a>
       <div class="reports-list__actions">
-        <button mat-icon-button
+        <button (click)="handleDeleteReport(report.id)"
                 color="warn"
-                (click)="handleDeleteReport(report.id)">
+                mat-icon-button>
           <mat-icon>delete</mat-icon>
         </button>
       </div>
@@ -22,8 +22,8 @@
       <div class="reports-list__link-container">
         <span class="reports-list__name">{{ report.name }}</span>
         <div class="reports-list__actions">
-          <mat-spinner mode="indeterminate"
-                       diameter="24">
+          <mat-spinner diameter="24"
+                       mode="indeterminate">
           </mat-spinner>
         </div>
       </div>
@@ -39,19 +39,19 @@
     </mat-label>
 
     <mat-date-range-input [rangePicker]="periodRangePicker">
-      <input matInput
-             matStartDate
+      <input [placeholder]="'reports.period.range.from-placeholder' | translate"
              formControlName="from"
-             [placeholder]="'reports.period.range.from-placeholder' | translate">
+             matInput
+             matStartDate>
 
-      <input matInput
-             matEndDate
+      <input [placeholder]="'reports.period.range.to-placeholder' | translate"
              formControlName="to"
-             [placeholder]="'reports.period.range.to-placeholder' | translate">
+             matEndDate
+             matInput>
     </mat-date-range-input>
 
-    <mat-datepicker-toggle matIconSuffix
-                           [for]="periodRangePicker"/>
+    <mat-datepicker-toggle [for]="periodRangePicker"
+                           matIconSuffix/>
 
     <mat-date-range-picker #periodRangePicker/>
   </mat-form-field>
@@ -60,21 +60,21 @@
     {{ 'reports.period.invalidPeriod' | translate }}
   </mat-error>
 
-  <button mat-raised-button
+  <button (click)="generatePeriodReport()"
           [disabled]="periodReportForm.invalid"
-          (click)="generatePeriodReport()">
+          mat-raised-button>
     {{ 'reports.period.generate' | translate }}
   </button>
 
   <div class="period-reports__presets">
-    <button class="link-like" (click)="handlePresetClick('previous-week')">
-      {{'reports.period.presets.previous-week-label' | translate}}
+    <button (click)="handlePresetClick('previous-week')" class="link-like">
+      {{ 'reports.period.presets.previous-week-label' | translate }}
     </button>
-    <button class="link-like" (click)="handlePresetClick('current-week')">
-      {{'reports.period.presets.current-week-label' | translate}}
+    <button (click)="handlePresetClick('current-week')" class="link-like">
+      {{ 'reports.period.presets.current-week-label' | translate }}
     </button>
-    <button class="link-like" (click)="handlePresetClick('current-month')">
-      {{'reports.period.presets.current-month-label' | translate}}
+    <button (click)="handlePresetClick('current-month')" class="link-like">
+      {{ 'reports.period.presets.current-month-label' | translate }}
     </button>
   </div>
 

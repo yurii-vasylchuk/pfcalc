@@ -1,6 +1,6 @@
-import {DateTime} from 'luxon';
-import {IPfcc} from '../../commons/models/common.models';
-import {FoodType, IMeal, IMeasurement} from '../../commons/models/domain.models';
+import {DateTime} from 'luxon'
+import {IPfcc} from '../../commons/models/common.models'
+import {FoodType, IMeal, IMeasurement} from '../../commons/models/domain.models'
 
 export namespace AddMeal {
   export type IAddMealState = {
@@ -25,10 +25,10 @@ export namespace AddMeal {
     measurements: IMeasurement[];
   }
 
-  export const LOAD_MEAL_OPTIONS = '[AddMeal] Load meal options';
-  export const LOAD_MORE_MEAL_OPTIONS = '[AddMeal] Load more meal options';
-  export const DELETE_DISH = '[AddMeal] Delete dish';
-  export const SAVE_MEAL = '[AddMeal] Save meal';
+  export const LOAD_MEAL_OPTIONS = '[AddMeal] Load meal options'
+  export const LOAD_MORE_MEAL_OPTIONS = '[AddMeal] Load more meal options'
+  export const DELETE_DISH = '[AddMeal] Delete dish'
+  export const SAVE_MEAL = '[AddMeal] Save meal'
 
   export type LoadMealOptionsPayload = {
     filter: string;

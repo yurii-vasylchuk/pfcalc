@@ -86,6 +86,11 @@
     "add-meal-btn": "Add meal",
     "daily-nutrients": "Daily nutrients",
     "weekly-nutrients": "Weekly nutrients {{days}}d.",
+    "weekly-nutrients.info": "",
+    "weekly-nutrients.label": {
+      "total": "Total",
+      "average": "Average"
+    },
     "meals-list": {
       "title-today": "Eaten today",
       "title-date": "Eaten on {{date}}"

@@ -1,9 +1,9 @@
 <form (ngSubmit)="handleSubmit()">
-<mat-form-field>
-  <mat-select>
-    <mat-option *ngFor="let opt of options" [value]="opt.value">
-      {{opt.title}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+  <mat-form-field>
+    <mat-select>
+      <mat-option *ngFor="let opt of options" [value]="opt.value">
+        {{ opt.title }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 </form>

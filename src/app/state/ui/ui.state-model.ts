@@ -4,5 +4,5 @@ export namespace Ui {
     showHeader: boolean;
   }
 
-  export const TOGGLE_SIDE_MENU = '[UI] Toggle side menu';
+  export const TOGGLE_SIDE_MENU = '[UI] Toggle side menu'
 }

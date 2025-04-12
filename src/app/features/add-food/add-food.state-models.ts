@@ -1,4 +1,4 @@
-import {IFood} from '../../commons/models/domain.models';
+import {IFood} from '../../commons/models/domain.models'
 
 export namespace AddFood {
   export type IAddFoodState = {
@@ -11,9 +11,9 @@ export namespace AddFood {
   }
 
 
-  export const RELOAD_INGREDIENT_OPTIONS_ACTION = '[AddFood] Reload ingredients options';
-  export const SAVE_FOOD_ACTION = '[AddFood] Save food';
-  export const DROP_MEASUREMENTS_ACTION = '[AddFood] Drop measurements';
+  export const RELOAD_INGREDIENT_OPTIONS_ACTION = '[AddFood] Reload ingredients options'
+  export const SAVE_FOOD_ACTION = '[AddFood] Save food'
+  export const DROP_MEASUREMENTS_ACTION = '[AddFood] Drop measurements'
 
 
   export type ReloadIngredientOptionsPayload = {

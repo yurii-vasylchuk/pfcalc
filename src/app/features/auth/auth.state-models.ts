@@ -1,4 +1,4 @@
-import {IPfcc, UnknownBoolean} from '../../commons/models/common.models';
+import {IPfcc, UnknownBoolean} from '../../commons/models/common.models'
 
 
 export namespace Auth {
@@ -9,11 +9,11 @@ export namespace Auth {
     refreshInProgress: boolean,
   }
 
-  export const SIGN_IN = '[AUTH] Sign in';
-  export const LOG_OUT = '[AUTH] Log out';
-  export const SIGN_UP = '[AUTH] Sign up';
-  export const REFRESH_AUTH = '[AUTH] Refresh auth action';
-  export const CONFIGURE_PROFILE = '[AUTH] Configure profile';
+  export const SIGN_IN = '[AUTH] Sign in'
+  export const LOG_OUT = '[AUTH] Log out'
+  export const SIGN_UP = '[AUTH] Sign up'
+  export const REFRESH_AUTH = '[AUTH] Refresh auth action'
+  export const CONFIGURE_PROFILE = '[AUTH] Configure profile'
 
   export type SignInPayload = {
     email: string,
@@ -31,7 +31,7 @@ export namespace Auth {
   };
 
   export class ProfileConfiguredSuccessfullyEvent {
-    static readonly type = '[Auth] Profile configured successfully';
+    static readonly type = '[Auth] Profile configured successfully'
 
     constructor(readonly aims: IPfcc) {
     }

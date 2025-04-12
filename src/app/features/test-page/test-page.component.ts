@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatSelectModule} from '@angular/material/select';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core'
+import {CommonModule} from '@angular/common'
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
+import {MatSelectModule} from '@angular/material/select'
 
 @Component({
   selector: 'pfc-test-page',
@@ -29,22 +29,22 @@ export class TestPageComponent implements OnInit {
       title: 'Title 4',
       value: 4,
     },
-  ];
+  ]
 
   protected form: FormGroup<{
     selection: FormControl<number>
-  }>;
+  }>
 
   constructor(private fb: FormBuilder) {
     this.form = fb.group({
       selection: [null as number, Validators.required],
-    });
+    })
   }
 
   ngOnInit(): void {
   }
 
   handleSubmit() {
-    console.log(this.form.value);
+    console.log(this.form.value)
   }
 }

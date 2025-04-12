@@ -1,4 +1,4 @@
-import {IPfcc} from '../../commons/models/common.models';
+import {IPfcc} from '../../commons/models/common.models'
 
 export namespace Settings {
   export type ISettingsState = {
@@ -14,7 +14,7 @@ export namespace Settings {
     newPassword: string;
   };
 
-  export const UPDATE_AIMS = '[Settings] Update aims';
-  export const UPDATE_USERNAME = '[Settings] Update username';
-  export const UPDATE_PASSWORD = '[Settings] Update password';
+  export const UPDATE_AIMS = '[Settings] Update aims'
+  export const UPDATE_USERNAME = '[Settings] Update username'
+  export const UPDATE_PASSWORD = '[Settings] Update password'
 }

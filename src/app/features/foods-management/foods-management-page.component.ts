@@ -4,9 +4,10 @@ import {
   Component,
   ElementRef,
   OnDestroy,
-  OnInit, QueryList,
+  OnInit,
+  QueryList,
   TrackByFunction,
-  ViewChild, ViewChildren,
+  ViewChildren,
 } from '@angular/core'
 import {CommonModule} from '@angular/common'
 import {MatTabChangeEvent, MatTabsModule} from '@angular/material/tabs'
@@ -51,10 +52,10 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   protected productsLoading: boolean
   @ViewSelectSnapshot(hasActionsExecuting([{type: FoodsManagement.LOAD_RECIPES}, {type: FoodsManagement.LOAD_MORE_RECIPES}]))
   protected recipesLoading: boolean
-
+  protected type: FoodType = 'INGREDIENT'
+  protected searchControl = new FormControl<string | null>(null)
   @ViewChildren('endIndicator', {read: ElementRef<HTMLDivElement>})
   private endIndicators: QueryList<ElementRef<HTMLDivElement>>
-
   @Emitter(FoodsManagementState.loadProducts)
   private loadProducts: Emittable<FoodsManagement.LoadFoodsActionPayload>
   @Emitter(FoodsManagementState.loadRecipes)
@@ -69,9 +70,6 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   private editFood: Emittable<FoodsManagement.EditFoodActionPayload>
   @Emitter(FoodsManagementState.deleteFood)
   private deleteFood: Emittable<FoodsManagement.DeleteFoodActionPayload>
-
-  protected type: FoodType = 'INGREDIENT'
-  protected searchControl = new FormControl<string | null>(null)
   private endIntersectionObserver: IntersectionObserver
   private isAccordionScrolledToEnd$ = new BehaviorSubject<boolean>(false)
   private destroyed$ = new Subject<void>()

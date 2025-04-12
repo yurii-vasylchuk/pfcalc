@@ -1,8 +1,8 @@
-import {Language} from '../commons/models/auth.models';
-import {IPfcc} from '../commons/models/common.models';
+import {Language} from '../commons/models/auth.models'
+import {IPfcc} from '../commons/models/common.models'
 
 export namespace Profile {
-  export const DEFAULT_LANGUAGE = 'EN';
+  export const DEFAULT_LANGUAGE = 'EN'
 
   export type IProfileState = {
     email: string;
@@ -12,7 +12,7 @@ export namespace Profile {
     language: Language;
   }
 
-  export const LANGUAGE_CHANGED_EVENT = '[Profile] Language changed';
+  export const LANGUAGE_CHANGED_EVENT = '[Profile] Language changed'
 
   export type LanguageChangedEventPayload = Language;
 }

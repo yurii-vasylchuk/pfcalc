@@ -1,5 +1,5 @@
-import {DateTime} from 'luxon';
-import {IReport} from '../../commons/models/domain.models';
+import {DateTime} from 'luxon'
+import {IReport} from '../../commons/models/domain.models'
 
 export namespace Reports {
   export type IReportsState = {
@@ -13,6 +13,6 @@ export namespace Reports {
   };
   export type DeleteReportPayload = number;
 
-  export const REQUEST_PERIOD_REPORT = "[Reports] Request period report";
-  export const DELETE_REPORT = "[Reports] delete report";
+  export const REQUEST_PERIOD_REPORT = '[Reports] Request period report'
+  export const DELETE_REPORT = '[Reports] delete report'
 }

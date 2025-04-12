@@ -1,4 +1,4 @@
-import {IDish, IDishToCreate, IFood} from '../../commons/models/domain.models';
+import {IDish, IDishToCreate, IFood} from '../../commons/models/domain.models'
 
 export namespace AddDish {
   export type IAddDishState = {
@@ -19,12 +19,12 @@ export namespace AddDish {
   };
   export type SaveDishPayload = IDishToCreate;
 
-  export const OPTIONS_PAGE_SIZE = 10;
+  export const OPTIONS_PAGE_SIZE = 10
 
-  export const LOAD_RECIPE = '[AddDish] Load Recipe';
-  export const LOAD_DISH = '[AddDish] Load Dish';
-  export const ADD_INGREDIENT = '[AddDish] Add Ingredient';
-  export const DELETE_INGREDIENT = '[AddDish] Delete Ingredient';
-  export const SEARCH_INGREDIENT_OPTIONS = '[AddDish] Search Ingredient Options';
-  export const SAVE_DISH = '[AddDish] Save Dish';
+  export const LOAD_RECIPE = '[AddDish] Load Recipe'
+  export const LOAD_DISH = '[AddDish] Load Dish'
+  export const ADD_INGREDIENT = '[AddDish] Add Ingredient'
+  export const DELETE_INGREDIENT = '[AddDish] Delete Ingredient'
+  export const SEARCH_INGREDIENT_OPTIONS = '[AddDish] Search Ingredient Options'
+  export const SAVE_DISH = '[AddDish] Save Dish'
 }

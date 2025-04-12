@@ -227,37 +227,37 @@
   <div class="measurements"
        formArrayName="measurements">
     @for (m of form.value.measurements; let idx = $index; track trackByIndexFn) {
-    <div *ngIf="!m.deleted"
-         [formGroupName]="idx"
-         class="measurement">
+      <div *ngIf="!m.deleted"
+           [formGroupName]="idx"
+           class="measurement">
 
-      <input formControlName="id"
-             hidden>
+        <input formControlName="id"
+               hidden>
 
-      <mat-form-field class="measurement-name">
-        <mat-label>{{ 'add-food.measurement-name-label' | translate }}</mat-label>
-        <input formControlName="name"
-               matInput
-               type="text">
-      </mat-form-field>
-      <button mat-icon-button
-              (click)="handleDeleteMeasurement(idx)"
-              color="warn">
-        <mat-icon>delete</mat-icon>
-      </button>
-      <mat-form-field class="measurement-multiplier">
-        <mat-label>{{ 'add-food.measurement-multiplier-label' | translate }}</mat-label>
-        <input formControlName="multiplier"
-               matInput
-               type="number">
-      </mat-form-field>
-      <mat-form-field class="measurement-default">
-        <mat-label>{{ 'add-food.measurement-default-label' | translate }}</mat-label>
-        <input formControlName="defaultValue"
-               matInput
-               type="number">
-      </mat-form-field>
-    </div>
+        <mat-form-field class="measurement-name">
+          <mat-label>{{ 'add-food.measurement-name-label' | translate }}</mat-label>
+          <input formControlName="name"
+                 matInput
+                 type="text">
+        </mat-form-field>
+        <button mat-icon-button
+                (click)="handleDeleteMeasurement(idx)"
+                color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <mat-form-field class="measurement-multiplier">
+          <mat-label>{{ 'add-food.measurement-multiplier-label' | translate }}</mat-label>
+          <input formControlName="multiplier"
+                 matInput
+                 type="number">
+        </mat-form-field>
+        <mat-form-field class="measurement-default">
+          <mat-label>{{ 'add-food.measurement-default-label' | translate }}</mat-label>
+          <input formControlName="defaultValue"
+                 matInput
+                 type="number">
+        </mat-form-field>
+      </div>
     }
     <button (click)="handleAddMeasurementClick()"
             class="add-measurement-btn"
