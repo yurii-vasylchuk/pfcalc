@@ -79,7 +79,7 @@ export class ApiService {
       .pipe(this.extractVoidResponse)
   }
 
-  addMeal(meal: Omit<IMeal, 'id'>): Observable<IMeal> {
+  saveMeal(meal: Partial<Pick<IMeal, 'id'>> & Omit<IMeal, 'id'>): Observable<IMeal> {
     return this.http.post<IApiResponse<IMeal>>('/api/meal', {
       ...meal,
       eatenOn: meal.eatenOn.toISO({includeOffset: false}),

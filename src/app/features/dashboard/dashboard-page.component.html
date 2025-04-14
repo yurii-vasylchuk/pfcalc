@@ -7,7 +7,8 @@
         <mat-icon>help</mat-icon>
       </button>
       <div class="flex-spacer"></div>
-      <mat-slide-toggle (toggleChange)="onWeeklyNutrientsTypeChange()" [checked]="state.weeklyNutrientsType == 'AVERAGE'"
+      <mat-slide-toggle (toggleChange)="onWeeklyNutrientsTypeChange()"
+                        [checked]="state.weeklyNutrientsType == 'AVERAGE'"
                         labelPosition="before">
         {{ weeklyNutrientsLabel | translate }}
       </mat-slide-toggle>
@@ -63,10 +64,16 @@
       <span class="meals__title">{{ meal.name }} - {{ meal.weight }}{{ 'common.gram-sign' | translate }}</span>
       <span class="meals__weight">
           {{ 'common.pfcc-values' | translate:fromFunctions.ceilPfcc(meal.pfcc) }}
-        </span>
+      </span>
     </div>
     <div class="flex-spacer"></div>
+    <button (click)="handleEditMealClick(meal)"
+            color="primary"
+            mat-icon-button>
+      <mat-icon>edit</mat-icon>
+    </button>
     <button (click)="removeMeal(meal.id!)"
+            color="warn"
             mat-icon-button>
       <mat-icon>delete</mat-icon>
     </button>
@@ -96,3 +103,32 @@
     {{ 'dashboard.add-meal-btn' | translate }}
   </a>
 </div>
+<ng-template #editMeal let-data>
+  <form [formGroup]="editMealForm">
+    <h2 mat-dialog-title>{{ 'dashboard.edit-meal.title' | translate }}</h2>
+    <mat-dialog-content>
+      <mat-form-field>
+        <mat-label>{{ 'dashboard.edit-meal.weight-label' | translate }}</mat-label>
+        <input formControlName="weight"
+               matInput
+               min="0"
+               type="number">
+      </mat-form-field>
+
+      <!-- TODO: Add measurement selector -->
+      <!-- TODO: Add re-calculated PFCC -->
+    </mat-dialog-content>
+    <mat-dialog-actions class="edit-meal__actions">
+      <button [matDialogClose]="false"
+              color="primary"
+              mat-button>
+        {{ 'dashboard.edit-meal.close-btn-label' | translate }}
+      </button>
+      <button [matDialogClose]="true"
+              color="accent"
+              mat-button>
+        {{ 'dashboard.edit-meal.save-btn-label' | translate }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</ng-template>

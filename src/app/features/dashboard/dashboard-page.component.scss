@@ -54,6 +54,12 @@
   }
 }
 
+.edit-meal {
+  &__actions {
+    justify-content: end;
+  }
+}
+
 .meals {
   &__header {
     font-size: 1.2rem;

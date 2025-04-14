@@ -114,16 +114,16 @@ export class DashboardState implements NgxsOnInit {
   }
 
   @Receiver({action: RouterNavigated})
-  static onNavigate(ctx: StateContext<Dashboard.IDashboardState>, action: RouterNavigated): void {
+  static onNavigate(ctx: StateContext<Dashboard.IDashboardState>, action: RouterNavigated): Observable<void> {
     if (!action.routerState.url.match(`/${fromRoutes.dashboard}.*`)) {
-      return
+      return EMPTY
     }
 
-    this.loadWeekMeals(this.currentDate(ctx.getState()), ctx)
+    return this.loadWeekMeals(this.currentDate(ctx.getState()), ctx)
   }
 
   @Receiver({type: Dashboard.REMOVE_MEAL})
-  static removeMeal(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.RemoveMealPayload>) {
+  static removeMeal(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.RemoveMealPayload>): Observable<void> {
     return this.api.removeMeal(payload.id)
       .pipe(
         tap(_ => ctx.patchState({weekMeals: ctx.getState().weekMeals.filter(m => m.id !== payload.id)})),
@@ -136,15 +136,23 @@ export class DashboardState implements NgxsOnInit {
       )
   }
 
-  @Receiver({type: Dashboard.ADD_MEAL})
-  static addMeal(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.AddMealPayload>) {
-    return this.api.addMeal(payload)
+  @Receiver({type: Dashboard.EDIT_MEAL})
+  public static editMeal(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.EditMealPayload>): Observable<void> {
+    return this.api.saveMeal(payload)
       .pipe(
         tap(meal => {
           ctx.patchState({
-            weekMeals: [...ctx.getState().weekMeals, meal],
+            weekMeals: [
+              ...ctx.getState().weekMeals.map(m => {
+                if (m.id === meal.id) {
+                  return meal
+                }
+                return m
+              }),
+            ],
           })
         }),
+        map(_ => null),
         catchError(err => {
           console.error(err)
           this.alert.warn('alert.default-error')
@@ -152,51 +160,57 @@ export class DashboardState implements NgxsOnInit {
           return EMPTY
         }),
       )
+
   }
 
   @Receiver({type: Dashboard.SWITCH_DATE})
-  static switchDate(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.SwitchDatePayload>) {
+  static switchDate(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.SwitchDatePayload>): Observable<void> {
     const newDate = payload.date.startOf('day')
     const oldDate = this.currentDate(ctx.getState())
+    console.log(`OldDate: ${oldDate.toISODate()}; NewDate: ${newDate.toISODate()}`)
 
     ctx.patchState({
       currentDate: newDate.toISODate(),
     })
 
     if (oldDate.weekNumber === newDate.weekNumber) {
+      console.log(`Week number is same old[${oldDate.weekNumber}] === new[${newDate.weekNumber}]`)
       return EMPTY
     }
+    console.log(`Week number is distinct old[${oldDate.weekNumber}] === new[${newDate.weekNumber}]`)
 
     return this.loadWeekMeals(newDate, ctx)
   }
 
   @Receiver({action: ProfileLoadedEvent})
-  public static profileLoaded(ctx: StateContext<Dashboard.IDashboardState>, {profile}: ProfileLoadedEvent) {
+  public static profileLoaded(ctx: StateContext<Dashboard.IDashboardState>, {profile}: ProfileLoadedEvent): void {
     ctx.patchState({
       aims: profile.aims,
     })
   }
 
   @Receiver({action: Auth.ProfileConfiguredSuccessfullyEvent})
-  public static profileConfigured(ctx: StateContext<Dashboard.IDashboardState>, {aims}: Auth.ProfileConfiguredSuccessfullyEvent) {
+  public static profileConfigured(ctx: StateContext<Dashboard.IDashboardState>, {aims}: Auth.ProfileConfiguredSuccessfullyEvent): void {
     ctx.patchState({
       aims,
     })
   }
 
   @Receiver({type: Dashboard.SWITCH_WEEKLY_NUTRIENTS_TYPE})
-  public static switchWeeklyNutrientsType(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.SwitchWeeklyNutrientsType>) {
+  public static switchWeeklyNutrientsType(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.SwitchWeeklyNutrientsTypePayload>): void {
     ctx.patchState({
       weeklyNutrientsType: payload,
     })
     this.localStore.saveWeeklyNutrientsType(payload)
   }
 
-  private static loadWeekMeals(date: DateTime, ctx: StateContext<Dashboard.IDashboardState>) {
+  private static loadWeekMeals(date: DateTime, ctx: StateContext<Dashboard.IDashboardState>): Observable<void> {
+    console.log(`Load week meals: ${date.toISODate()}`)
     const pageSize = 50
     const from = date.startOf('week')
     const to = date.endOf('week')
-    this.api.loadMeals(0, pageSize, from, to)
+
+    return this.api.loadMeals(0, pageSize, from, to)
       .pipe(
         switchMap(mealsPage => {
           let loaders: Observable<IPage<IMeal>>[] = []
@@ -211,15 +225,17 @@ export class DashboardState implements NgxsOnInit {
         map(pages => {
           return pages.map(p => p.data).reduce((m1, m2) => ([...m1, ...m2]), [])
         }),
+        tap(meals => {
+          ctx.patchState({weekMeals: meals})
+        }),
+        map(_ => null),
         catchError(err => {
           console.error(err)
           this.alert.warn('alert.default-error')
 
           return EMPTY
         }),
-      ).subscribe(meals => {
-      ctx.patchState({weekMeals: meals})
-    })
+      )
   }
 
   ngxsOnInit(ctx: StateContext<Dashboard.IDashboardState>): void {
@@ -229,7 +245,5 @@ export class DashboardState implements NgxsOnInit {
       aims: this.store.selectSnapshot(ProfileState.aims),
       weeklyNutrientsType: DashboardState.localStore.loadWeeklyNutrientsType(),
     })
-    //
-    //   DashboardState.loadWeekMeals(now, ctx);
   }
 }

@@ -95,7 +95,13 @@
       "title-today": "Eaten today",
       "title-date": "Eaten on {{date}}"
     },
-    "counted-days-on-week-info": "We only count the days on which you logged at least one meal."
+    "counted-days-on-week-info": "We only count the days on which you logged at least one meal.",
+    "edit-meal": {
+      "title": "Edit meal",
+      "weight-label": "Weight",
+      "close-btn-label": "Cancel",
+      "save-btn-label": "Save"
+    }
   },
   "add-meal": {
     "title": "Add meal",

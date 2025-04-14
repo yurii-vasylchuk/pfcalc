@@ -10,10 +10,11 @@ export namespace Dashboard {
     weeklyNutrientsType: WeeklyNutrientsType;
   }
 
-  export const REMOVE_MEAL = '[DASHBOARD] Remove meal'
-  export const ADD_MEAL = '[DASHBOARD] Add meal'
-  export const SWITCH_DATE = '[DASHBOARD] Switch date'
-  export const SWITCH_WEEKLY_NUTRIENTS_TYPE = '[DASHBOARD] Switch weekly nutrients type'
+  export const REMOVE_MEAL = '[Dashboard] Remove meal'
+  export const ADD_MEAL = '[Dashboard] Add meal'
+  export const SWITCH_DATE = '[Dashboard] Switch date'
+  export const EDIT_MEAL = '[Dashboard] Edit meal'
+  export const SWITCH_WEEKLY_NUTRIENTS_TYPE = '[Dashboard] Switch weekly nutrients type'
 
   export type RemoveMealPayload = {
     id: number;
@@ -23,5 +24,6 @@ export namespace Dashboard {
     date: DateTime;
   }
 
-  export type SwitchWeeklyNutrientsType = WeeklyNutrientsType
+  export type SwitchWeeklyNutrientsTypePayload = WeeklyNutrientsType
+  export type EditMealPayload = IMeal
 }

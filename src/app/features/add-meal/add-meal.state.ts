@@ -166,7 +166,7 @@ export class AddMealState {
 
   @Receiver({type: AddMeal.SAVE_MEAL})
   static saveMeal(ctx: StateContext<AddMeal.IAddMealState>, {payload}: EmitterAction<AddMeal.SaveMealPayload>) {
-    return this.api.addMeal(payload)
+    return this.api.saveMeal(payload)
       .pipe(
         map(meal => {
           return {
