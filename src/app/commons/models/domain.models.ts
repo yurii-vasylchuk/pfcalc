@@ -80,6 +80,14 @@ export type IMeasurement = {
   toGramMultiplier: number;
 };
 
+export const defaultMeasurement: IMeasurement = {
+  foodId: null,
+  id: 99999,
+  toGramMultiplier: 1,
+  name: 'g',
+  defaultValue: 100,
+}
+
 export type IReport = {
   id: number;
   name: string;

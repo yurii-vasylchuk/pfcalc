@@ -106,14 +106,29 @@
 <ng-template #editMeal let-data>
   <form [formGroup]="editMealForm">
     <h2 mat-dialog-title>{{ 'dashboard.edit-meal.title' | translate }}</h2>
-    <mat-dialog-content>
-      <mat-form-field>
-        <mat-label>{{ 'dashboard.edit-meal.weight-label' | translate }}</mat-label>
-        <input formControlName="weight"
-               matInput
-               min="0"
-               type="number">
-      </mat-form-field>
+    <mat-dialog-content class="edit-meal__content">
+      <div class="edit-meal__weight-input-group">
+
+        <mat-form-field [class.edit-meal__weight-field]="isEditingFood">
+          <mat-label>{{ 'dashboard.edit-meal.weight-label' | translate }}</mat-label>
+          <input formControlName="weight"
+                 matInput
+                 min="0"
+                 type="number">
+        </mat-form-field>
+
+        @if (isEditingFood) {
+          <mat-form-field class="edit-meal__measurement-select">
+            <mat-select formControlName="measurement">
+              @for (measurement of editMealMeasurements; track measurementTrackByFn) {
+                <mat-option [value]="measurement">{{ 'measurements.' + measurement.name | translate }}</mat-option>
+              }
+            </mat-select>
+
+          </mat-form-field>
+        }
+
+      </div>
 
       <!-- TODO: Add measurement selector -->
       <!-- TODO: Add re-calculated PFCC -->

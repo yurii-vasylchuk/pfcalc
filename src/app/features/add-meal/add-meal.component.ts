@@ -34,7 +34,7 @@ import {ProfileState} from '../../state/profile.state'
 import {emptyPfcc, IPfcc} from '../../commons/models/common.models'
 import {ceilPfcc, multiplyPfcc} from '../../commons/functions'
 import {MatSelectModule} from '@angular/material/select'
-import {IMeasurement} from '../../commons/models/domain.models'
+import {defaultMeasurement, IMeasurement} from '../../commons/models/domain.models'
 import {Select, Store} from '@ngxs/store'
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 import {MatProgressBarModule} from '@angular/material/progress-bar'
@@ -56,15 +56,8 @@ export class AddMealComponent implements OnInit, OnDestroy {
   private static readonly PAGE_SIZE = 16
   protected readonly ceilPfcc = ceilPfcc
 
-  protected readonly defaultMeasurement: IMeasurement = {
-    foodId: null,
-    id: null,
-    toGramMultiplier: 1,
-    name: 'g',
-    defaultValue: 100,
-  }
   protected measurements: IMeasurement[] = [
-    this.defaultMeasurement,
+    defaultMeasurement,
   ]
 
   @Select(hasActionsExecuting([{type: AddMeal.LOAD_MEAL_OPTIONS}, {type: AddMeal.LOAD_MORE_MEAL_OPTIONS}]))
@@ -89,11 +82,11 @@ export class AddMealComponent implements OnInit, OnDestroy {
   @Emitter(AddMealState.deleteDish)
   protected deleteDish: Emittable<AddMeal.DeleteDishPayload>
   @Emitter(AddMealState.saveMeal)
-  protected saveDish: Emittable<AddMeal.SaveMealPayload>
+  protected saveMeal: Emittable<AddMeal.SaveMealPayload>
 
   protected filterFC = new FormControl<string>(null)
   protected weightFC = new FormControl<number>(100)
-  protected measurementFC = new FormControl<IMeasurement>(this.defaultMeasurement)
+  protected measurementFC = new FormControl<IMeasurement>(defaultMeasurement)
   protected selectedOption$ = new ReplaySubject<AddMeal.IMealOption>()
   protected addedPfcc$ = new ReplaySubject<IPfcc>()
   @ViewChild('endIndicator', {static: true, read: ElementRef<HTMLDivElement>})
@@ -156,7 +149,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
     this.weightFC.patchValue(100)
     this.measurementFC.patchValue(this.measurements[0])
     this.measurements = [
-      this.defaultMeasurement,
+      defaultMeasurement,
       ...(option.measurements ?? []),
     ]
   }
@@ -179,13 +172,19 @@ export class AddMealComponent implements OnInit, OnDestroy {
 
   handleSaveMealClick(option: AddMeal.IMealOption) {
     const measurement = this.measurementFC.value
-    this.saveDish.emit({
+    const now = DateTime.now()
+    this.saveMeal.emit({
       pfcc: option.pfcc,
       weight: measurement.toGramMultiplier * this.weightFC.value,
       name: option.name,
       dishId: option.dishId,
       foodId: option.foodId,
-      eatenOn: this.date,
+      eatenOn: this.date.set({
+        hour: now.hour,
+        minute: now.minute,
+        second: now.second,
+        millisecond: now.millisecond,
+      }),
     })
   }
 

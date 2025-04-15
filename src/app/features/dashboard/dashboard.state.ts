@@ -6,7 +6,7 @@ import {DateTime} from 'luxon'
 import {ProfileState} from '../../state/profile.state'
 import {catchError, combineLatest, EMPTY, map, Observable, of, switchMap, tap} from 'rxjs'
 import {emptyPfcc, IPage, IPfcc} from '../../commons/models/common.models'
-import {defaultWeeklyNutrientsType, IMeal} from '../../commons/models/domain.models'
+import {defaultWeeklyNutrientsType, IMeal, IMeasurement} from '../../commons/models/domain.models'
 import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
 import {ceilPfcc, multiplyPfcc, sumPfccs} from '../../commons/functions'
 import {ProfileLoadedEvent} from '../../commons/models/state.models'
@@ -23,6 +23,7 @@ import {LocalStoreService} from '../../service/local-store.service'
     weekMeals: null,
     currentDate: null,
     weeklyNutrientsType: defaultWeeklyNutrientsType,
+    measurements: new Map<number, IMeasurement[]>(),
   },
 })
 @Injectable({providedIn: 'root'})
@@ -111,6 +112,11 @@ export class DashboardState implements NgxsOnInit {
     }
     return state.weekMeals
       .filter(m => m.eatenOn.hasSame(this.currentDate(state), 'day'))
+  }
+
+  @Selector()
+  static measurements(state: Dashboard.IDashboardState): Map<number, IMeasurement[]> {
+    return state.measurements
   }
 
   @Receiver({action: RouterNavigated})
@@ -204,8 +210,31 @@ export class DashboardState implements NgxsOnInit {
     this.localStore.saveWeeklyNutrientsType(payload)
   }
 
+  @Receiver({type: Dashboard.PREPARE_MEAL_EDIT})
+  public static prepareMealEdit(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.PrepareMealEditPayload>): Observable<void> {
+    if (payload.dishId != null) {
+      return EMPTY
+    }
+    return this.api.loadMeasurements(payload.foodId)
+      .pipe(
+        tap(measurements => {
+          const measurementsMap = new Map<number, IMeasurement[]>(ctx.getState().measurements)
+          measurementsMap.set(payload.foodId, measurements)
+          ctx.patchState({
+            measurements: measurementsMap,
+          })
+        }),
+        map(_ => null),
+        catchError(err => {
+          console.error(err)
+          this.alert.warn('alert.default-error')
+
+          return EMPTY
+        }),
+      )
+  }
+
   private static loadWeekMeals(date: DateTime, ctx: StateContext<Dashboard.IDashboardState>): Observable<void> {
-    console.log(`Load week meals: ${date.toISODate()}`)
     const pageSize = 50
     const from = date.startOf('week')
     const to = date.endOf('week')

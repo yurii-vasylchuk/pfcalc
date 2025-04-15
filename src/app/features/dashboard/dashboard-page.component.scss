@@ -55,6 +55,28 @@
 }
 
 .edit-meal {
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  &__weight-input-group {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 10px;
+  }
+
+  &__weight-field {
+    flex-basis: 40%;
+  }
+
+  &__measurement-select {
+    flex-basis: 60%;
+  }
+
   &__actions {
     justify-content: end;
   }
