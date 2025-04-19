@@ -10,7 +10,7 @@ import {NgxsRouterPluginModule} from '@ngxs/router-plugin'
 import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin'
 import {NgxsModule} from '@ngxs/store'
 import {AuthState} from './features/auth/auth.state'
-import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http'
+import {HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http'
 import {
   MissingTranslationHandler,
   TranslateCompiler,
@@ -54,13 +54,12 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
   ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     NgxsModule.forRoot([AuthState, UiState, FoodsManagementState, DashboardState, AddMealState, ProfileState,
-        AddDishState, NavigationState, AddFoodState, SettingsState, ReportsState],
-      {developmentMode: environment.ngxs.developmentMode}),
+      AddDishState, NavigationState, AddFoodState, SettingsState, ReportsState], {developmentMode: environment.ngxs.developmentMode}),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
       disabled: !environment.ngxs.logging,
@@ -90,7 +89,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         // useClass: environment.production ? TranslateMessageFormatCompiler : TranslateMessageFormatDebugCompiler,
       },
     }),
-
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: !environment.ngxs.developmentMode,
     }),
@@ -117,8 +115,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: AuthInterceptor,
       multi: true,
     },
+    provideHttpClient(withInterceptorsFromDi()),
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {
 }
