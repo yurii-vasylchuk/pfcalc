@@ -282,7 +282,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
         if (food.id == null) {
           this.form.patchValue({
             name: food.name,
-            isRecipe: food?.type === 'RECIPE' ?? false,
+            isRecipe: food?.type === 'RECIPE',
           })
         } else {
           this.title = AddFoodComponent.EDIT_TITLE

@@ -116,7 +116,7 @@ export class DashboardPageComponent implements OnInit {
   }
 
   protected get isEditingFood(): boolean {
-    return this.editMealForm.value?.meal?.dishId == null ?? false
+    return this.editMealForm.value.meal.dishId == null
   }
 
   protected get editMealMeasurements(): IMeasurement[] {
