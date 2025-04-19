@@ -288,12 +288,6 @@ export class ApiService {
         params: {page, pageSize},
       }).pipe(
         map(rsp => this.extractResponseData(rsp)),
-        map(res => {
-          if (Math.random() > 0.7) {
-            throw new Error('TEST')
-          }
-          return res
-        }),
       ),
       5,
     )

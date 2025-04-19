@@ -13,6 +13,7 @@ import {Profile} from './state/profile.state-model'
   selector: 'pfc-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: false,
 })
 export class AppComponent {
   @ViewSelectSnapshot(UiState.sideMenuOpened)

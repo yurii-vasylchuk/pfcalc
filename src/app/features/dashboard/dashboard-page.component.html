@@ -1,17 +1,25 @@
 <div class="nutrients">
   <div class="nutrients__period-block">
     <h1 class="nutrients__header">
+      <mat-form-field appearance="outline"
+                      subscriptSizing="dynamic">
+        <mat-select (valueChange)="onWeeklyNutrientsTypeChange($event)"
+                    [value]="state.weeklyNutrientsType"
+                    hideSingleSelectionIndicator="true">
+          @for (aType of weeklyNutrientsTypeOptions; track aType) {
+            <mat-option [value]="aType">
+              {{ 'dashboard.weekly-nutrients.label.' + aType | translate }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <div class="flex-spacer"></div>
       {{ 'dashboard.weekly-nutrients' | translate:{days: countedDaysOnWeek} }}
       <button (click)="showCountedDaysOnWeekInfo()"
               mat-icon-button>
         <mat-icon>help</mat-icon>
       </button>
-      <div class="flex-spacer"></div>
-      <mat-slide-toggle (toggleChange)="onWeeklyNutrientsTypeChange()"
-                        [checked]="state.weeklyNutrientsType == 'AVERAGE'"
-                        labelPosition="before">
-        {{ weeklyNutrientsLabel | translate }}
-      </mat-slide-toggle>
+
     </h1>
     <div class="nutrients__gauges">
       <pfc-nutrition-gauge [aim]="weeklyAims?.protein || null"

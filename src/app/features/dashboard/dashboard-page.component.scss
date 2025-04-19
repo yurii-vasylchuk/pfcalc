@@ -20,6 +20,10 @@
     flex-direction: row;
     align-items: center;
     gap: .2rem;
+
+    > mat-select {
+      flex-shrink: 1;
+    }
   }
 
   &__gauges {

@@ -14,7 +14,6 @@ import {Auth} from '../../features/auth/auth.state-models'
 
 @Component({
   selector: 'pfc-menu',
-  standalone: true,
   imports: [CommonModule, MatListModule, MatIconModule, TranslateModule, MatButtonModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],

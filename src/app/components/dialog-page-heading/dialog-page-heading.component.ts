@@ -10,7 +10,6 @@ import NavigateBackPayload = Navigation.NavigateBackPayload
 
 @Component({
   selector: 'pfc-dialog-page-heading',
-  standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule, TranslateModule],
   templateUrl: './dialog-page-heading.component.html',
   styleUrls: ['./dialog-page-heading.component.scss'],

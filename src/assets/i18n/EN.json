@@ -23,7 +23,7 @@
     "fat-sign": "f",
     "carbohydrates-sign": "c",
     "pfcc-sign": "p/f/c/kc",
-    "pfcc-values": "{{protein}}g / {{fat}}g / {{carbohydrates}}g / {{calories}}kCal",
+    "pfcc-values": "{protein}g / {fat}g / {carbohydrates}g / {calories}kCal",
     "calories-sign": "kcals",
     "weight": "Weight",
     "total-weight": "Total weight",
@@ -66,13 +66,13 @@
       "label": "Password",
       "required": "Password is <strong>required</strong>",
       "matches": "Passwords doesn't match",
-      "min-length": "Password should have at least {{value}} characters"
+      "min-length": "Password should have at least {value} characters"
     },
     "confirm-password": {
       "label": "Confirm password",
       "required": "Password confirmation is <strong>required</strong>",
       "matches": "Passwords doesn't match",
-      "min-length": "Password should have at least {{value}} characters"
+      "min-length": "Password should have at least {value} characters"
     },
     "sign-up-btn": "Sign up",
     "sign-in-link": "Sign in"
@@ -85,15 +85,15 @@
   "dashboard": {
     "add-meal-btn": "Add meal",
     "daily-nutrients": "Daily nutrients",
-    "weekly-nutrients": "Weekly nutrients {{days}}d.",
+    "weekly-nutrients": "in {days, plural, one {# day} other {# days}}",
     "weekly-nutrients.info": "",
     "weekly-nutrients.label": {
-      "total": "Total",
-      "average": "Average"
+      "TOTAL": "Total",
+      "AVERAGE": "Average"
     },
     "meals-list": {
       "title-today": "Eaten today",
-      "title-date": "Eaten on {{date}}"
+      "title-date": "Eaten on {date}"
     },
     "counted-days-on-week-info": "We only count the days on which you logged at least one meal.",
     "edit-meal": {
@@ -183,7 +183,7 @@
     "aims-saved-alert": "New aims saved!",
     "name-saved-alert": "New username saved!",
     "password-updated-alert": "New password saved!",
-    "current-password": "Current password",
+    "current-password-label": "Current password",
     "new-password-label": "New password",
     "confirm-new-password-label": "Confirm new password",
     "save-password": "Update password"

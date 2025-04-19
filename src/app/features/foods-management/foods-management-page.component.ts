@@ -33,7 +33,6 @@ import * as fromRoutes from '../../commons/routes'
 
 @Component({
   selector: 'pfc-foods-management-page',
-  standalone: true,
   imports: [CommonModule, MatTabsModule, TranslateModule, MatButtonModule, MatListModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, MatDialogModule, MatProgressBarModule],
   templateUrl: './foods-management-page.component.html',
   styleUrls: ['./foods-management-page.component.scss'],

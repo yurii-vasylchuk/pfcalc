@@ -48,7 +48,7 @@ export class DashboardState implements NgxsOnInit {
     return aims
   }
 
-  @Selector([DashboardState.weeklyCountingDays])
+  @Selector([DashboardState, DashboardState.weeklyCountingDays])
   static weeklyAims({aims, weeklyNutrientsType}: Dashboard.IDashboardState, countingDays: number): IPfcc {
     switch (weeklyNutrientsType) {
       case 'TOTAL':
@@ -80,11 +80,11 @@ export class DashboardState implements NgxsOnInit {
   }
 
   @Selector([DashboardState.todayMeals])
-  static todayNutrients(state: Dashboard.IDashboardState, todayMeals: IMeal[]): IPfcc {
+  static todayNutrients(todayMeals: IMeal[]): IPfcc {
     return sumPfccs(...todayMeals.map(m => m.pfcc))
   }
 
-  @Selector([DashboardState.weeklyCountingDays])
+  @Selector([DashboardState, DashboardState.weeklyCountingDays])
   static weeklyNutrients(state: Dashboard.IDashboardState, countingDays: number): IPfcc {
     if (state.weekMeals == null) {
       return emptyPfcc

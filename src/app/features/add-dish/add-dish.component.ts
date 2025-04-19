@@ -36,7 +36,6 @@ type AddDishFormGroup = FormGroup<{
 
 @Component({
   selector: 'pfc-add-dish',
-  standalone: true,
   imports: [CommonModule, DialogPageHeadingComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, TranslateModule, MatSelectModule, NgxMatSelectSearchModule, MatButtonModule, MatIconModule],
   templateUrl: './add-dish.component.html',
   styleUrls: ['./add-dish.component.scss'],

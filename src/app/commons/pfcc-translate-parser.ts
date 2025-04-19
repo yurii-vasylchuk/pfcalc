@@ -1,4 +1,4 @@
-import {TranslateDefaultParser, TranslateParser} from '@ngx-translate/core'
+import {InterpolateFunction, TranslateDefaultParser, TranslateParser} from '@ngx-translate/core'
 import {DateTime} from 'luxon'
 
 export class PfccTranslateParser extends TranslateParser {
@@ -15,13 +15,9 @@ export class PfccTranslateParser extends TranslateParser {
     this.parser = new TranslateDefaultParser()
   }
 
-  override interpolate(expr: string | Function, params?: any): string {
+  override interpolate(expr: string | InterpolateFunction, params?: any): string {
     params = this.replace(params)
     return this.parser.interpolate(expr, params)
-  }
-
-  override getValue(target: any, key: string) {
-    return this.parser.getValue(target, key)
   }
 
   private replace(params: any): any {

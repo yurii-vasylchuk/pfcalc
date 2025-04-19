@@ -38,7 +38,6 @@ type PasswordForm = FormGroup<{
 
 @Component({
   selector: 'pfc-settings',
-  standalone: true,
   imports: [
     MatFormField,
     MatInput,

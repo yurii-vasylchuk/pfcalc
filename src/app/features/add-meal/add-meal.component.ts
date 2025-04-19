@@ -46,7 +46,6 @@ import IMealOption = AddMeal.IMealOption
 
 @Component({
   selector: 'pfc-add-meal',
-  standalone: true,
   imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatExpansionModule, TranslateModule, ReactiveFormsModule, MatIconModule, NutritionGaugeComponent, MatSelectModule, MatProgressSpinnerModule, MatProgressBarModule, DialogPageHeadingComponent],
   templateUrl: './add-meal.component.html',
   styleUrls: ['./add-meal.component.scss'],

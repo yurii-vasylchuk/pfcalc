@@ -67,7 +67,6 @@ type AddFoodForm = {
 
 @Component({
   selector: 'pfc-add-food',
-  standalone: true,
   imports: [
     CommonModule, DialogPageHeadingComponent, FormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatOptionModule, MatSelectModule, MatSlideToggleModule, NgxMatSelectSearchModule, ReactiveFormsModule, TranslateModule, MatCheckbox,
   ],
@@ -282,7 +281,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
         if (food.id == null) {
           this.form.patchValue({
             name: food.name,
-            isRecipe: food?.type === 'RECIPE' ?? false,
+            isRecipe: food?.type === 'RECIPE',
           })
         } else {
           this.title = AddFoodComponent.EDIT_TITLE

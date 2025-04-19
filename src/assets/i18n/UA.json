@@ -23,7 +23,7 @@
     "fat-sign": "ж",
     "carbohydrates-sign": "у",
     "pfcc-sign": "б/ж/у/к",
-    "pfcc-values": "{{protein}}г/{{fat}}г/{{carbohydrates}}г/{{calories}}кКал",
+    "pfcc-values": "{protein}г/{fat}г/{carbohydrates}г/{calories}кКал",
     "calories-sign": "ккал",
     "weight": "Вага",
     "total-weight": "Загальна вага",
@@ -66,13 +66,13 @@
       "label": "Пароль",
       "required": "Пароль є <strong>обовʼязковим</strong>",
       "matches": "Паролі не зпівпадають",
-      "min-length": "Пароль має складатись якнайменш із {{value}} символів"
+      "min-length": "Пароль має складатись якнайменш із {value} символів"
     },
     "confirm-password": {
       "label": "Підтвердження паролю",
       "required": "Підтвердження паролю є <strong>обовʼязковим</strong>",
       "matches": "Паролі не зпівпадають",
-      "min-length": "Пароль має складатись якнайменш із {{value}} символів"
+      "min-length": "Пароль має складатись якнайменш із {value} символів"
     },
     "sign-up-btn": "Зареєструватись",
     "sign-in-link": "Увійти"
@@ -85,15 +85,15 @@
   "dashboard": {
     "add-meal-btn": "Зʼїсти страву",
     "daily-nutrients": "Сьогодні",
-    "weekly-nutrients": "За тиждень - {{days}}д.",
+    "weekly-nutrients": "за {days, plural, =0 {# днів} one {# день} other {# дні}}",
     "weekly-nutrients.help": "Враховуються лише ті дні, в які були внесені хоч якісь данні",
     "weekly-nutrients.label": {
-      "total": "Всього",
-      "average": "В середньому"
+      "TOTAL": "Всього",
+      "AVERAGE": "В середньому"
     },
     "meals-list": {
       "today-title": "Зʼїдено сьогодні",
-      "date-title": "Зʼїдено {{date}}"
+      "date-title": "Зʼїдено {date}"
     },
     "counted-days-on-week-info": "Ми враховуємо лише ті дні, в які ви записували хоча б один прийом їжі",
     "edit-meal": {
@@ -182,7 +182,7 @@
     "aims-saved-alert": "Нові цілі збережено!",
     "name-saved-alert": "Нове імʼя збережено!",
     "password-updated-alert": "Новий пароль збережено!",
-    "current-password": "Поточний пароль",
+    "current-password-label": "Поточний пароль",
     "new-password-label": "Новий пароль",
     "confirm-new-password-label": "Підтвердіть новий пароль",
     "save-password": "Зберегти новий пароль"

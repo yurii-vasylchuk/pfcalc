@@ -11,7 +11,6 @@ import {AuthState} from '../auth.state'
 
 @Component({
   selector: 'pfc-sign-in-page',
-  standalone: true,
   imports: [
     CommonModule,
     MatInputModule,
