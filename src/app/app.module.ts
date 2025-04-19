@@ -11,7 +11,13 @@ import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin'
 import {NgxsModule} from '@ngxs/store'
 import {AuthState} from './features/auth/auth.state'
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http'
-import {MissingTranslationHandler, TranslateLoader, TranslateModule, TranslateParser} from '@ngx-translate/core'
+import {
+  MissingTranslationHandler,
+  TranslateCompiler,
+  TranslateLoader,
+  TranslateModule,
+  TranslateParser,
+} from '@ngx-translate/core'
 import {TranslateHttpLoader} from '@ngx-translate/http-loader'
 import {HeadingComponent} from './components/heading/heading.component'
 import {NgxsFormPluginModule} from '@ngxs/form-plugin'
@@ -38,6 +44,7 @@ import {SettingsState} from './features/settings/settings.state'
 import {DateAdapter, MAT_DATE_LOCALE} from '@angular/material/core'
 import {PfcalcLuxonDateAdapter} from './commons/pfcalc-luxon-date-adapter'
 import {ReportsState} from './features/reports/reports.state'
+import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler'
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/')
@@ -76,6 +83,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
         useClass: PfccMissingTranslationHandler,
+      },
+      compiler: {
+        provide: TranslateCompiler,
+        useClass: TranslateMessageFormatCompiler,
+        // useClass: environment.production ? TranslateMessageFormatCompiler : TranslateMessageFormatDebugCompiler,
       },
     }),
 

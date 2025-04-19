@@ -98,7 +98,8 @@ export type IReport = {
 export type ReportStatus = 'INITIALIZED' | 'GENERATED';
 export type ReportType = 'PERIOD';
 
-export type WeeklyNutrientsType = 'TOTAL' | 'AVERAGE';
+export const WeeklyNutrientsTypes = ['TOTAL', 'AVERAGE'] as const
+export type WeeklyNutrientsType = typeof WeeklyNutrientsTypes[number];
 export const defaultWeeklyNutrientsType = 'AVERAGE'
 
 export function isWeeklyNutrientsType(value: string): value is WeeklyNutrientsType {
