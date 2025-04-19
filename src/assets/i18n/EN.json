@@ -183,7 +183,7 @@
     "aims-saved-alert": "New aims saved!",
     "name-saved-alert": "New username saved!",
     "password-updated-alert": "New password saved!",
-    "current-password": "Current password",
+    "current-password-label": "Current password",
     "new-password-label": "New password",
     "confirm-new-password-label": "Confirm new password",
     "save-password": "Update password"

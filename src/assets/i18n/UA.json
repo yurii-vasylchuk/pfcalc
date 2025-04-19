@@ -182,7 +182,7 @@
     "aims-saved-alert": "Нові цілі збережено!",
     "name-saved-alert": "Нове імʼя збережено!",
     "password-updated-alert": "Новий пароль збережено!",
-    "current-password": "Поточний пароль",
+    "current-password-label": "Поточний пароль",
     "new-password-label": "Новий пароль",
     "confirm-new-password-label": "Підтвердіть новий пароль",
     "save-password": "Зберегти новий пароль"

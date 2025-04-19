@@ -50,6 +50,9 @@ export class FoodsManagementState {
 
   @Selector()
   static moreRecipesAvailable(state: IFoodsManagementState): boolean {
+    if (state.recipes == null) {
+      return true
+    }
     return state.recipes.page < state.recipes.totalPages - 1
   }
 
