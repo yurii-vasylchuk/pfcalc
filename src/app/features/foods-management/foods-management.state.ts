@@ -32,16 +32,19 @@ export class FoodsManagementState {
 
   @Selector()
   static products(state: IFoodsManagementState): IFood[] {
-    return state.products.data
+    return state.products?.data ?? []
   }
 
   @Selector()
   static recipes(state: IFoodsManagementState): IFood[] {
-    return state.recipes.data
+    return state.recipes?.data ?? []
   }
 
   @Selector()
   static moreProductsAvailable(state: IFoodsManagementState): boolean {
+    if (state.products == null) {
+      return true
+    }
     return state.products.page < state.products.totalPages - 1
   }
 
