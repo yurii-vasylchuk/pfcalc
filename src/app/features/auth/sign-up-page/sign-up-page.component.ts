@@ -16,7 +16,6 @@ import {AuthState} from '../auth.state'
   selector: 'pfc-sign-up-page',
   templateUrl: './sign-up-page.component.html',
   styleUrls: ['./sign-up-page.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -67,7 +67,6 @@ type AddFoodForm = {
 
 @Component({
   selector: 'pfc-add-food',
-  standalone: true,
   imports: [
     CommonModule, DialogPageHeadingComponent, FormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatOptionModule, MatSelectModule, MatSlideToggleModule, NgxMatSelectSearchModule, ReactiveFormsModule, TranslateModule, MatCheckbox,
   ],

@@ -6,7 +6,6 @@ import * as fromFunctions from '../../commons/functions'
 
 @Component({
   selector: 'pfc-nutrition-gauge',
-  standalone: true,
   imports: [CommonModule, GaugeComponent],
   templateUrl: './nutrition-gauge.component.html',
   styleUrls: ['./nutrition-gauge.component.scss'],

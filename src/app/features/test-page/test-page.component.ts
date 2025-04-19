@@ -5,7 +5,6 @@ import {MatSelectModule} from '@angular/material/select'
 
 @Component({
   selector: 'pfc-test-page',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatSelectModule],
   templateUrl: './test-page.component.html',
   styleUrls: ['./test-page.component.scss'],

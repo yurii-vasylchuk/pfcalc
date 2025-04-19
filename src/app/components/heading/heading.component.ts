@@ -17,7 +17,6 @@ import {ProfileState} from '../../state/profile.state'
 
 @Component({
   selector: 'pfc-heading',
-  standalone: true,
   imports: [CommonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatButtonModule],
   templateUrl: './heading.component.html',
   styleUrls: ['./heading.component.scss'],

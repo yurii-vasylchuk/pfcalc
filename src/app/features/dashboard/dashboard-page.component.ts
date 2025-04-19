@@ -52,7 +52,6 @@ type EditMealForm = FormGroup<{
   templateUrl: './dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [CommonModule, NutritionGaugeComponent, MatButtonModule, MatListModule, TranslateModule, MatIconModule, MatDialogModule, MatLineModule, RouterLink, MatTooltipModule, ReactiveFormsModule, MatInputModule, MatSelectModule],
 })
 export class DashboardPageComponent implements OnInit {

@@ -8,7 +8,6 @@ interface IGaugeInternalTrackConfig extends IGaugeTrackConf {
 }
 
 @Component({
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'pfc-gauge',
   templateUrl: './gauge.component.html',

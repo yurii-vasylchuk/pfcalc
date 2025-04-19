@@ -39,7 +39,6 @@ type PeriodPreset = 'previous-week' | 'current-week' | 'current-month';
 
 @Component({
   selector: 'pfc-reports',
-  standalone: true,
   imports: [
     CommonModule,
     TranslateModule,
