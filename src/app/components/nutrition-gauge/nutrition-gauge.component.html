@@ -1,13 +1,12 @@
 @if (aim() != null) {
-  <pfc-gauge
-    [subtitle]="'' + aim()"
+  <pfc-gauge [subtitle]="'' + aim()"
     [title]="titleShorten"
     [values]="gaugeConfig"
-  ></pfc-gauge>
+  />
 } @else {
   <pfc-gauge [title]="titleShorten"
              [values]="gaugeConfig"
-  ></pfc-gauge>
+  />
 }
 
 

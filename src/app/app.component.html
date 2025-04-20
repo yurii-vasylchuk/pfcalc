@@ -5,12 +5,12 @@
               [opened]="menuOpened ?? false"
               class="menu-container"
               mode="over">
-    <pfc-menu></pfc-menu>
+    <pfc-menu/>
   </mat-drawer>
   <mat-drawer-content class="content">
     @if (showHeader) {
-      <pfc-heading></pfc-heading>
+      <pfc-heading/>
     }
-    <router-outlet></router-outlet>
+    <router-outlet/>
   </mat-drawer-content>
 </mat-drawer-container>

@@ -1,22 +1,18 @@
 <mat-tab-group (selectedTabChange)="handleTabSwitched($event)"
                dynamicHeight="true">
   <mat-tab label="{{'foods-management.ingredients-tab-label' | translate}}">
-    <ng-container
-      *ngTemplateOutlet="foodListTemplate; context: {
+    <ng-container *ngTemplateOutlet="foodListTemplate; context: {
       type: 'ingredients',
       data: products,
       moreDataAvailable: moreProductsAvailable,
-      loading: productsLoading}">
-    </ng-container>
+      loading: productsLoading}"/>
   </mat-tab>
   <mat-tab label="{{'foods-management.recipes-tab-label' | translate}}">
-    <ng-container
-      *ngTemplateOutlet="foodListTemplate; context: {
+    <ng-container *ngTemplateOutlet="foodListTemplate; context: {
        type: 'recipes',
        data: recipes,
        moreDataAvailable: moreRecipesAvailable,
-       loading: recipesLoading}">
-    </ng-container>
+       loading: recipesLoading}"/>
   </mat-tab>
 </mat-tab-group>
 
