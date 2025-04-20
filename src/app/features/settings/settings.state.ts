@@ -2,7 +2,7 @@ import {NgxsOnInit, Selector, State, StateContext} from '@ngxs/store'
 import {Settings} from './settings.state-models'
 import {ApiService} from '../../service/api.service'
 import {IPfcc} from '../../commons/models/common.models'
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
 import {catchError, EMPTY, Observable, tap} from 'rxjs'
 import {AlertService} from '../../service/alert.service'
@@ -18,12 +18,14 @@ import {AlertService} from '../../service/alert.service'
 })
 @Injectable()
 export class SettingsState implements NgxsOnInit {
+  private api = inject(ApiService)
+
   private static api: ApiService
   private static alerts: AlertService
 
-  constructor(private api: ApiService, alerts: AlertService) {
-    SettingsState.api = api
-    SettingsState.alerts = alerts
+  constructor() {
+    SettingsState.api = this.api
+    SettingsState.alerts = inject(AlertService)
   }
 
   @Selector()

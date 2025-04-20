@@ -2,7 +2,7 @@ import {State, StateContext} from '@ngxs/store'
 import {Navigation} from './navigation.state-model'
 import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
 import {RouterNavigated} from '@ngxs/router-plugin'
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {environment} from '../../environments/environment'
 import {ActivatedRoute, Router} from '@angular/router'
 import * as fromRoutes from '../commons/routes'
@@ -21,8 +21,8 @@ export class NavigationState {
 
   private static router: Router
 
-  constructor(router: Router) {
-    NavigationState.router = router
+  constructor() {
+    NavigationState.router = inject(Router)
   }
 
   @Receiver({action: RouterNavigated})

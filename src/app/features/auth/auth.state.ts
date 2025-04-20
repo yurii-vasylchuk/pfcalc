@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {Action, NgxsOnInit, Selector, State, StateContext, Store} from '@ngxs/store'
 import {Auth} from './auth.state-models'
 import {ApiService} from '../../service/api.service'
@@ -27,6 +27,10 @@ import IAuthState = Auth.IAuthState
 })
 @Injectable()
 export class AuthState implements NgxsOnInit {
+  private api = inject(ApiService)
+  private localStoreService = inject(LocalStoreService)
+  private alert = inject(AlertService)
+
   private static api: ApiService
   private static localStoreService: LocalStoreService
   private static store: Store
@@ -35,14 +39,11 @@ export class AuthState implements NgxsOnInit {
   @SelectSnapshot(ProfileState.language)
   language: Language
 
-  constructor(private api: ApiService,
-              private localStoreService: LocalStoreService,
-              store: Store,
-              private alert: AlertService) {
-    AuthState.api = api
-    AuthState.localStoreService = localStoreService
-    AuthState.store = store
-    AuthState.alert = alert
+  constructor() {
+    AuthState.api = this.api
+    AuthState.localStoreService = this.localStoreService
+    AuthState.store = inject(Store)
+    AuthState.alert = this.alert
   }
 
   @Selector()

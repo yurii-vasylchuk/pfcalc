@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
 import {Auth} from '../auth.state-models'
@@ -23,15 +23,14 @@ import {AuthState} from '../auth.state'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInPageComponent {
+  private fb = inject(FormBuilder)
+
   protected form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
   })
   @Emitter(AuthState.signIn)
   private signInEmt: Emittable<Auth.SignInPayload>
-
-  constructor(private fb: FormBuilder) {
-  }
 
   onSubmit() {
     const email = this.form.value.email as string

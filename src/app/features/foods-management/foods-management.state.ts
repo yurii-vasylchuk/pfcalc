@@ -1,6 +1,6 @@
 import {Selector, State, StateContext} from '@ngxs/store'
 import {FoodsManagement, IFoodsManagementState} from './foods-management.state-models'
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {Emittable, Emitter, EmitterAction, Receiver} from '@ngxs-labs/emitter'
 import {ApiService} from '../../service/api.service'
 import {catchError, EMPTY, Observable, switchMap, tap} from 'rxjs'
@@ -25,9 +25,9 @@ export class FoodsManagementState {
   private static api: ApiService
   private static alert: AlertService
 
-  constructor(api: ApiService, alert: AlertService) {
-    FoodsManagementState.api = api
-    FoodsManagementState.alert = alert
+  constructor() {
+    FoodsManagementState.api = inject(ApiService)
+    FoodsManagementState.alert = inject(AlertService)
   }
 
   @Selector()

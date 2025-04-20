@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {HttpClient} from '@angular/common/http'
 import {combineLatest, combineLatestWith, identity, map, Observable, of, switchMap, tap, throwError} from 'rxjs'
 import {IAuthTokensResponse, Language} from '../commons/models/auth.models'
@@ -21,14 +21,13 @@ import IMealOption = AddMeal.IMealOption
 
 @Injectable({providedIn: 'root'})
 export class ApiService {
+  private http = inject(HttpClient)
+
 
   private extractVoidResponse = map((rsp: IApiResponse<void>) => {
     this.extractResponseData(rsp)
     return null
   })
-
-  constructor(private http: HttpClient) {
-  }
 
   signIn(email: string, password: string): Observable<IAuthTokensResponse> {
     return this.http.post<IApiResponse<IAuthTokensResponse>>('/api/user/login',

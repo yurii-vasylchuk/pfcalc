@@ -1,6 +1,6 @@
 import {Selector, State, StateContext} from '@ngxs/store'
 import {AddDish} from './add-dish.state-models'
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {ApiService} from '../../service/api.service'
 import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
 import {RouterNavigated} from '@ngxs/router-plugin'
@@ -22,13 +22,15 @@ import {DateTime} from 'luxon'
 })
 @Injectable()
 export class AddDishState {
+  private api = inject(ApiService)
+
   private static api: ApiService
   private static defaultOptions: IFood[] = []
 
-  constructor(private api: ApiService) {
-    AddDishState.api = api
+  constructor() {
+    AddDishState.api = this.api
 
-    api.loadFoodsList(0, AddDish.OPTIONS_PAGE_SIZE)
+    this.api.loadFoodsList(0, AddDish.OPTIONS_PAGE_SIZE)
       .pipe(
         map(page => page.data),
       )

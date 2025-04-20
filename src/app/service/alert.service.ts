@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {MatSnackBar} from '@angular/material/snack-bar'
 import {TranslateService} from '@ngx-translate/core'
 import {environment} from '../../environments/environment'
@@ -8,9 +8,9 @@ import {combineLatest} from 'rxjs'
   providedIn: 'root',
 })
 export class AlertService {
+  private snackBar = inject(MatSnackBar)
+  private translate = inject(TranslateService)
 
-  constructor(private snackBar: MatSnackBar, private translate: TranslateService) {
-  }
 
   warn(message: string): void {
     combineLatest(

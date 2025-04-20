@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {NgxsOnInit, Selector, State, StateContext} from '@ngxs/store'
 import {AddFood} from './add-food.state-models'
 import {ApiService} from '../../service/api.service'
@@ -19,11 +19,13 @@ import {Navigation} from '../../state/navigation.state-model'
 })
 @Injectable()
 export class AddFoodState implements NgxsOnInit {
+  private api = inject(ApiService)
+
   private static readonly INGREDIENT_OPTIONS_PAGE_SIZE = 10
   private static api: ApiService
 
-  constructor(private api: ApiService) {
-    AddFoodState.api = api
+  constructor() {
+    AddFoodState.api = this.api
   }
 
   @Selector()

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 
 import {MatListModule} from '@angular/material/list'
 import {MatIconModule} from '@angular/material/icon'
@@ -20,10 +20,9 @@ import {Auth} from '../../features/auth/auth.state-models'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuComponent {
-  protected readonly fromRoutes = fromRoutes
+  private store = inject(Store)
 
-  constructor(private store: Store) {
-  }
+  protected readonly fromRoutes = fromRoutes
 
   handleRouteClick(url: string) {
     this.store.dispatch([new Navigate([url]), new EmitterAction(false, Ui.TOGGLE_SIDE_MENU)])

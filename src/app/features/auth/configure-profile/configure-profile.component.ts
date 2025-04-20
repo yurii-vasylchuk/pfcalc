@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
 import {TranslateModule} from '@ngx-translate/core'
@@ -18,6 +18,8 @@ import {Auth} from '../auth.state-models'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigureProfileComponent {
+  private fb = inject(FormBuilder)
+
   protected form = this.fb.group({
     protein: [130, Validators.min(0)],
     fat: [50, Validators.min(0)],
@@ -26,9 +28,6 @@ export class ConfigureProfileComponent {
   })
   @Emitter(AuthState.configureProfile)
   private configureProfileEmt: Emittable<Auth.ConfigureProfilePayload>
-
-  constructor(private fb: FormBuilder) {
-  }
 
   protected submit() {
     this.configureProfileEmt.emit({

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core'
 
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {MatSelectModule} from '@angular/material/select'
@@ -11,6 +11,8 @@ import {MatSelectModule} from '@angular/material/select'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestPageComponent implements OnInit {
+  private fb = inject(FormBuilder)
+
   options: { title: string, value: number }[] = [
     {
       title: 'Title 1',
@@ -34,8 +36,8 @@ export class TestPageComponent implements OnInit {
     selection: FormControl<number>
   }>
 
-  constructor(private fb: FormBuilder) {
-    this.form = fb.group({
+  constructor() {
+    this.form = this.fb.group({
       selection: [null as number, Validators.required],
     })
   }

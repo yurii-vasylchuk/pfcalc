@@ -1,4 +1,4 @@
-import {Component} from '@angular/core'
+import {Component, inject} from '@angular/core'
 import {TranslateService} from '@ngx-translate/core'
 import {Store} from '@ngxs/store'
 import {filter} from 'rxjs'
@@ -16,6 +16,9 @@ import {Profile} from './state/profile.state-model'
   standalone: false,
 })
 export class AppComponent {
+  private translateService = inject(TranslateService)
+  private store = inject(Store)
+
   @ViewSelectSnapshot(UiState.sideMenuOpened)
   protected menuOpened: boolean
   @ViewSelectSnapshot(UiState.showHeader)
@@ -24,14 +27,14 @@ export class AppComponent {
   @Emitter(UiState.toggleSideMenu)
   protected toggleMenuEmt: Emittable<boolean>
 
-  constructor(private translateService: TranslateService, private store: Store) {
-    store.select(ProfileState.language)
+  constructor() {
+    this.store.select(ProfileState.language)
       .pipe(
         filter(lang => lang != null),
       )
-      .subscribe(lang => translateService.use(lang))
+      .subscribe(lang => this.translateService.use(lang))
 
-    translateService.setDefaultLang(Profile.DEFAULT_LANGUAGE)
+    this.translateService.setDefaultLang(Profile.DEFAULT_LANGUAGE)
   }
 
   handleMenuClosed() {

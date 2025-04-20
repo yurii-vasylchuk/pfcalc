@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  inject,
   OnDestroy,
   OnInit,
   TrackByFunction,
@@ -52,6 +53,8 @@ import IMealOption = AddMeal.IMealOption
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddMealComponent implements OnInit, OnDestroy {
+  private store = inject(Store)
+
   private static readonly PAGE_SIZE = 16
   protected readonly ceilPfcc = ceilPfcc
 
@@ -93,7 +96,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
   private endIntersectionObserver: IntersectionObserver
   private isAccordionScrolledToEnd$ = new BehaviorSubject<boolean>(false)
 
-  constructor(private store: Store) {
+  constructor() {
     this.endIntersectionObserver = new IntersectionObserver((entries) => this.onEndIntersected(entries[0]), {
       threshold: 0.5,
     })

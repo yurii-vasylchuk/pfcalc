@@ -4,7 +4,7 @@ import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
 import {Language} from '../commons/models/auth.models'
 import {IPfcc} from '../commons/models/common.models'
 import {ProfileLoadedEvent} from '../commons/models/state.models'
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {Auth} from '../features/auth/auth.state-models'
 import {catchError, EMPTY, Observable} from 'rxjs'
 import {ApiService} from '../service/api.service'
@@ -24,8 +24,8 @@ import IProfileState = Profile.IProfileState
 export class ProfileState implements NgxsOnInit {
   private static api: ApiService
 
-  constructor(api: ApiService) {
-    ProfileState.api = api
+  constructor() {
+    ProfileState.api = inject(ApiService)
   }
 
   @Selector()

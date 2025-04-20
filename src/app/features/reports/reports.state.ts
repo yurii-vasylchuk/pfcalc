@@ -1,5 +1,5 @@
 import {Selector, State, StateContext} from '@ngxs/store'
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {ApiService} from '../../service/api.service'
 import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
 import {Reports} from './reports.state-models'
@@ -22,9 +22,9 @@ export class ReportsState {
 
   private static loadReportsSubscription: Subscription
 
-  constructor(api: ApiService, alert: AlertService) {
-    ReportsState.api = api
-    ReportsState.alert = alert
+  constructor() {
+    ReportsState.api = inject(ApiService)
+    ReportsState.alert = inject(AlertService)
   }
 
   @Selector()

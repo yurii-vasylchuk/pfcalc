@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {NgxsOnInit, Selector, State, StateContext, Store} from '@ngxs/store'
 import {Dashboard} from './dashboard.state-models'
 import {ApiService} from '../../service/api.service'
@@ -28,14 +28,16 @@ import {LocalStoreService} from '../../service/local-store.service'
 })
 @Injectable({providedIn: 'root'})
 export class DashboardState implements NgxsOnInit {
+  private store = inject(Store)
+
   private static api: ApiService
   private static alert: AlertService
   private static localStore: LocalStoreService
 
-  constructor(api: ApiService, private store: Store, alertService: AlertService, localStore: LocalStoreService) {
-    DashboardState.api = api
-    DashboardState.alert = alertService
-    DashboardState.localStore = localStore
+  constructor() {
+    DashboardState.api = inject(ApiService)
+    DashboardState.alert = inject(AlertService)
+    DashboardState.localStore = inject(LocalStoreService)
   }
 
   @Selector()

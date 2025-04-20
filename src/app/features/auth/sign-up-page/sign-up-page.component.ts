@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
 
 import * as fromPfccValidators from '../../../commons/pfcc-validators'
@@ -27,6 +27,8 @@ import {AuthState} from '../auth.state'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpPageComponent {
+  private fb = inject(FormBuilder)
+
 
   protected readonly minPasswordLength = 6
   protected form = this.fb.group({
@@ -39,9 +41,6 @@ export class SignUpPageComponent {
   })
   @Emitter(AuthState.signUp)
   private signUpEmt: Emittable<Auth.SignUpPayload>
-
-  constructor(private fb: FormBuilder) {
-  }
 
   signUp() {
     const password = this.form.value.password as string

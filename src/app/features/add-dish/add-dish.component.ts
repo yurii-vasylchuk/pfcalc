@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, TrackByFunction} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, TrackByFunction} from '@angular/core'
 
 import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot'
 import {AddDishState} from './add-dish.state'
@@ -42,6 +42,9 @@ type AddDishFormGroup = FormGroup<{
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddDishComponent implements OnInit, OnDestroy {
+  private fb = inject(FormBuilder)
+  private store = inject(Store)
+
   protected readonly defaultMeasurement: IMeasurement = {
     foodId: null,
     id: null,
@@ -69,13 +72,13 @@ export class AddDishComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>()
   private nextIngredientIdx = 0
 
-  constructor(private fb: FormBuilder, private store: Store) {
-    this.form = fb.group({
+  constructor() {
+    this.form = this.fb.group({
       id: [null as number],
       foodId: [null as number],
       dishName: [null as string, Validators.required],
       weight: [0, Validators.required],
-      ingredients: fb.array<IngredientFormGroup>([]),
+      ingredients: this.fb.array<IngredientFormGroup>([]),
     })
   }
 

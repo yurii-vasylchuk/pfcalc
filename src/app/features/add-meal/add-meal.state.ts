@@ -4,7 +4,7 @@ import {ApiService} from '../../service/api.service'
 import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
 import {RouterNavigated} from '@ngxs/router-plugin'
 import * as fromRoutes from '../../commons/routes'
-import {Injectable} from '@angular/core'
+import {inject, Injectable} from '@angular/core'
 import {DateTime} from 'luxon'
 import {catchError, combineLatest, EMPTY, map, Observable, switchMap, tap} from 'rxjs'
 import {loadAllPages, sumPfccs} from '../../commons/functions'
@@ -31,9 +31,9 @@ export class AddMealState {
   private static api: ApiService
   private static alert: AlertService
 
-  constructor(api: ApiService, alert: AlertService) {
-    AddMealState.api = api
-    AddMealState.alert = alert
+  constructor() {
+    AddMealState.api = inject(ApiService)
+    AddMealState.alert = inject(AlertService)
   }
 
   @Selector()

@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  inject,
   OnDestroy,
   OnInit,
   QueryList,
@@ -39,6 +40,8 @@ import * as fromRoutes from '../../commons/routes'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterViewInit {
+  private store = inject(Store)
+
   @ViewSelectSnapshot(FoodsManagementState.products)
   protected products: IFood[]
   @ViewSelectSnapshot(FoodsManagementState.recipes)
@@ -73,7 +76,7 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   private isAccordionScrolledToEnd$ = new BehaviorSubject<boolean>(false)
   private destroyed$ = new Subject<void>()
 
-  constructor(private store: Store) {
+  constructor() {
     this.endIntersectionObserver = new IntersectionObserver((entries) => this.onEndIntersected(entries[0]), {
       threshold: 0.5,
     })

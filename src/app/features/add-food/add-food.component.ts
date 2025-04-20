@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, TrackByFunction} from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  OnDestroy,
+  OnInit,
+  TrackByFunction,
+} from '@angular/core'
 import {CommonModule} from '@angular/common'
 import {DialogPageHeadingComponent} from '../../components/dialog-page-heading/dialog-page-heading.component'
 import {ceilPfcc, multiplyPfcc, sumPfccs, withDefaults} from '../../commons/functions'
@@ -75,6 +83,10 @@ type AddFoodForm = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddFoodComponent implements OnInit, OnDestroy {
+  private fb = inject(FormBuilder)
+  private store = inject(Store)
+  private translateService = inject(TranslateService)
+
   private static readonly CREATE_TITLE = 'add-food.title-create'
   private static readonly EDIT_TITLE = 'add-food.title-edit'
 
@@ -102,9 +114,6 @@ export class AddFoodComponent implements OnInit, OnDestroy {
   private nextIngredientIndex = 1
   private nextMeasurementIndex = 1
   private $destroy = new Subject<void>()
-
-  constructor(private fb: FormBuilder, private store: Store, private translateService: TranslateService) {
-  }
 
   protected get isRecipe(): boolean {
     return this.form.value.isRecipe

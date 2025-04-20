@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core'
+import {AfterViewInit, ChangeDetectionStrategy, Component, inject, ViewChild} from '@angular/core'
 
 import {MatFormFieldModule} from '@angular/material/form-field'
 import {MatIconModule} from '@angular/material/icon'
@@ -23,6 +23,8 @@ import {ProfileState} from '../../state/profile.state'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeadingComponent implements AfterViewInit {
+  private store = inject(Store)
+
   //TODO: Auto-infer
   protected availableLanguages: Language[] = ['UA', 'EN']
   @ViewSelectSnapshot(AuthState.isAuthenticated)
@@ -34,9 +36,6 @@ export class HeadingComponent implements AfterViewInit {
 
   @ViewChild('langSelector')
   private langSelector!: MatSelect
-
-  constructor(private store: Store) {
-  }
 
   ngAfterViewInit(): void {
     this.store.select(ProfileState.language)

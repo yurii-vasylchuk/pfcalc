@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core'
 import {SettingsState} from './settings.state'
 import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field'
 import {MatInput} from '@angular/material/input'
@@ -52,6 +52,8 @@ type PasswordForm = FormGroup<{
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent implements OnInit {
+  private store = inject(Store)
+
   protected aimsForm: AimsForm
   protected nameForm: NameForm
   protected passwordForm: PasswordForm
@@ -62,7 +64,9 @@ export class SettingsComponent implements OnInit {
   @Emitter(SettingsState.updatePassword)
   private updatePasswordEmt: Emittable<Settings.UpdatePasswordPayload>
 
-  constructor(fb: FormBuilder, private store: Store) {
+  constructor() {
+    const fb = inject(FormBuilder)
+
     this.aimsForm = fb.group({
       protein: [0],
       fat: [0],
