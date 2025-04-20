@@ -6,7 +6,7 @@ import {
   OnDestroy,
   OnInit,
   TrackByFunction,
-  ViewChild,
+  viewChild,
 } from '@angular/core'
 import {CommonModule} from '@angular/common'
 import {MatFormFieldModule} from '@angular/material/form-field'
@@ -91,8 +91,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
   protected measurementFC = new FormControl<IMeasurement>(defaultMeasurement)
   protected selectedOption$ = new ReplaySubject<AddMeal.IMealOption>()
   protected addedPfcc$ = new ReplaySubject<IPfcc>()
-  @ViewChild('endIndicator', {static: true, read: ElementRef<HTMLDivElement>})
-  private endIndicator: ElementRef<HTMLDivElement>
+  private readonly endIndicator = viewChild('endIndicator', {read: (ElementRef<HTMLDivElement>)})
   private endIntersectionObserver: IntersectionObserver
   private isAccordionScrolledToEnd$ = new BehaviorSubject<boolean>(false)
 
@@ -131,7 +130,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
       }),
     ).subscribe(next => this.addedPfcc$.next(next))
 
-    this.endIntersectionObserver.observe(this.endIndicator.nativeElement)
+    this.endIntersectionObserver.observe(this.endIndicator().nativeElement)
 
     this.isAccordionScrolledToEnd$.pipe(
       combineLatestWith(this.loading$.pipe(debounceTime(50)), this.moreDataAvailable$),
@@ -143,7 +142,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.endIntersectionObserver.unobserve(this.endIndicator.nativeElement)
+    this.endIntersectionObserver.unobserve(this.endIndicator().nativeElement)
   }
 
   handleOptionOpened(option: AddMeal.IMealOption) {

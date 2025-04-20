@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, inject, ViewChild} from '@angular/core'
+import {AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild} from '@angular/core'
 
 import {MatFormFieldModule} from '@angular/material/form-field'
 import {MatIconModule} from '@angular/material/icon'
@@ -34,14 +34,13 @@ export class HeadingComponent implements AfterViewInit {
   @Emitter(ProfileState.languageChanged)
   private languageChangedEmt: Emittable<Language>
 
-  @ViewChild('langSelector')
-  private langSelector!: MatSelect
+  private readonly langSelector = viewChild.required<MatSelect>('langSelector')
 
   ngAfterViewInit(): void {
     this.store.select(ProfileState.language)
       .pipe(take(1))
       .subscribe(value => {
-        this.langSelector.writeValue(value)
+        this.langSelector().writeValue(value)
       })
   }
 

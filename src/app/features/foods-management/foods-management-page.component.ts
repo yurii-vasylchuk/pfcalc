@@ -6,9 +6,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  QueryList,
   TrackByFunction,
-  ViewChildren,
+  viewChildren,
 } from '@angular/core'
 import {CommonModule} from '@angular/common'
 import {MatTabChangeEvent, MatTabsModule} from '@angular/material/tabs'
@@ -56,8 +55,7 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   protected recipesLoading: boolean
   protected type: FoodType = 'INGREDIENT'
   protected searchControl = new FormControl<string | null>(null)
-  @ViewChildren('endIndicator', {read: ElementRef<HTMLDivElement>})
-  private endIndicators: QueryList<ElementRef<HTMLDivElement>>
+  private readonly endIndicators = viewChildren('endIndicator', {read: (ElementRef<HTMLDivElement>)})
   @Emitter(FoodsManagementState.loadProducts)
   private loadProducts: Emittable<FoodsManagement.LoadFoodsActionPayload>
   @Emitter(FoodsManagementState.loadRecipes)
@@ -83,7 +81,7 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   }
 
   ngAfterViewInit(): void {
-    this.endIndicators.forEach(endIndicator => this.endIntersectionObserver.observe(endIndicator.nativeElement))
+    this.endIndicators().forEach(endIndicator => this.endIntersectionObserver.observe(endIndicator.nativeElement))
   }
 
   ngOnInit(): void {
@@ -127,7 +125,7 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   ngOnDestroy(): void {
     this.destroyed$.next()
     this.destroyed$.complete()
-    this.endIndicators.forEach(endIndicator => this.endIntersectionObserver.unobserve(endIndicator.nativeElement))
+    this.endIndicators().forEach(endIndicator => this.endIntersectionObserver.unobserve(endIndicator.nativeElement))
   }
 
   handleAddFoodClick() {

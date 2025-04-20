@@ -181,7 +181,6 @@ export class DashboardState implements NgxsOnInit {
     })
 
     if (oldDate.weekNumber === newDate.weekNumber) {
-      console.log(`Week number is same old[${oldDate.weekNumber}] === new[${newDate.weekNumber}]`)
       return EMPTY
     }
 

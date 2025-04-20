@@ -6,7 +6,7 @@ import {
   OnInit,
   TemplateRef,
   TrackByFunction,
-  ViewChild,
+  viewChild,
 } from '@angular/core'
 import {NutritionGaugeComponent} from '../../components/nutrition-gauge/nutrition-gauge.component'
 import {
@@ -62,8 +62,7 @@ export class DashboardPageComponent implements OnInit {
   protected readonly fromRoutes = fromRoutes
   protected readonly weeklyNutrientsTypeOptions = WeeklyNutrientsTypes
   protected readonly dashboard = dashboard
-  @ViewChild('editMeal', {static: true})
-  protected editMealTemplate: TemplateRef<any>
+  protected readonly editMealTemplate = viewChild<TemplateRef<any>>('editMeal')
   protected editMealForm: EditMealForm
   @ViewSelectSnapshot(DashboardState.measurements)
   protected measurements: Map<number, IMeasurement[]>
@@ -154,7 +153,7 @@ export class DashboardPageComponent implements OnInit {
 
     this.prepareMealEdit.emit(meal)
 
-    const dialogRef = this.dialogService.open<any, void, boolean>(this.editMealTemplate)
+    const dialogRef = this.dialogService.open<any, void, boolean>(this.editMealTemplate())
 
     this.editMealForm.controls.measurement.valueChanges.pipe(
       takeUntil(dialogRef.afterClosed()),
