@@ -1,6 +1,6 @@
-@if (aim != null) {
+@if (aim() != null) {
   <pfc-gauge
-    [subtitle]="'' + aim"
+    [subtitle]="'' + aim()"
     [title]="titleShorten"
     [values]="gaugeConfig"
   ></pfc-gauge>
@@ -11,12 +11,12 @@
 }
 
 
-@if (aim != null) {
+@if (aim() != null) {
   <span
-    class="values">{{ fromFunctions.ceil(value + (addingValue || 0)) }}/{{ fromFunctions.ceil(aim) }}</span>
+    class="values">{{ fromFunctions.ceil(value() + (addingValue() || 0)) }}/{{ fromFunctions.ceil(aim()) }}</span>
 }
-@if (aim == null) {
+@if (aim() == null) {
   <span
-    class="values">{{ fromFunctions.ceil(value + (addingValue || 0)) }}</span>
+    class="values">{{ fromFunctions.ceil(value() + (addingValue() || 0)) }}</span>
 }
-<span class="title">{{ title }}</span>
+<span class="title">{{ title() }}</span>

@@ -26,21 +26,21 @@
     </ng-container>
   }
 
-  <text [attr.font-size]="titleFontSize"
+  <text [attr.font-size]="titleFontSize()"
         [attr.x]="titleX"
         [attr.y]="titleY"
         class="title"
         font-weight="bold"
         text-anchor="middle">
-    {{ title }}
+    {{ title() }}
   </text>
-  @if (subtitle != null) {
+  @if (subtitle() != null) {
     <text
-      [attr.font-size]="subtitleFontSize"
+      [attr.font-size]="subtitleFontSize()"
       [attr.x]="subtitleX"
       [attr.y]="subtitleY"
       text-anchor="middle">
-      {{ subtitle }}
+      {{ subtitle() }}
     </text>
   }
 </svg>

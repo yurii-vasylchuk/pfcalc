@@ -175,7 +175,6 @@ export class DashboardState implements NgxsOnInit {
   static switchDate(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.SwitchDatePayload>): Observable<void> {
     const newDate = payload.date.startOf('day')
     const oldDate = this.currentDate(ctx.getState())
-    console.log(`OldDate: ${oldDate.toISODate()}; NewDate: ${newDate.toISODate()}`)
 
     ctx.patchState({
       currentDate: newDate.toISODate(),
@@ -185,7 +184,6 @@ export class DashboardState implements NgxsOnInit {
       console.log(`Week number is same old[${oldDate.weekNumber}] === new[${newDate.weekNumber}]`)
       return EMPTY
     }
-    console.log(`Week number is distinct old[${oldDate.weekNumber}] === new[${newDate.weekNumber}]`)
 
     return this.loadWeekMeals(newDate, ctx)
   }

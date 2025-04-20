@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core'
+import {ChangeDetectionStrategy, Component, input} from '@angular/core'
 
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
@@ -16,8 +16,7 @@ import NavigateBackPayload = Navigation.NavigateBackPayload
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DialogPageHeadingComponent {
-  @Input()
-  title: string
+  readonly title = input<string>()
   @Emitter(NavigationState.navigateBack)
   protected goBack: Emittable<NavigateBackPayload>
 

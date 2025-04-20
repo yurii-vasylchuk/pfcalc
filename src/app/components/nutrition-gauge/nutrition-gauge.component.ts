@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core'
+import {ChangeDetectionStrategy, Component, input} from '@angular/core'
 
 import {GaugeComponent} from '../gauge/gauge.component'
 import {IGaugeTrackConf} from '../gauge/gauge-component.interfaces'
@@ -12,44 +12,45 @@ import * as fromFunctions from '../../commons/functions'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NutritionGaugeComponent {
-  @Input() value = 0
-  @Input() aim: number | null = 100
-  @Input() addingValue = 0
-  @Input() title!: string
+  readonly value = input(0)
+  readonly aim = input<number | null>(100)
+  readonly addingValue = input(0)
+  readonly title = input.required<string>()
 
-  @Input() strokeWidth = 15
-  @Input() mainColor = '#ff4081'
-  @Input() bgColor = '#bf3060'
+  readonly strokeWidth = input(15)
+  readonly mainColor = input('#ff4081')
+  readonly bgColor = input('#bf3060')
   protected readonly fromFunctions = fromFunctions
 
   constructor() {
   }
 
   get titleShorten(): string {
-    return this.title.charAt(0).toUpperCase()
+    return this.title().charAt(0).toUpperCase()
   }
 
   get gaugeConfig(): IGaugeTrackConf[] {
     const result = [
       {
-        strokeWidth: this.strokeWidth,
-        bgStrokeColor: this.bgColor,
+        strokeWidth: this.strokeWidth(),
+        bgStrokeColor: this.bgColor(),
         circles: [
           {
-            value: this.value,
-            maxValue: this.aim || (this.value + (this.addingValue > 0 ? this.addingValue : 0)),
-            color: this.mainColor,
+            value: this.value(),
+            maxValue: this.aim() || (this.value() + (this.addingValue() > 0 ? this.addingValue() : 0)),
+            color: this.mainColor(),
             blink: false,
           },
         ],
       },
     ]
 
-    if (this.addingValue) {
+    const addingValue = this.addingValue()
+    if (addingValue) {
       result[0].circles.push({
-        value: this.value + this.addingValue,
-        maxValue: this.aim || (this.value + (this.addingValue > 0 ? this.addingValue : 0)),
-        color: this.mainColor,
+        value: this.value() + addingValue,
+        maxValue: this.aim() || (this.value() + (addingValue > 0 ? addingValue : 0)),
+        color: this.mainColor(),
         blink: true,
       })
     }

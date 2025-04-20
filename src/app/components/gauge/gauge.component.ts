@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core'
+import {ChangeDetectionStrategy, Component, Input, input, OnChanges, SimpleChanges} from '@angular/core'
 import {GaugeCircleDirective} from './gauge-circle.directive'
 import {IGaugeCircleConf, IGaugeTrackConf} from './gauge-component.interfaces'
 
@@ -17,12 +17,12 @@ interface IGaugeInternalTrackConfig extends IGaugeTrackConf {
   ],
 })
 export class GaugeComponent implements OnChanges {
-  @Input() animationDuration = 3
-  @Input() title!: string
-  @Input() subtitle?: string
+  readonly animationDuration = input(3)
+  readonly title = input.required<string>()
+  readonly subtitle = input<string>()
 
-  @Input() titleFontSize = 35
-  @Input() subtitleFontSize = 20
+  readonly titleFontSize = input(35)
+  readonly subtitleFontSize = input(20)
 
   titleX = 50
   titleY = 50
@@ -39,6 +39,8 @@ export class GaugeComponent implements OnChanges {
   constructor() {
   }
 
+  // TODO: Skipped for migration because:
+  //  Accessor inputs cannot be migrated as they are too complex.
   @Input()
   set values(values: IGaugeTrackConf[]) {
     this.cumulativeRadius = 40
@@ -72,9 +74,9 @@ export class GaugeComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.width = this.height = this.cumulativeRadius * 2
     this.titleX = this.cumulativeRadius
-    this.titleY = this.subtitle != null ? this.cumulativeRadius : this.cumulativeRadius + (this.titleFontSize * 0.39)
+    this.titleY = this.subtitle != null ? this.cumulativeRadius : this.cumulativeRadius + (this.titleFontSize() * 0.39)
     this.subtitleX = this.cumulativeRadius
-    this.subtitleY = this.cumulativeRadius + this.subtitleFontSize
+    this.subtitleY = this.cumulativeRadius + this.subtitleFontSize()
     this.viewBox = `0 0 ${this.width} ${this.height}`
   }
 }

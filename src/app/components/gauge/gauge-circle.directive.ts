@@ -41,6 +41,8 @@ export class GaugeCircleDirective implements OnDestroy, OnInit, AfterViewInit {
     })
   }
 
+  // TODO: Skipped for migration because:
+  //  Accessor inputs cannot be migrated as they are too complex.
   @Input() set pfcGaugeCircle(conf: IGaugeCircleConf) {
     this.value = Math.max(0, conf.value)
     this.maxValue = conf.maxValue
