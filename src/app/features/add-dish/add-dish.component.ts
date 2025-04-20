@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, TrackByFunction} from '@angular/core'
-import {CommonModule} from '@angular/common'
+
 import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot'
 import {AddDishState} from './add-dish.state'
 import {AddDish} from './add-dish.state-models'
@@ -36,7 +36,7 @@ type AddDishFormGroup = FormGroup<{
 
 @Component({
   selector: 'pfc-add-dish',
-  imports: [CommonModule, DialogPageHeadingComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, TranslateModule, MatSelectModule, NgxMatSelectSearchModule, MatButtonModule, MatIconModule],
+  imports: [DialogPageHeadingComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, TranslateModule, MatSelectModule, NgxMatSelectSearchModule, MatButtonModule, MatIconModule],
   templateUrl: './add-dish.component.html',
   styleUrls: ['./add-dish.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

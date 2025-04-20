@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core'
-import {CommonModule} from '@angular/common'
+
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
 import {Auth} from '../auth.state-models'
 import {TranslateModule} from '@ngx-translate/core'
@@ -12,7 +12,6 @@ import {AuthState} from '../auth.state'
 @Component({
   selector: 'pfc-sign-in-page',
   imports: [
-    CommonModule,
     MatInputModule,
     ReactiveFormsModule,
     MatButtonModule,

@@ -8,12 +8,16 @@
            matInput
            type="email"/>
 
-    <mat-error *ngIf="form.controls.email.hasError('required')"
-               [innerHTML]="'sign-in.email.required' | translate">
-    </mat-error>
-    <mat-error *ngIf="form.controls.email.hasError('email')">
-      {{ 'sign-in.email.email' | translate }}
-    </mat-error>
+    @if (form.controls.email.hasError('required')) {
+      <mat-error
+        [innerHTML]="'sign-in.email.required' | translate">
+      </mat-error>
+    }
+    @if (form.controls.email.hasError('email')) {
+      <mat-error>
+        {{ 'sign-in.email.email' | translate }}
+      </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field>
@@ -23,9 +27,11 @@
            matInput
            type="password"/>
 
-    <mat-error *ngIf="form.controls.password.hasError('required')"
-               [innerHTML]="'sign-in.password.required' | translate">
-    </mat-error>
+    @if (form.controls.password.hasError('required')) {
+      <mat-error
+        [innerHTML]="'sign-in.password.required' | translate">
+      </mat-error>
+    }
   </mat-form-field>
 
   <button [disabled]="!form.valid"

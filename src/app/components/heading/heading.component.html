@@ -1,9 +1,10 @@
-<button (click)="handleMenuClicked()"
-        *ngIf="isAuthenticated?.isTrue ?? false"
-        color="primary"
-        mat-icon-button>
-  <mat-icon>menu</mat-icon>
-</button>
+@if (isAuthenticated?.isTrue ?? false) {
+  <button (click)="handleMenuClicked()"
+          color="primary"
+          mat-icon-button>
+    <mat-icon>menu</mat-icon>
+  </button>
+}
 <div class="flex-spacer"></div>
 <mat-form-field appearance="outline"
                 class="lang-select"
@@ -13,8 +14,10 @@
   </mat-label>
   <mat-select #langSelector
               (selectionChange)="handleLangChanged($event)">
-    <mat-option *ngFor="let lang of availableLanguages"
-                [value]="lang">{{ lang }}
-    </mat-option>
+    @for (lang of availableLanguages; track lang) {
+      <mat-option
+        [value]="lang">{{ lang }}
+      </mat-option>
+    }
   </mat-select>
 </mat-form-field>

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core'
 import {GaugeCircleDirective} from './gauge-circle.directive'
 import {IGaugeCircleConf, IGaugeTrackConf} from './gauge-component.interfaces'
-import {CommonModule} from '@angular/common'
+
 
 interface IGaugeInternalTrackConfig extends IGaugeTrackConf {
   radius: number;
@@ -13,7 +13,7 @@ interface IGaugeInternalTrackConfig extends IGaugeTrackConf {
   templateUrl: './gauge.component.html',
   styleUrls: ['./gauge.component.scss'],
   imports: [
-    CommonModule, GaugeCircleDirective,
+    GaugeCircleDirective,
   ],
 })
 export class GaugeComponent implements OnChanges {

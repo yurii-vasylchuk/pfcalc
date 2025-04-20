@@ -165,7 +165,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
   }
 
   protected trackByIndexFn: TrackByFunction<{
-    index: number
+    index?: number
   }> = (_, i) => `${i.index}`
 
   protected compareIngredientsFn = (ing1: any, ing2: any) => ing1?.id === ing2?.id

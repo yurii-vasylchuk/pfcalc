@@ -62,16 +62,9 @@ export class DashboardPageComponent implements OnInit {
   protected readonly fromRoutes = fromRoutes
   protected readonly weeklyNutrientsTypeOptions = WeeklyNutrientsTypes
   protected readonly dashboard = dashboard
-
-  onWeeklyNutrientsTypeChange(value: WeeklyNutrientsType) {
-    this.changeWeeklyNutrientsType.emit(value)
-  }
-
   @ViewChild('editMeal', {static: true})
   protected editMealTemplate: TemplateRef<any>
-
   protected editMealForm: EditMealForm
-
   @ViewSelectSnapshot(DashboardState.measurements)
   protected measurements: Map<number, IMeasurement[]>
   @ViewSelectSnapshot(DashboardState.todayNutrients)
@@ -90,7 +83,6 @@ export class DashboardPageComponent implements OnInit {
   protected countedDaysOnWeek: number
   @ViewSelectSnapshot(DashboardState)
   protected state: Dashboard.IDashboardState
-
   @Emitter(DashboardState.removeMeal)
   private removeMealEmt: Emittable<Dashboard.RemoveMealPayload>
   @Emitter(DashboardState.switchDate)
@@ -101,7 +93,6 @@ export class DashboardPageComponent implements OnInit {
   private editMeal: Emittable<Dashboard.EditMealPayload>
   @Emitter(DashboardState.prepareMealEdit)
   private prepareMealEdit: EventEmitter<Dashboard.PrepareMealEditPayload>
-
   private alertService = inject(AlertService)
   private dialogService = inject(MatDialog)
   private fb = inject(FormBuilder)
@@ -127,6 +118,10 @@ export class DashboardPageComponent implements OnInit {
       defaultMeasurement,
       ...(this.measurements.get(this.editMealForm.value?.meal.foodId ?? -999) ?? []),
     ]
+  }
+
+  onWeeklyNutrientsTypeChange(value: WeeklyNutrientsType) {
+    this.changeWeeklyNutrientsType.emit(value)
   }
 
   ngOnInit() {

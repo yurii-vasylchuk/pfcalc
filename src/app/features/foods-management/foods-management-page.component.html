@@ -45,39 +45,45 @@
     </mat-form-field>
 
     <mat-list>
-      <mat-list-item *ngFor="let food of data; trackBy: trackFoodById">
-        <span matListItemTitle>{{ food.name }}</span>
-        <span matListItemLine>{{ 'common.pfcc-values' | translate:food.pfcc }}</span>
-        <div class="content__food-actions"
-             matListItemMeta>
-          <button (click)="handleEditClick(food.id)"
-                  color="primary"
-                  mat-icon-button>
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button (click)="handleDeleteClick(food.id)"
-                  *ngIf="food.ownedByUser"
-                  color="warn"
-                  mat-icon-button>
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </mat-list-item>
+      @for (food of data; track trackFoodById($index, food)) {
+        <mat-list-item>
+          <span matListItemTitle>{{ food.name }}</span>
+          <span matListItemLine>{{ 'common.pfcc-values' | translate:food.pfcc }}</span>
+          <div class="content__food-actions"
+               matListItemMeta>
+            <button (click)="handleEditClick(food.id)"
+                    color="primary"
+                    mat-icon-button>
+              <mat-icon>edit</mat-icon>
+            </button>
+            @if (food.ownedByUser) {
+              <button (click)="handleDeleteClick(food.id)"
+                      color="warn"
+                      mat-icon-button>
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </div>
+        </mat-list-item>
+      }
     </mat-list>
     <div #endIndicator id="end-indicator-{{type}}"></div>
 
-    <div *ngIf="loading"
-         class="data-loading-bar-container">
-      <mat-progress-bar mode="indeterminate">
-      </mat-progress-bar>
-    </div>
+    @if (loading) {
+      <div
+        class="data-loading-bar-container">
+        <mat-progress-bar mode="indeterminate">
+        </mat-progress-bar>
+      </div>
+    }
 
-    <button (click)="handleAddFoodClick()"
-            *ngIf="data?.length > 10 || false"
-            class="content__add-btn"
-            color="primary"
-            mat-stroked-button>
-      {{ 'foods-management.add-ingredient-caption' | translate }}
-    </button>
+    @if (data?.length > 10 || false) {
+      <button (click)="handleAddFoodClick()"
+              class="content__add-btn"
+              color="primary"
+              mat-stroked-button>
+        {{ 'foods-management.add-ingredient-caption' | translate }}
+      </button>
+    }
   </div>
 </ng-template>

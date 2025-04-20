@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core'
-import {CommonModule} from '@angular/common'
+
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {MatSelectModule} from '@angular/material/select'
 
 @Component({
   selector: 'pfc-test-page',
-  imports: [CommonModule, ReactiveFormsModule, MatSelectModule],
+  imports: [ReactiveFormsModule, MatSelectModule],
   templateUrl: './test-page.component.html',
   styleUrls: ['./test-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

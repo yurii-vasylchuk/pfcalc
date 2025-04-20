@@ -21,7 +21,7 @@ import {
 } from '@angular/material/datepicker'
 import {DateTime} from 'luxon'
 import {MatButton, MatIconButton} from '@angular/material/button'
-import {CommonModule} from '@angular/common'
+
 import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot'
 import {ReportsState} from './reports.state'
 import {IReport} from '../../commons/models/domain.models'
@@ -40,7 +40,6 @@ type PeriodPreset = 'previous-week' | 'current-week' | 'current-month';
 @Component({
   selector: 'pfc-reports',
   imports: [
-    CommonModule,
     TranslateModule,
     MatFormField,
     FormsModule,

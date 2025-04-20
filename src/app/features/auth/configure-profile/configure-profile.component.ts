@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core'
-import {CommonModule} from '@angular/common'
+
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
 import {TranslateModule} from '@ngx-translate/core'
 import {MatFormFieldModule} from '@angular/material/form-field'
@@ -12,7 +12,7 @@ import {Auth} from '../auth.state-models'
 
 @Component({
   selector: 'pfc-configure-profile',
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatSlideToggleModule, TranslateModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatSlideToggleModule, TranslateModule],
   templateUrl: './configure-profile.component.html',
   styleUrls: ['./configure-profile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

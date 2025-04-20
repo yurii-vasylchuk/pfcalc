@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core'
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
-import {CommonModule} from '@angular/common'
+
 import * as fromPfccValidators from '../../../commons/pfcc-validators'
 import {Auth} from '../auth.state-models'
 import {TranslateModule} from '@ngx-translate/core'
@@ -17,7 +17,6 @@ import {AuthState} from '../auth.state'
   templateUrl: './sign-up-page.component.html',
   styleUrls: ['./sign-up-page.component.scss'],
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatButtonModule,

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core'
-import {CommonModule} from '@angular/common'
+
 import {MatListModule} from '@angular/material/list'
 import {MatIconModule} from '@angular/material/icon'
 import {TranslateModule} from '@ngx-translate/core'
@@ -14,7 +14,7 @@ import {Auth} from '../../features/auth/auth.state-models'
 
 @Component({
   selector: 'pfc-menu',
-  imports: [CommonModule, MatListModule, MatIconModule, TranslateModule, MatButtonModule],
+  imports: [MatListModule, MatIconModule, TranslateModule, MatButtonModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

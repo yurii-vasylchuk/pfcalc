@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core'
-import {CommonModule} from '@angular/common'
+
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
 import {TranslateModule} from '@ngx-translate/core'
@@ -10,7 +10,7 @@ import NavigateBackPayload = Navigation.NavigateBackPayload
 
 @Component({
   selector: 'pfc-dialog-page-heading',
-  imports: [CommonModule, MatButtonModule, MatIconModule, TranslateModule],
+  imports: [MatButtonModule, MatIconModule, TranslateModule],
   templateUrl: './dialog-page-heading.component.html',
   styleUrls: ['./dialog-page-heading.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

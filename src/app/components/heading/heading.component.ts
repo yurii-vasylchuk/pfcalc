@@ -1,5 +1,5 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core'
-import {CommonModule} from '@angular/common'
+
 import {MatFormFieldModule} from '@angular/material/form-field'
 import {MatIconModule} from '@angular/material/icon'
 import {MatSelect, MatSelectChange, MatSelectModule} from '@angular/material/select'
@@ -17,7 +17,7 @@ import {ProfileState} from '../../state/profile.state'
 
 @Component({
   selector: 'pfc-heading',
-  imports: [CommonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatButtonModule],
+  imports: [MatFormFieldModule, MatIconModule, MatSelectModule, MatButtonModule],
   templateUrl: './heading.component.html',
   styleUrls: ['./heading.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

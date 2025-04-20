@@ -6,12 +6,16 @@
            matInput
            type="email"/>
 
-    <mat-error *ngIf="form.controls.email.hasError('required')"
-               [innerHTML]="'sign-up.email.required' | translate">
-    </mat-error>
-    <mat-error *ngIf="form.controls.email.hasError('email')">
-      {{ 'sign-up.email.email' | translate }}
-    </mat-error>
+    @if (form.controls.email.hasError('required')) {
+      <mat-error
+        [innerHTML]="'sign-up.email.required' | translate">
+      </mat-error>
+    }
+    @if (form.controls.email.hasError('email')) {
+      <mat-error>
+        {{ 'sign-up.email.email' | translate }}
+      </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field>
@@ -20,9 +24,11 @@
            matInput
            type="text"/>
 
-    <mat-error *ngIf="form.controls.email.hasError('required')"
-               [innerHTML]="'sign-up.name.required' | translate">
-    </mat-error>
+    @if (form.controls.email.hasError('required')) {
+      <mat-error
+        [innerHTML]="'sign-up.name.required' | translate">
+      </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field>
@@ -31,15 +37,21 @@
            matInput
            type="password"/>
 
-    <mat-error *ngIf="form.controls.password.hasError('required')"
-               [innerHTML]="'sign-up.password.required' | translate">
-    </mat-error>
-    <mat-error *ngIf="form.hasError('fieldsMatches')">
-      {{ 'sign-up.password.matches' | translate }}
-    </mat-error>
-    <mat-error *ngIf="form.hasError('minlength')">
-      {{ 'sign-up.password.min-length' | translate:({value: minPasswordLength}) }}
-    </mat-error>
+    @if (form.controls.password.hasError('required')) {
+      <mat-error
+        [innerHTML]="'sign-up.password.required' | translate">
+      </mat-error>
+    }
+    @if (form.hasError('fieldsMatches')) {
+      <mat-error>
+        {{ 'sign-up.password.matches' | translate }}
+      </mat-error>
+    }
+    @if (form.hasError('minlength')) {
+      <mat-error>
+        {{ 'sign-up.password.min-length' | translate:({value: minPasswordLength}) }}
+      </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field>
@@ -48,15 +60,21 @@
            matInput
            type="password"/>
 
-    <mat-error *ngIf="form.controls.confirmPassword.hasError('required')"
-               [innerHTML]="'sign-up.confirm-password.required' | translate">
-    </mat-error>
-    <mat-error *ngIf="form.hasError('fieldsMatches')">
-      {{ 'sign-up.confirm-password.matches' | translate }}
-    </mat-error>
-    <mat-error *ngIf="form.hasError('minlength')">
-      {{ 'sign-up.confirm-password.min-length' | translate:({value: minPasswordLength}) }}
-    </mat-error>
+    @if (form.controls.confirmPassword.hasError('required')) {
+      <mat-error
+        [innerHTML]="'sign-up.confirm-password.required' | translate">
+      </mat-error>
+    }
+    @if (form.hasError('fieldsMatches')) {
+      <mat-error>
+        {{ 'sign-up.confirm-password.matches' | translate }}
+      </mat-error>
+    }
+    @if (form.hasError('minlength')) {
+      <mat-error>
+        {{ 'sign-up.confirm-password.min-length' | translate:({value: minPasswordLength}) }}
+      </mat-error>
+    }
   </mat-form-field>
 
 

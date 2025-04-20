@@ -1,15 +1,25 @@
 <h1>{{ 'reports.list.title'|translate }}</h1>
 <div class="reports-list">
-  <ng-container *ngFor="let report of reports; trackBy: trackReportById">
-
+  @for (report of reports; track trackReportById($index, report)) {
     <div class="reports-list__link-container">
-      <a *ngIf="report.status === 'GENERATED'; else placeholder"
-         [href]="reportHref(report)"
-         class="reports-list__name"
-         download
-         target="_blank">
-        <span>{{ report.name }}</span>
-      </a>
+      @if (report.status === 'GENERATED') {
+        <a
+          [href]="reportHref(report)"
+          class="reports-list__name"
+          download
+          target="_blank">
+          <span>{{ report.name }}</span>
+        </a>
+      } @else {
+        <div class="reports-list__link-container">
+          <span class="reports-list__name">{{ report.name }}</span>
+          <div class="reports-list__actions">
+            <mat-spinner diameter="24"
+                         mode="indeterminate">
+            </mat-spinner>
+          </div>
+        </div>
+      }
       <div class="reports-list__actions">
         <button (click)="handleDeleteReport(report.id)"
                 color="warn"
@@ -18,17 +28,7 @@
         </button>
       </div>
     </div>
-    <ng-template #placeholder>
-      <div class="reports-list__link-container">
-        <span class="reports-list__name">{{ report.name }}</span>
-        <div class="reports-list__actions">
-          <mat-spinner diameter="24"
-                       mode="indeterminate">
-          </mat-spinner>
-        </div>
-      </div>
-    </ng-template>
-  </ng-container>
+  }
 </div>
 
 <h1>{{ 'reports.period.title' | translate }}</h1>
@@ -56,9 +56,11 @@
     <mat-date-range-picker #periodRangePicker/>
   </mat-form-field>
 
-  <mat-error *ngIf="periodReportForm.errors?.['periodInvalid']">
-    {{ 'reports.period.invalidPeriod' | translate }}
-  </mat-error>
+  @if (periodReportForm.errors?.['periodInvalid']) {
+    <mat-error>
+      {{ 'reports.period.invalidPeriod' | translate }}
+    </mat-error>
+  }
 
   <button (click)="generatePeriodReport()"
           [disabled]="periodReportForm.invalid"

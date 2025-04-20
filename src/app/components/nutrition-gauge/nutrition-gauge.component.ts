@@ -1,12 +1,12 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core'
-import {CommonModule} from '@angular/common'
+
 import {GaugeComponent} from '../gauge/gauge.component'
 import {IGaugeTrackConf} from '../gauge/gauge-component.interfaces'
 import * as fromFunctions from '../../commons/functions'
 
 @Component({
   selector: 'pfc-nutrition-gauge',
-  imports: [CommonModule, GaugeComponent],
+  imports: [GaugeComponent],
   templateUrl: './nutrition-gauge.component.html',
   styleUrls: ['./nutrition-gauge.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

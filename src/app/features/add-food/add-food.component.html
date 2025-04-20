@@ -36,153 +36,141 @@
     {{ 'add-food.hidden-switcher-label' | translate }}
   </mat-slide-toggle>
 
-  <div *ngIf="!isRecipe"
-       class="pfcc-container"
-       formGroupName="pfcc">
-    <mat-form-field>
-      <mat-label>{{ 'add-food.protein-input-label' | translate }}</mat-label>
-      <input (click)="handleNutrientInputClick($event)"
-             (focus)="handleNutrientInputFocus('protein')"
-             [placeholder]="'add-food.protein-input-placeholder' | translate"
-             [readonly]="recipeSwitcher.checked"
-             formControlName="protein"
-             matInput
-             type="number">
+  @if (!isRecipe) {
+    <div
+      class="pfcc-container"
+      formGroupName="pfcc">
+      <mat-form-field>
+        <mat-label>{{ 'add-food.protein-input-label' | translate }}</mat-label>
+        <input (click)="handleNutrientInputClick($event)"
+               (focus)="handleNutrientInputFocus('protein')"
+               [placeholder]="'add-food.protein-input-placeholder' | translate"
+               [readonly]="recipeSwitcher.checked"
+               formControlName="protein"
+               matInput
+               type="number">
+        <span matSuffix>{{ 'common.gram-sign' | translate }} &nbsp;</span>
+        <mat-hint>{{ 'add-food.pfcc-inputs-hint' | translate }}</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'add-food.fat-input-label' | translate }}</mat-label>
+        <input (click)="handleNutrientInputClick($event)"
+               (focus)="handleNutrientInputFocus('fat')"
+               [placeholder]="'add-food.fat-input-placeholder' | translate"
+               [readonly]="recipeSwitcher.checked"
+               formControlName="fat"
+               matInput
+               type="number">
+        <span matSuffix>{{ 'common.gram-sign' | translate }} &nbsp;</span>
+        <mat-hint>{{ 'add-food.pfcc-inputs-hint' | translate }}</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'add-food.carbohydrates-input-label' | translate }}</mat-label>
+        <input (click)="handleNutrientInputClick($event)"
+               (focus)="handleNutrientInputFocus('carbohydrates')"
+               [placeholder]="'add-food.carbohydrates-input-placeholder' | translate"
+               [readonly]="recipeSwitcher.checked"
+               formControlName="carbohydrates"
+               matInput
+               type="number">
+        <span matSuffix>{{ 'common.gram-sign' | translate }} &nbsp;</span>
+        <mat-hint>{{ 'add-food.pfcc-inputs-hint' | translate }}</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'add-food.calories-input-label' | translate }}</mat-label>
+        <input (click)="handleNutrientInputClick($event)"
+               (focus)="handleNutrientInputFocus('calories')"
+               [placeholder]="'add-food.calories-input-placeholder' | translate"
+               [readonly]="recipeSwitcher.checked"
+               formControlName="calories"
+               matInput
+               type="number">
+        <span matSuffix>{{ 'common.calories-sign' | translate }} &nbsp;</span>
+        <mat-hint>{{ 'add-food.pfcc-inputs-hint' | translate }}</mat-hint>
+      </mat-form-field>
+    </div>
+  }
 
-      <span matSuffix>{{ 'common.gram-sign' | translate }} &nbsp;</span>
-      <mat-hint>{{ 'add-food.pfcc-inputs-hint' | translate }}</mat-hint>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>{{ 'add-food.fat-input-label' | translate }}</mat-label>
-
-      <input (click)="handleNutrientInputClick($event)"
-             (focus)="handleNutrientInputFocus('fat')"
-             [placeholder]="'add-food.fat-input-placeholder' | translate"
-             [readonly]="recipeSwitcher.checked"
-             formControlName="fat"
-             matInput
-             type="number">
-
-      <span matSuffix>{{ 'common.gram-sign' | translate }} &nbsp;</span>
-      <mat-hint>{{ 'add-food.pfcc-inputs-hint' | translate }}</mat-hint>
-    </mat-form-field>
-
-
-    <mat-form-field>
-      <mat-label>{{ 'add-food.carbohydrates-input-label' | translate }}</mat-label>
-      <input (click)="handleNutrientInputClick($event)"
-             (focus)="handleNutrientInputFocus('carbohydrates')"
-             [placeholder]="'add-food.carbohydrates-input-placeholder' | translate"
-             [readonly]="recipeSwitcher.checked"
-             formControlName="carbohydrates"
-             matInput
-             type="number">
-
-      <span matSuffix>{{ 'common.gram-sign' | translate }} &nbsp;</span>
-      <mat-hint>{{ 'add-food.pfcc-inputs-hint' | translate }}</mat-hint>
-    </mat-form-field>
-
-
-    <mat-form-field>
-      <mat-label>{{ 'add-food.calories-input-label' | translate }}</mat-label>
-      <input (click)="handleNutrientInputClick($event)"
-             (focus)="handleNutrientInputFocus('calories')"
-             [placeholder]="'add-food.calories-input-placeholder' | translate"
-             [readonly]="recipeSwitcher.checked"
-             formControlName="calories"
-             matInput
-             type="number">
-
-      <span matSuffix>{{ 'common.calories-sign' | translate }} &nbsp;</span>
-      <mat-hint>{{ 'add-food.pfcc-inputs-hint' | translate }}</mat-hint>
-    </mat-form-field>
-  </div>
-
-  <ng-container *ngIf="isRecipe">
+  @if (isRecipe) {
     <div class="pfcc-values pfcc-values">
       <p class="pfcc-values__label">{{ 'common.protein' | translate }} :</p>
       <p class="pfcc-values__value">{{ ceiledPfcc.protein }}</p>
-
       <p class="pfcc-values__label">{{ 'common.fat' | translate }} :</p>
       <p class="pfcc-values__value">{{ ceiledPfcc.fat }}</p>
-
       <p class="pfcc-values__label">{{ 'common.carbohydrates' | translate }} :</p>
       <p class="pfcc-values__value">{{ ceiledPfcc.carbohydrates }}</p>
-
       <p class="pfcc-values__label">{{ 'common.calories' | translate }} :</p>
       <p class="pfcc-values__value">{{ ceiledPfcc.calories }}</p>
-
       <p class="pfcc-values__label">{{ 'common.total-weight' | translate }} :</p>
       <p class="pfcc-values__value">{{ totalRecipeWeight }}</p>
     </div>
-
     <h2>{{ 'add-food.ingredients-header' | translate }}</h2>
-
     <div class="ingredients"
          formArrayName="ingredients">
-      <div *ngFor="let fi of form.value.ingredients; index as idx; trackBy: trackByIndexFn"
-           class="ingredient">
-        <div class="ingredient-pfcc_row">
-            <span *ngIf="fi != null && fi.ingredient != null">
-              {{ 'common.pfcc-sign' | translate }} :
-              {{ 'common.pfcc-values' | translate:ceilPfcc(multiplyPfcc(fi.ingredient.pfcc, (fi.weight * fi.measurement.toGramMultiplier) / 100), 0) }}
-            </span>
-        </div>
-        <div [formGroupName]="idx"
-             class="ingredient-edit_row">
-          <mat-form-field class="ingredient-select">
-            <mat-label>{{ 'add-food.ingredient-select-label' | translate }}</mat-label>
-            <mat-select [compareWith]="compareIngredientsFn"
-                        [placeholder]="'add-food.ingredient-select-placeholder' | translate"
-                        formControlName="ingredient">
-              <mat-option>
-                <ngx-mat-select-search [placeholderLabel]="'add-food.ingredient-search-placeholder' | translate"
-                                       formControlName="ingredientSearch"/>
-              </mat-option>
-              <mat-option *ngFor="let ingredient of ingredientsOptions[idx];
-                            trackBy:trackFoodByIdFn "
-                          [disabled]="(usedIngredientsIds$ | async)!.includes(ingredient?.id)"
-                          [value]="ingredient">
-                {{ ingredient?.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <button (click)="handleRemoveIngredientClick(idx)"
-                  class="remove-ingredient-btn"
-                  color="warn"
-                  mat-icon-button
-                  type="button">
-            <mat-icon>delete</mat-icon>
-          </button>
-
-          <div class="ingredient-weight-group">
-
-            <mat-form-field class="ingredient-weight">
-              <mat-label>{{ 'add-food.ingredient-weight-label' | translate }}</mat-label>
-              <input formControlName="weight"
-                     matInput
-                     type="number">
-            </mat-form-field>
-
-            <mat-form-field class="ingredient-measurement">
-              <mat-label>{{ 'add-food.ingredient-measurement-label' | translate }}</mat-label>
-              <mat-select [placeholder]="'placeholder'"
-                          formControlName="measurement">
-                <mat-option [value]="defaultMeasurement">
-                  {{ 'measurements.' + defaultMeasurement.name | translate }}
+      @for (fi of form.value.ingredients; track trackByIndexFn(idx, fi); let idx = $index) {
+        <div
+          class="ingredient">
+          <div class="ingredient-pfcc_row">
+            @if (fi != null && fi.ingredient != null) {
+              <span>
+                {{ 'common.pfcc-sign' | translate }} :
+                {{ 'common.pfcc-values' | translate:ceilPfcc(multiplyPfcc(fi.ingredient.pfcc, (fi.weight * fi.measurement.toGramMultiplier) / 100), 0) }}
+              </span>
+            }
+          </div>
+          <div [formGroupName]="idx"
+               class="ingredient-edit_row">
+            <mat-form-field class="ingredient-select">
+              <mat-label>{{ 'add-food.ingredient-select-label' | translate }}</mat-label>
+              <mat-select [compareWith]="compareIngredientsFn"
+                          [placeholder]="'add-food.ingredient-select-placeholder' | translate"
+                          formControlName="ingredient">
+                <mat-option>
+                  <ngx-mat-select-search [placeholderLabel]="'add-food.ingredient-search-placeholder' | translate"
+                                         formControlName="ingredientSearch"/>
                 </mat-option>
-                <mat-option *ngFor="let m of form.value.ingredients[idx].ingredient?.measurements ?? []"
-                            [value]="m">
-                  {{ 'measurements.' + m.name | translate }}
-                </mat-option>
+                @for (ingredient of ingredientsOptions[idx]; track trackFoodByIdFn($index, ingredient)) {
+                  <mat-option
+                    [disabled]="(usedIngredientsIds$ | async)!.includes(ingredient?.id)"
+                    [value]="ingredient">
+                    {{ ingredient?.name }}
+                  </mat-option>
+                }
               </mat-select>
             </mat-form-field>
+            <button (click)="handleRemoveIngredientClick(idx)"
+                    class="remove-ingredient-btn"
+                    color="warn"
+                    mat-icon-button
+                    type="button">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <div class="ingredient-weight-group">
+              <mat-form-field class="ingredient-weight">
+                <mat-label>{{ 'add-food.ingredient-weight-label' | translate }}</mat-label>
+                <input formControlName="weight"
+                       matInput
+                       type="number">
+              </mat-form-field>
+              <mat-form-field class="ingredient-measurement">
+                <mat-label>{{ 'add-food.ingredient-measurement-label' | translate }}</mat-label>
+                <mat-select [placeholder]="'placeholder'"
+                            formControlName="measurement">
+                  <mat-option [value]="defaultMeasurement">
+                    {{ 'measurements.' + defaultMeasurement.name | translate }}
+                  </mat-option>
+                  @for (m of form.value.ingredients[idx].ingredient?.measurements ?? []; track m) {
+                    <mat-option
+                      [value]="m">
+                      {{ 'measurements.' + m.name | translate }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
         </div>
-      </div>
-
+      }
       <button (click)="handleAddIngredientClick()"
               class="add-ingredient-btn"
               color="primary"
@@ -191,7 +179,7 @@
         {{ 'add-food.add-ingredient-btn' | translate }}
       </button>
     </div>
-  </ng-container>
+  }
 
   <h2>{{ 'add-food.additional-measurements-header' | translate }}</h2>
 
@@ -227,37 +215,37 @@
   <div class="measurements"
        formArrayName="measurements">
     @for (m of form.value.measurements; let idx = $index; track trackByIndexFn) {
-      <div *ngIf="!m.deleted"
-           [formGroupName]="idx"
-           class="measurement">
-
-        <input formControlName="id"
-               hidden>
-
-        <mat-form-field class="measurement-name">
-          <mat-label>{{ 'add-food.measurement-name-label' | translate }}</mat-label>
-          <input formControlName="name"
-                 matInput
-                 type="text">
-        </mat-form-field>
-        <button mat-icon-button
-                (click)="handleDeleteMeasurement(idx)"
-                color="warn">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <mat-form-field class="measurement-multiplier">
-          <mat-label>{{ 'add-food.measurement-multiplier-label' | translate }}</mat-label>
-          <input formControlName="multiplier"
-                 matInput
-                 type="number">
-        </mat-form-field>
-        <mat-form-field class="measurement-default">
-          <mat-label>{{ 'add-food.measurement-default-label' | translate }}</mat-label>
-          <input formControlName="defaultValue"
-                 matInput
-                 type="number">
-        </mat-form-field>
-      </div>
+      @if (!m.deleted) {
+        <div
+          [formGroupName]="idx"
+          class="measurement">
+          <input formControlName="id"
+                 hidden>
+          <mat-form-field class="measurement-name">
+            <mat-label>{{ 'add-food.measurement-name-label' | translate }}</mat-label>
+            <input formControlName="name"
+                   matInput
+                   type="text">
+          </mat-form-field>
+          <button mat-icon-button
+                  (click)="handleDeleteMeasurement(idx)"
+                  color="warn">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <mat-form-field class="measurement-multiplier">
+            <mat-label>{{ 'add-food.measurement-multiplier-label' | translate }}</mat-label>
+            <input formControlName="multiplier"
+                   matInput
+                   type="number">
+          </mat-form-field>
+          <mat-form-field class="measurement-default">
+            <mat-label>{{ 'add-food.measurement-default-label' | translate }}</mat-label>
+            <input formControlName="defaultValue"
+                   matInput
+                   type="number">
+          </mat-form-field>
+        </div>
+      }
     }
     <button (click)="handleAddMeasurementClick()"
             class="add-measurement-btn"

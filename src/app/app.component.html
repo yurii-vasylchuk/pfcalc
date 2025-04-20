@@ -8,7 +8,9 @@
     <pfc-menu></pfc-menu>
   </mat-drawer>
   <mat-drawer-content class="content">
-    <pfc-heading *ngIf="showHeader"></pfc-heading>
+    @if (showHeader) {
+      <pfc-heading></pfc-heading>
+    }
     <router-outlet></router-outlet>
   </mat-drawer-content>
 </mat-drawer-container>
