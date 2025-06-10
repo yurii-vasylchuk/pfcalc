@@ -33,7 +33,6 @@ import {NgxsSelectSnapshotModule} from '@ngxs-labs/select-snapshot'
 import {DashboardState} from './features/dashboard/dashboard.state'
 import {AddMealState} from './features/add-meal/add-meal.state'
 import {ProfileState} from './state/profile.state'
-import {AddDishState} from './features/add-dish/add-dish.state'
 import {provideRouter, RouterOutlet} from '@angular/router'
 import {NavigationState} from './state/navigation.state'
 import {AddFoodState} from './features/add-food/add-food.state'
@@ -58,8 +57,18 @@ export function HttpLoaderFactory(http: HttpClient) {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    NgxsModule.forRoot([AuthState, UiState, FoodsManagementState, DashboardState, AddMealState, ProfileState,
-      AddDishState, NavigationState, AddFoodState, SettingsState, ReportsState], {developmentMode: environment.ngxs.developmentMode}),
+    NgxsModule.forRoot([
+        AuthState,
+        UiState,
+        FoodsManagementState,
+        DashboardState,
+        AddMealState,
+        ProfileState,
+        NavigationState,
+        AddFoodState,
+        SettingsState,
+        ReportsState],
+      {developmentMode: environment.ngxs.developmentMode}),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
       disabled: !environment.ngxs.logging,

@@ -58,16 +58,6 @@ export const routes: Routes = [
     canActivate: [isAuthenticatedGuardFn],
   },
   {
-    path: fromRoutes.addDish,
-    title: resolvePageTitle,
-    data: {
-      hideHeader: true,
-      defaultBackNavigationUrl: fromRoutes.addMeal,
-    },
-    loadComponent: () => import('./features/add-dish/add-dish.component').then(mod => mod.AddDishComponent),
-    canActivate: [isAuthenticatedGuardFn],
-  },
-  {
     path: fromRoutes.addFood,
     title: resolvePageTitle,
     data: {

@@ -2,17 +2,7 @@ import {inject, Injectable} from '@angular/core'
 import {HttpClient} from '@angular/common/http'
 import {combineLatest, combineLatestWith, identity, map, Observable, of, switchMap, tap, throwError} from 'rxjs'
 import {IAuthTokensResponse, Language} from '../commons/models/auth.models'
-import {
-  FoodType,
-  IDish,
-  IDishToCreate,
-  IFood,
-  IMeal,
-  IMeasurement,
-  IProfile,
-  IProfileUpdate,
-  IReport,
-} from '../commons/models/domain.models'
+import {FoodType, IFood, IMeal, IMeasurement, IProfile, IProfileUpdate, IReport} from '../commons/models/domain.models'
 import {IApiResponse, IPage, WithOptional} from '../commons/models/common.models'
 import {DateTime} from 'luxon'
 import {AddMeal} from '../features/add-meal/add-meal.state-models'
@@ -117,30 +107,6 @@ export class ApiService {
     )
   }
 
-  addDish(dish: IDishToCreate): Observable<IDish> {
-    return this.http.post<IApiResponse<IDish>>('/api/dish', {
-      ...dish,
-      cookedOn: dish.cookedOn.toISO({includeOffset: false}),
-    })
-      .pipe(map(this.extractResponseData))
-  }
-
-  updateDish(id: number, dish: IDishToCreate): Observable<IDish> {
-    return this.http.put<IApiResponse<IDish>>(`/api/dish/${id}`, {
-      ...dish,
-      cookedOn: dish.cookedOn.toISO({includeOffset: false}),
-    }).pipe(map(this.extractResponseData))
-  }
-
-  deleteDish(dishId: number): Observable<null> {
-    if (dishId == null) {
-      throwError(() => new Error('Dish id is required'))
-    }
-
-    return this.http.delete<IApiResponse<void>>(`/api/dish/${dishId}`)
-      .pipe(this.extractVoidResponse)
-  }
-
   saveFood(food: WithOptional<IFood, 'id' | 'ownedByUser'>): Observable<IFood> {
     return this.http.post<IApiResponse<IFood>>('/api/food', food)
       .pipe(map(this.extractResponseData))
@@ -149,13 +115,6 @@ export class ApiService {
   deleteFood(id: number): Observable<void> {
     return this.http.delete<IApiResponse<void>>(`/api/food/${id}`)
       .pipe(this.extractVoidResponse)
-  }
-
-  loadDish(dishId: number): Observable<IDish> {
-    return this.http.get<IApiResponse<IDish>>(`/api/dish/${dishId}`)
-      .pipe(
-        map(this.extractResponseData),
-      )
   }
 
   loadFoodsList(page: number, pageSize: number, name?: string, type?: FoodType): Observable<IPage<IFood>> {

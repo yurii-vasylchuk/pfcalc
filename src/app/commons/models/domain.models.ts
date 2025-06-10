@@ -25,18 +25,6 @@ export function isFoodType(input: string): input is FoodType {
   return ['RECIPE', 'INGREDIENT'].includes(input)
 }
 
-export interface IDish {
-  id: number;
-  cookedOn: DateTime;
-  pfcc: IPfcc;
-  name: string;
-  foodId: number;
-  ingredients: IIngredient[];
-  recipeWeight: number;
-  cookedWeight: number;
-  deleted: boolean;
-}
-
 export interface IMeal {
   id: number | null;
   name: string;
@@ -44,7 +32,6 @@ export interface IMeal {
   weight: number;
   pfcc: IPfcc;
   foodId: number;
-  dishId: number | null;
 }
 
 export interface IProfile {
@@ -58,19 +45,6 @@ export type IProfileUpdate = Partial<Pick<IProfile, 'aims' | 'name' | 'preferred
   currentPassword: string;
   newPassword: string
 }>
-
-export interface IDishToCreate {
-  id?: number;
-  cookedOn: DateTime;
-  name: string;
-  foodId: number;
-  ingredients: {
-    id: number;
-    ingredientWeight: number;
-    ingredientIndex: number;
-  }[];
-  cookedWeight: number;
-}
 
 export type IMeasurement = {
   id: number;

@@ -28,7 +28,6 @@
     "weight": "Вага",
     "total-weight": "Загальна вага",
     "page-titles": {
-      "add-dish": "Додати страву",
       "add-meal": "Зʼїсти",
       "add-food": "Додати їжу",
       "dashboard": "Головна",
@@ -106,19 +105,10 @@
   "add-meal": {
     "title": "Зʼїсти страву",
     "add-btn": "Зберегти",
-    "cook-a-dish-btn": "Редагувати інгредієнти",
+    "edit-ingredients-btn": "Редагувати інгредієнти",
     "search-placeholder": "Пошук страви...",
     "weight-input-placeholder": "Напр. 240",
     "create-foot-btn": "Додати страву"
-  },
-  "add-dish": {
-    "title": "Приготувати страву",
-    "dish-name-label": "Назва",
-    "save-btn": "Зберегти",
-    "ingredient-select-label": "Інгредієнт",
-    "add-ingredient-btn": "Додати інгредієнт",
-    "cooked-weight-label": "Вага страви",
-    "ingredient-search-placeholder": "Пошук..."
   },
   "add-food": {
     "title-create": "Додати їжу",

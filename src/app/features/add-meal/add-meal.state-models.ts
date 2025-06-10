@@ -13,13 +13,10 @@ export namespace AddMeal {
     optionsTotalPages: number;
   }
 
-  export type MealOptionType = 'DISH' | FoodType;
-
   export type IMealOption = {
     foodId: number;
-    dishId: number | null;
     name: string;
-    type: MealOptionType;
+    type: FoodType;
     pfcc: IPfcc;
     ownedByUser: boolean;
     measurements: IMeasurement[];
@@ -27,7 +24,6 @@ export namespace AddMeal {
 
   export const LOAD_MEAL_OPTIONS = '[AddMeal] Load meal options'
   export const LOAD_MORE_MEAL_OPTIONS = '[AddMeal] Load more meal options'
-  export const DELETE_DISH = '[AddMeal] Delete dish'
   export const SAVE_MEAL = '[AddMeal] Save meal'
 
   export type LoadMealOptionsPayload = {
@@ -35,8 +31,6 @@ export namespace AddMeal {
     page: number;
     pageSize: number;
   };
-
-  export type DeleteDishPayload = number;
 
   export type SaveMealPayload = Omit<IMeal, 'id'>;
 }

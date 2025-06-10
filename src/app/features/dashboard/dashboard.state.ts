@@ -211,9 +211,6 @@ export class DashboardState implements NgxsOnInit {
 
   @Receiver({type: Dashboard.PREPARE_MEAL_EDIT})
   public static prepareMealEdit(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.PrepareMealEditPayload>): Observable<void> {
-    if (payload.dishId != null) {
-      return EMPTY
-    }
     return this.api.loadMeasurements(payload.foodId)
       .pipe(
         tap(measurements => {

@@ -39,8 +39,6 @@ import {defaultMeasurement, IMeasurement} from '../../commons/models/domain.mode
 import {Select, Store} from '@ngxs/store'
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 import {MatProgressBarModule} from '@angular/material/progress-bar'
-import * as fromRoutes from '../../commons/routes'
-import {Navigate} from '@ngxs/router-plugin'
 import {DialogPageHeadingComponent} from '../../components/dialog-page-heading/dialog-page-heading.component'
 import {DateTime} from 'luxon'
 import IMealOption = AddMeal.IMealOption
@@ -81,8 +79,6 @@ export class AddMealComponent implements OnInit, OnDestroy {
   protected loadMealOptions: Emittable<AddMeal.LoadMealOptionsPayload>
   @Emitter(AddMealState.loadMoreMealOptions)
   protected loadMore: Emittable<void>
-  @Emitter(AddMealState.deleteDish)
-  protected deleteDish: Emittable<AddMeal.DeleteDishPayload>
   @Emitter(AddMealState.saveMeal)
   protected saveMeal: Emittable<AddMeal.SaveMealPayload>
 
@@ -155,16 +151,8 @@ export class AddMealComponent implements OnInit, OnDestroy {
     ]
   }
 
-  handleDeleteOptionClick(option: AddMeal.IMealOption) {
-    this.deleteDish.emit(option.dishId)
-  }
-
-  handleEditOptionClick(option: AddMeal.IMealOption) {
-    this.store.dispatch(new Navigate([fromRoutes.addDish], {dishId: option.dishId}))
-  }
-
-  handleCookADishClick(option: AddMeal.IMealOption) {
-    this.store.dispatch(new Navigate([fromRoutes.addDish], {recipeId: option.foodId}))
+  handleEditIngredientsClick(option: AddMeal.IMealOption) {
+    console.log('Currently unsupported')
   }
 
   handleWeightInputFocus($event: FocusEvent) {
@@ -178,7 +166,6 @@ export class AddMealComponent implements OnInit, OnDestroy {
       pfcc: option.pfcc,
       weight: measurement.toGramMultiplier * this.weightFC.value,
       name: option.name,
-      dishId: option.dishId,
       foodId: option.foodId,
       eatenOn: this.date.set({
         hour: now.hour,
@@ -189,7 +176,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
     })
   }
 
-  protected optionTrackBy: TrackByFunction<AddMeal.IMealOption> = (_, opt) => `${opt.type}-${opt.foodId ?? '_'}-${opt.dishId ?? '_'}`
+  protected optionTrackBy: TrackByFunction<AddMeal.IMealOption> = (_, opt) => `${opt.type.substring(0, 1)}-${opt.foodId ?? '_'}`
 
   private onEndIntersected(entry: IntersectionObserverEntry) {
     this.isAccordionScrolledToEnd$.next(entry.isIntersecting)

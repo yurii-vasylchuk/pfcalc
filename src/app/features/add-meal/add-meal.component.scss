@@ -13,7 +13,7 @@ h1 {
 }
 
 
-.dishes-header {
+.meal-options-header {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -21,18 +21,18 @@ h1 {
   justify-content: flex-start;
 }
 
-.dishes-header_title {
+.meal-options-header_title {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
 }
 
-.dishes-header_title-primary {
+.meal-options-header_title-primary {
   margin: 0;
 }
 
-.dishes-header_title-secondary {
+.meal-options-header_title-secondary {
   margin: 0;
   font-size: .8rem;
   color: #707070;
@@ -65,7 +65,7 @@ h1 {
   flex-basis: 60%;
 }
 
-.cook-a-dish-btn {
+.edit-ingredients-btn {
   width: 100%;
   margin-bottom: 10px;
 }

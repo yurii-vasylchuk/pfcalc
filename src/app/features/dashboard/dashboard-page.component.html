@@ -119,7 +119,7 @@
     <mat-dialog-content class="edit-meal__content">
       <div class="edit-meal__weight-input-group">
 
-        <mat-form-field [class.edit-meal__weight-field]="isEditingFood">
+        <mat-form-field class="edit-meal__weight-field]=">
           <mat-label>{{ 'dashboard.edit-meal.weight-label' | translate }}</mat-label>
           <input formControlName="weight"
                  matInput
@@ -127,16 +127,15 @@
                  type="number">
         </mat-form-field>
 
-        @if (isEditingFood) {
-          <mat-form-field class="edit-meal__measurement-select">
-            <mat-select formControlName="measurement">
-              @for (measurement of editMealMeasurements; track measurementTrackByFn) {
-                <mat-option [value]="measurement">{{ 'measurements.' + measurement.name | translate }}</mat-option>
-              }
-            </mat-select>
+        <mat-form-field class="edit-meal__measurement-select">
+          <mat-select formControlName="measurement">
+            @for (measurement of editMealMeasurements; track measurementTrackByFn) {
+              <mat-option [value]="measurement">{{ 'measurements.' + measurement.name | translate }}</mat-option>
+            }
+          </mat-select>
 
-          </mat-form-field>
-        }
+        </mat-form-field>
+
 
       </div>
 

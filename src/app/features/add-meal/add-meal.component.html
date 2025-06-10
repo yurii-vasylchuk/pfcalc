@@ -14,30 +14,12 @@
     <mat-expansion-panel (opened)="handleOptionOpened(option)"
                          [hideToggle]="false">
       <mat-expansion-panel-header>
-        <div class="dishes-header">
-          <div class="dishes-header_title">
-            <p class="dishes-header_title-primary">{{ option.name }}</p>
+        <div class="meal-options-header">
+          <div class="meal-options-header_title">
+            <p class="meal-options-header_title-primary">{{ option.name }}</p>
             <p [innerHTML]="'common.pfcc-values' | translate:(ceilPfcc(option.pfcc))"
-               class="dishes-header_title-secondary"></p>
+               class="meal-options-header_title-secondary"></p>
           </div>
-          @if (option.type === 'DISH') {
-            <div
-              class="flex-spacer"></div>
-          }
-          @if (option.type === 'DISH') {
-            <button (click)="handleEditOptionClick(option); $event.stopPropagation();"
-                    color="accent"
-                    mat-icon-button>
-              <mat-icon>pencil</mat-icon>
-            </button>
-          }
-          @if (option.type === 'DISH') {
-            <button (click)="handleDeleteOptionClick(option); $event.stopPropagation();"
-                    color="accent"
-                    mat-icon-button>
-              <mat-icon>delete</mat-icon>
-            </button>
-          }
         </div>
       </mat-expansion-panel-header>
       <ng-template matExpansionPanelContent>
@@ -82,11 +64,12 @@
           </mat-form-field>
         </div>
         @if (option.type === 'RECIPE') {
-          <button (click)="handleCookADishClick(option)"
-                  class="cook-a-dish-btn"
+          <button (click)="handleEditIngredientsClick(option)"
+                  class="edit-ingredients-btn"
+                  disabled
                   color="primary"
                   mat-raised-button>
-            {{ 'add-meal.cook-a-dish-btn' | translate }}
+            {{ 'add-meal.edit-ingredients-btn' | translate }}
           </button>
         }
         <button (click)="handleSaveMealClick(option)"

@@ -6,12 +6,11 @@ import {RouterNavigated} from '@ngxs/router-plugin'
 import * as fromRoutes from '../../commons/routes'
 import {inject, Injectable} from '@angular/core'
 import {DateTime} from 'luxon'
-import {catchError, combineLatest, EMPTY, map, Observable, switchMap, tap} from 'rxjs'
+import {catchError, EMPTY, map, switchMap, tap} from 'rxjs'
 import {loadAllPages, sumPfccs} from '../../commons/functions'
-import {emptyPfcc, IPage, IPfcc} from '../../commons/models/common.models'
+import {emptyPfcc, IPfcc} from '../../commons/models/common.models'
 import {Navigation} from '../../state/navigation.state-model'
 import {AlertService} from '../../service/alert.service'
-import IMealOption = AddMeal.IMealOption
 
 
 @State<AddMeal.IAddMealState>({
@@ -135,35 +134,6 @@ export class AddMealState {
       )
   }
 
-  @Receiver({type: AddMeal.DELETE_DISH})
-  static deleteDish(ctx: StateContext<AddMeal.IAddMealState>, {payload}: EmitterAction<AddMeal.DeleteDishPayload>) {
-    return this.api.deleteDish(payload)
-      .pipe(
-        switchMap(_ => {
-          let loaders: Observable<IPage<IMealOption>>[] = []
-
-          const state = ctx.getState()
-          for (let i = 0; i <= state.optionsPage; i++) {
-            loaders.push(this.api.getMealOptions(state.filter, i, state.optionsPageSize))
-          }
-
-          return combineLatest(loaders)
-        }),
-        tap(pages => {
-          ctx.patchState({
-            options: pages.map(p => p.data).reduce((data1, data2) => [...data1, ...data2], []),
-            optionsTotalPages: pages[pages.length - 1].totalPages,
-          })
-        }),
-        catchError(err => {
-          console.warn('Error while deleting dish: ', err)
-          this.alert.warn('alert.default-error')
-
-          return EMPTY
-        }),
-      )
-  }
-
   @Receiver({type: AddMeal.SAVE_MEAL})
   static saveMeal(ctx: StateContext<AddMeal.IAddMealState>, {payload}: EmitterAction<AddMeal.SaveMealPayload>) {
     return this.api.saveMeal(payload)
@@ -179,7 +149,7 @@ export class AddMealState {
           }
         }),
         catchError(err => {
-          console.warn('Error while saving dish: ', err)
+          console.warn('Error while saving meal: ', err)
           this.alert.warn('alert.default-error')
 
           return EMPTY

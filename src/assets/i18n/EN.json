@@ -28,7 +28,6 @@
     "weight": "Weight",
     "total-weight": "Total weight",
     "page-titles": {
-      "add-dish": "Add Dish",
       "add-meal": "Add Meal",
       "add-food": "Add Food",
       "dashboard": "Dashboard",
@@ -106,20 +105,10 @@
   "add-meal": {
     "title": "Add meal",
     "add-btn": "Save",
-    "cook-a-dish-btn": "Cook a dish",
+    "edit-ingredients-btn": "Edit ingredients",
     "search-placeholder": "Find a food...",
     "weight-input-placeholder": "Ex. 240",
     "create-foot-btn": "Add food"
-  },
-  "add-dish": {
-    "title-create": "Cook a dish",
-    "title-edit": "Edit a dish",
-    "dish-name-label": "Name",
-    "save-btn": "Create",
-    "ingredient-select-label": "Ingredient",
-    "add-ingredient-btn": "Add ingredient",
-    "cooked-weight-label": "Cooked weight",
-    "ingredient-select-placeholder": "Ex. Cheese"
   },
   "add-food": {
     "title-create": "Add food",
