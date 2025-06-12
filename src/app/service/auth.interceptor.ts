@@ -25,7 +25,7 @@ export class AuthInterceptor implements HttpInterceptor, OnDestroy {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url.startsWith(`${environment.apiUrl}/api`)) {
+    if (req.url.startsWith(`${environment.apiUrl}`)) {
       req = req.clone({withCredentials: true})
     }
 
@@ -59,7 +59,7 @@ export class AuthInterceptor implements HttpInterceptor, OnDestroy {
   private shouldRefreshAuth(err: Error): boolean {
     return err instanceof HttpErrorResponse &&
       err.status === 403 &&
-      !err.url.startsWith(`${environment.apiUrl}/api/user/refresh-auth-token`) &&
+      !err.url.startsWith(`${environment.apiUrl}/user/refresh-auth-token`) &&
       this.refreshToken != null
   }
 }

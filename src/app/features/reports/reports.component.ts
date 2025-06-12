@@ -29,6 +29,7 @@ import {Emitter} from '@ngxs-labs/emitter'
 import {Reports} from './reports.state-models'
 import {MatProgressSpinner} from '@angular/material/progress-spinner'
 import {MatIcon} from '@angular/material/icon'
+import {environment} from '../../../environments/environment'
 
 type PeriodReportFormGroup = FormGroup<{
   from: FormControl<DateTime>;
@@ -128,7 +129,7 @@ export class ReportsComponent {
   protected reportHref(report: IReport): string {
     return report.status === 'INITIALIZED' ?
       'javascript:void(0)' :
-      `/api/report/${report.id}/file`
+      `${environment.apiUrl}/api/report/${report.id}/file`
   }
 
   private validatePeriod: ValidatorFn = (form: AbstractControl): ValidationErrors => {
