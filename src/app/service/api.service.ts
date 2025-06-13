@@ -20,7 +20,7 @@ export class ApiService {
   })
 
   signIn(email: string, password: string): Observable<IAuthTokensResponse> {
-    return this.http.post<IApiResponse<IAuthTokensResponse>>('/user/login',
+    return this.http.post<IApiResponse<IAuthTokensResponse>>('/api/user/login',
       {
         email,
         password,
@@ -28,14 +28,14 @@ export class ApiService {
   }
 
   getProfile(): Observable<IProfile> {
-    return this.http.get<IApiResponse<IProfile>>('/user/profile')
+    return this.http.get<IApiResponse<IProfile>>('/api/user/profile')
       .pipe(
         map(this.extractResponseData),
       )
   }
 
   signUp(email: string, name: string, password: string, language: Language): Observable<IAuthTokensResponse> {
-    return this.http.post<IApiResponse<IAuthTokensResponse>>('/user/register', {
+    return this.http.post<IApiResponse<IAuthTokensResponse>>('/api/user/register', {
       email,
       name,
       password,
@@ -50,7 +50,7 @@ export class ApiService {
                   currentPassword,
                   newPassword,
                 }: IProfileUpdate): Observable<null> {
-    return this.http.post<IApiResponse<void>>('/user/profile', {
+    return this.http.post<IApiResponse<void>>('/api/user/profile', {
       aims,
       name,
       preferredLanguage,
@@ -64,7 +64,7 @@ export class ApiService {
       return throwError(() => new Error('mealId is required'))
     }
 
-    return this.http.delete<IApiResponse<void>>(`/meal/${mealId}`)
+    return this.http.delete<IApiResponse<void>>(`/api/meal/${mealId}`)
       .pipe(this.extractVoidResponse)
   }
 
@@ -73,7 +73,7 @@ export class ApiService {
 
     console.log(`eatenOn: ${eatenOn}`)
 
-    return this.http.post<IApiResponse<IMeal>>('/meal', {
+    return this.http.post<IApiResponse<IMeal>>('/api/meal', {
       ...meal,
       eatenOn,
     }).pipe(
@@ -97,7 +97,7 @@ export class ApiService {
       params['to'] = to.toISO({includeOffset: false})
     }
 
-    return this.http.get<IApiResponse<IPage<IMeal>>>('/meal', {
+    return this.http.get<IApiResponse<IPage<IMeal>>>('/api/meal', {
       params,
     }).pipe(
       map(this.extractResponseData),
@@ -108,12 +108,12 @@ export class ApiService {
   }
 
   saveFood(food: WithOptional<IFood, 'id' | 'ownedByUser'>): Observable<IFood> {
-    return this.http.post<IApiResponse<IFood>>('/food', food)
+    return this.http.post<IApiResponse<IFood>>('/api/food', food)
       .pipe(map(this.extractResponseData))
   }
 
   deleteFood(id: number): Observable<void> {
-    return this.http.delete<IApiResponse<void>>(`/food/${id}`)
+    return this.http.delete<IApiResponse<void>>(`/api/food/${id}`)
       .pipe(this.extractVoidResponse)
   }
 
@@ -131,7 +131,7 @@ export class ApiService {
       params['type'] = type
     }
 
-    return this.http.get<IApiResponse<IPage<IFood>>>(`/food`,
+    return this.http.get<IApiResponse<IPage<IFood>>>(`/api/food`,
       {
         params: params,
       })
@@ -158,7 +158,7 @@ export class ApiService {
   }
 
   loadFood(id: number): Observable<IFood> {
-    return this.http.get<IApiResponse<IFood>>(`/food/${id}`)
+    return this.http.get<IApiResponse<IFood>>(`/api/food/${id}`)
       .pipe(
         map(this.extractResponseData),
         combineLatestWith(this.loadMeasurements(id)),
@@ -170,7 +170,7 @@ export class ApiService {
   }
 
   refreshAuth(refreshToken: string): Observable<IAuthTokensResponse> {
-    return this.http.post<IApiResponse<IAuthTokensResponse>>('/user/refresh-auth-token', {
+    return this.http.post<IApiResponse<IAuthTokensResponse>>('/api/user/refresh-auth-token', {
       refreshToken,
     }).pipe(map(this.extractResponseData))
   }
@@ -185,7 +185,7 @@ export class ApiService {
       params['filter'] = filter.trim()
     }
 
-    return this.http.get<IApiResponse<IPage<IMealOption>>>('/meal/options', {
+    return this.http.get<IApiResponse<IPage<IMealOption>>>('/api/meal/options', {
       params,
     }).pipe(
       map(this.extractResponseData),
@@ -213,26 +213,26 @@ export class ApiService {
   }
 
   loadMeasurements(foodId: number): Observable<IMeasurement[]> {
-    return this.http.get<IApiResponse<IMeasurement[]>>(`/measurement`, {params: {foodId}})
+    return this.http.get<IApiResponse<IMeasurement[]>>(`/api/measurement`, {params: {foodId}})
       .pipe(
         map(this.extractResponseData),
       )
   }
 
   dropMeasurement(measurementId: number): Observable<void> {
-    return this.http.delete<IApiResponse<void>>(`/measurement/${measurementId}`)
+    return this.http.delete<IApiResponse<void>>(`/api/measurement/${measurementId}`)
       .pipe(this.extractVoidResponse)
   }
 
   saveMeasurement(measurement: IMeasurement): Observable<IMeasurement> {
-    return this.http.post<IApiResponse<IMeasurement>>(`/measurement`, measurement)
+    return this.http.post<IApiResponse<IMeasurement>>(`/api/measurement`, measurement)
       .pipe(
         map(this.extractResponseData),
       )
   }
 
   requestPeriodReport(from: DateTime, to: DateTime): Observable<void> {
-    return this.http.post<IApiResponse<void>>('/report/period', null, {
+    return this.http.post<IApiResponse<void>>('/api/report/period', null, {
       params: {
         from: from.toISODate(),
         to: to.toISODate(),
@@ -242,7 +242,7 @@ export class ApiService {
 
   loadReports(): Observable<IReport[]> {
     return loadAllPages<IReport>(
-      (page, pageSize) => this.http.get<IApiResponse<IPage<IReport>>>('/report', {
+      (page, pageSize) => this.http.get<IApiResponse<IPage<IReport>>>('/api/report', {
         params: {page, pageSize},
       }).pipe(
         map(rsp => this.extractResponseData(rsp)),
@@ -252,7 +252,7 @@ export class ApiService {
   }
 
   deleteReport(id: number): Observable<void> {
-    return this.http.delete<IApiResponse<void>>(`/report/${id}`)
+    return this.http.delete<IApiResponse<void>>(`/api/report/${id}`)
       .pipe(this.extractVoidResponse)
   }
 

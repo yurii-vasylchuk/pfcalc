@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://pfcalc.yuriivasylchuk.org.ua',
+  apiUrl: 'https://api.pfcalc.yuriivasylchuk.org.ua',
   // apiUrl: 'http://localhost:8080',
   ngxs: {
     logging: false,
