@@ -59,7 +59,7 @@ export class AuthInterceptor implements HttpInterceptor, OnDestroy {
   private shouldRefreshAuth(err: Error): boolean {
     return err instanceof HttpErrorResponse &&
       err.status === 403 &&
-      !err.url.startsWith(`${environment.apiUrl}/user/refresh-auth-token`) &&
+      !err.url.startsWith(`${environment.apiUrl}/api/user/refresh-auth-token`) &&
       this.refreshToken != null
   }
 }

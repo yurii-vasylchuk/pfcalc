@@ -168,7 +168,6 @@ export class AuthState implements NgxsOnInit {
         catchError(err => {
           this.alert.warn('alert.default-error')
 
-
           console.warn(err.msg)
 
           ctx.patchState({
