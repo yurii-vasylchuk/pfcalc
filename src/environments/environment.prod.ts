@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.pfcalc.yuriivasylchuk.org.ua',
+  apiUrl: 'https://api.pfcalc.vasylchuk.org.ua',
   ngxs: {
     logging: false,
     developmentMode: false,
