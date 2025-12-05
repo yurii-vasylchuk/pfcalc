@@ -73,7 +73,7 @@ export class ProfileState implements NgxsOnInit {
   ngxsOnInit(ctx: StateContext<Profile.IProfileState>): void {
     const lang = navigator.language.substring(0, 2)
     switch (lang) {
-      case 'ua':
+      case 'uk':
       case 'ru':
         ctx.patchState({
           language: 'UA',
