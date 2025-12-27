@@ -2,6 +2,7 @@ import {IPage, IPfcc} from './models/common.models'
 import {combineLatest, map, Observable, of, OperatorFunction, switchMap} from 'rxjs'
 import {DateTime} from 'luxon'
 import {Language} from './models/auth.models'
+import {defaultMeasurement, IMeasurement, IWeight} from './models/domain.models'
 
 export function isToday(date: DateTime): boolean {
   const now = DateTime.now()
@@ -97,4 +98,22 @@ export function resolveLocale(language: Language): string {
   }
 
   return locale
+}
+
+export function calcWeight(weight: number, measurement: IMeasurement): IWeight {
+  if (measurement == null || measurement.id === defaultMeasurement.id) {
+    return {
+      measurementId: null,
+      measurementCount: null,
+      inGram: weight,
+      measurementName: null,
+    }
+  } else {
+    return {
+      measurementId: measurement.id,
+      measurementCount: weight,
+      inGram: null,
+      measurementName: null,
+    }
+  }
 }

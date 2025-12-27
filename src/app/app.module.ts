@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser'
 
 import {routes} from './app-routes'
 import {AppComponent} from './app.component'
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
+import {provideAnimations} from '@angular/platform-browser/animations'
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin'
 import {environment} from '../environments/environment'
 import {NgxsRouterPluginModule} from '@ngxs/router-plugin'
@@ -44,6 +44,7 @@ import {DateAdapter, MAT_DATE_LOCALE} from '@angular/material/core'
 import {PfcalcLuxonDateAdapter} from './commons/pfcalc-luxon-date-adapter'
 import {ReportsState} from './features/reports/reports.state'
 import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler'
+import {EditMealState} from './features/dialogs/edit-meal-dialog/edit-meal.state'
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/')
@@ -56,7 +57,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
+    // BrowserAnimationsModule,
     NgxsModule.forRoot([
         AuthState,
         UiState,
@@ -67,7 +68,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         NavigationState,
         AddFoodState,
         SettingsState,
-        ReportsState],
+        ReportsState,
+        EditMealState,
+      ],
       {developmentMode: environment.ngxs.developmentMode}),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
@@ -125,6 +128,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       multi: true,
     },
     provideHttpClient(withInterceptorsFromDi()),
+    provideAnimations(),
   ],
 })
 export class AppModule {

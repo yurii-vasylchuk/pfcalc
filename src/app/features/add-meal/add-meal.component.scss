@@ -43,6 +43,11 @@ h1 {
   }
 }
 
+.meal-options-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .nutrients {
   display: flex;
   flex-direction: row;
@@ -85,4 +90,35 @@ h1 {
 
 .loading-bar {
   width: 100%;
+}
+
+.edit-ingredients {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: stretch;
+
+  > mat-progress-bar {
+    margin: 10px 0;
+  }
+
+  mat-divider {
+    margin: 0 0 10px;
+  }
+}
+
+.ingredient-selector {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: baseline;
+
+  > span, mat-checkbox {
+    flex-grow: 0;
+  }
+
+  > mat-form-field {
+    flex-grow: 1;
+  }
 }

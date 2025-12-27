@@ -44,7 +44,7 @@
       @for (food of data; track trackFoodById($index, food)) {
         <mat-list-item>
           <span matListItemTitle>{{ food.name }}</span>
-          <span matListItemLine>{{ 'common.pfcc-values' | translate:food.pfcc }}</span>
+          <span matListItemLine>{{ 'common.pfcc-values' | translate:fromFunctions.ceilPfcc(food.pfcc) }}</span>
           <div class="content__food-actions"
                matListItemMeta>
             <button (click)="handleEditClick(food.id)"

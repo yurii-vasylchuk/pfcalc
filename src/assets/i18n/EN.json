@@ -23,7 +23,7 @@
     "fat-sign": "f",
     "carbohydrates-sign": "c",
     "pfcc-sign": "p/f/c/kc",
-    "pfcc-values": "{protein}g / {fat}g / {carbohydrates}g / {calories}kCal",
+    "pfcc-values": "{protein}g/{fat}g/{carbohydrates}g/{calories}kCal",
     "calories-sign": "kcals",
     "weight": "Weight",
     "total-weight": "Total weight",
@@ -33,7 +33,7 @@
       "dashboard": "Dashboard",
       "signin": "Sign In",
       "signup": "Sign Up",
-      "complete-profile": "Complete prrofile",
+      "complete-profile": "Complete profile",
       "foods": "Foods management",
       "settings": "Settings"
     }
@@ -143,7 +143,13 @@
     "default-portion-name": "Portion",
     "enable-portions-measurement": "Create portions?",
     "portion-name-label": "Name",
-    "portions-count-label": "Count per recipe"
+    "portions-count-label": "Count per recipe",
+    "add-ingredient-option": "Add option",
+    "ingredient-group": {
+      "group-title": "Ingredient #{index}",
+      "make-default": "Make Default",
+      "delete-group-btn": "Delete Group"
+    }
   },
   "side-menu": {
     "title": "PFCC",
@@ -200,6 +206,11 @@
       },
       "invalidPeriod": "'From' should not exceed 'To'",
       "generate": "Generate"
+    }
+  },
+  "components": {
+    "edit-ingredients": {
+      "empty-configuration-msg": "Ingredients is not configured"
     }
   }
 }

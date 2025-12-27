@@ -40,16 +40,16 @@
   <div class="nutrients__period-block">
     <h1 class="nutrients__header">{{ 'dashboard.daily-nutrients' | translate }}</h1>
     <div class="nutrients__gauges">
-      <pfc-nutrition-gauge [aim]="dailyAims?.protein || null"
+      <pfc-nutrition-gauge [aim]="state.aims?.protein || null"
                            [title]="'common.protein' | translate"
                            [value]="dailyNutrients?.protein || 0"></pfc-nutrition-gauge>
-      <pfc-nutrition-gauge [aim]="dailyAims?.fat || null"
+      <pfc-nutrition-gauge [aim]="state.aims?.fat || null"
                            [title]="'common.fat' | translate"
                            [value]="dailyNutrients?.fat || 0"></pfc-nutrition-gauge>
-      <pfc-nutrition-gauge [aim]="dailyAims?.carbohydrates || null"
+      <pfc-nutrition-gauge [aim]="state.aims?.carbohydrates || null"
                            [title]="'common.carbohydrates' | translate"
                            [value]="dailyNutrients?.carbohydrates || 0"></pfc-nutrition-gauge>
-      <pfc-nutrition-gauge [aim]="dailyAims?.calories || null"
+      <pfc-nutrition-gauge [aim]="state.aims?.calories || null"
                            [title]="'common.calories' | translate"
                            [value]="dailyNutrients?.calories || 0"></pfc-nutrition-gauge>
     </div>
@@ -64,13 +64,15 @@
       {{ 'dashboard.meals-list.date-title' | translate: ({'date.date': currentDate}) }}
     }
   </h1>
-  @for (meal of eatenMeals; track mealTrackBy(i, meal); let i = $index) {
+  @for (meal of eatenMeals; track meal.id; let i = $index) {
     <div
       [ngClass]="i % 2 === 1 ? 'meals__line_even' : ''"
       class="meals__line">
       <!-- TODO: Implement loading more meals -->
       <div class="meals__description">
-        <span class="meals__title">{{ meal.name }} - {{ meal.weight }}{{ 'common.gram-sign' | translate }}</span>
+        <!-- TODO: Simplify line -->
+        <span class="meals__title">{{ meal.name }}
+          - {{ meal.weight.measurementId != null ? (meal.weight.measurementCount + ' ' + meal.weight.measurementName) : (meal.weight.inGram + ('common.gram-sign' | translate)) }}</span>
         <span class="meals__weight">
           {{ 'common.pfcc-values' | translate:fromFunctions.ceilPfcc(meal.pfcc) }}
         </span>
@@ -113,46 +115,3 @@
     {{ 'dashboard.add-meal-btn' | translate }}
   </a>
 </div>
-<ng-template #editMeal let-data>
-  <form [formGroup]="editMealForm">
-    <h2 mat-dialog-title>{{ 'dashboard.edit-meal.title' | translate }}</h2>
-    <mat-dialog-content class="edit-meal__content">
-      <div class="edit-meal__weight-input-group">
-
-        <mat-form-field class="edit-meal__weight-field]=">
-          <mat-label>{{ 'dashboard.edit-meal.weight-label' | translate }}</mat-label>
-          <input formControlName="weight"
-                 matInput
-                 min="0"
-                 type="number">
-        </mat-form-field>
-
-        <mat-form-field class="edit-meal__measurement-select">
-          <mat-select formControlName="measurement">
-            @for (measurement of editMealMeasurements; track measurementTrackByFn) {
-              <mat-option [value]="measurement">{{ 'measurements.' + measurement.name | translate }}</mat-option>
-            }
-          </mat-select>
-
-        </mat-form-field>
-
-
-      </div>
-
-      <!-- TODO: Add measurement selector -->
-      <!-- TODO: Add re-calculated PFCC -->
-    </mat-dialog-content>
-    <mat-dialog-actions class="edit-meal__actions">
-      <button [matDialogClose]="false"
-              color="primary"
-              mat-button>
-        {{ 'dashboard.edit-meal.close-btn-label' | translate }}
-      </button>
-      <button [matDialogClose]="true"
-              color="accent"
-              mat-button>
-        {{ 'dashboard.edit-meal.save-btn-label' | translate }}
-      </button>
-    </mat-dialog-actions>
-  </form>
-</ng-template>

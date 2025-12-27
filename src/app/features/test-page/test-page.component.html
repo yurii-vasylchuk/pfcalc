@@ -1,11 +1,5 @@
-<form>
-  <mat-form-field>
-    <mat-select>
-      @for (opt of options; track opt) {
-        <mat-option [value]="opt.value">
-          {{ opt.title }}
-        </mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-</form>
+@for (meal of meals$ | async; track meal.id) {
+  <button (click)="showDialog(meal)" mat-button>
+    {{ meal.name }}
+  </button>
+}

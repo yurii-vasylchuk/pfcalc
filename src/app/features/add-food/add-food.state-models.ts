@@ -18,7 +18,7 @@ export namespace AddFood {
 
   export type ReloadIngredientOptionsPayload = {
     searchString: string;
-    selectedIngredient: IFood;
+    selectedIngredient?: IFood;
   }[];
 
   export type SaveFoodPayload = IFood;

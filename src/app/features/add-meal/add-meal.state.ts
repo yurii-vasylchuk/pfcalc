@@ -11,6 +11,7 @@ import {loadAllPages, sumPfccs} from '../../commons/functions'
 import {emptyPfcc, IPfcc} from '../../commons/models/common.models'
 import {Navigation} from '../../state/navigation.state-model'
 import {AlertService} from '../../service/alert.service'
+import {IFoodIngredient} from '../../commons/models/domain.models'
 
 
 @State<AddMeal.IAddMealState>({
@@ -23,6 +24,8 @@ import {AlertService} from '../../service/alert.service'
     optionsPage: 0,
     optionsPageSize: 15,
     optionsTotalPages: null,
+    selectedOption: null,
+    selectedOptionIngredients: [],
   },
 })
 @Injectable({providedIn: 'root'})
@@ -37,6 +40,19 @@ export class AddMealState {
 
   @Selector()
   static options(state: AddMeal.IAddMealState): AddMeal.IMealOption[] {
+    //TODO: Remove
+    const aMap = state.options.map(option => option.foodId).reduce((map, id) => {
+      const count = map.get(id)
+      map.set(id, (count ?? 0) + 1)
+      return map
+    }, new Map<number, number>())
+
+    aMap.forEach((count, id) => {
+      if (count > 1) {
+        console.log(`ID: ${id}; COUNT: ${count}`)
+      }
+    })
+
     return state.options
   }
 
@@ -53,6 +69,11 @@ export class AddMealState {
   @Selector()
   static date(state: AddMeal.IAddMealState): DateTime {
     return state.date
+  }
+
+  @Selector()
+  static optionIngredients(state: AddMeal.IAddMealState): IFoodIngredient[] {
+    return state.selectedOptionIngredients
   }
 
   @Receiver({action: RouterNavigated})
@@ -136,7 +157,19 @@ export class AddMealState {
 
   @Receiver({type: AddMeal.SAVE_MEAL})
   static saveMeal(ctx: StateContext<AddMeal.IAddMealState>, {payload}: EmitterAction<AddMeal.SaveMealPayload>) {
-    return this.api.saveMeal(payload)
+    const base = {
+      foodId: payload.foodId,
+      eatenOn: payload.eatenOn,
+    }
+
+    const command = payload.ingredients != null && payload.ingredients.length > 0 ? {
+      ...base,
+      ingredients: payload.ingredients,
+    } : {
+      ...base,
+      weight: payload.weight,
+    }
+    return this.api.saveMeal(command)
       .pipe(
         map(meal => {
           return {
@@ -155,6 +188,46 @@ export class AddMealState {
           return EMPTY
         }),
         switchMap(ctx.dispatch),
+      )
+  }
+
+  @Receiver({type: AddMeal.SELECT_MEAL_OPTION})
+  static selectOption(ctx: StateContext<AddMeal.IAddMealState>, {payload}: EmitterAction<AddMeal.SelectOptionPayload>) {
+    ctx.patchState({
+      selectedOption: payload,
+      selectedOptionIngredients: [],
+    })
+
+    if (ctx.getState().options.find(o => o.foodId === payload)?.type === 'RECIPE') {
+      return ctx.dispatch({
+        type: AddMeal.LOAD_OPTION_INGREDIENTS,
+      })
+    }
+
+    return EMPTY
+  }
+
+  @Receiver({type: AddMeal.LOAD_OPTION_INGREDIENTS})
+  static loadOptionIngredients(ctx: StateContext<AddMeal.IAddMealState>, _: EmitterAction) {
+    const foodId = ctx.getState().selectedOption
+
+    return this.api.loadFood(foodId)
+      .pipe(
+        tap(food => {
+          ctx.patchState({
+            selectedOptionIngredients: food.ingredients,
+          })
+        }),
+        catchError(err => {
+          console.warn('Error while loading ingredients list: ', err)
+          this.alert.warn('alert.default-error')
+
+          ctx.patchState({
+            selectedOptionIngredients: [],
+          })
+
+          return EMPTY
+        }),
       )
   }
 }

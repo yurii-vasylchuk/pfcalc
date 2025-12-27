@@ -106,72 +106,132 @@
     </div>
     <h2>{{ 'add-food.ingredients-header' | translate }}</h2>
     <div class="ingredients"
-         formArrayName="ingredients">
-      @for (fi of form.value.ingredients; track trackByIndexFn(idx, fi); let idx = $index) {
-        <div
-          class="ingredient">
-          <div class="ingredient-pfcc_row">
-            @if (fi != null && fi.ingredient != null) {
+         formArrayName="ingredientGroups">
+      @for (ig of form.value.ingredientGroups; track ig.index; let $groupIdx = $index) {
+        @let selectedIngredient = ig.ingredients[ig.selectedOption];
+
+        <div class="ingredient-group" [formGroupName]="$groupIdx">
+          <div class="ingredient-group-controls">
+            <span>{{ 'add-food.ingredient-group.group-title' | translate: {index: ($groupIdx + 1)} }}</span>
+            <div class="flex-spacer"></div>
+            <button mat-stroked-button
+                    color="warn"
+                    type="button"
+                    (click)="handleRemoveIngredientGroupClick($groupIdx)">
+              {{ 'add-food.ingredient-group.delete-group-btn' | translate }}
+              <!-- Delete Group -->
+            </button>
+          </div>
+          <div class="ingredient-group-ingredient-controls">
+            @if (selectedIngredient?.ingredient?.pfcc != null) {
               <span>
                 {{ 'common.pfcc-sign' | translate }} :
-                {{ 'common.pfcc-values' | translate:ceilPfcc(multiplyPfcc(fi.ingredient.pfcc, (fi.weight * fi.measurement.toGramMultiplier) / 100), 0) }}
+                {{ 'common.pfcc-values' | translate:ceilPfcc(multiplyPfcc(selectedIngredient.ingredient.pfcc, (selectedIngredient.weight * selectedIngredient.measurement.toGramMultiplier) / 100), 0) }}
+              </span>
+            } @else {
+              <span>
+                {{ 'common.pfcc-sign' | translate }} :
+                {{ 'common.pfcc-values' | translate: emptyPfcc }}
               </span>
             }
-          </div>
-          <div [formGroupName]="idx"
-               class="ingredient-edit_row">
-            <mat-form-field class="ingredient-select">
-              <mat-label>{{ 'add-food.ingredient-select-label' | translate }}</mat-label>
-              <mat-select [compareWith]="compareIngredientsFn"
-                          [placeholder]="'add-food.ingredient-select-placeholder' | translate"
-                          formControlName="ingredient">
-                <mat-option>
-                  <ngx-mat-select-search [placeholderLabel]="'add-food.ingredient-search-placeholder' | translate"
-                                         formControlName="ingredientSearch"/>
-                </mat-option>
-                @for (ingredient of ingredientsOptions[idx]; track trackFoodByIdFn($index, ingredient)) {
-                  <mat-option
-                    [disabled]="(usedIngredientsIds$ | async)!.includes(ingredient?.id)"
-                    [value]="ingredient">
-                    {{ ingredient?.name }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-            <button (click)="handleRemoveIngredientClick(idx)"
-                    class="remove-ingredient-btn"
-                    color="warn"
-                    mat-icon-button
-                    type="button">
-              <mat-icon>delete</mat-icon>
+            <button mat-stroked-button
+                    [disabled]="ig.selectedOption <= 0"
+                    color="primary"
+                    type="button"
+                    (click)="handleMakeIngredientDefaultClick($groupIdx)">
+              {{ 'add-food.ingredient-group.make-default' | translate }}
             </button>
-            <div class="ingredient-weight-group">
-              <mat-form-field class="ingredient-weight">
-                <mat-label>{{ 'add-food.ingredient-weight-label' | translate }}</mat-label>
-                <input formControlName="weight"
-                       matInput
-                       type="number">
-              </mat-form-field>
-              <mat-form-field class="ingredient-measurement">
-                <mat-label>{{ 'add-food.ingredient-measurement-label' | translate }}</mat-label>
-                <mat-select [placeholder]="'placeholder'"
-                            formControlName="measurement">
-                  <mat-option [value]="defaultMeasurement">
-                    {{ 'measurements.' + defaultMeasurement.name | translate }}
-                  </mat-option>
-                  @for (m of form.value.ingredients[idx].ingredient?.measurements ?? []; track m) {
-                    <mat-option
-                      [value]="m">
-                      {{ 'measurements.' + m.name | translate }}
-                    </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
+          </div>
+
+          <div formArrayName="ingredients">
+            @for (ingredient of ig.ingredients; track ingredient.index; let $ingredientIndex = $index) {
+              <div class="ingredient-group-items"
+                   [style.display]="ig.selectedOption == $ingredientIndex ? '' : 'none'"
+                   [formGroupName]="$ingredientIndex">
+                <div class="ingredient-group-item_ingredient">
+                  <mat-form-field>
+                    <mat-label>{{ 'add-food.ingredient-select-label' | translate }}</mat-label>
+                    <mat-select [compareWith]="compareIngredientsFn"
+                                [placeholder]="'add-food.ingredient-select-placeholder' | translate"
+                                formControlName="ingredient">
+                      <mat-option>
+                        <ngx-mat-select-search [placeholderLabel]="'add-food.ingredient-search-placeholder' | translate"
+                                               [formControl]="form.controls.ingredientGroups.at($groupIdx).controls.ingredientSearch">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      @for (ingredientOption of ingredientsOptions[$groupIdx]; track ingredientOption.id) {
+                        <mat-option
+                          [value]="ingredientOption">
+                          {{ ingredientOption?.name }}
+                        </mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+
+                  <button mat-icon-button
+                          type="button"
+                          (click)="handleRemoveIngredientFromGroupClick($groupIdx, ig.selectedOption)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+
+                <div class="ingredient-group-weight-group">
+                  <mat-form-field class="ingredient-weight">
+                    <mat-label>{{ 'add-food.ingredient-weight-label' | translate }}</mat-label>
+                    <input formControlName="weight"
+                           matInput
+                           type="number">
+                  </mat-form-field>
+                  <mat-form-field class="ingredient-measurement">
+                    <mat-label>{{ 'add-food.ingredient-measurement-label' | translate }}</mat-label>
+                    <mat-select [placeholder]="'placeholder'"
+                                [compareWith]="compareMeasurementsFn"
+                                formControlName="measurement">
+                      <mat-option [value]="defaultMeasurement">
+                        {{ 'measurements.' + defaultMeasurement.name | translate }}
+                      </mat-option>
+                      @for (
+                        m of form.value.ingredientGroups[$groupIdx].ingredients[$ingredientIndex]?.ingredient?.measurements ?? []; track m.id) {
+                        <mat-option
+                          [value]="m">
+                          {{ 'measurements.' + m.name | translate }}
+                        </mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            }
+            <div class="ingredient-group-item_controls">
+              <button mat-mini-fab
+                      type="button"
+                      [disabled]="ig.selectedOption <= 0"
+                      (click)="handleSelectPreviousIngredientInGroupClick($groupIdx)">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+
+              <span class="flex-spacer"></span>
+              <span>{{ (ig.selectedOption + 1) }} / {{ ig.ingredients.length }}</span>
+              <span class="flex-spacer"></span>
+
+              @if ((ig.selectedOption + 1) < ig.ingredients.length) {
+                <button mat-mini-fab
+                        type="button"
+                        (click)="handleSelectNextIngredientInGroupClick($groupIdx)">
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
+              } @else {
+                <button mat-mini-fab
+                        type="button"
+                        (click)="handleAddIngredientToGroupClick($groupIdx)">
+                  <mat-icon>add</mat-icon>
+                </button>
+              }
             </div>
           </div>
         </div>
       }
-      <button (click)="handleAddIngredientClick()"
+      <button (click)="handleAddIngredientGroupClick()"
               class="add-ingredient-btn"
               color="primary"
               mat-stroked-button
@@ -214,10 +274,10 @@
 
   <div class="measurements"
        formArrayName="measurements">
-    @for (m of form.value.measurements; let idx = $index; track trackByIndexFn) {
+    @for (m of form.value.measurements; track m.index) {
       @if (!m.deleted) {
         <div
-          [formGroupName]="idx"
+          [formGroupName]="$index"
           class="measurement">
           <input formControlName="id"
                  hidden>
@@ -228,7 +288,8 @@
                    type="text">
           </mat-form-field>
           <button mat-icon-button
-                  (click)="handleDeleteMeasurement(idx)"
+                  type="button"
+                  (click)="handleDeleteMeasurement($index)"
                   color="warn">
             <mat-icon>delete</mat-icon>
           </button>

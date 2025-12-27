@@ -1,3 +1,5 @@
+import {FormArray, FormControl, FormGroup} from '@angular/forms'
+
 export interface IApiError {
   message: string;
 }
@@ -83,3 +85,13 @@ export class UnknownBoolean {
 
 // export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+export type FormControlValue<T> =
+  T extends FormControl<infer V> ? V :
+    T extends FormGroup<infer G> ? FormGroupValue<T> :
+      T extends FormArray<infer U> ? FormControlValue<U>[] :
+        never;
+
+export type FormGroupValue<T extends FormGroup<any>> = {
+  [K in keyof T['controls']]: FormControlValue<T['controls'][K]>;
+};

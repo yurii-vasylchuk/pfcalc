@@ -30,6 +30,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar'
 import {Store} from '@ngxs/store'
 import {Navigate} from '@ngxs/router-plugin'
 import * as fromRoutes from '../../commons/routes'
+import * as fromFunctions from '../../commons/functions'
 
 @Component({
   selector: 'pfc-foods-management-page',
@@ -40,6 +41,8 @@ import * as fromRoutes from '../../commons/routes'
 })
 export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private store = inject(Store)
+
+  protected readonly fromFunctions = fromFunctions
 
   @ViewSelectSnapshot(FoodsManagementState.products)
   protected products: IFood[]

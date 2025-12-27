@@ -1,51 +1,41 @@
 import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core'
 
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
+import {ReactiveFormsModule} from '@angular/forms'
 import {MatSelectModule} from '@angular/material/select'
+import {ApiService} from '../../service/api.service'
+import {MatButton} from '@angular/material/button'
+import {map, Observable} from 'rxjs'
+import {IMeal} from '../../commons/models/domain.models'
+import {AsyncPipe} from '@angular/common'
+import {MatDialog} from '@angular/material/dialog'
+import {EditMealDialogComponent} from '../dialogs/edit-meal-dialog/edit-meal-dialog.component'
 
 @Component({
   selector: 'pfc-test-page',
-  imports: [ReactiveFormsModule, MatSelectModule],
+  imports: [ReactiveFormsModule, MatSelectModule, MatButton, AsyncPipe],
   templateUrl: './test-page.component.html',
   styleUrls: ['./test-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestPageComponent implements OnInit {
-  private fb = inject(FormBuilder)
-
-  options: { title: string, value: number }[] = [
-    {
-      title: 'Title 1',
-      value: 1,
-    },
-    {
-      title: 'Title 2',
-      value: 2,
-    },
-    {
-      title: 'Title 3',
-      value: 3,
-    },
-    {
-      title: 'Title 4',
-      value: 4,
-    },
-  ]
-
-  protected form: FormGroup<{
-    selection: FormControl<number>
-  }>
-
-  constructor() {
-    this.form = this.fb.group({
-      selection: [null as number, Validators.required],
-    })
-  }
+  protected meals$: Observable<IMeal[]>
+  private api = inject(ApiService)
+  private dialog = inject(MatDialog)
 
   ngOnInit(): void {
+    this.meals$ = this.api.loadMeals(0, 10, null, null)
+      .pipe(
+        map(page => page.data),
+      )
   }
 
-  handleSubmit() {
-    console.log(this.form.value)
+  showDialog(meal: IMeal) {
+    const matDialogRef = this.dialog.open(EditMealDialogComponent, {
+      data: {meal: meal},
+    })
+
+    matDialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+    })
   }
 }

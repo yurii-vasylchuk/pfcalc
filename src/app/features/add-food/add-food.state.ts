@@ -8,6 +8,7 @@ import * as fromRoutes from '../../commons/routes'
 import {FoodType, IFood, IMeasurement, isFoodType} from '../../commons/models/domain.models'
 import {catchError, combineLatest, EMPTY, map, Observable, of, switchMap, tap} from 'rxjs'
 import {Navigation} from '../../state/navigation.state-model'
+import {state} from '@angular/animations'
 
 @State<AddFood.IAddFoodState>({
   name: 'addFood',
@@ -48,25 +49,24 @@ export class AddFoodState implements NgxsOnInit {
       return EMPTY
     }
 
-    const {id, type, name} = action.routerState.root.queryParams
+    const {id: idStr, type, name} = action.routerState.root.queryParams
 
-    if (id != null) {
-      return this.api.loadFood(Number.parseInt(id))
+    if (idStr != null) {
+      const id = Number.parseInt(idStr)
+
+      ctx.patchState({
+        defaultIngredientOptions: [
+          ...ctx.getState().defaultIngredientOptions.filter(opt => opt.id !== id),
+        ],
+      })
+
+      return this.api.loadFood(id)
         .pipe(
           tap(food => ctx.patchState({
-            formInitialization: food,
-          })),
-          switchMap(food => {
-            const sources: Observable<IFood[]>[] = (food.ingredients ?? [])
-              .map(ingredient => this.api.loadFoodsList(0, 10)
-                .pipe(map(page => [ingredient, ...page.data])))
-            return combineLatest(sources)
-          }),
-          tap(ingredients => ctx.patchState({
-            ingredientOptions: ingredients.map(opts => ({
-              ingredients: opts,
-              ingredientSearch: null,
-            })),
+            formInitialization: {
+              ...food,
+              ingredients: food.ingredients?.sort((a, b) => a.ingredientIndex - b.ingredientIndex),
+            },
           })),
           map(_ => null),
         )
@@ -108,7 +108,6 @@ export class AddFoodState implements NgxsOnInit {
 
   @Receiver({type: AddFood.RELOAD_INGREDIENT_OPTIONS_ACTION})
   static reloadIngredientOptions(ctx: StateContext<AddFood.IAddFoodState>, {payload}: EmitterAction<AddFood.ReloadIngredientOptionsPayload>): void {
-    //TODO: Optimize
     const {defaultIngredientOptions} = ctx.getState()
     let options$: Observable<IFood[]>[] = []
 

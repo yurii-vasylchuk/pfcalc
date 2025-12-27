@@ -1,12 +1,13 @@
 import {inject, Injectable} from '@angular/core'
 import {HttpClient} from '@angular/common/http'
-import {combineLatest, combineLatestWith, identity, map, Observable, of, switchMap, tap, throwError} from 'rxjs'
+import {map, Observable, tap, throwError} from 'rxjs'
 import {IAuthTokensResponse, Language} from '../commons/models/auth.models'
 import {FoodType, IFood, IMeal, IMeasurement, IProfile, IProfileUpdate, IReport} from '../commons/models/domain.models'
 import {IApiResponse, IPage, WithOptional} from '../commons/models/common.models'
 import {DateTime} from 'luxon'
 import {AddMeal} from '../features/add-meal/add-meal.state-models'
 import {loadAllPages} from '../commons/functions'
+import {IMealCommandDto} from './api/api-models'
 import IMealOption = AddMeal.IMealOption
 
 @Injectable({providedIn: 'root'})
@@ -68,10 +69,9 @@ export class ApiService {
       .pipe(this.extractVoidResponse)
   }
 
-  saveMeal(meal: Partial<Pick<IMeal, 'id'>> & Omit<IMeal, 'id'>): Observable<IMeal> {
+  saveMeal(meal: IMealCommandDto): Observable<IMeal> {
     const eatenOn = meal.eatenOn.toISO({includeOffset: false})
 
-    console.log(`eatenOn: ${eatenOn}`)
 
     return this.http.post<IApiResponse<IMeal>>('/api/meal', {
       ...meal,
@@ -137,23 +137,6 @@ export class ApiService {
       })
       .pipe(
         map(this.extractResponseData),
-        tap(page => page.data.forEach(f => f.measurements = (f.measurements ?? []))),
-        switchMap(page => {
-          return combineLatest(page.data.map(food => this.loadMeasurements(food.id))).pipe(
-            map(measurements => {
-              measurements.flatMap(identity).forEach(m => {
-                const food = page.data.find(f => f.id === m.foodId)
-                if (food == null) {
-                  console.warn(`Can't find appropriate food (#${m.foodId}) for measurement #${m.id} - ${m.name}`)
-                  return
-                }
-                food.measurements.push(m)
-              })
-
-              return page
-            }),
-          )
-        }),
       )
   }
 
@@ -161,11 +144,6 @@ export class ApiService {
     return this.http.get<IApiResponse<IFood>>(`/api/food/${id}`)
       .pipe(
         map(this.extractResponseData),
-        combineLatestWith(this.loadMeasurements(id)),
-        map(([food, measurements]) => {
-          food.measurements = measurements
-          return food
-        }),
       )
   }
 
@@ -189,26 +167,6 @@ export class ApiService {
       params,
     }).pipe(
       map(this.extractResponseData),
-      switchMap(data => {
-        const sources = data.data.filter(opt => opt.type === 'RECIPE' || 'INGREDIENT')
-          .map(opt => this.loadMeasurements(opt.foodId))
-
-        return combineLatest([of(data), combineLatest(sources)])
-      }),
-      map(([options, allMeasurements]) => {
-        allMeasurements
-          .filter(measurements => measurements != null && measurements.length > 0)
-          .forEach(measurements => {
-            const food = options.data
-              .find(opt => ['RECIPE', 'INGREDIENT'].includes(opt.type) && opt.foodId === measurements[0].foodId)
-
-            if (food != null) {
-              food.measurements = measurements
-            }
-          })
-
-        return options
-      }),
     )
   }
 

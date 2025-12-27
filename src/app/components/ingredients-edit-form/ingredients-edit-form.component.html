@@ -1,0 +1,40 @@
+@let groups = ingredientGroups();
+
+@if (groups == null) {
+  <mat-progress-bar mode="indeterminate"/>
+} @else if (groups.length === 0) {
+  <p>{{ 'components.edit-ingredients.empty-configuration-msg' | translate }}</p>
+} @else {
+  <form [formGroup]="form">
+    <div formGroupName="ingredients"
+         class="ingredients">
+      @for (group of groups; let $groupIndex = $index; track $groupIndex) {
+        <div class="ingredient"
+             [formGroupName]="$groupIndex">
+          <div class="option-row">
+            <mat-form-field class="option-row_ingredient">
+              <mat-select formControlName="ingredient">
+                @for (option of group.options; track option.id) {
+                  <mat-option [value]="option">
+                    {{ option.name }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-checkbox formControlName="include"></mat-checkbox>
+          </div>
+
+          <pfc-weight-input [initial]="group.weight ?? group.options[0].ingredientWeight"
+                            [measurements]="measurementsByGroup()[$groupIndex]"
+                            (weightChanges)="handleWeightChanged($groupIndex, $event)">
+          </pfc-weight-input>
+
+        </div>
+        @if (!$last) {
+          <mat-divider class="ingredients-divider"/>
+        }
+      }
+    </div>
+  </form>
+}

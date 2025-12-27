@@ -1,15 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  inject,
-  OnDestroy,
-  OnInit,
-  TrackByFunction,
-} from '@angular/core'
+import {ChangeDetectionStrategy, Component, EventEmitter, inject, OnDestroy, OnInit} from '@angular/core'
 import {CommonModule} from '@angular/common'
 import {DialogPageHeadingComponent} from '../../components/dialog-page-heading/dialog-page-heading.component'
-import {ceilPfcc, multiplyPfcc, sumPfccs, withDefaults} from '../../commons/functions'
+import {calcWeight, ceilPfcc, multiplyPfcc, sumPfccs, withDefaults} from '../../commons/functions'
 import {
   FormArray,
   FormBuilder,
@@ -27,22 +19,28 @@ import {MatOptionModule} from '@angular/material/core'
 import {MatSelectModule} from '@angular/material/select'
 import {MatSlideToggleChange, MatSlideToggleModule} from '@angular/material/slide-toggle'
 import {NgxMatSelectSearchModule} from 'ngx-mat-select-search'
-import {IFood, IIngredient, IMeasurement} from '../../commons/models/domain.models'
+import {defaultMeasurement, IFood, IFoodIngredient, IMeasurement} from '../../commons/models/domain.models'
 import {Store} from '@ngxs/store'
 import {AddFoodState} from './add-food.state'
 import {ViewSelectSnapshot} from '@ngxs-labs/select-snapshot'
-import {BehaviorSubject, debounceTime, filter, map, skipWhile, Subject, take, takeUntil} from 'rxjs'
-import {emptyPfcc, IPfcc} from '../../commons/models/common.models'
+import {debounceTime, filter, map, skipWhile, Subject, take, takeUntil} from 'rxjs'
+import {emptyPfcc, FormGroupValue, IPfcc} from '../../commons/models/common.models'
 import {Emitter} from '@ngxs-labs/emitter'
 import {AddFood} from './add-food.state-models'
 import {TranslateModule, TranslateService} from '@ngx-translate/core'
 import {MatCheckbox} from '@angular/material/checkbox'
 
-type AddFoodIngredientForm = FormGroup<{
-  ingredientSearch: FormControl<string>;
-  ingredient: FormControl<IFood>;
+type FoodIngredientForm = FormGroup<{
+  ingredient: FormControl<IFoodIngredient>;
   measurement: FormControl<IMeasurement>;
   weight: FormControl<number>;
+  index: FormControl<number>;
+}>;
+
+type AddFoodIngredientGroupForm = FormGroup<{
+  ingredientSearch: FormControl<string>;
+  ingredients: FormArray<FoodIngredientForm>;
+  selectedOption: FormControl<number>;
   index: FormControl<number>;
 }>;
 
@@ -67,9 +65,10 @@ type AddFoodForm = {
   description: FormControl<string>;
   isRecipe: FormControl<boolean>;
   hidden: FormControl<boolean>;
+  ownedByUser: FormControl<boolean>;
   pfcc: FormGroup<{ [p in keyof IPfcc]: FormControl<IPfcc[p]> }>;
   portions: AddPortionsForm;
-  ingredients: FormArray<AddFoodIngredientForm>;
+  ingredientGroups: FormArray<AddFoodIngredientGroupForm>;
   measurements: FormArray<AddFoodMeasurementForm>;
 };
 
@@ -92,13 +91,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
 
   protected readonly ceilPfcc = ceilPfcc
   protected readonly multiplyPfcc = multiplyPfcc
-  protected readonly defaultMeasurement: IMeasurement = {
-    id: null,
-    name: 'g',
-    foodId: null,
-    defaultValue: 100,
-    toGramMultiplier: 1,
-  }
+  protected readonly defaultMeasurement = defaultMeasurement
 
   @ViewSelectSnapshot(AddFoodState.ingredients)
   protected ingredientsOptions: IFood[][]
@@ -106,11 +99,11 @@ export class AddFoodComponent implements OnInit, OnDestroy {
   protected saveFood: EventEmitter<AddFood.SaveFoodPayload>
   protected title = AddFoodComponent.CREATE_TITLE
   protected form: FormGroup<AddFoodForm>
-  protected usedIngredientsIds$ = new BehaviorSubject<number[]>([])
   @Emitter(AddFoodState.reloadIngredientOptions)
   private reloadIngredientOptions: EventEmitter<AddFood.ReloadIngredientOptionsPayload>
   @Emitter(AddFoodState.dropMeasurements)
   private dropMeasurements: EventEmitter<number[]>
+  protected readonly emptyPfcc = emptyPfcc
   private nextIngredientIndex = 1
   private nextMeasurementIndex = 1
   private $destroy = new Subject<void>()
@@ -122,67 +115,58 @@ export class AddFoodComponent implements OnInit, OnDestroy {
   protected get ceiledPfcc(): IPfcc {
     return ceilPfcc(withDefaults(this.form.value.pfcc, emptyPfcc))
   }
+  private nextIngredientGroupIndex = 1
 
   protected get totalRecipeWeight(): number {
     if (!this.isRecipe) {
       return 0
     }
 
-    return this.form.value.ingredients.map(i => i.weight * i.measurement.toGramMultiplier).reduce((w1, w2) => w1 + w2, 0)
+    return this.form.value.ingredientGroups
+      .filter(g => g.selectedOption >= 0)
+      .map(i => i.ingredients[i.selectedOption].weight * i.ingredients[i.selectedOption].measurement.toGramMultiplier)
+      .reduce((w1, w2) => w1 + w2, 0)
+  }
+
+  ngOnDestroy() {
+    this.$destroy.next(null)
+    this.$destroy.complete()
   }
 
   ngOnInit(): void {
     this.createForm()
 
-    this.form.controls.ingredients.valueChanges
-      .pipe(takeUntil(this.$destroy))
-      .subscribe(ingredients => {
-        this.recalculateUsedIngredients(ingredients.map(i => i.ingredient))
-      })
-
     this.form.valueChanges.pipe(
       filter(form => form.isRecipe),
-      map(form => form.ingredients.filter(i => i?.ingredient != null)),
+      map(form => form.ingredientGroups
+        .map(i => i.ingredients[i.selectedOption])
+        .filter(i => i?.ingredient != null)),
     ).subscribe(ingredients => {
       this.form.patchValue({
         pfcc: sumPfccs(...ingredients.map(i => multiplyPfcc(i.ingredient.pfcc, (i.weight * i.measurement.toGramMultiplier) / 100))),
       }, {emitEvent: false})
     })
 
-    this.form.controls.ingredients.valueChanges.pipe(
+    this.form.controls.ingredientGroups.valueChanges.pipe(
       takeUntil(this.$destroy),
       debounceTime(100),
       map(ingredients => ingredients.map(i => ({
         searchString: i.ingredientSearch,
-        selectedIngredient: i.ingredient,
-      })) as AddFood.ReloadIngredientOptionsPayload),
+        selectedIngredient: i.ingredients[i.selectedOption]?.ingredient,
+      }))),
     ).subscribe(this.reloadIngredientOptions.emit)
 
-    this.initializeFromData()
+    this.initializeFormData()
   }
-
-  ngOnDestroy() {
-    this.$destroy.next(null)
-    this.$destroy.complete()
-    this.usedIngredientsIds$.complete()
-  }
-
-  handleDeleteMeasurement(idx: number) {
-    this.form.controls.measurements.at(idx).patchValue({
-      deleted: true,
-    })
-  }
-
-  protected trackByIndexFn: TrackByFunction<{
-    index?: number
-  }> = (_, i) => `${i.index}`
 
   protected compareIngredientsFn = (ing1: any, ing2: any) => ing1?.id === ing2?.id
 
-  protected trackFoodByIdFn: TrackByFunction<IFood> = (_, item) => item?.id
+  protected compareMeasurementsFn: (m1: IMeasurement, m2: IMeasurement) => boolean = (m1, m2) => m1.id === m2.id
 
-  protected handleRemoveIngredientClick(idx: number) {
-    this.form.controls.ingredients.removeAt(idx)
+  protected handleDeleteMeasurement(idx: number) {
+    this.form.controls.measurements.at(idx).patchValue({
+      deleted: true,
+    })
   }
 
   protected handleAddMeasurementClick() {
@@ -198,23 +182,8 @@ export class AddFoodComponent implements OnInit, OnDestroy {
     this.form.controls.measurements.push(measurementFormGroup)
   }
 
-  protected handleAddIngredientClick() {
-    const ingredientFormGroup = this.fb.group({
-      ingredient: this.fb.control(null as IFood),
-      ingredientSearch: this.fb.control(''),
-      measurement: this.fb.control(this.defaultMeasurement),
-      weight: this.fb.control(100),
-      index: this.fb.control(this.nextIngredientIndex++),
-    })
-
-    ingredientFormGroup.controls.measurement.valueChanges
-      .subscribe(m => ingredientFormGroup.patchValue({
-        weight: m.defaultValue,
-      }))
-    ingredientFormGroup.controls.ingredient.valueChanges
-      .subscribe(_ => ingredientFormGroup.controls.measurement.setValue(this.defaultMeasurement))
-
-    this.form.controls.ingredients.push(ingredientFormGroup)
+  protected handleRemoveIngredientGroupClick(idx: number) {
+    this.form.controls.ingredientGroups.removeAt(idx)
   }
 
   protected handleNutrientInputFocus(formElementName: keyof IPfcc) {
@@ -229,12 +198,107 @@ export class AddFoodComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected handleAddIngredientGroupClick() {
+    const ingredientFG = this.fb.group({
+      ingredient: this.fb.control(null as IFoodIngredient),
+      measurement: this.fb.control(defaultMeasurement),
+      weight: this.fb.control(100),
+      index: this.fb.control(this.nextIngredientIndex++),
+    })
+    const ingredientGroupFG: AddFoodIngredientGroupForm = this.fb.group({
+      ingredientSearch: this.fb.control(''),
+      ingredients: this.fb.array<FoodIngredientForm>([
+        ingredientFG,
+      ]),
+      selectedOption: this.fb.control(0),
+      index: this.fb.control(this.nextIngredientGroupIndex++),
+    })
+
+    ingredientFG.controls.measurement.valueChanges
+      .subscribe(m => ingredientFG.patchValue({
+        weight: m.defaultValue,
+      }))
+
+    ingredientFG.controls.ingredient.valueChanges
+      .subscribe(_ => ingredientFG.controls.measurement.setValue(defaultMeasurement))
+
+    this.form.controls.ingredientGroups.push(ingredientGroupFG)
+  }
+
   protected handleRecipeSwitcherChanged(data: MatSlideToggleChange) {
     if (data.checked) {
       this.form.controls.pfcc.setValue(emptyPfcc)
     } else {
-      this.form.controls.ingredients.clear()
+      this.form.controls.ingredientGroups.clear()
     }
+  }
+
+  protected handleSelectPreviousIngredientInGroupClick(groupIdx: number) {
+    const group = this.form.value.ingredientGroups[groupIdx]
+
+    if (group.selectedOption >= 1) {
+      this.form.controls.ingredientGroups.at(groupIdx).patchValue({
+        selectedOption: group.selectedOption - 1,
+      })
+    }
+  }
+
+  protected handleSelectNextIngredientInGroupClick(groupIdx: number) {
+    const group = this.form.value.ingredientGroups[groupIdx]
+
+    if (group.ingredients.length > (group.selectedOption + 1)) {
+      this.form.controls.ingredientGroups.at(groupIdx).patchValue({
+        selectedOption: group.selectedOption + 1,
+      })
+    }
+  }
+
+  protected handleMakeIngredientDefaultClick(groupIdx: number) {
+    const group = this.form.controls.ingredientGroups.at(groupIdx)
+    const currentIngredientIndex = group.value.selectedOption
+    const ingredients = group.controls.ingredients
+    const ingredient = ingredients.at(currentIngredientIndex)
+
+    ingredients.removeAt(currentIngredientIndex)
+    ingredients.insert(0, ingredient)
+
+    group.patchValue({
+      selectedOption: 0,
+    })
+  }
+
+  protected handleAddIngredientToGroupClick(groupIdx: number) {
+    const group = this.form.controls.ingredientGroups.at(groupIdx)
+    const ingredientFG = this.fb.group({
+      ingredient: this.fb.control(null as IFoodIngredient),
+      measurement: this.fb.control(defaultMeasurement),
+      weight: this.fb.control(100),
+      index: this.fb.control(this.nextIngredientIndex++),
+    })
+    group.controls.ingredients.push(ingredientFG)
+    ingredientFG.controls.measurement.valueChanges
+      .subscribe(m => ingredientFG.patchValue({
+        weight: m.defaultValue,
+      }))
+
+    ingredientFG.controls.ingredient.valueChanges
+      .subscribe(_ => ingredientFG.controls.measurement.setValue(defaultMeasurement))
+
+    group.patchValue({
+      selectedOption: group.value.selectedOption + 1,
+    })
+  }
+
+  protected handleRemoveIngredientFromGroupClick(groupIdx: number, ingredientIdx: number) {
+    const group = this.form.controls.ingredientGroups.at(groupIdx)
+
+    if (!(ingredientIdx == 0 && group.value.ingredients.length > 1)) {
+      group.patchValue({
+        selectedOption: ingredientIdx - 1,
+      })
+    }
+
+    group.controls.ingredients.removeAt(ingredientIdx)
   }
 
   protected handleSubmit() {
@@ -254,7 +318,8 @@ export class AddFoodComponent implements OnInit, OnDestroy {
         id: null,
         foodId: f.id,
         name: f.portions.name,
-        toGramMultiplier: f.ingredients.map(i => i.weight * i.measurement.toGramMultiplier).reduce((a, b) => a + b) / f.portions.portionsCount,
+        toGramMultiplier: f.ingredientGroups
+          .map(i => i.ingredients[0].weight * i.ingredients[0].measurement.toGramMultiplier).reduce((a, b) => a + b) / f.portions.portionsCount,
         defaultValue: 1,
       })
     }
@@ -267,11 +332,13 @@ export class AddFoodComponent implements OnInit, OnDestroy {
       hidden: f.hidden,
       ownedByUser: true,
       pfcc: withDefaults(f.pfcc, emptyPfcc),
-      ingredients: !f.isRecipe ? null : f.ingredients.map<IIngredient>((i, index) => ({
-        ...i.ingredient,
-        ingredientWeight: i.weight * i.measurement.toGramMultiplier,
-        ingredientIndex: index,
-      })),
+      ingredients: !f.isRecipe ? null : f.ingredientGroups.flatMap<IFoodIngredient>((ig, groupIndex) => ig.ingredients.map((i, ingredientIndex) => ({
+          ...i.ingredient,
+          ingredientIndex: groupIndex,
+          ingredientWeight: calcWeight(i.weight, i.measurement),
+          isDefault: ingredientIndex == 0,
+        })),
+      ),
       measurements,
     }
 
@@ -279,7 +346,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
     this.dropMeasurements.emit(measurementsToDelete)
   }
 
-  private initializeFromData() {
+  private initializeFormData() {
     this.store.select(AddFoodState.initializationVector)
       .pipe(
         skipWhile(food => food == null),
@@ -287,25 +354,51 @@ export class AddFoodComponent implements OnInit, OnDestroy {
         take(1),
       )
       .subscribe(food => {
-        if (food.id == null) {
+        if (food?.id == null) {
           this.form.patchValue({
             name: food.name,
             isRecipe: food?.type === 'RECIPE',
           })
         } else {
           this.title = AddFoodComponent.EDIT_TITLE
-          this.form.controls.ingredients.clear()
+          this.form.controls.ingredientGroups.clear()
 
-          food.ingredients?.forEach(_ => this.handleAddIngredientClick())
           food.measurements?.forEach(_ => this.handleAddMeasurementClick())
 
-          const ingredients = (food.ingredients ?? []).map((i => ({
-            ingredient: i,
-            ingredientSearch: null,
-            weight: i.ingredientWeight,
-            index: this.nextIngredientIndex++,
-          })))
-          const measurements = (food.measurements ?? []).map(m => ({
+          const ingredientGroups: Map<number, IFoodIngredient[]> = (food.ingredients ?? []).reduce((map, ing) => {
+            let group = map.get(ing.ingredientIndex)
+            if (group == null) {
+              group = []
+              map.set(ing.ingredientIndex, group)
+            }
+            group.push(ing)
+            return map
+          }, new Map<number, IFoodIngredient[]>)
+
+          ingredientGroups.forEach(_ => this.handleAddIngredientGroupClick())
+
+          let formIngredientGroups: FormGroupValue<AddFoodIngredientGroupForm>[] = []
+          ingredientGroups.forEach((ingredients, groupIdx) => {
+            for (let i = 1; i < ingredients.length; i++) {
+              this.handleAddIngredientToGroupClick(groupIdx)
+            }
+
+            formIngredientGroups.push({
+              ingredientSearch: '',
+              ingredients: ingredients
+                .sort((a, b) => (a.isDefault ? 0 : 1) - (b.isDefault ? 0 : 1))
+                .map(i => ({
+                  ingredient: i,
+                  measurement: i.measurements?.find(m => m.id === i.ingredientWeight.measurementId) ?? defaultMeasurement,
+                  weight: i.ingredientWeight.measurementId == null ? i.ingredientWeight.inGram : i.ingredientWeight.measurementCount,
+                  index: this.nextIngredientIndex++,
+                })),
+              selectedOption: ingredients?.length > 0 ? 0 : null,
+              index: groupIdx,
+            })
+          })
+
+          const foodMeasurements = (food.measurements ?? []).map(m => ({
             id: m.id,
             name: m.name,
             multiplier: m.toGramMultiplier,
@@ -313,12 +406,19 @@ export class AddFoodComponent implements OnInit, OnDestroy {
             index: this.nextMeasurementIndex++,
           }))
 
+          const id = food.ownedByUser ? food.id : null
+
+          if (!food.ownedByUser) {
+            this.form.controls.hidden.disable()
+          }
+
           this.form.patchValue({
-            id: food.id,
+            id,
+            ownedByUser: food.ownedByUser,
             name: food.name,
             description: food.description,
             isRecipe: food.type === 'RECIPE',
-            hidden: food.hidden,
+            hidden: food.ownedByUser ? food.hidden : true,
             portions: {
               enabled: false,
             },
@@ -328,8 +428,8 @@ export class AddFoodComponent implements OnInit, OnDestroy {
               carbohydrates: food.pfcc?.carbohydrates,
               calories: food.pfcc?.calories,
             },
-            ingredients,
-            measurements,
+            ingredientGroups: formIngredientGroups,
+            measurements: foodMeasurements,
           })
         }
       })
@@ -338,6 +438,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
   private createForm() {
     this.form = this.fb.group<AddFoodForm>({
       id: this.fb.control(null as number),
+      ownedByUser: this.fb.control(true),
       isRecipe: this.fb.control(false),
       name: this.fb.control(null as string, Validators.required),
       description: this.fb.control(null as string),
@@ -353,7 +454,7 @@ export class AddFoodComponent implements OnInit, OnDestroy {
         portionsCount: this.fb.control(1),
         name: this.fb.control(null as string, Validators.required),
       }),
-      ingredients: new FormArray<AddFoodIngredientForm>([]),
+      ingredientGroups: new FormArray<AddFoodIngredientGroupForm>([]),
       measurements: new FormArray<AddFoodMeasurementForm>([]),
     })
 
@@ -362,9 +463,5 @@ export class AddFoodComponent implements OnInit, OnDestroy {
       .subscribe(defaultPortionName => {
         this.form.patchValue({portions: {name: defaultPortionName}}, {emitEvent: false})
       })
-  }
-
-  private recalculateUsedIngredients(ingredients: IFood[]) {
-    this.usedIngredientsIds$.next(ingredients.map(i => i?.id).filter(id => id != null))
   }
 }

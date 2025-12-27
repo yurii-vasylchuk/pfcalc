@@ -6,7 +6,7 @@ import {DateTime} from 'luxon'
 import {ProfileState} from '../../state/profile.state'
 import {catchError, combineLatest, EMPTY, map, Observable, of, switchMap, tap} from 'rxjs'
 import {emptyPfcc, IPage, IPfcc} from '../../commons/models/common.models'
-import {defaultWeeklyNutrientsType, IMeal, IMeasurement} from '../../commons/models/domain.models'
+import {defaultWeeklyNutrientsType, IMeal, IMealIngredient, IMeasurement} from '../../commons/models/domain.models'
 import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
 import {ceilPfcc, multiplyPfcc, sumPfccs} from '../../commons/functions'
 import {ProfileLoadedEvent} from '../../commons/models/state.models'
@@ -15,6 +15,7 @@ import * as fromRoutes from '../../commons/routes'
 import {AlertService} from '../../service/alert.service'
 import {Auth} from '../auth/auth.state-models'
 import {LocalStoreService} from '../../service/local-store.service'
+import {fromMeal} from '../../service/api/api-models'
 
 @State<Dashboard.IDashboardState>({
   name: 'dashboard',
@@ -24,6 +25,7 @@ import {LocalStoreService} from '../../service/local-store.service'
     currentDate: null,
     weeklyNutrientsType: defaultWeeklyNutrientsType,
     measurements: new Map<number, IMeasurement[]>(),
+    food: null,
   },
 })
 @Injectable({providedIn: 'root'})
@@ -43,11 +45,6 @@ export class DashboardState implements NgxsOnInit {
   @Selector()
   static currentDate(state: Dashboard.IDashboardState): DateTime {
     return DateTime.fromISO(state.currentDate)
-  }
-
-  @Selector()
-  static dailyAims({aims}: Dashboard.IDashboardState): IPfcc {
-    return aims
   }
 
   @Selector([DashboardState, DashboardState.weeklyCountingDays])
@@ -117,8 +114,25 @@ export class DashboardState implements NgxsOnInit {
   }
 
   @Selector()
-  static measurements(state: Dashboard.IDashboardState): Map<number, IMeasurement[]> {
-    return state.measurements
+  static editIngredientsGroups(state: Dashboard.IDashboardState): IMealIngredient[][] {
+    if (state.food == null || state.food.type !== 'RECIPE') {
+      return []
+    }
+
+    let groups = new Map<number, IMealIngredient[]>()
+
+    state.food.ingredients.forEach(ingredient => {
+      let group = groups.get(ingredient.ingredientIndex)
+
+      if (group == null) {
+        group = []
+        groups.set(ingredient.ingredientIndex, group)
+      }
+
+      group.push(ingredient)
+    })
+
+    return Array.from(groups.values()).sort((g1, g2) => g1[0].ingredientIndex - g2[0].ingredientIndex)
   }
 
   @Receiver({action: RouterNavigated})
@@ -146,7 +160,9 @@ export class DashboardState implements NgxsOnInit {
 
   @Receiver({type: Dashboard.EDIT_MEAL})
   public static editMeal(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.EditMealPayload>): Observable<void> {
-    return this.api.saveMeal(payload)
+    const command = fromMeal(payload)
+
+    return this.api.saveMeal(command)
       .pipe(
         tap(meal => {
           ctx.patchState({
@@ -207,27 +223,6 @@ export class DashboardState implements NgxsOnInit {
       weeklyNutrientsType: payload,
     })
     this.localStore.saveWeeklyNutrientsType(payload)
-  }
-
-  @Receiver({type: Dashboard.PREPARE_MEAL_EDIT})
-  public static prepareMealEdit(ctx: StateContext<Dashboard.IDashboardState>, {payload}: EmitterAction<Dashboard.PrepareMealEditPayload>): Observable<void> {
-    return this.api.loadMeasurements(payload.foodId)
-      .pipe(
-        tap(measurements => {
-          const measurementsMap = new Map<number, IMeasurement[]>(ctx.getState().measurements)
-          measurementsMap.set(payload.foodId, measurements)
-          ctx.patchState({
-            measurements: measurementsMap,
-          })
-        }),
-        map(_ => null),
-        catchError(err => {
-          console.error(err)
-          this.alert.warn('alert.default-error')
-
-          return EMPTY
-        }),
-      )
   }
 
   private static loadWeekMeals(date: DateTime, ctx: StateContext<Dashboard.IDashboardState>): Observable<void> {

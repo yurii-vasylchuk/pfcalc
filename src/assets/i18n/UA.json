@@ -143,7 +143,13 @@
     "default-portion-name": "Порція",
     "enable-portions-measurement": "Створити порції?",
     "portion-name-label": "Назва",
-    "portions-count-label": "Кількість на рецепт"
+    "portions-count-label": "Кількість на рецепт",
+    "add-ingredient-option": "Додати опцію",
+    "ingredient-group": {
+      "group-title": "Інгредієнт №{index}",
+      "make-default": "За замовч.",
+      "delete-group-btn": "Видалити групу"
+    }
   },
   "side-menu": {
     "title": "PFCC",
@@ -199,6 +205,11 @@
       },
       "invalidPeriod": "'Початок' не має перевищувати 'Кінець'",
       "generate": "Згенерувати"
+    }
+  },
+  "components": {
+    "edit-ingredients": {
+      "empty-configuration-msg": "Інгредієнти не налаштовані"
     }
   }
 }

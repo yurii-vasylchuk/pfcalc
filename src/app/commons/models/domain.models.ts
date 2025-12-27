@@ -2,9 +2,20 @@ import {DateTime} from 'luxon'
 import {IPfcc} from './common.models'
 import {Language} from './auth.models'
 
-export type IIngredient = (IFood & {
-  ingredientWeight: number;
+export type IWeight = {
+  measurementCount: number;
+  measurementId: number;
+  inGram: number;
+  measurementName: string;
+}
+
+export type IMealIngredient = (IFood & {
+  ingredientWeight: IWeight;
   ingredientIndex: number;
+});
+
+export type IFoodIngredient = (IMealIngredient & {
+  isDefault: boolean;
 });
 
 export type IFood = {
@@ -15,7 +26,7 @@ export type IFood = {
   hidden: boolean;
   ownedByUser: boolean;
   type: FoodType;
-  ingredients: IIngredient[]
+  ingredients: IFoodIngredient[]
   measurements: IMeasurement[]
 }
 
@@ -29,9 +40,10 @@ export interface IMeal {
   id: number | null;
   name: string;
   eatenOn: DateTime;
-  weight: number;
+  weight: IWeight;
   pfcc: IPfcc;
   foodId: number;
+  ingredients: IMealIngredient[];
 }
 
 export interface IProfile {
@@ -55,8 +67,8 @@ export type IMeasurement = {
 };
 
 export const defaultMeasurement: IMeasurement = {
-  foodId: null,
-  id: 99999,
+  foodId: 999999,
+  id: 999999,
   toGramMultiplier: 1,
   name: 'g',
   defaultValue: 100,

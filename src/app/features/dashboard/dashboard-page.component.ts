@@ -1,30 +1,19 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  inject,
-  OnInit,
-  TemplateRef,
-  TrackByFunction,
-  viewChild,
-} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core'
 import {NutritionGaugeComponent} from '../../components/nutrition-gauge/nutrition-gauge.component'
 import {
-  defaultMeasurement,
   IMeal,
-  IMeasurement,
+  IMealIngredient,
   IProfile,
   WeeklyNutrientsType,
   WeeklyNutrientsTypes,
 } from '../../commons/models/domain.models'
-import {Observable, takeUntil} from 'rxjs'
+import {Observable} from 'rxjs'
 import {CommonModule} from '@angular/common'
 import {IPfcc} from '../../commons/models/common.models'
 import {DateTime} from 'luxon'
 import {TranslateModule} from '@ngx-translate/core'
 import * as fromFunctions from '../../commons/functions'
 import * as fromRoutes from '../../commons/routes'
-import {dashboard} from '../../commons/routes'
 import {MatIconModule} from '@angular/material/icon'
 import {MatListModule} from '@angular/material/list'
 import {MatButtonModule} from '@angular/material/button'
@@ -37,15 +26,15 @@ import {Emittable, Emitter} from '@ngxs-labs/emitter'
 import {Dashboard} from './dashboard.state-models'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {AlertService} from '../../service/alert.service'
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
+import {ReactiveFormsModule} from '@angular/forms'
 import {MatInputModule} from '@angular/material/input'
 import {MatSelectModule} from '@angular/material/select'
-
-type EditMealForm = FormGroup<{
-  meal: FormControl<IMeal>
-  weight: FormControl<number>
-  measurement: FormControl<IMeasurement>
-}>
+import {Store} from '@ngxs/store'
+import {
+  EditMealDialogComponent,
+  EditMealDialogParams,
+  EditMealDialogResult,
+} from '../dialogs/edit-meal-dialog/edit-meal-dialog.component'
 
 @Component({
   selector: 'pfc-dashboard-page',
@@ -56,22 +45,21 @@ type EditMealForm = FormGroup<{
 })
 export class DashboardPageComponent implements OnInit {
 
+  protected store = inject(Store)
+  @ViewSelectSnapshot(DashboardState.editIngredientsGroups)
+  protected editIngredientsGroups: IMealIngredient[][]
+  private alertService = inject(AlertService)
+
   protected profile$: Observable<IProfile>
 
   protected readonly fromFunctions = fromFunctions
   protected readonly fromRoutes = fromRoutes
   protected readonly weeklyNutrientsTypeOptions = WeeklyNutrientsTypes
-  protected readonly dashboard = dashboard
-  protected readonly editMealTemplate = viewChild<TemplateRef<any>>('editMeal')
-  protected editMealForm: EditMealForm
-  @ViewSelectSnapshot(DashboardState.measurements)
-  protected measurements: Map<number, IMeasurement[]>
+
   @ViewSelectSnapshot(DashboardState.todayNutrients)
   protected dailyNutrients: IPfcc
   @ViewSelectSnapshot(DashboardState.weeklyNutrients)
   protected weeklyNutrients: IPfcc
-  @ViewSelectSnapshot(DashboardState.dailyAims)
-  protected dailyAims: IPfcc
   @ViewSelectSnapshot(DashboardState.weeklyAims)
   protected weeklyAims: IPfcc
   @ViewSelectSnapshot(DashboardState.todayMeals)
@@ -80,8 +68,10 @@ export class DashboardPageComponent implements OnInit {
   protected currentDate: DateTime
   @ViewSelectSnapshot(DashboardState.weeklyCountingDays)
   protected countedDaysOnWeek: number
+  private dialogService = inject(MatDialog)
   @ViewSelectSnapshot(DashboardState)
   protected state: Dashboard.IDashboardState
+
   @Emitter(DashboardState.removeMeal)
   private removeMealEmt: Emittable<Dashboard.RemoveMealPayload>
   @Emitter(DashboardState.switchDate)
@@ -90,26 +80,6 @@ export class DashboardPageComponent implements OnInit {
   private changeWeeklyNutrientsType: Emittable<Dashboard.SwitchWeeklyNutrientsTypePayload>
   @Emitter(DashboardState.editMeal)
   private editMeal: Emittable<Dashboard.EditMealPayload>
-  @Emitter(DashboardState.prepareMealEdit)
-  private prepareMealEdit: EventEmitter<Dashboard.PrepareMealEditPayload>
-  private alertService = inject(AlertService)
-  private dialogService = inject(MatDialog)
-  private fb = inject(FormBuilder)
-
-  constructor() {
-    this.editMealForm = this.fb.group({
-      meal: new FormControl(null, Validators.required),
-      weight: new FormControl(null, Validators.required),
-      measurement: new FormControl(defaultMeasurement, Validators.required),
-    })
-  }
-
-  protected get editMealMeasurements(): IMeasurement[] {
-    return [
-      defaultMeasurement,
-      ...(this.measurements.get(this.editMealForm.value?.meal.foodId ?? -999) ?? []),
-    ]
-  }
 
   onWeeklyNutrientsTypeChange(value: WeeklyNutrientsType) {
     this.changeWeeklyNutrientsType.emit(value)
@@ -121,8 +91,6 @@ export class DashboardPageComponent implements OnInit {
   showCountedDaysOnWeekInfo() {
     this.alertService.info('dashboard.counted-days-on-week-info')
   }
-
-  protected readonly measurementTrackByFn: TrackByFunction<IMeasurement> = (_, m) => m.id
 
   protected removeMeal(mealId: number) {
     this.removeMealEmt.emit({id: mealId})
@@ -137,47 +105,24 @@ export class DashboardPageComponent implements OnInit {
   }
 
   protected handleEditMealClick(meal: IMeal) {
-    this.editMealForm.patchValue({
-      meal: {...meal},
-      weight: meal.weight,
-      measurement: defaultMeasurement,
+    const dialogRef = this.dialogService.open<EditMealDialogComponent, EditMealDialogParams, EditMealDialogResult>(EditMealDialogComponent, {
+      data: {meal},
     })
 
-    this.prepareMealEdit.emit(meal)
-
-    const dialogRef = this.dialogService.open<any, void, boolean>(this.editMealTemplate())
-
-    this.editMealForm.controls.measurement.valueChanges.pipe(
-      takeUntil(dialogRef.afterClosed()),
-    ).subscribe(measurement => {
-      this.editMealForm.patchValue({
-        weight: measurement.defaultValue,
-      })
-    })
-
-    dialogRef.afterClosed().subscribe(shouldSave => {
-      if (!shouldSave) {
-        return
-      }
-      if (this.editMealForm.invalid) {
-        this.alertService.warn(`Can't save: data is invalid.`)
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null) {
         return
       }
 
-      const formValue = this.editMealForm.value
-      const newWeight = formValue.weight * formValue.measurement.toGramMultiplier
-      if (newWeight == meal.weight) {
-        return
-      }
-
-      const editedMeal: IMeal = {
-        ...formValue.meal,
-        weight: newWeight,
+      const editedMeal: IMeal = (result.ingredients == null || result.ingredients.length === 0) ? {
+        ...meal,
+        weight: result.weight,
+      } : {
+        ...meal,
+        ingredients: result.ingredients,
       }
 
       this.editMeal.emit(editedMeal)
     })
   }
-
-  protected readonly mealTrackBy = (idx: number, item: IMeal) => item.id
 }

@@ -10,6 +10,6 @@ export const environment = {
     defaultPage: 'dashboard',
   },
   alert: {
-    duration: 2500,
+    duration: 4000,
   },
 }

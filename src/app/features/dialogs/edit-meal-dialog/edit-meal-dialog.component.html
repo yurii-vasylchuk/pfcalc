@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>{{ 'dashboard.edit-meal.title' | translate }}</h2>
+
+@if (foodLoading$ | async) {
+  <mat-progress-bar mode="indeterminate"/>
+} @else {
+  <mat-dialog-content class="edit-meal__content">
+    @if (meal.ingredients == null || meal.ingredients.length === 0) {
+      <pfc-weight-input [measurements]="measurements$ | async"
+                        [initial]="meal.weight"
+                        (weightChanges)="handleWeightChanged($event)">
+      </pfc-weight-input>
+    } @else {
+      <pfc-ingredients-edit-form [ingredientGroups]="ingredientGroups$ | async"
+                                 (result)="handleIngredientsChanged($event)">
+      </pfc-ingredients-edit-form>
+    }
+  </mat-dialog-content>
+}
+
+<mat-dialog-actions class="edit-meal__actions">
+  <button (click)="handleCloseDialogClick()"
+          color="primary"
+          mat-button>
+    {{ 'dashboard.edit-meal.close-btn-label' | translate }}
+  </button>
+  <button (click)="handleSaveClick()"
+          color="accent"
+          mat-button>
+    {{ 'dashboard.edit-meal.save-btn-label' | translate }}
+  </button>
+</mat-dialog-actions>

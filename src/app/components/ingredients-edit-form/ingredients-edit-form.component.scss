@@ -1,0 +1,40 @@
+.ingredients {
+  display: flex;
+  flex-direction: column;
+  //gap: 10px;
+}
+
+.ingredients-divider {
+  margin-bottom: 10px;
+}
+
+.ingredient {
+  display: flex;
+  flex-direction: column;
+}
+
+.option-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+
+  &_ingredient {
+    flex-grow: 1;
+  }
+}
+
+.weight-row {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+
+  &_count {
+    width: 100px;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  &_measurement {
+    flex-grow: 1;
+  }
+}

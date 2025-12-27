@@ -10,7 +10,7 @@
 <mat-accordion [displayMode]="'flat'"
                [multi]="false"
                class="options-list">
-  @for (option of options; track optionTrackBy($index, option)) {
+  @for (option of options; track option.foodId) {
     <mat-expansion-panel (opened)="handleOptionOpened(option)"
                          [hideToggle]="false">
       <mat-expansion-panel-header>
@@ -23,61 +23,52 @@
         </div>
       </mat-expansion-panel-header>
       <ng-template matExpansionPanelContent>
-        <div class="nutrients">
-          <pfc-nutrition-gauge
-            [addingValue]="ceilPfcc(addedPfcc$ | async).protein"
-            [aim]="aims.protein"
-            [title]="'common.protein' | translate"
-            [value]="nutrients.protein"/>
-          <pfc-nutrition-gauge
-            [addingValue]="ceilPfcc(addedPfcc$ | async).fat"
-            [aim]="aims.fat"
-            [title]="'common.fat' | translate"
-            [value]="nutrients.fat"/>
-          <pfc-nutrition-gauge
-            [addingValue]="ceilPfcc(addedPfcc$| async).carbohydrates"
-            [aim]="aims.carbohydrates"
-            [title]="'common.carbohydrates' | translate"
-            [value]="nutrients.carbohydrates"/>
-          <pfc-nutrition-gauge
-            [addingValue]="ceilPfcc(addedPfcc$ | async).calories"
-            [aim]="aims.calories"
-            [title]="'common.calories' | translate"
-            [value]="nutrients.calories"/>
-        </div>
-        <div class="weight-input-group">
-          <mat-form-field class="weight-field">
-            <input (focus)="handleWeightInputFocus($event)"
-                   [formControl]="weightFC"
-                   [placeholder]="'add-meal.weight-input-placeholder' | translate"
-                   matInput
-                   type="number">
-          </mat-form-field>
-          <mat-form-field class="measurement-select">
-            <mat-select [formControl]="measurementFC">
-              @for (m of measurements; track m) {
-                <mat-option
-                  [value]="m">{{ 'measurements.' + m.name  | translate }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-        @if (option.type === 'RECIPE') {
-          <button (click)="handleEditIngredientsClick(option)"
-                  class="edit-ingredients-btn"
-                  disabled
-                  color="primary"
+        <div class="meal-options-content">
+          <div class="nutrients">
+            <pfc-nutrition-gauge
+              [addingValue]="ceilPfcc(addedPfcc$ | async).protein"
+              [aim]="aims.protein"
+              [title]="'common.protein' | translate"
+              [value]="nutrients.protein"/>
+            <pfc-nutrition-gauge
+              [addingValue]="ceilPfcc(addedPfcc$ | async).fat"
+              [aim]="aims.fat"
+              [title]="'common.fat' | translate"
+              [value]="nutrients.fat"/>
+            <pfc-nutrition-gauge
+              [addingValue]="ceilPfcc(addedPfcc$| async).carbohydrates"
+              [aim]="aims.carbohydrates"
+              [title]="'common.carbohydrates' | translate"
+              [value]="nutrients.carbohydrates"/>
+            <pfc-nutrition-gauge
+              [addingValue]="ceilPfcc(addedPfcc$ | async).calories"
+              [aim]="aims.calories"
+              [title]="'common.calories' | translate"
+              [value]="nutrients.calories"/>
+          </div>
+          @if (editingIngredients) {
+            <pfc-ingredients-edit-form [ingredientGroups]="mealIngredientsConf$ | async"
+                                       (result)="handleIngredientsEdited($event)">
+            </pfc-ingredients-edit-form>
+          } @else {
+            <pfc-weight-input [measurements]="measurements" [initial]="weight$ | async"
+                              (weightChanges)="handleSimpleWeightChanged($event)"/>
+          }
+          @if (option.type === 'RECIPE' && !editingIngredients) {
+            <button (click)="handleEditIngredientsClick(option)"
+                    class="edit-ingredients-btn"
+                    color="primary"
+                    mat-raised-button>
+              {{ 'add-meal.edit-ingredients-btn' | translate }}
+            </button>
+          }
+          <button (click)="handleSaveMealClick(option)"
+                  class="save-meal-btn"
+                  color="accent"
                   mat-raised-button>
-            {{ 'add-meal.edit-ingredients-btn' | translate }}
+            {{ 'add-meal.add-btn' | translate }}
           </button>
-        }
-        <button (click)="handleSaveMealClick(option)"
-                class="save-meal-btn"
-                color="accent"
-                mat-raised-button>
-          {{ 'add-meal.add-btn' | translate }}
-        </button>
+        </div>
       </ng-template>
     </mat-expansion-panel>
   }
