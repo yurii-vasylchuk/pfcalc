@@ -68,6 +68,16 @@ export class WeightInputComponent {
         }
       })
 
+    this.form.controls.measurement.valueChanges
+      .pipe(
+        takeUntilDestroyed(),
+      )
+      .subscribe(measurement => {
+        this.form.patchValue({
+          weight: measurement.defaultValue ?? 100,
+        })
+      })
+
     effect(() => {
       const weight = this.initial()
       const measurements = untracked(this.measurements)

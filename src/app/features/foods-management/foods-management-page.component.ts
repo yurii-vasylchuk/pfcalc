@@ -67,10 +67,6 @@ export class FoodsManagementPageComponent implements OnInit, OnDestroy, AfterVie
   private loadMoreProducts: Emittable
   @Emitter(FoodsManagementState.loadMoreRecipes)
   private loadMoreRecipes: Emittable
-  @Emitter(FoodsManagementState.createFood)
-  private createFood: Emittable<FoodsManagement.CreateFoodActionPayload>
-  @Emitter(FoodsManagementState.editFood)
-  private editFood: Emittable<FoodsManagement.EditFoodActionPayload>
   @Emitter(FoodsManagementState.deleteFood)
   private deleteFood: Emittable<FoodsManagement.DeleteFoodActionPayload>
   private endIntersectionObserver: IntersectionObserver

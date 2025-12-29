@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core'
 import {
-  defaultMeasurement,
   IFood,
   IFoodIngredient,
   IMeal,
@@ -134,11 +133,4 @@ export class EditMealDialogComponent implements OnInit {
   handleSaveClick() {
     this.dialogRef.close(this.result$.value)
   }
-}
-
-function withDefaultMeasurement(measurements: IMeasurement[]): IMeasurement[] {
-  return [
-    ...measurements,
-    defaultMeasurement,
-  ]
 }

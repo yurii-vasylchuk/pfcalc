@@ -8,7 +8,7 @@ import * as fromRoutes from '../../commons/routes'
 import {FoodType, IFood, IMeasurement, isFoodType} from '../../commons/models/domain.models'
 import {catchError, combineLatest, EMPTY, map, Observable, of, switchMap, tap} from 'rxjs'
 import {Navigation} from '../../state/navigation.state-model'
-import {state} from '@angular/animations'
+import {AlertService} from '../../service/alert.service'
 
 @State<AddFood.IAddFoodState>({
   name: 'addFood',
@@ -21,12 +21,15 @@ import {state} from '@angular/animations'
 @Injectable()
 export class AddFoodState implements NgxsOnInit {
   private api = inject(ApiService)
+  private static alert: AlertService
 
   private static readonly INGREDIENT_OPTIONS_PAGE_SIZE = 10
   private static api: ApiService
+  private alert = inject(AlertService)
 
   constructor() {
     AddFoodState.api = this.api
+    AddFoodState.alert = this.alert
   }
 
   @Selector()
@@ -148,6 +151,11 @@ export class AddFoodState implements NgxsOnInit {
       }),
       map(food => new EmitterAction({additionalQueryParams: {selectedFoodId: food.id}} as Navigation.NavigateBackPayload, Navigation.NAVIGATE_BACK)),
       switchMap(ctx.dispatch),
+      catchError(err => {
+        console.error(err)
+        this.alert.warn(err['alertMsg'] ?? 'alert.add-food.save-food-failed')
+        return EMPTY
+      }),
     )
   }
 
@@ -156,7 +164,10 @@ export class AddFoodState implements NgxsOnInit {
       measurements
         .map(m => ({...m, foodId: food.id}))
         .map(m => this.api.saveMeasurement(m)),
-    ).pipe(map(_ => (food)))
+    ).pipe(
+      map(_ => (food)),
+      catchError(err => of({...err, alertMsg: 'alert.add-food.save-measurements-failed'})),
+    )
   }
 
   ngxsOnInit(ctx: StateContext<AddFood.IAddFoodState>): void {

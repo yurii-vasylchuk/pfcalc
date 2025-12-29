@@ -2,6 +2,10 @@
   "alert": {
     "action": "Ok",
     "default-error": "Something's went wrong",
+    "add-food": {
+      "save-food-failed": "Unable to save food, try later",
+      "save-measurements-failed": "Unable to save measurements, try later"
+    },
     "reports": {
       "period": {
         "request-failed": "Failed to request period report, try again later",

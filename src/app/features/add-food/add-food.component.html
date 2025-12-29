@@ -318,7 +318,7 @@
   </div>
 
   <div class="actions">
-    <button [disabled]="form.invalid"
+    <button [disabled]="form.invalid || (savingFood$ | async)"
             color="accent"
             mat-raised-button
             type="submit">

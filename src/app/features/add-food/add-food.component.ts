@@ -29,6 +29,7 @@ import {Emitter} from '@ngxs-labs/emitter'
 import {AddFood} from './add-food.state-models'
 import {TranslateModule, TranslateService} from '@ngx-translate/core'
 import {MatCheckbox} from '@angular/material/checkbox'
+import {hasActionsExecuting} from '@ngxs-labs/actions-executing'
 
 type FoodIngredientForm = FormGroup<{
   ingredient: FormControl<IFoodIngredient>;
@@ -92,20 +93,23 @@ export class AddFoodComponent implements OnInit, OnDestroy {
   protected readonly ceilPfcc = ceilPfcc
   protected readonly multiplyPfcc = multiplyPfcc
   protected readonly defaultMeasurement = defaultMeasurement
+  protected readonly emptyPfcc = emptyPfcc
 
   @ViewSelectSnapshot(AddFoodState.ingredients)
   protected ingredientsOptions: IFood[][]
-  @Emitter(AddFoodState.saveFood)
-  protected saveFood: EventEmitter<AddFood.SaveFoodPayload>
+  protected savingFood$ = this.store.select(hasActionsExecuting([{type: AddFood.SAVE_FOOD_ACTION}]))
   protected title = AddFoodComponent.CREATE_TITLE
-  protected form: FormGroup<AddFoodForm>
   @Emitter(AddFoodState.reloadIngredientOptions)
   private reloadIngredientOptions: EventEmitter<AddFood.ReloadIngredientOptionsPayload>
   @Emitter(AddFoodState.dropMeasurements)
   private dropMeasurements: EventEmitter<number[]>
-  protected readonly emptyPfcc = emptyPfcc
+  protected form: FormGroup<AddFoodForm>
+  @Emitter(AddFoodState.saveFood)
+  private saveFood: EventEmitter<AddFood.SaveFoodPayload>
+
   private nextIngredientIndex = 1
   private nextMeasurementIndex = 1
+  private nextIngredientGroupIndex = 1
   private $destroy = new Subject<void>()
 
   protected get isRecipe(): boolean {
@@ -115,7 +119,6 @@ export class AddFoodComponent implements OnInit, OnDestroy {
   protected get ceiledPfcc(): IPfcc {
     return ceilPfcc(withDefaults(this.form.value.pfcc, emptyPfcc))
   }
-  private nextIngredientGroupIndex = 1
 
   protected get totalRecipeWeight(): number {
     if (!this.isRecipe) {

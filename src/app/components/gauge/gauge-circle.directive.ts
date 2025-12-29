@@ -9,7 +9,6 @@ export class GaugeCircleDirective implements OnDestroy, OnInit, AfterViewInit {
   private el = inject<ElementRef<SVGCircleElement>>(ElementRef)
   private cdr = inject(ChangeDetectorRef)
 
-
   private static readonly STROKE_DASHARRAY = 'stroke-dasharray'
   private static readonly TRANSFORM = 'transform'
   private static readonly DEFAULT_COLOR = '#ee1d1d'

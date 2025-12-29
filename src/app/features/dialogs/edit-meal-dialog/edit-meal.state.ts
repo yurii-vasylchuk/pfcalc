@@ -1,5 +1,5 @@
 import {EditMeal} from './edit-meal.state-models'
-import {Selector, State, StateContext, Store} from '@ngxs/store'
+import {Selector, State, StateContext} from '@ngxs/store'
 import {inject, Injectable} from '@angular/core'
 import {ApiService} from '../../../service/api.service'
 import {EmitterAction, Receiver} from '@ngxs-labs/emitter'
@@ -17,7 +17,6 @@ import {defaultMeasurement, IFood} from '../../../commons/models/domain.models'
 export class EditMealState {
   private static api: ApiService
   private static alert: AlertService
-  private store = inject(Store)
 
   constructor() {
     EditMealState.api = inject(ApiService)
